@@ -1,16 +1,17 @@
 package com.cta4j.client;
 
 import com.cta4j.exception.Cta4jException;
+import com.cta4j.external.bus.detour.CtaDetoursResponse;
 import com.cta4j.external.bus.direction.CtaDirection;
 import com.cta4j.external.bus.direction.CtaDirectionsResponse;
 import com.cta4j.external.bus.prediction.CtaPredictionsResponse;
 import com.cta4j.external.bus.route.CtaRoutesResponse;
 import com.cta4j.external.bus.stop.CtaStopsResponse;
+import com.cta4j.model.bus.Detour;
 import com.cta4j.model.bus.Route;
 import com.cta4j.model.bus.Stop;
 import com.cta4j.model.bus.StopArrival;
 import com.cta4j.util.HttpUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 
@@ -35,6 +36,8 @@ public final class BusClient {
 
     private static final String PREDICTIONS_ENDPOINT;
 
+    private static final String DETOURS_ENDPOINT;
+
     static {
         DEFAULT_HOST = "ctabustracker.com";
 
@@ -45,6 +48,8 @@ public final class BusClient {
         STOPS_ENDPOINT = "/bustime/api/v3/getstops";
 
         PREDICTIONS_ENDPOINT = "/bustime/api/v3/getpredictions";
+
+        DETOURS_ENDPOINT = "/bustime/api/v3/getdetours";
     }
 
     public BusClient(String host, String apiKey) {
@@ -188,12 +193,40 @@ public final class BusClient {
                                   .toList();
     }
 
-//    @RequestLine("GET /bustime/api/v3/getpredictions?rt={routeId}&stpid={stopId}")
-//    CtaPredictionsResponse getPredictions(String routeId, int stopId);
-//
-//    @RequestLine("GET /bustime/api/v3/getdetours?rt={routeId}&rtdir={direction}")
-//    CtaDetoursResponse getDetours(String routeId, String direction);
-//
+    public List<Detour> getDetours(String routeId, String direction) {
+        Objects.requireNonNull(routeId);
+
+        Objects.requireNonNull(direction);
+
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(DETOURS_ENDPOINT)
+            .addParameter("rt", routeId)
+            .addParameter("dir", direction)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        CtaDetoursResponse detoursResponse;
+
+        try {
+            detoursResponse = this.objectMapper.readValue(response, CtaDetoursResponse.class);
+        } catch (IOException e) {
+            String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        return detoursResponse.bustimeResponse()
+                              .dtrs()
+                              .stream()
+                              .map(Detour::fromExternal)
+                              .toList();
+    }
+
 //    @RequestLine("GET /bustime/api/v3/getvehicles?vid={id}")
 //    CtaVehicleResponse getVehicle(String id);
 }
