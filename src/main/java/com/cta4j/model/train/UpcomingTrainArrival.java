@@ -1,14 +1,13 @@
-package com.cta4j.model.trainstation;
+package com.cta4j.model.train;
 
-import com.cta4j.external.train.arrival.CtaArrivalsEta;
+import com.cta4j.external.train.follow.CtaFollowEta;
 import com.cta4j.model.common.TrainRoute;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
-public record StationArrival(
+public record UpcomingTrainArrival(
     int stationId,
 
     int stopId,
@@ -39,18 +38,12 @@ public record StationArrival(
 
     boolean faulted,
 
-    String flags,
-
-    BigDecimal latitude,
-
-    BigDecimal longitude,
-
-    int heading
+    String flags
 ) {
-    public static StationArrival fromExternal(CtaArrivalsEta eta) {
+    public static UpcomingTrainArrival fromExternal(CtaFollowEta eta) {
         Objects.requireNonNull(eta);
 
-        return new StationArrival(
+        return new UpcomingTrainArrival(
             Integer.parseInt(eta.staId()),
             Integer.parseInt(eta.stpId()),
             eta.staNm(),
@@ -66,13 +59,9 @@ public record StationArrival(
             "1".equals(eta.isSch()),
             "1".equals(eta.isDly()),
             "1".equals(eta.isFlt()),
-            eta.flags(),
-            new BigDecimal(eta.lat()),
-            new BigDecimal(eta.lon()),
-            Integer.parseInt(eta.heading())
+            eta.flags()
         );
     }
-
     public long etaMinutes() {
         long minutes = Duration.between(this.predictionTime, this.arrivalTime)
                                .toMinutes();
