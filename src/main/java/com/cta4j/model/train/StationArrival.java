@@ -1,6 +1,7 @@
 package com.cta4j.model.train;
 
 import com.cta4j.external.train.arrival.CtaArrivalsEta;
+import com.cta4j.util.DateTimeUtils;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -59,8 +60,8 @@ public record StationArrival(
             Integer.parseInt(eta.destSt()),
             eta.destNm(),
             Integer.parseInt(eta.trDr()),
-            Instant.ofEpochMilli(Long.parseLong(eta.prdt())),
-            Instant.ofEpochMilli(Long.parseLong(eta.arrT())),
+            DateTimeUtils.parseTrainTimestamp(eta.prdt()),
+            DateTimeUtils.parseTrainTimestamp(eta.arrT()),
             "1".equals(eta.isApp()),
             "1".equals(eta.isSch()),
             "1".equals(eta.isDly()),

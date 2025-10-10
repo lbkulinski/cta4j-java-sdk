@@ -1,26 +1,29 @@
 package com.cta4j.client;
 
 import com.cta4j.exception.Cta4jException;
+import com.cta4j.external.bus.prediction.CtaPredictionsResponse;
 import com.cta4j.external.bus.route.CtaRoutesResponse;
 import com.cta4j.external.bus.stop.CtaStopsResponse;
 import com.cta4j.model.bus.Route;
 import com.cta4j.model.bus.Stop;
+import com.cta4j.model.bus.StopArrival;
 import com.cta4j.util.HttpUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.hc.core5.net.URIBuilder;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
 public final class BusClient {
-    private final String baseUrl;
+    private final String host;
 
     private final String apiKey;
 
     private final ObjectMapper objectMapper;
 
-    private static final String DEFAULT_BASE_URL;
+    private static final String DEFAULT_HOST;
 
     private static final String ROUTES_ENDPOINT;
 
@@ -28,18 +31,22 @@ public final class BusClient {
 
     private static final String STOPS_ENDPOINT;
 
+    private static final String PREDICTIONS_ENDPOINT;
+
     static {
-        DEFAULT_BASE_URL = "https://ctabustracker.com";
+        DEFAULT_HOST = "ctabustracker.com";
 
         ROUTES_ENDPOINT = "/bustime/api/v3/getroutes";
 
         DIRECTIONS_ENDPOINT = "/bustime/api/v3/getdirections";
 
         STOPS_ENDPOINT = "/bustime/api/v3/getstops";
+
+        PREDICTIONS_ENDPOINT = "/bustime/api/v3/getpredictions";
     }
 
-    public BusClient(String baseUrl, String apiKey) {
-        this.baseUrl = Objects.requireNonNull(baseUrl);
+    public BusClient(String host, String apiKey) {
+        this.host = Objects.requireNonNull(host);
 
         this.apiKey = Objects.requireNonNull(apiKey);
 
@@ -47,11 +54,17 @@ public final class BusClient {
     }
 
     public BusClient(String apiKey) {
-        this(DEFAULT_BASE_URL, apiKey);
+        this(DEFAULT_HOST, apiKey);
     }
 
     public List<Route> getRoutes() {
-        String url = String.format("%s%s?key=%s&format=json", this.baseUrl, ROUTES_ENDPOINT, this.apiKey);
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(ROUTES_ENDPOINT)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
 
         String response = HttpUtils.get(url);
 
@@ -75,8 +88,14 @@ public final class BusClient {
     public List<String> getDirections(String routeId) {
         Objects.requireNonNull(routeId);
 
-        String url = String.format("%s%s?rt=%s&key=%s&format=json", this.baseUrl, DIRECTIONS_ENDPOINT, routeId,
-            this.apiKey);
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(DIRECTIONS_ENDPOINT)
+            .addParameter("rt", routeId)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
 
         String response = HttpUtils.get(url);
 
@@ -100,8 +119,15 @@ public final class BusClient {
 
         Objects.requireNonNull(direction);
 
-        String url = String.format("%s%s?rt=%s&dir=%s&key=%s&format=json", this.baseUrl, STOPS_ENDPOINT, routeId,
-            direction, this.apiKey);
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(STOPS_ENDPOINT)
+            .addParameter("rt", routeId)
+            .addParameter("dir", direction)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
 
         String response = HttpUtils.get(url);
 
@@ -120,6 +146,42 @@ public final class BusClient {
                             .stream()
                             .map(Stop::fromExternal)
                             .toList();
+    }
+
+    public List<StopArrival> getArrivals(String routeId, int stopId) {
+        Objects.requireNonNull(routeId);
+
+        if (stopId <= 0) {
+            throw new IllegalArgumentException("Stop ID must be a positive integer");
+        }
+
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(PREDICTIONS_ENDPOINT)
+            .addParameter("rt", routeId)
+            .addParameter("stpid", String.valueOf(stopId))
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        CtaPredictionsResponse predictionsResponse;
+
+        try {
+            predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
+        } catch (IOException e) {
+            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        return predictionsResponse.bustimeResponse()
+                                  .prd()
+                                  .stream()
+                                  .map(StopArrival::fromExternal)
+                                  .toList();
     }
 
 //    @RequestLine("GET /bustime/api/v3/getpredictions?rt={routeId}&stpid={stopId}")

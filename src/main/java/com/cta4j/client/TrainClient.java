@@ -9,34 +9,35 @@ import com.cta4j.model.train.UpcomingTrainArrival;
 import com.cta4j.model.train.StationArrival;
 import com.cta4j.util.HttpUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.hc.core5.net.URIBuilder;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
 public final class TrainClient {
-    private final String baseUrl;
+    private final String host;
 
     private final String apiKey;
 
     private final ObjectMapper objectMapper;
 
-    private static final String DEFAULT_BASE_URL;
+    private static final String DEFAULT_HOST;
 
     private static final String ARRIVALS_ENDPOINT;
 
     private static final String FOLLOW_ENDPOINT;
 
     static {
-        DEFAULT_BASE_URL = "https://lapi.transitchicago.com";
+        DEFAULT_HOST = "lapi.transitchicago.com";
 
         ARRIVALS_ENDPOINT = "/api/1.0/ttarrivals.aspx";
 
         FOLLOW_ENDPOINT = "/api/1.0/ttfollow.aspx";
     }
 
-    public TrainClient(String baseUrl, String apiKey) {
-        this.baseUrl = Objects.requireNonNull(baseUrl);
+    public TrainClient(String host, String apiKey) {
+        this.host = Objects.requireNonNull(host);
 
         this.apiKey = Objects.requireNonNull(apiKey);
 
@@ -44,7 +45,7 @@ public final class TrainClient {
     }
 
     public TrainClient(String apiKey) {
-        this(DEFAULT_BASE_URL, apiKey);
+        this(DEFAULT_HOST, apiKey);
     }
 
     public List<StationArrival> getStationArrivals(int stationId) {
@@ -52,8 +53,14 @@ public final class TrainClient {
             throw new IllegalArgumentException("Station ID must be a positive integer");
         }
 
-        String url = String.format("%s%s?mapid=%d&key=%s&outputType=JSON", this.baseUrl, ARRIVALS_ENDPOINT, stationId,
-            this.apiKey);
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(ARRIVALS_ENDPOINT)
+            .addParameter("mapid", String.valueOf(stationId))
+            .addParameter("key", this.apiKey)
+            .addParameter("outputType", "JSON")
+            .toString();
 
         String response = HttpUtils.get(url);
 
@@ -79,8 +86,14 @@ public final class TrainClient {
             throw new IllegalArgumentException("Run number must be a positive integer");
         }
 
-        String url = String.format("%s%s?runnumber=%d&key=%s&outputType=JSON", this.baseUrl, FOLLOW_ENDPOINT, run,
-            this.apiKey);
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(FOLLOW_ENDPOINT)
+            .addParameter("runnumber", String.valueOf(run))
+            .addParameter("key", this.apiKey)
+            .addParameter("outputType", "JSON")
+            .toString();
 
         String response = HttpUtils.get(url);
 
