@@ -7,10 +7,8 @@ import com.cta4j.external.bus.direction.CtaDirectionsResponse;
 import com.cta4j.external.bus.prediction.CtaPredictionsResponse;
 import com.cta4j.external.bus.route.CtaRoutesResponse;
 import com.cta4j.external.bus.stop.CtaStopsResponse;
-import com.cta4j.model.bus.Detour;
-import com.cta4j.model.bus.Route;
-import com.cta4j.model.bus.Stop;
-import com.cta4j.model.bus.StopArrival;
+import com.cta4j.external.bus.vehicle.CtaVehicleResponse;
+import com.cta4j.model.bus.*;
 import com.cta4j.util.HttpUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
@@ -18,6 +16,7 @@ import org.apache.hc.core5.net.URIBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public final class BusClient {
     private final String host;
@@ -38,6 +37,8 @@ public final class BusClient {
 
     private static final String DETOURS_ENDPOINT;
 
+    private static final String VEHICLES_ENDPOINT;
+
     static {
         DEFAULT_HOST = "ctabustracker.com";
 
@@ -50,6 +51,8 @@ public final class BusClient {
         PREDICTIONS_ENDPOINT = "/bustime/api/v3/getpredictions";
 
         DETOURS_ENDPOINT = "/bustime/api/v3/getdetours";
+
+        VEHICLES_ENDPOINT = "/bustime/api/v3/getvehicles";
     }
 
     public BusClient(String host, String apiKey) {
@@ -227,6 +230,36 @@ public final class BusClient {
                               .toList();
     }
 
-//    @RequestLine("GET /bustime/api/v3/getvehicles?vid={id}")
-//    CtaVehicleResponse getVehicle(String id);
+    public Optional<Vehicle> getVehicle(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Vehicle ID must be a positive integer");
+        }
+
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(VEHICLES_ENDPOINT)
+            .addParameter("vid", String.valueOf(id))
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        CtaVehicleResponse vehicleResponse;
+
+        try {
+            vehicleResponse = this.objectMapper.readValue(response, CtaVehicleResponse.class);
+        } catch (IOException e) {
+            String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        return vehicleResponse.bustimeResponse()
+                              .vehicle()
+                              .stream()
+                              .map(Vehicle::fromExternal)
+                              .findFirst();
+    }
 }

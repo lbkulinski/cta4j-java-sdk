@@ -15,7 +15,7 @@ public record StopArrival(
 
     int stopId,
 
-    int vehicleId,
+    Integer vehicleId,
 
     BigInteger distanceToStop,
 
@@ -38,7 +38,7 @@ public record StopArrival(
             BusPredictionType.parseString(prd.typ()),
             prd.stpnm(),
             Integer.parseInt(prd.stpid()),
-            Integer.parseInt(prd.vid()),
+            prd.vid().isBlank() ? null : Integer.parseInt(prd.vid()),
             BigInteger.valueOf(prd.dstp()),
             prd.rt(),
             prd.rtdd(),
