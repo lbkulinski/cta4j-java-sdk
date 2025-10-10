@@ -35,7 +35,7 @@ public record StopArrival(
         Objects.requireNonNull(prd);
 
         return new StopArrival(
-            BusPredictionType.valueOf(prd.typ()),
+            BusPredictionType.parseString(prd.typ()),
             prd.stpnm(),
             Integer.parseInt(prd.stpid()),
             Integer.parseInt(prd.vid()),

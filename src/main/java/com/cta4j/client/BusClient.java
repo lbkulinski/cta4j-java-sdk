@@ -1,6 +1,8 @@
 package com.cta4j.client;
 
 import com.cta4j.exception.Cta4jException;
+import com.cta4j.external.bus.direction.CtaDirection;
+import com.cta4j.external.bus.direction.CtaDirectionsResponse;
 import com.cta4j.external.bus.prediction.CtaPredictionsResponse;
 import com.cta4j.external.bus.route.CtaRoutesResponse;
 import com.cta4j.external.bus.stop.CtaStopsResponse;
@@ -99,19 +101,21 @@ public final class BusClient {
 
         String response = HttpUtils.get(url);
 
-        TypeReference<List<String>> typeReference = new TypeReference<>() {};
-
-        List<String> directions;
+        CtaDirectionsResponse directionsResponse;
 
         try {
-            directions = this.objectMapper.readValue(response, typeReference);
+            directionsResponse = this.objectMapper.readValue(response, CtaDirectionsResponse.class);
         } catch (IOException e) {
             String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
 
-        return List.copyOf(directions);
+        return directionsResponse.bustimeResponse()
+                                 .directions()
+                                 .stream()
+                                 .map(CtaDirection::id)
+                                 .toList();
     }
 
     public List<Stop> getStops(String routeId, String direction) {
