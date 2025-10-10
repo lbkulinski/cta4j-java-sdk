@@ -1,10 +1,12 @@
 package com.cta4j.client;
 
 import com.cta4j.exception.Cta4jException;
+import com.cta4j.external.train.arrival.CtaArrivalsResponse;
 import com.cta4j.external.train.follow.CtaFollowResponse;
 import com.cta4j.model.train.TrainCoordinates;
 import com.cta4j.model.train.TrainLocation;
 import com.cta4j.model.train.UpcomingTrainArrival;
+import com.cta4j.model.train.StationArrival;
 import com.cta4j.util.HttpUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -21,10 +23,14 @@ public final class TrainClient {
 
     private static final String DEFAULT_BASE_URL;
 
+    private static final String ARRIVALS_ENDPOINT;
+
     private static final String FOLLOW_ENDPOINT;
 
     static {
         DEFAULT_BASE_URL = "https://lapi.transitchicago.com";
+
+        ARRIVALS_ENDPOINT = "/api/1.0/ttarrivals.aspx";
 
         FOLLOW_ENDPOINT = "/api/1.0/ttfollow.aspx";
     }
@@ -41,12 +47,40 @@ public final class TrainClient {
         this(DEFAULT_BASE_URL, apiKey);
     }
 
-    public TrainLocation getLocation(int run) {
+    public List<StationArrival> getStationArrivals(int stationId) {
+        if (stationId <= 0) {
+            throw new IllegalArgumentException("Station ID must be a positive integer");
+        }
+
+        String url = String.format("%s%s?mapid=%d&key=%s&outputType=JSON", this.baseUrl, ARRIVALS_ENDPOINT, stationId,
+            this.apiKey);
+
+        String response = HttpUtils.get(url);
+
+        CtaArrivalsResponse arrivalsResponse;
+
+        try {
+            arrivalsResponse = this.objectMapper.readValue(response, CtaArrivalsResponse.class);
+        } catch (IOException e) {
+            String message = "Failed to parse response from %s".formatted(ARRIVALS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        return arrivalsResponse.ctatt()
+                               .eta()
+                               .stream()
+                               .map(StationArrival::fromExternal)
+                               .toList();
+    }
+
+    public TrainLocation getTrainLocation(int run) {
         if (run <= 0) {
             throw new IllegalArgumentException("Run number must be a positive integer");
         }
 
-        String url = "%s%s?runnumber=%d&key=%s".formatted(this.baseUrl, FOLLOW_ENDPOINT, run, this.apiKey);
+        String url = String.format("%s%s?runnumber=%d&key=%s&outputType=JSON", this.baseUrl, FOLLOW_ENDPOINT, run,
+            this.apiKey);
 
         String response = HttpUtils.get(url);
 

@@ -1,7 +1,6 @@
-package com.cta4j.model.trainstation;
+package com.cta4j.model.train;
 
 import com.cta4j.external.train.arrival.CtaArrivalsEta;
-import com.cta4j.model.common.TrainRoute;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -19,7 +18,7 @@ public record StationArrival(
 
     int run,
 
-    TrainRoute route,
+    Route route,
 
     int destinationStopId,
 
@@ -56,7 +55,7 @@ public record StationArrival(
             eta.staNm(),
             eta.stpDe(),
             Integer.parseInt(eta.rn()),
-            TrainRoute.parseString(eta.rt()),
+            Route.parseString(eta.rt()),
             Integer.parseInt(eta.destSt()),
             eta.destNm(),
             Integer.parseInt(eta.trDr()),

@@ -1,7 +1,6 @@
 package com.cta4j.model.train;
 
 import com.cta4j.external.train.follow.CtaFollowEta;
-import com.cta4j.model.common.TrainRoute;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -18,7 +17,7 @@ public record UpcomingTrainArrival(
 
     int run,
 
-    TrainRoute route,
+    Route route,
 
     int destinationStopId,
 
@@ -49,7 +48,7 @@ public record UpcomingTrainArrival(
             eta.staNm(),
             eta.stpDe(),
             Integer.parseInt(eta.rn()),
-            TrainRoute.parseString(eta.rt()),
+            Route.parseString(eta.rt()),
             Integer.parseInt(eta.destSt()),
             eta.destNm(),
             Integer.parseInt(eta.trDr()),
