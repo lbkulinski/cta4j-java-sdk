@@ -1,10 +1,8 @@
-package com.cta4j.model.common;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
+package com.cta4j.model.train;
 
 import java.util.Objects;
 
-public enum TrainRoute {
+public enum Route {
     RED,
 
     BLUE,
@@ -23,7 +21,7 @@ public enum TrainRoute {
 
     N_A;
 
-    public static TrainRoute parseString(String string) {
+    public static Route parseString(String string) {
         Objects.requireNonNull(string);
 
         string = string.toUpperCase();

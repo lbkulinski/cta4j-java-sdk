@@ -1,27 +1,25 @@
-package com.cta4j.model.trainstation;
+package com.cta4j.model.train;
 
-import com.cta4j.external.train.arrival.CtaArrivalsEta;
-import com.cta4j.model.common.TrainRoute;
+import com.cta4j.external.train.follow.CtaFollowEta;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Objects;
 
-public record StationArrival(
-    int stationId,
+public record UpcomingTrainArrival(
+    String stationId,
 
-    int stopId,
+    String stopId,
 
     String stationName,
 
     String stopDescription,
 
-    int run,
+    String run,
 
-    TrainRoute route,
+    Route route,
 
-    int destinationStopId,
+    String destinationStopId,
 
     String destinationName,
 
@@ -39,25 +37,19 @@ public record StationArrival(
 
     boolean faulted,
 
-    String flags,
-
-    BigDecimal latitude,
-
-    BigDecimal longitude,
-
-    int heading
+    String flags
 ) {
-    public static StationArrival fromExternal(CtaArrivalsEta eta) {
+    public static UpcomingTrainArrival fromExternal(CtaFollowEta eta) {
         Objects.requireNonNull(eta);
 
-        return new StationArrival(
-            Integer.parseInt(eta.staId()),
-            Integer.parseInt(eta.stpId()),
+        return new UpcomingTrainArrival(
+            eta.staId(),
+            eta.stpId(),
             eta.staNm(),
             eta.stpDe(),
-            Integer.parseInt(eta.rn()),
-            TrainRoute.parseString(eta.rt()),
-            Integer.parseInt(eta.destSt()),
+            eta.rn(),
+            Route.parseString(eta.rt()),
+            eta.destSt(),
             eta.destNm(),
             Integer.parseInt(eta.trDr()),
             Instant.ofEpochMilli(Long.parseLong(eta.prdt())),
@@ -66,14 +58,10 @@ public record StationArrival(
             "1".equals(eta.isSch()),
             "1".equals(eta.isDly()),
             "1".equals(eta.isFlt()),
-            eta.flags(),
-            new BigDecimal(eta.lat()),
-            new BigDecimal(eta.lon()),
-            Integer.parseInt(eta.heading())
+            eta.flags()
         );
     }
-
-    public long getEtaMinutes() {
+    public long etaMinutes() {
         long minutes = Duration.between(this.predictionTime, this.arrivalTime)
                                .toMinutes();
 
