@@ -48,16 +48,14 @@ public final class TrainClient {
         this(DEFAULT_HOST, apiKey);
     }
 
-    public List<StationArrival> getStationArrivals(int stationId) {
-        if (stationId <= 0) {
-            throw new IllegalArgumentException("Station ID must be a positive integer");
-        }
+    public List<StationArrival> getStationArrivals(String stationId) {
+        Objects.requireNonNull(stationId);
 
         String url = new URIBuilder()
             .setScheme("https")
             .setHost(this.host)
             .setPath(ARRIVALS_ENDPOINT)
-            .addParameter("mapid", String.valueOf(stationId))
+            .addParameter("mapid", stationId)
             .addParameter("key", this.apiKey)
             .addParameter("outputType", "JSON")
             .toString();
@@ -81,16 +79,14 @@ public final class TrainClient {
                                .toList();
     }
 
-    public TrainLocation getTrainLocation(int run) {
-        if (run <= 0) {
-            throw new IllegalArgumentException("Run number must be a positive integer");
-        }
+    public TrainLocation getTrainLocation(String run) {
+        Objects.requireNonNull(run);
 
         String url = new URIBuilder()
             .setScheme("https")
             .setHost(this.host)
             .setPath(FOLLOW_ENDPOINT)
-            .addParameter("runnumber", String.valueOf(run))
+            .addParameter("runnumber", run)
             .addParameter("key", this.apiKey)
             .addParameter("outputType", "JSON")
             .toString();

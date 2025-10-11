@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public record Stop(
-    int id,
+    String id,
 
     String name,
 
@@ -18,7 +18,7 @@ public record Stop(
         Objects.requireNonNull(stop);
 
         return new Stop(
-            Integer.parseInt(stop.stpid()),
+            stop.stpid(),
             stop.stpnm(),
             new BigDecimal(stop.lat()),
             new BigDecimal(stop.lon())

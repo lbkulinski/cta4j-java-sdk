@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 public record Vehicle(
-    int id,
+    String id,
 
     BigDecimal latitude,
 
@@ -24,7 +24,7 @@ public record Vehicle(
         Objects.requireNonNull(vehicle);
 
         return new Vehicle(
-            Integer.parseInt(vehicle.vid()),
+            vehicle.vid(),
             new BigDecimal(vehicle.lat()),
             new BigDecimal(vehicle.lon()),
             Integer.parseInt(vehicle.hdg()),

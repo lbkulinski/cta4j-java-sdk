@@ -7,19 +7,19 @@ import java.time.Instant;
 import java.util.Objects;
 
 public record UpcomingTrainArrival(
-    int stationId,
+    String stationId,
 
-    int stopId,
+    String stopId,
 
     String stationName,
 
     String stopDescription,
 
-    int run,
+    String run,
 
     Route route,
 
-    int destinationStopId,
+    String destinationStopId,
 
     String destinationName,
 
@@ -43,13 +43,13 @@ public record UpcomingTrainArrival(
         Objects.requireNonNull(eta);
 
         return new UpcomingTrainArrival(
-            Integer.parseInt(eta.staId()),
-            Integer.parseInt(eta.stpId()),
+            eta.staId(),
+            eta.stpId(),
             eta.staNm(),
             eta.stpDe(),
-            Integer.parseInt(eta.rn()),
+            eta.rn(),
             Route.parseString(eta.rt()),
-            Integer.parseInt(eta.destSt()),
+            eta.destSt(),
             eta.destNm(),
             Integer.parseInt(eta.trDr()),
             Instant.ofEpochMilli(Long.parseLong(eta.prdt())),

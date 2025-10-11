@@ -160,19 +160,17 @@ public final class BusClient {
                             .toList();
     }
 
-    public List<StopArrival> getArrivals(String routeId, int stopId) {
+    public List<StopArrival> getArrivals(String routeId, String stopId) {
         Objects.requireNonNull(routeId);
 
-        if (stopId <= 0) {
-            throw new IllegalArgumentException("Stop ID must be a positive integer");
-        }
+        Objects.requireNonNull(stopId);
 
         String url = new URIBuilder()
             .setScheme("https")
             .setHost(this.host)
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("rt", routeId)
-            .addParameter("stpid", String.valueOf(stopId))
+            .addParameter("stpid", stopId)
             .addParameter("key", this.apiKey)
             .addParameter("format", "json")
             .toString();
@@ -230,16 +228,14 @@ public final class BusClient {
                               .toList();
     }
 
-    public Optional<Vehicle> getVehicle(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("Vehicle ID must be a positive integer");
-        }
+    public Optional<Vehicle> getVehicle(String id) {
+        Objects.requireNonNull(id);
 
         String url = new URIBuilder()
             .setScheme("https")
             .setHost(this.host)
             .setPath(VEHICLES_ENDPOINT)
-            .addParameter("vid", String.valueOf(id))
+            .addParameter("vid", id)
             .addParameter("key", this.apiKey)
             .addParameter("format", "json")
             .toString();
