@@ -7,7 +7,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   publish:
-    name: Build with Maven and Deploy to Maven Central
+    name: Publish to Maven Central
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
