@@ -40,7 +40,7 @@ public record StopArrival(
 
     Instant arrivalTime,
 
-    boolean delayed
+    Boolean delayed
 ) {
     /**
      * Calculates the estimated time of arrival (ETA) in minutes from the current time to the predicted arrival time.

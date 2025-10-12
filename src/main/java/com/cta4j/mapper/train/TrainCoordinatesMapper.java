@@ -15,9 +15,9 @@ public final class TrainCoordinatesMapper {
         Objects.requireNonNull(position);
 
         return new TrainCoordinates(
-            new BigDecimal(position.lat()),
-            new BigDecimal(position.lon()),
-            Integer.parseInt(position.heading())
+            (position.lat() == null) ? null : new BigDecimal(position.lat()),
+            (position.lon() == null) ? null : new BigDecimal(position.lon()),
+            (position.heading() == null) ? null : Integer.parseInt(position.heading())
         );
     }
 }

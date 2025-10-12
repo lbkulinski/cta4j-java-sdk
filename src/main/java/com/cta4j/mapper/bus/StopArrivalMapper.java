@@ -17,17 +17,17 @@ public final class StopArrivalMapper {
         Objects.requireNonNull(prd);
 
         return new StopArrival(
-            BusPredictionTypeMapper.fromExternal(prd.typ()),
+            (prd.typ() == null) ? null :BusPredictionTypeMapper.fromExternal(prd.typ()),
             prd.stpnm(),
             prd.stpid(),
             prd.vid(),
-            BigInteger.valueOf(prd.dstp()),
+            (prd.dstp() == null) ? null : new BigInteger(prd.dstp()),
             prd.rt(),
             prd.rtdd(),
             prd.rtdir(),
             prd.des(),
-            DateTimeUtils.parseBusTimestamp(prd.prdtm()),
-            prd.dly()
+            (prd.prdtm() == null) ? null: DateTimeUtils.parseBusTimestamp(prd.prdtm()),
+            (prd.dly() == null) ? null : Boolean.parseBoolean(prd.dly())
         );
     }
 }

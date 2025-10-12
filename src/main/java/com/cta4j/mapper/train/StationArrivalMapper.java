@@ -21,20 +21,20 @@ public final class StationArrivalMapper {
             eta.staNm(),
             eta.stpDe(),
             eta.rn(),
-            RouteMapper.fromExternal(eta.rt()),
+            (eta.rt() == null) ? null : RouteMapper.fromExternal(eta.rt()),
             eta.destSt(),
             eta.destNm(),
-            Integer.parseInt(eta.trDr()),
-            DateTimeUtils.parseTrainTimestamp(eta.prdt()),
-            DateTimeUtils.parseTrainTimestamp(eta.arrT()),
-            "1".equals(eta.isApp()),
-            "1".equals(eta.isSch()),
-            "1".equals(eta.isDly()),
-            "1".equals(eta.isFlt()),
+            (eta.trDr() == null) ? null : Integer.parseInt(eta.trDr()),
+            (eta.prdt() == null) ? null : DateTimeUtils.parseTrainTimestamp(eta.prdt()),
+            (eta.arrT() == null) ? null : DateTimeUtils.parseTrainTimestamp(eta.arrT()),
+            (eta.isApp() == null) ? null : "1".equals(eta.isApp()),
+            (eta.isSch() == null) ? null : "1".equals(eta.isSch()),
+            (eta.isDly() == null) ? null : "1".equals(eta.isDly()),
+            (eta.isFlt() == null) ? null : "1".equals(eta.isFlt()),
             eta.flags(),
-            new BigDecimal(eta.lat()),
-            new BigDecimal(eta.lon()),
-            Integer.parseInt(eta.heading())
+            (eta.lat() == null) ? null : new BigDecimal(eta.lat()),
+            (eta.lon() == null) ? null : new BigDecimal(eta.lon()),
+            (eta.heading() == null) ? null : Integer.parseInt(eta.heading())
         );
     }
 }

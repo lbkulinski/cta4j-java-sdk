@@ -2,6 +2,7 @@ package com.cta4j.mapper.train;
 
 import com.cta4j.external.train.follow.CtaFollowEta;
 import com.cta4j.model.train.UpcomingTrainArrival;
+import com.cta4j.util.DateTimeUtils;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -20,16 +21,16 @@ public final class UpcomingTrainArrivalMapper {
             eta.staNm(),
             eta.stpDe(),
             eta.rn(),
-            RouteMapper.fromExternal(eta.rt()),
+            (eta.rt() == null) ? null : RouteMapper.fromExternal(eta.rt()),
             eta.destSt(),
             eta.destNm(),
-            Integer.parseInt(eta.trDr()),
-            Instant.ofEpochMilli(Long.parseLong(eta.prdt())),
-            Instant.ofEpochMilli(Long.parseLong(eta.arrT())),
-            "1".equals(eta.isApp()),
-            "1".equals(eta.isSch()),
-            "1".equals(eta.isDly()),
-            "1".equals(eta.isFlt()),
+            (eta.trDr() == null) ? null : Integer.parseInt(eta.trDr()),
+            (eta.prdt() == null) ? null : DateTimeUtils.parseTrainTimestamp(eta.prdt()),
+            (eta.arrT() == null) ? null : DateTimeUtils.parseTrainTimestamp(eta.arrT()),
+            (eta.isApp() == null) ? null : "1".equals(eta.isApp()),
+            (eta.isSch() == null) ? null : "1".equals(eta.isSch()),
+            (eta.isDly() == null) ? null : "1".equals(eta.isDly()),
+            (eta.isFlt() == null) ? null : "1".equals(eta.isFlt()),
             eta.flags()
         );
     }

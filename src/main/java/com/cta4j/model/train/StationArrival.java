@@ -44,19 +44,19 @@ public record StationArrival(
 
     String destinationName,
 
-    int direction,
+    Integer direction,
 
     Instant predictionTime,
 
     Instant arrivalTime,
 
-    boolean approaching,
+    Boolean approaching,
 
-    boolean scheduled,
+    Boolean scheduled,
 
-    boolean delayed,
+    Boolean delayed,
 
-    boolean faulted,
+    Boolean faulted,
 
     String flags,
 
@@ -64,7 +64,7 @@ public record StationArrival(
 
     BigDecimal longitude,
 
-    int heading
+    Integer heading
 ) {
     /**
      * Calculates the estimated time of arrival (ETA) in minutes from the prediction time to the arrival time. If the

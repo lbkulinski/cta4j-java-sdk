@@ -17,8 +17,8 @@ public final class StopMapper {
         return new Stop(
             stop.stpid(),
             stop.stpnm(),
-            new BigDecimal(stop.lat()),
-            new BigDecimal(stop.lon())
+            (stop.lat() == null) ? null : new BigDecimal(stop.lat()),
+            (stop.lon() == null) ? null : new BigDecimal(stop.lon())
         );
     }
 }

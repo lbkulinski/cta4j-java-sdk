@@ -18,14 +18,16 @@ public final class DetourMapper {
         return new Detour(
             detour.id(),
             detour.ver(),
-            detour.st() == 1,
+            (detour.st() == null) ? null : "1".equals(detour.st()),
             detour.desc(),
-            detour.rtdirs()
-                  .stream()
-                  .map(rd -> new DetourRouteDirection(rd.rt(), rd.dir()))
-                  .toList(),
-            DateTimeUtils.parseBusTimestamp(detour.startdt()),
-            DateTimeUtils.parseBusTimestamp(detour.enddt())
+            (detour.rtdirs() == null) ? null : detour.rtdirs()
+                                                     .stream()
+                                                     .map(rd -> new DetourRouteDirection(
+                                                         rd.rt(), rd.dir()
+                                                     ))
+                                                     .toList(),
+            (detour.startdt() == null) ? null : DateTimeUtils.parseBusTimestamp(detour.startdt()),
+            (detour.enddt() == null) ? null : DateTimeUtils.parseBusTimestamp(detour.enddt())
         );
     }
 }

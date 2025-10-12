@@ -16,9 +16,9 @@ public final class BusMapper {
 
         return new Bus(
             vehicle.vid(),
-            new BigDecimal(vehicle.lat()),
-            new BigDecimal(vehicle.lon()),
-            Integer.parseInt(vehicle.hdg()),
+            (vehicle.lat() == null) ? null : new BigDecimal(vehicle.lat()),
+            (vehicle.lon() == null) ? null : new BigDecimal(vehicle.lon()),
+            (vehicle.hdg() == null) ? null : Integer.parseInt(vehicle.hdg()),
             vehicle.rt(),
             vehicle.des(),
             vehicle.dly()
