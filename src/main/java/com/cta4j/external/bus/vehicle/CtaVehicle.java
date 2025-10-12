@@ -6,18 +6,18 @@ public record CtaVehicle(
     String lat,
     String lon,
     String hdg,
-    int pid,
+    String pid,
     String rt,
     String des,
-    int pdist,
-    boolean dly,
+    String pdist,
+    Boolean dly,
     String tatripid,
     String origtatripno,
     String tablockid,
     String zone,
-    int mode,
+    String mode,
     String psgld,
-    int stst,
+    String stst,
     String stsd
 ) {
 }

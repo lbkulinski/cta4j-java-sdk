@@ -6,22 +6,22 @@ public record CtaPredictionsPrd(
     String stpnm,
     String stpid,
     String vid,
-    int dstp,
+    String dstp,
     String rt,
     String rtdd,
     String rtdir,
     String des,
     String prdtm,
-    boolean dly,
-    int dyn,
+    String dly,
+    String dyn,
     String tablockid,
     String tatripid,
     String origtatripno,
     String prdctdn,
     String zone,
     String psgld,
-    int stst,
+    String stst,
     String stsd,
-    int flagstop
+    String flagstop
 ) {
 }

@@ -5,9 +5,9 @@ import java.util.List;
 public record CtaDetour(
     String id,
 
-    int ver,
+    String ver,
 
-    int st,
+    String st,
 
     String desc,
 

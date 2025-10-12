@@ -17,9 +17,9 @@ import java.util.List;
 public record Detour(
     String id,
 
-    int version,
+    String version,
 
-    boolean active,
+    Boolean active,
 
     String description,
 

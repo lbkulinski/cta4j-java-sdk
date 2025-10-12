@@ -40,19 +40,19 @@ public record UpcomingTrainArrival(
 
     String destinationName,
 
-    int direction,
+    Integer direction,
 
     Instant predictionTime,
 
     Instant arrivalTime,
 
-    boolean approaching,
+    Boolean approaching,
 
-    boolean scheduled,
+    Boolean scheduled,
 
-    boolean delayed,
+    Boolean delayed,
 
-    boolean faulted,
+    Boolean faulted,
 
     String flags
 ) {

@@ -20,12 +20,12 @@ public record Bus(
 
     BigDecimal longitude,
 
-    int heading,
+    Integer heading,
 
     String route,
 
     String destination,
 
-    boolean delayed
+    Boolean delayed
 ) {
 }
