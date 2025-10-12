@@ -35,13 +35,13 @@ After applying, you'll receive an API key by email. Keep it safe — you'll use 
 <dependency>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>1.2.0</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
 ### Gradle (Kotlin DSL)
 ```kotlin
-implementation("com.cta4j:cta4j-java-sdk:1.2.0")
+implementation("com.cta4j:cta4j-java-sdk:1.3.0")
 ```
 
 ---
@@ -54,43 +54,44 @@ implementation("com.cta4j:cta4j-java-sdk:1.2.0")
 import com.cta4j.client.BusClient;
 import com.cta4j.client.TrainClient;
 
-void main() {
-    TrainClient trainClient = new TrainClient("TRAIN_API_KEY");
+public final class Application {
+    public static void main(String[] args) {
+        TrainClient trainClient = new TrainClient("TRAIN_API_KEY");
 
-    trainClient.getStationArrivals("41320")
-               .stream()
-               .map(arrival -> String.format(
-                   "%s-bound %s Line train is arriving at %s in %d minutes",
-                   arrival.destinationName(),
-                   arrival.route(),
-                   arrival.stationName(),
-                   arrival.etaMinutes()
-               ))
-               .forEach(System.out::println);
+        trainClient.getStationArrivals("41320")
+                   .stream()
+                   .map(arrival -> String.format(
+                       "%s-bound %s Line train is arriving at %s in %d minutes",
+                       arrival.destinationName(),
+                       arrival.route(),
+                       arrival.stationName(),
+                       arrival.etaMinutes()
+                   ))
+                   .forEach(System.out::println);
 
-    // Example output:
-    // Howard-bound RED Line train is arriving at Belmont in 1 minutes
-    // 95th/Dan Ryan-bound RED Line train is arriving at Belmont in 2 minutes
-    // Kimball-bound BROWN Line train is arriving at Belmont in 4 minutes
-    // Loop-bound BROWN Line train is arriving at Belmont in 5 minutes
+        // Example output:
+        // Howard-bound RED Line train is arriving at Belmont in 1 minutes
+        // 95th/Dan Ryan-bound RED Line train is arriving at Belmont in 2 minutes
+        // Kimball-bound BROWN Line train is arriving at Belmont in 4 minutes
+        // Loop-bound BROWN Line train is arriving at Belmont in 5 minutes
 
-    BusClient busClient = new BusClient("BUS_API_KEY");
+        BusClient busClient = new BusClient("BUS_API_KEY");
 
-    busClient.getStopArrivals("22", "1828")
-             .stream()
-             .map(arrival -> String.format(
-                 "%s-bound bus is arriving at %s in %d minutes",
-                 arrival.destination(),
-                 arrival.stopName(),
-                 arrival.etaMinutes()
-             ))
-             .forEach(System.out::println);
+        busClient.getStopArrivals("22", "1828")
+                 .stream()
+                 .map(arrival -> String.format(
+                     "%s-bound bus is arriving at %s in %d minutes",
+                     arrival.destination(),
+                     arrival.stopName(),
+                     arrival.etaMinutes()
+                 ))
+                 .forEach(System.out::println);
 
-    // Example output:
-    // Harrison-bound bus is arriving at Clark & Belmont in 1 minutes
-    // Harrison-bound bus is arriving at Clark & Belmont in 26 minutes
+        // Example output:
+        // Harrison-bound bus is arriving at Clark & Belmont in 1 minutes
+        // Harrison-bound bus is arriving at Clark & Belmont in 26 minutes
+    }
 }
-
 ```
 
 ---
