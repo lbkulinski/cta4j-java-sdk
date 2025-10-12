@@ -17,7 +17,7 @@ public final class StopArrivalMapper {
         Objects.requireNonNull(prd);
 
         return new StopArrival(
-            (prd.typ() == null) ? null :BusPredictionTypeMapper.fromExternal(prd.typ()),
+            (prd.typ() == null) ? null : BusPredictionTypeMapper.fromExternal(prd.typ()),
             prd.stpnm(),
             prd.stpid(),
             prd.vid(),
@@ -26,7 +26,7 @@ public final class StopArrivalMapper {
             prd.rtdd(),
             prd.rtdir(),
             prd.des(),
-            (prd.prdtm() == null) ? null: DateTimeUtils.parseBusTimestamp(prd.prdtm()),
+            (prd.prdtm() == null) ? null : DateTimeUtils.parseBusTimestamp(prd.prdtm()),
             (prd.dly() == null) ? null : Boolean.parseBoolean(prd.dly())
         );
     }
