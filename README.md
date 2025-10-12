@@ -1,7 +1,7 @@
 # cta4j Java SDK
 
 A lightweight Java SDK for interacting with the [Chicago Transit Authority (CTA)](https://www.transitchicago.com/) APIs — both Train Tracker and Bus Tracker.  
-Built for simplicity, reliability, and zero external dependencies beyond the Java standard library.
+Built for simplicity, reliability, and minimal external dependencies.
 
 ---
 
@@ -51,7 +51,6 @@ implementation("com.cta4j:cta4j-java-sdk:1.3.0")
 ### Fetch upcoming train arrivals for a station
 
 ```java
-import com.cta4j.client.BusClient;
 import com.cta4j.client.TrainClient;
 
 public final class Application {
@@ -74,7 +73,17 @@ public final class Application {
         // 95th/Dan Ryan-bound RED Line train is arriving at Belmont in 2 minutes
         // Kimball-bound BROWN Line train is arriving at Belmont in 4 minutes
         // Loop-bound BROWN Line train is arriving at Belmont in 5 minutes
+    }
+}
+```
 
+### Fetch upcoming bus arrivals for a stop
+
+```java
+import com.cta4j.client.BusClient;
+
+public final class Application {
+    public static void main(String[] args) {
         BusClient busClient = new BusClient("BUS_API_KEY");
 
         busClient.getStopArrivals("22", "1828")
@@ -100,7 +109,6 @@ public final class Application {
 
 - **Dependency-light**: no Spring, Feign, or Lombok
 - **Modern Java**: uses records and Apache HttpClient 5
-- **Safe by default**: retries transient failures, handles rate limits
 - **Framework-agnostic**: works in any Java 21+ project
 
 ---
