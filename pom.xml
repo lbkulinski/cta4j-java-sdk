@@ -90,6 +90,10 @@
                         <goals><goal>sign</goal></goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <useAgent>false</useAgent>
+                    <passphrase>${env.MAVEN_GPG_PASSPHRASE}</passphrase>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.central</groupId>

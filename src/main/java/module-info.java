@@ -1,3 +1,6 @@
+/**
+ * The cta4j Java SDK module. Provides client APIs for CTA bus and train data.
+ */
 module cta4j.java.sdk {
     requires com.fasterxml.jackson.annotation;
     requires com.fasterxml.jackson.databind;
