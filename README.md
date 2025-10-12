@@ -141,4 +141,4 @@ Copyright © 2025 Logan Bailey Kulinski.
 
 ---
 
-*Built with ❤️ by [Logan Bailey Kulinski](https://lbku.net)*
+*Built with ❤️ by [Logan Kulinski](https://lbku.net)*
