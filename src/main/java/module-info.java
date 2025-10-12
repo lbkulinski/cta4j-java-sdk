@@ -8,5 +8,4 @@ module cta4j.java.sdk {
     exports com.cta4j.exception;
     exports com.cta4j.model.bus;
     exports com.cta4j.model.train;
-    exports com.cta4j.util;
 }
