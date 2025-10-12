@@ -11,7 +11,7 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>CTA Java SDK</name>
     <description>Java SDK for the CTA API</description>
     <url>https://cta4j.app</url>
     <licenses>
