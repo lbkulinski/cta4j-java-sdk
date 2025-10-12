@@ -113,6 +113,18 @@ public final class Application {
 
 ---
 
+## 🛠️ Planned Improvements
+
+- Add test coverage
+- Improve error handling and logging
+- Add support for more API endpoints, like service alerts
+- Implement caching for frequently requested data
+- Add asynchronous request support
+
+Have ideas? Feel free to open an issue or submit a PR!
+
+---
+
 ## 🧾 License
 
 This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).  
