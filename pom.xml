@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
