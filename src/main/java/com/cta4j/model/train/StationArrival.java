@@ -1,13 +1,32 @@
 package com.cta4j.model.train;
 
-import com.cta4j.external.train.arrival.CtaArrivalsEta;
-import com.cta4j.util.DateTimeUtils;
-
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Objects;
 
+/**
+ * An arrival prediction for a train at a station.
+ *
+ * @param stationId the unique identifier of the station.
+ * @param stopId the unique identifier of the stop.
+ * @param stationName the name of the station.
+ * @param stopDescription the description of the stop.
+ * @param run the unique identifier of the train run.
+ * @param route the route of the train.
+ * @param destinationStopId the unique identifier of the destination stop.
+ * @param destinationName the name of the destination.
+ * @param direction the direction of travel (0 = North, 1 = East, 2 = South, 3 = West).
+ * @param predictionTime the time the prediction was made.
+ * @param arrivalTime the predicted arrival time.
+ * @param approaching whether the train is approaching the station.
+ * @param scheduled whether the prediction is based on a schedule.
+ * @param delayed whether the train is delayed.
+ * @param faulted whether there is a fault affecting the train.
+ * @param flags additional flags associated with the prediction.
+ * @param latitude the latitude of the train's current location.
+ * @param longitude the longitude of the train's current location.
+ * @param heading the heading of the train in degrees (0-359).
+ */
 public record StationArrival(
     String stationId,
 
@@ -47,32 +66,12 @@ public record StationArrival(
 
     int heading
 ) {
-    public static StationArrival fromExternal(CtaArrivalsEta eta) {
-        Objects.requireNonNull(eta);
-
-        return new StationArrival(
-            eta.staId(),
-            eta.stpId(),
-            eta.staNm(),
-            eta.stpDe(),
-            eta.rn(),
-            Route.parseString(eta.rt()),
-            eta.destSt(),
-            eta.destNm(),
-            Integer.parseInt(eta.trDr()),
-            DateTimeUtils.parseTrainTimestamp(eta.prdt()),
-            DateTimeUtils.parseTrainTimestamp(eta.arrT()),
-            "1".equals(eta.isApp()),
-            "1".equals(eta.isSch()),
-            "1".equals(eta.isDly()),
-            "1".equals(eta.isFlt()),
-            eta.flags(),
-            new BigDecimal(eta.lat()),
-            new BigDecimal(eta.lon()),
-            Integer.parseInt(eta.heading())
-        );
-    }
-
+    /**
+     * Calculates the estimated time of arrival (ETA) in minutes from the prediction time to the arrival time. If the
+     * arrival time is before the prediction time, it returns 0.
+     *
+     * @return the ETA in minutes, or 0 if the arrival time is before the prediction time.
+     */
     public long etaMinutes() {
         long minutes = Duration.between(this.predictionTime, this.arrivalTime)
                                .toMinutes();

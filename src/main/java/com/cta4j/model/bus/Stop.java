@@ -1,10 +1,15 @@
 package com.cta4j.model.bus;
 
-import com.cta4j.external.bus.stop.CtaStop;
-
 import java.math.BigDecimal;
-import java.util.Objects;
 
+/**
+ * A bus stop.
+ *
+ * @param id the unique identifier of the bus stop
+ * @param name the name of the bus stop
+ * @param latitude the latitude coordinate of the bus stop
+ * @param longitude the longitude coordinate of the bus stop
+ */
 public record Stop(
     String id,
 
@@ -14,14 +19,4 @@ public record Stop(
 
     BigDecimal longitude
 ) {
-    public static Stop fromExternal(CtaStop stop) {
-        Objects.requireNonNull(stop);
-
-        return new Stop(
-            stop.stpid(),
-            stop.stpnm(),
-            new BigDecimal(stop.lat()),
-            new BigDecimal(stop.lon())
-        );
-    }
 }

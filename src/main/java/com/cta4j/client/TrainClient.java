@@ -3,6 +3,9 @@ package com.cta4j.client;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.external.train.arrival.CtaArrivalsResponse;
 import com.cta4j.external.train.follow.CtaFollowResponse;
+import com.cta4j.mapper.train.StationArrivalMapper;
+import com.cta4j.mapper.train.TrainCoordinatesMapper;
+import com.cta4j.mapper.train.UpcomingTrainArrivalMapper;
 import com.cta4j.model.train.TrainCoordinates;
 import com.cta4j.model.train.TrainLocation;
 import com.cta4j.model.train.UpcomingTrainArrival;
@@ -75,7 +78,7 @@ public final class TrainClient {
         return arrivalsResponse.ctatt()
                                .eta()
                                .stream()
-                               .map(StationArrival::fromExternal)
+                               .map(StationArrivalMapper::fromExternal)
                                .toList();
     }
 
@@ -103,13 +106,13 @@ public final class TrainClient {
             throw new Cta4jException(message, e);
         }
 
-        TrainCoordinates coordinates = TrainCoordinates.fromExternal(followResponse.ctatt()
-                                                                                   .position());
+        TrainCoordinates coordinates = TrainCoordinatesMapper.fromExternal(followResponse.ctatt()
+                                                                                         .position());
 
         List<UpcomingTrainArrival> arrivals = followResponse.ctatt()
                                                             .eta()
                                                             .stream()
-                                                            .map(UpcomingTrainArrival::fromExternal)
+                                                            .map(UpcomingTrainArrivalMapper::fromExternal)
                                                             .toList();
 
         return new TrainLocation(coordinates, arrivals);

@@ -1,46 +1,51 @@
 package com.cta4j.model.train;
 
-import java.util.Objects;
-
+/**
+ * A train route.
+ */
 public enum Route {
+    /**
+     * The Red Line route.
+     */
     RED,
 
+    /**
+     * The Blue Line route.
+     */
     BLUE,
 
+    /**
+     * The Brown Line route.
+     */
     BROWN,
 
+    /**
+     * The Green Line route.
+     */
     GREEN,
 
+    /**
+     * The Orange Line route.
+     */
     ORANGE,
 
+    /**
+     * The Purple Line route.
+     */
     PURPLE,
 
+    /**
+     * The Pink Line route.
+     */
     PINK,
 
+    /**
+     * The Yellow Line route.
+     */
     YELLOW,
 
-    N_A;
-
-    public static Route parseString(String string) {
-        Objects.requireNonNull(string);
-
-        string = string.toUpperCase();
-
-        return switch (string) {
-            case "RED", "RED LINE" -> RED;
-            case "BLUE", "BLUE LINE" -> BLUE;
-            case "BRN", "BROWN LINE" -> BROWN;
-            case "G", "GREEN LINE" -> GREEN;
-            case "ORG", "ORANGE LINE" -> ORANGE;
-            case "P", "PURPLE LINE" -> PURPLE;
-            case "PINK", "PINK LINE" -> PINK;
-            case "Y", "YELLOW LINE" -> YELLOW;
-            case "N/A" -> N_A;
-            default -> {
-                String message = "A line with the name \"%s\" does not exist".formatted(string);
-
-                throw new IllegalArgumentException(message);
-            }
-        };
-    }
+    /**
+     * Not available / not applicable.
+     */
+    N_A
 }
