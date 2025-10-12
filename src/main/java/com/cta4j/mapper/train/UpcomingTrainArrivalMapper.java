@@ -1,13 +1,22 @@
 package com.cta4j.mapper.train;
 
 import com.cta4j.external.train.follow.CtaFollowEta;
+import com.cta4j.model.train.Route;
 import com.cta4j.model.train.UpcomingTrainArrival;
 import com.cta4j.util.DateTimeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.Objects;
 
 public final class UpcomingTrainArrivalMapper {
+    private static final Logger logger;
+
+    static {
+        logger = LoggerFactory.getLogger(UpcomingTrainArrivalMapper.class);
+    }
+
     private UpcomingTrainArrivalMapper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
@@ -15,22 +24,86 @@ public final class UpcomingTrainArrivalMapper {
     public static UpcomingTrainArrival fromExternal(CtaFollowEta eta) {
         Objects.requireNonNull(eta);
 
+        Route route = null;
+
+        if (eta.rt() != null) {
+            try {
+                route = RouteMapper.fromExternal(eta.rt());
+            } catch (IllegalArgumentException e) {
+                logger.warn("Invalid route {}", eta.rt());
+            }
+        }
+
+        Integer direction = null;
+
+        if (eta.trDr() != null) {
+            try {
+                direction = Integer.parseInt(eta.trDr());
+            } catch (NumberFormatException e) {
+                logger.warn("Invalid direction value {}", eta.trDr());
+            }
+        }
+
+        Instant predictionTime = null;
+
+        if (eta.prdt() != null) {
+            try {
+                predictionTime = DateTimeUtils.parseTrainTimestamp(eta.prdt());
+            } catch (Exception e) {
+                logger.warn("Invalid prediction time value {}", eta.prdt());
+            }
+        }
+
+        Instant arrivalTime = null;
+
+        if (eta.arrT() != null) {
+            try {
+                arrivalTime = DateTimeUtils.parseTrainTimestamp(eta.arrT());
+            } catch (Exception e) {
+                logger.warn("Invalid arrival time value {}", eta.arrT());
+            }
+        }
+
+        Boolean approaching = null;
+
+        if (eta.isApp() != null) {
+            approaching = "1".equals(eta.isApp());
+        }
+
+        Boolean scheduled = null;
+
+        if (eta.isSch() != null) {
+            scheduled = "1".equals(eta.isSch());
+        }
+
+        Boolean delayed = null;
+
+        if (eta.isDly() != null) {
+            delayed = "1".equals(eta.isDly());
+        }
+
+        Boolean faulted = null;
+
+        if (eta.isFlt() != null) {
+            faulted = "1".equals(eta.isFlt());
+        }
+
         return new UpcomingTrainArrival(
             eta.staId(),
             eta.stpId(),
             eta.staNm(),
             eta.stpDe(),
             eta.rn(),
-            (eta.rt() == null) ? null : RouteMapper.fromExternal(eta.rt()),
+            route,
             eta.destSt(),
             eta.destNm(),
-            (eta.trDr() == null) ? null : Integer.parseInt(eta.trDr()),
-            (eta.prdt() == null) ? null : DateTimeUtils.parseTrainTimestamp(eta.prdt()),
-            (eta.arrT() == null) ? null : DateTimeUtils.parseTrainTimestamp(eta.arrT()),
-            (eta.isApp() == null) ? null : "1".equals(eta.isApp()),
-            (eta.isSch() == null) ? null : "1".equals(eta.isSch()),
-            (eta.isDly() == null) ? null : "1".equals(eta.isDly()),
-            (eta.isFlt() == null) ? null : "1".equals(eta.isFlt()),
+            direction,
+            predictionTime,
+            arrivalTime,
+            approaching,
+            scheduled,
+            delayed,
+            faulted,
             eta.flags()
         );
     }
