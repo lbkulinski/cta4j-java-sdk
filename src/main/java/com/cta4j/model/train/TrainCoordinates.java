@@ -1,10 +1,14 @@
 package com.cta4j.model.train;
 
-import com.cta4j.external.train.follow.CtaFollowPosition;
-
 import java.math.BigDecimal;
-import java.util.Objects;
 
+/**
+ * The coordinates and heading of a train.
+ *
+ * @param latitude the latitude of the train's current location.
+ * @param longitude the longitude of the train's current location.
+ * @param heading the heading of the train in degrees (0-359).
+ */
 public record TrainCoordinates(
     BigDecimal latitude,
 
@@ -12,13 +16,4 @@ public record TrainCoordinates(
 
     int heading
 ) {
-    public static TrainCoordinates fromExternal(CtaFollowPosition position) {
-        Objects.requireNonNull(position);
-
-        return new TrainCoordinates(
-            new BigDecimal(position.lat()),
-            new BigDecimal(position.lon()),
-            Integer.parseInt(position.heading())
-        );
-    }
 }

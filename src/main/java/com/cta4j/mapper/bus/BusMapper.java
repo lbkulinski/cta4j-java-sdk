@@ -1,29 +1,20 @@
-package com.cta4j.model.bus;
+package com.cta4j.mapper.bus;
 
 import com.cta4j.external.bus.vehicle.CtaVehicle;
+import com.cta4j.model.bus.Bus;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
-public record Vehicle(
-    String id,
+public final class BusMapper {
+    private BusMapper() {
+        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+    }
 
-    BigDecimal latitude,
-
-    BigDecimal longitude,
-
-    int heading,
-
-    String route,
-
-    String destination,
-
-    boolean delayed
-) {
-    public static Vehicle fromExternal(CtaVehicle vehicle) {
+    public static Bus fromExternal(CtaVehicle vehicle) {
         Objects.requireNonNull(vehicle);
 
-        return new Vehicle(
+        return new Bus(
             vehicle.vid(),
             new BigDecimal(vehicle.lat()),
             new BigDecimal(vehicle.lon()),

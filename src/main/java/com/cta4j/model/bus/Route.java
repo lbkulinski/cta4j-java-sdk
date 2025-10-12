@@ -1,20 +1,14 @@
 package com.cta4j.model.bus;
 
-import com.cta4j.external.bus.route.CtaRoute;
-
-import java.util.Objects;
-
+/**
+ * A bus route.
+ *
+ * @param id the unique identifier of the bus route
+ * @param name the name of the bus route
+ */
 public record Route(
     String id,
 
     String name
 ) {
-    public static Route fromExternal(CtaRoute route) {
-        Objects.requireNonNull(route);
-
-        return new Route(
-            route.rt(),
-            route.rtnm()
-        );
-    }
 }

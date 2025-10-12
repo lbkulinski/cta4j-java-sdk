@@ -1,25 +1,16 @@
 package com.cta4j.model.bus;
 
-import java.util.Objects;
-
+/**
+ * A type of bus prediction, either an arrival or a departure.
+ */
 public enum BusPredictionType {
+    /**
+     * Indicates an arrival prediction.
+     */
     ARRIVAL,
 
-    DEPARTURE;
-
-    public static BusPredictionType parseString(String string) {
-        Objects.requireNonNull(string);
-
-        string = string.toUpperCase();
-
-        return switch (string) {
-            case "A" -> ARRIVAL;
-            case "D" -> DEPARTURE;
-            default -> {
-                String message = "A bus prediction type with the name \"%s\" does not exist".formatted(string);
-
-                throw new IllegalArgumentException(message);
-            }
-        };
-    }
+    /**
+     * Indicates a departure prediction.
+     */
+    DEPARTURE
 }

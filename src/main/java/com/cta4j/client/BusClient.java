@@ -8,6 +8,7 @@ import com.cta4j.external.bus.prediction.CtaPredictionsResponse;
 import com.cta4j.external.bus.route.CtaRoutesResponse;
 import com.cta4j.external.bus.stop.CtaStopsResponse;
 import com.cta4j.external.bus.vehicle.CtaVehicleResponse;
+import com.cta4j.mapper.bus.*;
 import com.cta4j.model.bus.*;
 import com.cta4j.util.HttpUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,7 +92,7 @@ public final class BusClient {
         return routesResponse.bustimeResponse()
                              .routes()
                              .stream()
-                             .map(Route::fromExternal)
+                             .map(RouteMapper::fromExternal)
                              .toList();
     }
 
@@ -156,7 +157,7 @@ public final class BusClient {
         return stopsResponse.bustimeResponse()
                             .stops()
                             .stream()
-                            .map(Stop::fromExternal)
+                            .map(StopMapper::fromExternal)
                             .toList();
     }
 
@@ -190,7 +191,7 @@ public final class BusClient {
         return predictionsResponse.bustimeResponse()
                                   .prd()
                                   .stream()
-                                  .map(StopArrival::fromExternal)
+                                  .map(StopArrivalMapper::fromExternal)
                                   .toList();
     }
 
@@ -224,11 +225,11 @@ public final class BusClient {
         return detoursResponse.bustimeResponse()
                               .dtrs()
                               .stream()
-                              .map(Detour::fromExternal)
+                              .map(DetourMapper::fromExternal)
                               .toList();
     }
 
-    public Optional<Vehicle> getVehicle(String id) {
+    public Optional<Bus> getBus(String id) {
         Objects.requireNonNull(id);
 
         String url = new URIBuilder()
@@ -255,7 +256,7 @@ public final class BusClient {
         return vehicleResponse.bustimeResponse()
                               .vehicle()
                               .stream()
-                              .map(Vehicle::fromExternal)
+                              .map(BusMapper::fromExternal)
                               .findFirst();
     }
 }
