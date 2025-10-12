@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>CTA Java SDK</name>
     <description>Java SDK for the CTA API</description>
     <url>https://cta4j.app</url>
     <licenses>
@@ -74,6 +74,7 @@
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
+                        <phase>package</phase>
                         <goals><goal>jar</goal></goals>
                     </execution>
                 </executions>
@@ -97,8 +98,6 @@
                 <extensions>true</extensions>
                 <configuration>
                     <publishingServerId>central</publishingServerId>
-                    <autoPublish>true</autoPublish>
-                    <waitUntil>published</waitUntil>
                 </configuration>
             </plugin>
         </plugins>
