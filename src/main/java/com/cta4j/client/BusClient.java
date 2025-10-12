@@ -64,7 +64,7 @@ public final class BusClient {
      *
      * @param host the host of the CTA Bus Tracker API
      * @param apiKey the API key for accessing the CTA Bus Tracker API
-     * @throws NullPointerException if host or API key is {@code null}
+     * @throws NullPointerException if the specified host or API key is {@code null}
      */
     public BusClient(String host, String apiKey) {
         this.host = Objects.requireNonNull(host);
@@ -85,9 +85,9 @@ public final class BusClient {
     }
 
     /**
-     * Retrieves a list of all bus routes.
+     * Retrieves a {@code List} of all bus routes.
      *
-     * @return a list of all bus routes
+     * @return a {@code List} of all bus routes
      * @throws Cta4jException if an error occurs while fetching the data
      */
     public List<Route> getRoutes() {
@@ -119,11 +119,11 @@ public final class BusClient {
     }
 
     /**
-     * Retrieves a list of directions for a specific bus route.
+     * Retrieves a {@code List} of directions for a specific bus route.
      *
      * @param routeId the ID of the bus route
-     * @return a list of directions for the specified bus route
-     * @throws NullPointerException if specified bus route is {@code null}
+     * @return a {@code List} of directions for the specified bus route
+     * @throws NullPointerException if the specified bus route is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     public List<String> getDirections(String routeId) {
@@ -158,12 +158,12 @@ public final class BusClient {
     }
 
     /**
-     * Retrieves a list of stops for a specific bus route and direction.
+     * Retrieves a {@code List} of stops for a specific bus route and direction.
      *
      * @param routeId the ID of the bus route
      * @param direction the direction of the bus route
-     * @return a list of stops for the specified bus route and direction
-     * @throws NullPointerException if specified bus route or direction is {@code null}
+     * @return a {@code List} of stops for the specified bus route and direction
+     * @throws NullPointerException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     public List<Stop> getStops(String routeId, String direction) {
@@ -201,15 +201,15 @@ public final class BusClient {
     }
 
     /**
-     * Retrieves a list of upcoming arrivals for a specific bus route and stop.
+     * Retrieves a {@code List} of upcoming arrivals for a specific bus route and stop.
      *
      * @param routeId the ID of the bus route
      * @param stopId the ID of the bus stop
-     * @return a list of upcoming arrivals for the specified bus route and stop
-     * @throws NullPointerException if specified bus route or stop is {@code null}
+     * @return a {@code List} of upcoming arrivals for the specified bus route and stop
+     * @throws NullPointerException if the specified bus route or stop is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    public List<StopArrival> getArrivals(String routeId, String stopId) {
+    public List<StopArrival> getStopArrivals(String routeId, String stopId) {
         Objects.requireNonNull(routeId);
 
         Objects.requireNonNull(stopId);
@@ -244,12 +244,12 @@ public final class BusClient {
     }
 
     /**
-     * Retrieves a list of detours for a specific bus route and direction.
+     * Retrieves a {@code List} of detours for a specific bus route and direction.
      *
      * @param routeId the ID of the bus route
      * @param direction the direction of the bus route
-     * @return a list of detours for the specified bus route and direction
-     * @throws NullPointerException if specified bus route or direction is {@code null}
+     * @return a {@code List} of detours for the specified bus route and direction
+     * @throws NullPointerException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     public List<Detour> getDetours(String routeId, String direction) {
@@ -291,7 +291,7 @@ public final class BusClient {
      *
      * @param id the ID of the bus
      * @return an {@code Optional} containing the bus information if found, or an empty {@code Optional} if not found
-     * @throws NullPointerException if specified bus ID is {@code null}
+     * @throws NullPointerException if the specified bus ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     public Optional<Bus> getBus(String id) {

@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * A client for interacting with the CTA Train Tracker API.
+ */
 public final class TrainClient {
     private final String host;
 
@@ -39,6 +42,13 @@ public final class TrainClient {
         FOLLOW_ENDPOINT = "/api/1.0/ttfollow.aspx";
     }
 
+    /**
+     * Constructs a new {@code TrainClient} with the specified host and API key.
+     *
+     * @param host the host of the CTA Train Tracker API
+     * @param apiKey the API key for accessing the CTA Train Tracker API
+     * @throws NullPointerException if host or API key is {@code null}
+     */
     public TrainClient(String host, String apiKey) {
         this.host = Objects.requireNonNull(host);
 
@@ -47,10 +57,24 @@ public final class TrainClient {
         this.objectMapper = new ObjectMapper();
     }
 
+    /**
+     * Constructs a new {@code TrainClient} with the default host and the specified API key.
+     *
+     * @param apiKey the API key for accessing the CTA Train Tracker API
+     * @throws NullPointerException if API key is {@code null}
+     */
     public TrainClient(String apiKey) {
         this(DEFAULT_HOST, apiKey);
     }
 
+    /**
+     * Retrieves a {@code List} of upcoming arrivals for a specific station.
+     *
+     * @param stationId the ID of the station
+     * @return a {@code List} of upcoming arrivals for the specified station
+     * @throws NullPointerException if the specified station ID is {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
     public List<StationArrival> getStationArrivals(String stationId) {
         Objects.requireNonNull(stationId);
 
@@ -82,6 +106,14 @@ public final class TrainClient {
                                .toList();
     }
 
+    /**
+     * Retrieves the current location and upcoming arrivals of a specific train.
+     *
+     * @param run the run number of the train
+     * @return the current location and upcoming arrivals of the train with the specified run number
+     * @throws NullPointerException if the specified run number is {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
     public TrainLocation getTrainLocation(String run) {
         Objects.requireNonNull(run);
 
