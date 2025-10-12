@@ -7,7 +7,6 @@ module cta4j.java.sdk {
     requires org.apache.httpcomponents.client5.httpclient5;
     requires org.apache.httpcomponents.core5.httpcore5;
     requires org.slf4j;
-    requires cta4j.java.sdk;
 
     exports com.cta4j.client;
     exports com.cta4j.exception;
