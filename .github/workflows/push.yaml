@@ -15,9 +15,9 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: 'corretto'
-          java-version: '25'
-          cache: 'maven'
+          distribution: "corretto"
+          java-version: "21"
+          cache: "maven"
       - name: Import GPG key
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
