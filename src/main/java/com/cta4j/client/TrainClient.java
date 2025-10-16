@@ -7,7 +7,7 @@ import com.cta4j.mapper.train.StationArrivalMapper;
 import com.cta4j.mapper.train.TrainCoordinatesMapper;
 import com.cta4j.mapper.train.UpcomingTrainArrivalMapper;
 import com.cta4j.model.train.TrainCoordinates;
-import com.cta4j.model.train.TrainLocation;
+import com.cta4j.model.train.Train;
 import com.cta4j.model.train.UpcomingTrainArrival;
 import com.cta4j.model.train.StationArrival;
 import com.cta4j.util.HttpUtils;
@@ -17,6 +17,7 @@ import org.apache.hc.core5.net.URIBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A client for interacting with the CTA Train Tracker API.
@@ -107,14 +108,14 @@ public final class TrainClient {
     }
 
     /**
-     * Retrieves the current location and upcoming arrivals of a specific train.
+     * Retrieves information about a specific train by its run number.
      *
      * @param run the run number of the train
-     * @return the current location and upcoming arrivals of the train with the specified run number
+     * @return an {@code Optional} containing the train information if found, or an empty {@code Optional} if not found
      * @throws NullPointerException if the specified run number is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    public TrainLocation getTrainLocation(String run) {
+    public Optional<Train> getTrain(String run) {
         Objects.requireNonNull(run);
 
         String url = new URIBuilder()
@@ -133,9 +134,7 @@ public final class TrainClient {
         try {
             followResponse = this.objectMapper.readValue(response, CtaFollowResponse.class);
         } catch (IOException e) {
-            String message = "Failed to parse response from %s".formatted(FOLLOW_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            return Optional.empty();
         }
 
         TrainCoordinates coordinates = TrainCoordinatesMapper.fromExternal(followResponse.ctatt()
@@ -147,6 +146,8 @@ public final class TrainClient {
                                                             .map(UpcomingTrainArrivalMapper::fromExternal)
                                                             .toList();
 
-        return new TrainLocation(coordinates, arrivals);
+        Train train = new Train(coordinates, arrivals);
+
+        return Optional.of(train);
     }
 }
