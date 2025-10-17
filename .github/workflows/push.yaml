@@ -42,9 +42,6 @@ jobs:
 
           # import the private key (secret must be the ASCII-armored key)
           printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
-
-          # debug output to confirm key is available
-          gpg --list-secret-keys --keyid-format LONG
         env:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
