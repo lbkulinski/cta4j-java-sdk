@@ -30,6 +30,8 @@ jobs:
 
       - name: Build and test
         run: mvn -B clean verify
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
       - name: Read project version from pom.xml
         id: ver
