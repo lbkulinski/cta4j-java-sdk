@@ -24,6 +24,10 @@ jobs:
 
       - name: Build and test
         run: mvn -B clean verify
+        env:
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
       - name: Read project version from pom.xml
         id: ver
