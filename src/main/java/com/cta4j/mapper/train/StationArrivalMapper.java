@@ -4,6 +4,7 @@ import com.cta4j.external.train.arrival.CtaArrivalsEta;
 import com.cta4j.model.train.Route;
 import com.cta4j.model.train.StationArrival;
 import com.cta4j.util.DateTimeUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class StationArrivalMapper {
     private static final Logger logger;
 

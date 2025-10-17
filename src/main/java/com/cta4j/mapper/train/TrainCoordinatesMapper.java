@@ -2,12 +2,14 @@ package com.cta4j.mapper.train;
 
 import com.cta4j.external.train.follow.CtaFollowPosition;
 import com.cta4j.model.train.TrainCoordinates;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class TrainCoordinatesMapper {
     private static final Logger logger;
 

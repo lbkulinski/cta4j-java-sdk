@@ -2,12 +2,14 @@ package com.cta4j.mapper.bus;
 
 import com.cta4j.external.bus.stop.CtaStop;
 import com.cta4j.model.bus.Stop;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class StopMapper {
     private static final Logger logger;
 

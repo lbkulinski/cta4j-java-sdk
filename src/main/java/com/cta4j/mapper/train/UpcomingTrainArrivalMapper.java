@@ -4,12 +4,14 @@ import com.cta4j.external.train.follow.CtaFollowEta;
 import com.cta4j.model.train.Route;
 import com.cta4j.model.train.UpcomingTrainArrival;
 import com.cta4j.util.DateTimeUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class UpcomingTrainArrivalMapper {
     private static final Logger logger;
 

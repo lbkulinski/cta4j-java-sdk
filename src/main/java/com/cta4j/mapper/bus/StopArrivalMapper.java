@@ -4,6 +4,7 @@ import com.cta4j.external.bus.prediction.CtaPredictionsPrd;
 import com.cta4j.model.bus.BusPredictionType;
 import com.cta4j.model.bus.StopArrival;
 import com.cta4j.util.DateTimeUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,7 @@ import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class StopArrivalMapper {
     private static final Logger logger;
 

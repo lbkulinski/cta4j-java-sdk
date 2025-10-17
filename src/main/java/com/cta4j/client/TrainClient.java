@@ -1,13 +1,18 @@
 package com.cta4j.client;
 
 import com.cta4j.exception.Cta4jException;
+import com.cta4j.external.train.arrival.CtaArrivalsCtatt;
+import com.cta4j.external.train.arrival.CtaArrivalsEta;
 import com.cta4j.external.train.arrival.CtaArrivalsResponse;
+import com.cta4j.external.train.follow.CtaFollowCtatt;
+import com.cta4j.external.train.follow.CtaFollowEta;
+import com.cta4j.external.train.follow.CtaFollowPosition;
 import com.cta4j.external.train.follow.CtaFollowResponse;
 import com.cta4j.mapper.train.StationArrivalMapper;
 import com.cta4j.mapper.train.TrainCoordinatesMapper;
 import com.cta4j.mapper.train.UpcomingTrainArrivalMapper;
 import com.cta4j.model.train.TrainCoordinates;
-import com.cta4j.model.train.TrainLocation;
+import com.cta4j.model.train.Train;
 import com.cta4j.model.train.UpcomingTrainArrival;
 import com.cta4j.model.train.StationArrival;
 import com.cta4j.util.HttpUtils;
@@ -17,6 +22,7 @@ import org.apache.hc.core5.net.URIBuilder;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * A client for interacting with the CTA Train Tracker API.
@@ -99,22 +105,32 @@ public final class TrainClient {
             throw new Cta4jException(message, e);
         }
 
-        return arrivalsResponse.ctatt()
-                               .eta()
-                               .stream()
-                               .map(StationArrivalMapper::fromExternal)
-                               .toList();
+        CtaArrivalsCtatt ctatt = arrivalsResponse.ctatt();
+
+        if (ctatt == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(ARRIVALS_ENDPOINT));
+        }
+
+        List<CtaArrivalsEta> eta = ctatt.eta();
+
+        if ((eta == null) || eta.isEmpty()) {
+            return List.of();
+        }
+
+        return eta.stream()
+                  .map(StationArrivalMapper::fromExternal)
+                  .toList();
     }
 
     /**
-     * Retrieves the current location and upcoming arrivals of a specific train.
+     * Retrieves information about a specific train by its run number.
      *
      * @param run the run number of the train
-     * @return the current location and upcoming arrivals of the train with the specified run number
+     * @return an {@code Optional} containing the train information if found, or an empty {@code Optional} if not found
      * @throws NullPointerException if the specified run number is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    public TrainLocation getTrainLocation(String run) {
+    public Optional<Train> getTrain(String run) {
         Objects.requireNonNull(run);
 
         String url = new URIBuilder()
@@ -138,15 +154,34 @@ public final class TrainClient {
             throw new Cta4jException(message, e);
         }
 
-        TrainCoordinates coordinates = TrainCoordinatesMapper.fromExternal(followResponse.ctatt()
-                                                                                         .position());
+        CtaFollowCtatt ctatt = followResponse.ctatt();
 
-        List<UpcomingTrainArrival> arrivals = followResponse.ctatt()
-                                                            .eta()
-                                                            .stream()
-                                                            .map(UpcomingTrainArrivalMapper::fromExternal)
-                                                            .toList();
+        if (ctatt == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(FOLLOW_ENDPOINT));
+        }
 
-        return new TrainLocation(coordinates, arrivals);
+        CtaFollowPosition position = ctatt.position();
+
+        if (position == null) {
+            return Optional.empty();
+        }
+
+        TrainCoordinates coordinates = TrainCoordinatesMapper.fromExternal(position);
+
+        List<CtaFollowEta> eta = ctatt.eta();
+
+        if ((eta == null) || eta.isEmpty()) {
+            Train train = new Train(coordinates, List.of());
+
+            return Optional.of(train);
+        }
+
+        List<UpcomingTrainArrival> arrivals = eta.stream()
+                                                 .map(UpcomingTrainArrivalMapper::fromExternal)
+                                                 .toList();
+
+        Train train = new Train(coordinates, arrivals);
+
+        return Optional.of(train);
     }
 }
