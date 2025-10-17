@@ -22,22 +22,23 @@ jobs:
           java-version: "21"
           cache: "maven"
 
-      - name: Import GPG key
-        run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-
-      - name: Build and test
-        run: mvn -B clean verify
-        env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
       - name: Read project version from pom.xml
         id: ver
         run: |
           VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:3.5.0:exec)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build and test
+        run: mvn -B clean verify -Dgpg.skip=${{ contains(steps.ver.outputs.version, 'SNAPSHOT') && 'true' || 'false' }}
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+
+      - name: Import GPG key
+        if: "!contains(steps.ver.outputs.version, 'SNAPSHOT')"
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: Build and deploy
         if: "!contains(steps.ver.outputs.version, 'SNAPSHOT')"
@@ -81,9 +82,10 @@ jobs:
           tag_name: v${{ steps.ver.outputs.version }}
           name: cta4j-java-sdk v${{ steps.ver.outputs.version }}
           body_path: ${{ steps.notes.outputs.path }}
+          overwrite: true
           files: |
-            target/cta4j-java-sdk-*.jar
-            target/cta4j-java-sdk-*-sources.jar
-            target/cta4j-java-sdk-*-javadoc.jar
+            target/cta4j-java-sdk-${{ steps.ver.outputs.version }}.jar
+            target/cta4j-java-sdk-${{ steps.ver.outputs.version }}-sources.jar
+            target/cta4j-java-sdk-${{ steps.ver.outputs.version }}-javadoc.jar
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
