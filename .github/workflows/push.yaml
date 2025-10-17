@@ -24,26 +24,7 @@ jobs:
 
       - name: Import GPG key
         run: |
-          mkdir -p ~/.gnupg
-          chmod 700 ~/.gnupg
-
-          # enable loopback pinentry
-          cat > ~/.gnupg/gpg.conf <<'EOF'
-          pinentry-mode loopback
-          EOF
-
-          # allow loopback in gpg-agent
-          cat > ~/.gnupg/gpg-agent.conf <<'EOF'
-          allow-loopback-pinentry
-          EOF
-
-          # restart the agent so changes take effect
-          gpgconf --kill gpg-agent || true
-
-          # import the private key (secret must be the ASCII-armored key)
-          printf '%s' "$GPG_PRIVATE_KEY" | gpg --batch --import
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
 
       - name: Build and test
         run: mvn -B clean verify
