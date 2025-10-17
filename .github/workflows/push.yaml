@@ -22,21 +22,20 @@ jobs:
           java-version: "21"
           cache: "maven"
 
+      - name: Import GPG key
+        run: |
+          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+
       - name: Build and test
-        run: mvn -B clean test
+        run: mvn -B clean verify
 
       - name: Read project version from pom.xml
         id: ver
         run: |
           VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:3.5.0:exec)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
-      - name: Import GPG key
-        if: "!contains(steps.ver.outputs.version, 'SNAPSHOT')"
-        run: |
-          echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: Build and deploy
         if: "!contains(steps.ver.outputs.version, 'SNAPSHOT')"
