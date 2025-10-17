@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Improved testing coverage for `TrainClient` and `BusClient` classes.
 
-## [2.0.0] - 2025-10-17
+## 2.0.0 - 2025-10-17
 
 ### Added
 
@@ -83,4 +83,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `BusClient` class with methods to interact with CTA Bus API.
 
 [Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v2.0.0...HEAD
-[2.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v1.3.0...v2.0.0
