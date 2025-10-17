@@ -20,7 +20,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

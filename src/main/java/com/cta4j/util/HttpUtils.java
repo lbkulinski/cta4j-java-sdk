@@ -11,7 +11,6 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Objects;
 
 public final class HttpUtils {
     private static final CloseableHttpClient httpClient;
@@ -25,10 +24,6 @@ public final class HttpUtils {
     }
 
     private static String handleResponse(URI uri, ClassicHttpResponse httpResponse) throws IOException, ParseException {
-        Objects.requireNonNull(uri);
-
-        Objects.requireNonNull(httpResponse);
-
         int status = httpResponse.getCode();
 
         if (status >= 200 && status < 300) {
