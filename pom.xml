@@ -91,8 +91,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <excludePackageNames>com.cta4j.external.*</excludePackageNames>
-                    <excludePackageNames>com.cta4j.mapper.*</excludePackageNames>
+                    <excludePackageNames>com.cta4j.external.*,com.cta4j.mapper.*</excludePackageNames>
                 </configuration>
             </plugin>
             <plugin>
