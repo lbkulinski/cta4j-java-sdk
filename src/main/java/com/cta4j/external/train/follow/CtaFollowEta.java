@@ -1,5 +1,8 @@
 package com.cta4j.external.train.follow;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record CtaFollowEta(
     String staId,
     String stpId,

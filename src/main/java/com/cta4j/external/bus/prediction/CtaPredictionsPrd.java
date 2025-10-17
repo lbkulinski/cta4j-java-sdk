@@ -1,5 +1,8 @@
 package com.cta4j.external.bus.prediction;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public record CtaPredictionsPrd(
     String tmstmp,
     String typ,

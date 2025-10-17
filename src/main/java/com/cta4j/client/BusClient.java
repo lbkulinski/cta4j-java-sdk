@@ -1,12 +1,23 @@
 package com.cta4j.client;
 
 import com.cta4j.exception.Cta4jException;
+import com.cta4j.external.bus.detour.CtaDetour;
+import com.cta4j.external.bus.detour.CtaDetoursBustimeResponse;
 import com.cta4j.external.bus.detour.CtaDetoursResponse;
 import com.cta4j.external.bus.direction.CtaDirection;
+import com.cta4j.external.bus.direction.CtaDirectionsBustimeResponse;
 import com.cta4j.external.bus.direction.CtaDirectionsResponse;
+import com.cta4j.external.bus.prediction.CtaPredictionsBustimeResponse;
+import com.cta4j.external.bus.prediction.CtaPredictionsPrd;
 import com.cta4j.external.bus.prediction.CtaPredictionsResponse;
+import com.cta4j.external.bus.route.CtaRoute;
+import com.cta4j.external.bus.route.CtaRoutesBustimeResponse;
 import com.cta4j.external.bus.route.CtaRoutesResponse;
+import com.cta4j.external.bus.stop.CtaStop;
+import com.cta4j.external.bus.stop.CtaStopsBustimeResponse;
 import com.cta4j.external.bus.stop.CtaStopsResponse;
+import com.cta4j.external.bus.vehicle.CtaVehicle;
+import com.cta4j.external.bus.vehicle.CtaVehicleBustimeResponse;
 import com.cta4j.external.bus.vehicle.CtaVehicleResponse;
 import com.cta4j.mapper.bus.*;
 import com.cta4j.model.bus.*;
@@ -111,11 +122,21 @@ public final class BusClient {
             throw new Cta4jException(message, e);
         }
 
-        return routesResponse.bustimeResponse()
-                             .routes()
-                             .stream()
-                             .map(RouteMapper::fromExternal)
-                             .toList();
+        CtaRoutesBustimeResponse bustimeResponse = routesResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(ROUTES_ENDPOINT));
+        }
+
+        List<CtaRoute> routes = bustimeResponse.routes();
+
+        if ((routes == null) || routes.isEmpty()) {
+            return List.of();
+        }
+
+        return routes.stream()
+                     .map(RouteMapper::fromExternal)
+                     .toList();
     }
 
     /**
@@ -150,11 +171,21 @@ public final class BusClient {
             throw new Cta4jException(message, e);
         }
 
-        return directionsResponse.bustimeResponse()
-                                 .directions()
-                                 .stream()
-                                 .map(CtaDirection::id)
-                                 .toList();
+        CtaDirectionsBustimeResponse bustimeResponse = directionsResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(DIRECTIONS_ENDPOINT));
+        }
+
+        List<CtaDirection> directions = bustimeResponse.directions();
+
+        if ((directions == null) || directions.isEmpty()) {
+            return List.of();
+        }
+
+        return directions.stream()
+                         .map(CtaDirection::id)
+                         .toList();
     }
 
     /**
@@ -193,11 +224,21 @@ public final class BusClient {
             throw new Cta4jException(message, e);
         }
 
-        return stopsResponse.bustimeResponse()
-                            .stops()
-                            .stream()
-                            .map(StopMapper::fromExternal)
-                            .toList();
+        CtaStopsBustimeResponse bustimeResponse = stopsResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(STOPS_ENDPOINT));
+        }
+
+        List<CtaStop> stops = bustimeResponse.stops();
+
+        if ((stops == null) || stops.isEmpty()) {
+            return List.of();
+        }
+
+        return stops.stream()
+                    .map(StopMapper::fromExternal)
+                    .toList();
     }
 
     /**
@@ -236,11 +277,21 @@ public final class BusClient {
             throw new Cta4jException(message, e);
         }
 
-        return predictionsResponse.bustimeResponse()
-                                  .prd()
-                                  .stream()
-                                  .map(StopArrivalMapper::fromExternal)
-                                  .toList();
+        CtaPredictionsBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
+        }
+
+        List<CtaPredictionsPrd> prd = bustimeResponse.prd();
+
+        if ((prd == null) || prd.isEmpty()) {
+            return List.of();
+        }
+
+        return prd.stream()
+                  .map(StopArrivalMapper::fromExternal)
+                  .toList();
     }
 
     /**
@@ -279,11 +330,21 @@ public final class BusClient {
             throw new Cta4jException(message, e);
         }
 
-        return detoursResponse.bustimeResponse()
-                              .dtrs()
-                              .stream()
-                              .map(DetourMapper::fromExternal)
-                              .toList();
+        CtaDetoursBustimeResponse bustimeResponse = detoursResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(DETOURS_ENDPOINT));
+        }
+
+        List<CtaDetour> dtrs = bustimeResponse.dtrs();
+
+        if ((dtrs == null) || dtrs.isEmpty()) {
+            return List.of();
+        }
+
+        return dtrs.stream()
+                   .map(DetourMapper::fromExternal)
+                   .toList();
     }
 
     /**
@@ -318,10 +379,20 @@ public final class BusClient {
             throw new Cta4jException(message, e);
         }
 
-        return vehicleResponse.bustimeResponse()
-                              .vehicle()
-                              .stream()
-                              .map(BusMapper::fromExternal)
-                              .findFirst();
+        CtaVehicleBustimeResponse bustimeResponse = vehicleResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(VEHICLES_ENDPOINT));
+        }
+
+        List<CtaVehicle> vehicles = bustimeResponse.vehicle();
+
+        if ((vehicles == null) || vehicles.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return vehicles.stream()
+                       .map(BusMapper::fromExternal)
+                       .findFirst();
     }
 }
