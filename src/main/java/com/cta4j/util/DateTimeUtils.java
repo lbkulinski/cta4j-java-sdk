@@ -1,11 +1,14 @@
 package com.cta4j.util;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class DateTimeUtils {
     private DateTimeUtils() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");

@@ -8,10 +8,12 @@ import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.HttpEntity;
 import org.apache.hc.core5.http.ParseException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
 import java.net.URI;
 
+@ApiStatus.Internal
 public final class HttpUtils {
     private static final CloseableHttpClient httpClient;
 
