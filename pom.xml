@@ -53,6 +53,12 @@
             <artifactId>httpclient5</artifactId>
             <version>5.5.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>26.0.2-1</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -64,6 +70,12 @@
                     <execution>
                         <id>attach-sources</id>
                         <goals><goal>jar</goal></goals>
+                        <configuration>
+                            <excludes>
+                                <exclude>com/cta4j/external/**</exclude>
+                                <exclude>com/cta4j/mapper/**</exclude>
+                            </excludes>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -78,6 +90,10 @@
                         <goals><goal>jar</goal></goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludePackageNames>com.cta4j.external.*</excludePackageNames>
+                    <excludePackageNames>com.cta4j.mapper.*</excludePackageNames>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

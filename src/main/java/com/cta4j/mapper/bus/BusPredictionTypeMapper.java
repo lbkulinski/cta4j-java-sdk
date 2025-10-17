@@ -1,9 +1,11 @@
 package com.cta4j.mapper.bus;
 
 import com.cta4j.model.bus.BusPredictionType;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class BusPredictionTypeMapper {
     private BusPredictionTypeMapper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
