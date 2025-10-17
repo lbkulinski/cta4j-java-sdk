@@ -22,16 +22,16 @@ jobs:
           java-version: "21"
           cache: "maven"
 
-      - name: Build and test
-        run: mvn -B clean verify -Dgpg.skip=${{ contains(steps.ver.outputs.version, 'SNAPSHOT') && 'true' || 'false' }}
-        env:
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
-
       - name: Read project version from pom.xml
         id: ver
         run: |
           VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:3.5.0:exec)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Build and test
+        run: mvn -B clean verify -Dgpg.skip=${{ contains(steps.ver.outputs.version, 'SNAPSHOT') && 'true' || 'false' }}
+        env:
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
 
       - name: Import GPG key
         if: "!contains(steps.ver.outputs.version, 'SNAPSHOT')"
