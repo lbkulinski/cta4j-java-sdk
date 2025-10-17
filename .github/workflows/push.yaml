@@ -25,6 +25,8 @@ jobs:
       - name: Import GPG key
         run: |
           echo "$GPG_PRIVATE_KEY" | gpg --batch --import
+        env:
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: Build and test
         run: mvn -B clean verify
