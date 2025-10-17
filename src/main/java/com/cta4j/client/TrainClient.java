@@ -167,13 +167,15 @@ public final class TrainClient {
             return Optional.empty();
         }
 
+        TrainCoordinates coordinates = TrainCoordinatesMapper.fromExternal(position);
+
         List<CtaFollowEta> eta = ctatt.eta();
 
-        if (eta == null) {
-            return Optional.empty();
-        }
+        if ((eta == null) || eta.isEmpty()) {
+            Train train = new Train(coordinates, List.of());
 
-        TrainCoordinates coordinates = TrainCoordinatesMapper.fromExternal(position);
+            return Optional.of(train);
+        }
 
         List<UpcomingTrainArrival> arrivals = eta.stream()
                                                  .map(UpcomingTrainArrivalMapper::fromExternal)
