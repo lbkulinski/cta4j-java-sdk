@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-- `TrainLocation` class and `getTrainLocations` method in `TrainClient` class.
+- `TrainLocation` class and `getTrainLocation` method in `TrainClient` class.
 - Internal classes from Maven Javadoc and source JARs.
 
 ## 1.3.0 - 2025-10-12
