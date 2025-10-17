@@ -104,16 +104,7 @@
                     <execution>
                         <id>sign-release</id>
                         <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                        <configuration>
-                            <gpgArguments>
-                                <arg>--pinentry-mode</arg>
-                                <arg>loopback</arg>
-                            </gpgArguments>
-                            <passphrase>${env.MAVEN_GPG_PASSPHRASE}</passphrase>
-                        </configuration>
+                        <goals><goal>sign</goal></goals>
                     </execution>
                 </executions>
                 <configuration>
