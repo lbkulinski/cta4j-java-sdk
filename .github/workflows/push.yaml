@@ -84,7 +84,7 @@ jobs:
           tag_name: v${{ steps.ver.outputs.version }}
           name: cta4j-java-sdk v${{ steps.ver.outputs.version }}
           body_path: ${{ steps.notes.outputs.path }}
-          overwrite: true
+          overwrite_files: true
           files: |
             target/cta4j-java-sdk-${{ steps.ver.outputs.version }}.jar
             target/cta4j-java-sdk-${{ steps.ver.outputs.version }}-sources.jar
