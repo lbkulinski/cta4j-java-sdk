@@ -1,7 +1,7 @@
 package com.cta4j.bus.mapper;
 
 import com.cta4j.bus.external.vehicle.CtaVehicle;
-import com.cta4j.bus.model.Bus;
+import com.cta4j.bus.model.BusCoordinates;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,18 +10,18 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 @ApiStatus.Internal
-public final class BusMapper {
+public final class BusCoordinatesMapper {
     private static final Logger logger;
 
     static {
-        logger = LoggerFactory.getLogger(BusMapper.class);
+        logger = LoggerFactory.getLogger(BusCoordinatesMapper.class);
     }
 
-    private BusMapper() {
+    private BusCoordinatesMapper() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static Bus fromExternal(CtaVehicle vehicle) {
+    public static BusCoordinates fromExternal(CtaVehicle vehicle) {
         Objects.requireNonNull(vehicle);
 
         BigDecimal latitude = null;
@@ -54,14 +54,6 @@ public final class BusMapper {
             }
         }
 
-        return new Bus(
-            vehicle.vid(),
-            latitude,
-            longitude,
-            heading,
-            vehicle.rt(),
-            vehicle.des(),
-            vehicle.dly()
-        );
+        return new BusCoordinates(latitude, longitude, heading);
     }
 }

@@ -176,7 +176,7 @@ public final class TrainClientImpl implements TrainClient {
             String finalHost = (this.host == null) ? DEFAULT_HOST : this.host;
 
             if (this.apiKey == null) {
-                throw new NullPointerException("API key must not be null");
+                throw new IllegalStateException("API key must not be null");
             }
 
             return new TrainClientImpl(finalHost, this.apiKey);

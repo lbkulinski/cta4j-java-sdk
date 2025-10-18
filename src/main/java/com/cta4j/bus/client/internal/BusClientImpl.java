@@ -278,6 +278,47 @@ public final class BusClientImpl implements BusClient {
                    .toList();
     }
 
+    private List<UpcomingBusArrival> getUpcomingBusArrivals(String id) {
+        Objects.requireNonNull(id);
+
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(PREDICTIONS_ENDPOINT)
+            .addParameter("vid", id)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        CtaPredictionsResponse predictionsResponse;
+
+        try {
+            predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
+        } catch (IOException e) {
+            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaPredictionsBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
+        }
+
+        List<CtaPredictionsPrd> prd = bustimeResponse.prd();
+
+        if ((prd == null) || prd.isEmpty()) {
+            return List.of();
+        }
+
+        return prd.stream()
+                  .map(UpcomingBusArrivalMapper::fromExternal)
+                  .toList();
+    }
+
     @Override
     public Optional<Bus> getBus(String id) {
         Objects.requireNonNull(id);
@@ -315,9 +356,27 @@ public final class BusClientImpl implements BusClient {
             return Optional.empty();
         }
 
-        return vehicles.stream()
-                       .map(BusMapper::fromExternal)
-                       .findFirst();
+        if (vehicles.size() > 1) {
+            String message = "Multiple buses found for ID %s".formatted(id);
+
+            throw new Cta4jException(message);
+        }
+
+        CtaVehicle vehicle = vehicles.getFirst();
+
+        String route = vehicle.rt();
+
+        String destination = vehicle.des();
+
+        BusCoordinates coordinates = BusCoordinatesMapper.fromExternal(vehicle);
+
+        List<UpcomingBusArrival> upcomingArrivals = this.getUpcomingBusArrivals(id);
+
+        Boolean delayed = vehicle.dly();
+
+        Bus bus = new Bus(id, route, destination, coordinates, upcomingArrivals, delayed);
+
+        return Optional.of(bus);
     }
 
     public static final class BuilderImpl implements BusClient.Builder {
@@ -350,7 +409,7 @@ public final class BusClientImpl implements BusClient {
             String finalHost = (this.host == null) ? DEFAULT_HOST : this.host;
 
             if (this.apiKey == null) {
-                throw new NullPointerException("API key must not be null");
+                throw new IllegalStateException("API key must not be null");
             }
 
             return new BusClientImpl(finalHost, this.apiKey);

@@ -1,14 +1,13 @@
 package com.cta4j.bus.model;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * A bus currently in service.
  *
  * @param id the unique identifier of the bus
- * @param latitude the latitude of the bus
- * @param longitude the longitude of the bus
- * @param heading the heading of the bus in degrees
+ * @param coordinates the coordinates and heading of the bus
+ * @param arrivals the list of upcoming bus arrivals for the bus
  * @param route the route identifier the bus is serving
  * @param destination the destination of the bus
  * @param delayed whether the bus is currently delayed
@@ -16,15 +15,13 @@ import java.math.BigDecimal;
 public record Bus(
     String id,
 
-    BigDecimal latitude,
-
-    BigDecimal longitude,
-
-    Integer heading,
-
     String route,
 
     String destination,
+
+    BusCoordinates coordinates,
+
+    List<UpcomingBusArrival> arrivals,
 
     Boolean delayed
 ) {

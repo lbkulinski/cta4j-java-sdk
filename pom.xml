@@ -68,8 +68,12 @@
                         <goals><goal>jar</goal></goals>
                         <configuration>
                             <excludes>
-                                <exclude>com/cta4j/external/**</exclude>
-                                <exclude>com/cta4j/mapper/**</exclude>
+                                <exclude>com/cta4j/bus/client/internal/**</exclude>
+                                <exclude>com/cta4j/bus/external/**</exclude>
+                                <exclude>com/cta4j/bus/mapper/**</exclude>
+                                <exclude>com/cta4j/train/client/internal/**</exclude>
+                                <exclude>com/cta4j/train/external/**</exclude>
+                                <exclude>com/cta4j/train/mapper/**</exclude>
                                 <exclude>com/cta4j/util/**</exclude>
                             </excludes>
                         </configuration>
@@ -88,7 +92,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <excludePackageNames>com.cta4j.external.*,com.cta4j.mapper.*,com.cta4j.util.*</excludePackageNames>
+                    <excludePackageNames>com.cta4j.bus.client.internal.*,com.cta4j.bus.external.*,com.cta4j.bus.mapper.*,com.cta4j.train.client.internal.*,com.cta4j.train.external.*,com.cta4j.train.mapper.*,com.cta4j.util.*</excludePackageNames>
                 </configuration>
             </plugin>
             <plugin>
