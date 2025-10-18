@@ -66,13 +66,15 @@ jobs:
         id: notes
         run: |
           VER="${{ steps.ver.outputs.version }}"
-          # Grab the section that starts at "## [VER]" and ends before the next "## "
-          awk -v ver="$VER" 'BEGIN { regex="^## \\[" ver "\\]" } $0 ~ regex {flag=1; next} flag && /^##[[:space:]]/ {flag=0} flag' CHANGELOG.md > RELEASE_NOTES.md || true
-
+          
+          # Match either "## [VER]" or "## VER" and allow optional " - date" after the version
+          awk -v ver="$VER" 'BEGIN { regex="^##[[:space:]]+\\[?" ver "\\]?(\\s*-.*)?$" } $0 ~ regex {flag=1; next} flag && /^##[[:space:]]/ {flag=0} flag' CHANGELOG.md > RELEASE_NOTES.md || true
+          
           # Fallback if empty
           if [ ! -s RELEASE_NOTES.md ]; then
             echo "No changelog section found for ${VER}." > RELEASE_NOTES.md
           fi
+          
           echo "path=RELEASE_NOTES.md" >> "$GITHUB_OUTPUT"
 
       - name: Create GitHub Release using CHANGELOG section
