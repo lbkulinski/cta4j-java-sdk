@@ -7,9 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## 2.0.1 - 2025-10-17
+
 ### Added
 
-- Improved testing coverage for `TrainClient` and `BusClient` classes.
+- Dependency: logback-core 1.5.19
+  - Temporary fix for vulnerability in logback-classic (CVE-2025-11226)
+
+### Changed
+
+- Bumped org.apache.maven.plugins:maven-javadoc-plugin from 3.8.0 to 3.12.0
+- Bumped org.apache.maven.plugins:maven-gpg-plugin from 3.2.4 to 3.2.8
 
 ## 2.0.0 - 2025-10-17
 
