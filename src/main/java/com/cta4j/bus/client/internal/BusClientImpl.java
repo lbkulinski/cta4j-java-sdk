@@ -392,14 +392,14 @@ public final class BusClientImpl implements BusClient {
 
         @Override
         public Builder host(String host) {
-            this.host = host;
+            this.host = Objects.requireNonNull(host);
 
             return this;
         }
 
         @Override
         public Builder apiKey(String apiKey) {
-            this.apiKey = apiKey;
+            this.apiKey = Objects.requireNonNull(apiKey);
 
             return this;
         }

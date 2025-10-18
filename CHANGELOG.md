@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - A new type `UpcomingBusArrival` representing upcoming bus arrival information.
-- A new type `BusCoordindates` representing bus coordinates (latitude, longitude, heading).
+- A new type `BusCoordinates` representing bus coordinates (latitude, longitude, heading).
 - An `arrivals` field of type `List<UpcomingBusArrival>` has been added to the `Bus` class to provide information about upcoming bus arrivals.
 
 ### Changed
@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `com.cta4j.common` for shared/common classes
 - BREAKING CHANGE: Public concrete client classes replaced by interfaces with a fluent `Builder` API (e.g. `BusClient`, `TrainClient`)
   - Create clients via `XxxClient.builder()...build()` instead of instantiating implementation classes.
-- BREAKING CHANGE: The `Bus` class has moved latitude, longitude, and heading fields into a field of type `BusCoordindates`.
+- BREAKING CHANGE: The `Bus` class has moved latitude, longitude, and heading fields into a field of type `BusCoordinates`.
 - Implementation classes are now internal and may be excluded from source/javadoc artifacts.
 
 ## [2.0.2] - 2025-10-17

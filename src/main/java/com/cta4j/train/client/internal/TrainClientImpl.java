@@ -158,15 +158,15 @@ public final class TrainClientImpl implements TrainClient {
         }
 
         @Override
-        public TrainClient.Builder host(String host) {
-            this.host = host;
+        public Builder host(String host) {
+            this.host = Objects.requireNonNull(host);
 
             return this;
         }
 
         @Override
-        public TrainClient.Builder apiKey(String apiKey) {
-            this.apiKey = apiKey;
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Objects.requireNonNull(apiKey);
 
             return this;
         }
