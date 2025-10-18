@@ -82,7 +82,7 @@ public final class Application {
 ### Fetch upcoming bus arrivals for a stop
 
 ```java
-
+import com.cta4j.bus.client.BusClient;
 
 public final class Application {
     public static void main(String[] args) {
