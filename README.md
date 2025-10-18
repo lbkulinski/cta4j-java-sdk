@@ -35,13 +35,13 @@ After applying, you'll receive an API key by email. Keep it safe — you'll use 
 <dependency>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>2.0.2</version>
+    <version>3.0.0</version>
 </dependency>
 ```
 
 ### Gradle (Kotlin DSL)
 ```kotlin
-implementation("com.cta4j:cta4j-java-sdk:2.0.2")
+implementation("com.cta4j:cta4j-java-sdk:3.0.0")
 ```
 
 ---
@@ -51,11 +51,13 @@ implementation("com.cta4j:cta4j-java-sdk:2.0.2")
 ### Fetch upcoming train arrivals for a station
 
 ```java
-import com.cta4j.client.TrainClient;
+import com.cta4j.train.client.TrainClient;
 
 public final class Application {
     public static void main(String[] args) {
-        TrainClient trainClient = new TrainClient("TRAIN_API_KEY");
+        TrainClient trainClient = TrainClient.builder()
+                                             .apiKey("TRAIN_API_KEY")
+                                             .build();
 
         trainClient.getStationArrivals("41320")
                    .stream()
@@ -80,11 +82,13 @@ public final class Application {
 ### Fetch upcoming bus arrivals for a stop
 
 ```java
-import com.cta4j.client.BusClient;
+
 
 public final class Application {
     public static void main(String[] args) {
-        BusClient busClient = new BusClient("BUS_API_KEY");
+        BusClient busClient = BusClient.builder()
+                                       .apiKey("BUS_API_KEY")
+                                       .build();
 
         busClient.getStopArrivals("22", "1828")
                  .stream()

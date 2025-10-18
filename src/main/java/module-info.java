@@ -9,17 +9,18 @@ module cta4j.java.sdk {
     requires org.slf4j;
     requires static org.jetbrains.annotations;
 
-    exports com.cta4j.client;
+    exports com.cta4j.bus.client;
+    exports com.cta4j.train.client;
+    exports com.cta4j.bus.model;
+    exports com.cta4j.train.model;
     exports com.cta4j.exception;
-    exports com.cta4j.model.bus;
-    exports com.cta4j.model.train;
 
-    opens com.cta4j.external.bus.detour to com.fasterxml.jackson.databind;
-    opens com.cta4j.external.bus.direction to com.fasterxml.jackson.databind;
-    opens com.cta4j.external.bus.prediction to com.fasterxml.jackson.databind;
-    opens com.cta4j.external.bus.route to com.fasterxml.jackson.databind;
-    opens com.cta4j.external.bus.stop to com.fasterxml.jackson.databind;
-    opens com.cta4j.external.bus.vehicle to com.fasterxml.jackson.databind;
-    opens com.cta4j.external.train.arrival to com.fasterxml.jackson.databind;
-    opens com.cta4j.external.train.follow to com.fasterxml.jackson.databind;
+    opens com.cta4j.bus.external.detour to com.fasterxml.jackson.databind;
+    opens com.cta4j.bus.external.direction to com.fasterxml.jackson.databind;
+    opens com.cta4j.bus.external.prediction to com.fasterxml.jackson.databind;
+    opens com.cta4j.bus.external.route to com.fasterxml.jackson.databind;
+    opens com.cta4j.bus.external.stop to com.fasterxml.jackson.databind;
+    opens com.cta4j.bus.external.vehicle to com.fasterxml.jackson.databind;
+    opens com.cta4j.train.external.arrival to com.fasterxml.jackson.databind;
+    opens com.cta4j.train.external.follow to com.fasterxml.jackson.databind;
 }
