@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.0] - 2025-10-18
+
+### Added
+
+- A new type `UpcomingBusArrival` representing upcoming bus arrival information.
+- A new type `BusCoordinates` representing bus coordinates (latitude, longitude, heading).
+- An `arrivals` field of type `List<UpcomingBusArrival>` has been added to the `Bus` class to provide information about upcoming bus arrivals.
+
+### Changed
+
+- BREAKING CHANGE: Organized classes into packages by functionality:
+  - `com.cta4j.bus` for bus-related classes
+  - `com.cta4j.train` for train-related classes
+  - `com.cta4j.common` for shared/common classes
+- BREAKING CHANGE: Public concrete client classes replaced by interfaces with a fluent `Builder` API (e.g. `BusClient`, `TrainClient`)
+  - Create clients via `XxxClient.builder()...build()` instead of instantiating implementation classes.
+- BREAKING CHANGE: The `Bus` class has moved latitude, longitude, and heading fields into a field of type `BusCoordinates`.
+- Implementation classes are now internal and may be excluded from source/javadoc artifacts.
+
 ## [2.0.2] - 2025-10-17
 
 ### Removed
@@ -97,6 +116,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v2.0.2...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.0...HEAD
+[3.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v2.0.2...v3.0.0
 [2.0.2]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v2.0.1...v2.0.2
 [2.0.1]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v2.0.0...v2.0.1
