@@ -16,13 +16,13 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Set up JDK and configure Maven server & GPG
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: corretto
@@ -39,7 +39,7 @@ jobs:
           VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive org.codehaus.mojo:exec-maven-plugin:3.5.0:exec)
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Build, sign and deploy to Maven Central
+      - name: Build & Publish to Maven Central
         run: mvn -B clean deploy
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
