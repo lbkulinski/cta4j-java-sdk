@@ -40,7 +40,7 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Build, sign and deploy to Maven Central
-        run: mvn -B clean deploy -Dgpg.skip=${{ contains(steps.ver.outputs.version, 'SNAPSHOT') && 'true' || 'false' }} -DskipTests=false
+        run: mvn -B clean deploy
         env:
           MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
           OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
