@@ -17,7 +17,8 @@ import com.cta4j.train.model.Train;
 import com.cta4j.train.model.UpcomingTrainArrival;
 import com.cta4j.train.model.StationArrival;
 import com.cta4j.util.HttpUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -67,7 +68,7 @@ public final class TrainClientImpl implements TrainClient {
 
         try {
             arrivalsResponse = this.objectMapper.readValue(response, CtaArrivalsResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(ARRIVALS_ENDPOINT);
 
             throw new Cta4jException(message, e);
@@ -109,7 +110,7 @@ public final class TrainClientImpl implements TrainClient {
 
         try {
             followResponse = this.objectMapper.readValue(response, CtaFollowResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(FOLLOW_ENDPOINT);
 
             throw new Cta4jException(message, e);

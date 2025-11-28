@@ -23,7 +23,8 @@ import com.cta4j.bus.external.vehicle.CtaVehicle;
 import com.cta4j.bus.external.vehicle.CtaVehicleBustimeResponse;
 import com.cta4j.bus.external.vehicle.CtaVehicleResponse;
 import com.cta4j.util.HttpUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -78,7 +79,7 @@ public final class BusClientImpl implements BusClient {
 
         try {
             routesResponse = this.objectMapper.readValue(response, CtaRoutesResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(ROUTES_ENDPOINT);
 
             throw new Cta4jException(message, e);
@@ -120,7 +121,7 @@ public final class BusClientImpl implements BusClient {
 
         try {
             directionsResponse = this.objectMapper.readValue(response, CtaDirectionsResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
@@ -165,7 +166,7 @@ public final class BusClientImpl implements BusClient {
 
         try {
             stopsResponse = this.objectMapper.readValue(response, CtaStopsResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(STOPS_ENDPOINT);
 
             throw new Cta4jException(message, e);
@@ -210,7 +211,7 @@ public final class BusClientImpl implements BusClient {
 
         try {
             predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
@@ -255,7 +256,7 @@ public final class BusClientImpl implements BusClient {
 
         try {
             detoursResponse = this.objectMapper.readValue(response, CtaDetoursResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
 
             throw new Cta4jException(message, e);
@@ -296,7 +297,7 @@ public final class BusClientImpl implements BusClient {
 
         try {
             predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
@@ -338,7 +339,7 @@ public final class BusClientImpl implements BusClient {
 
         try {
             vehicleResponse = this.objectMapper.readValue(response, CtaVehicleResponse.class);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
 
             throw new Cta4jException(message, e);
