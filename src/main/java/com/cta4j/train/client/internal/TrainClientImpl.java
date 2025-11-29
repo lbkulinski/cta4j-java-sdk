@@ -121,13 +121,12 @@ public final class TrainClientImpl implements TrainClient {
             throw new Cta4jException("Invalid response from %s".formatted(FOLLOW_ENDPOINT));
         }
 
+        TrainCoordinates coordinates = null;
         CtaFollowPosition position = ctatt.position();
 
-        if (position == null) {
-            return Optional.empty();
+        if (position != null) {
+            coordinates = TrainCoordinatesMapper.fromExternal(position);
         }
-
-        TrainCoordinates coordinates = TrainCoordinatesMapper.fromExternal(position);
 
         List<CtaFollowEta> eta = ctatt.eta();
 
