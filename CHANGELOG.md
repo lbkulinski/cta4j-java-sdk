@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.3] - 2025-11-28
+
+### Changed
+
+- Changed edge case where coordinates could be null in Follow Train API responses.
+  - If both the position is `null` and the arrivals list is empty, an empty `Optional` is returned.
+
 ## [3.0.2] - 2025-11-28
 
 ### Fixed
@@ -130,7 +137,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.2...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.3...HEAD
+[3.0.3]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.1...v3.0.2
 [3.0.1]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.0...v3.0.1
 [3.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v2.0.2...v3.0.0

@@ -131,6 +131,10 @@ public final class TrainClientImpl implements TrainClient {
         List<CtaFollowEta> eta = ctatt.eta();
 
         if ((eta == null) || eta.isEmpty()) {
+            if (coordinates == null) {
+                return Optional.empty();
+            }
+
             Train train = new Train(coordinates, List.of());
 
             return Optional.of(train);
