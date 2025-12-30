@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Bumped `tools.jackson.core:jackson-databind` from **3.0.2** → **3.0.3**
 - Bumped `org.apache.httpcomponents.client5:httpclient5` from **5.5.1** → **5.6**
 - Bumped `org.apache.maven.plugins:maven-source-plugin` from **3.3.1** → **3.4.0**
+- BREAKING CHANGE: Removed `module-info.java`, dropping explicit JPMS module support. The library is now an automatic module, which may change the effective module name and impact consumers using the Java module system.
 
 ## [3.0.3] - 2025-11-28
 
