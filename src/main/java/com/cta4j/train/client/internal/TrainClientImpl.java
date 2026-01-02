@@ -17,6 +17,7 @@ import com.cta4j.train.model.Train;
 import com.cta4j.train.model.UpcomingTrainArrival;
 import com.cta4j.train.model.StationArrival;
 import com.cta4j.util.HttpUtils;
+import org.jspecify.annotations.NonNull;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
@@ -28,17 +29,13 @@ import java.util.Optional;
 
 @ApiStatus.Internal
 public final class TrainClientImpl implements TrainClient {
-    private final String host;
-
-    private final String apiKey;
-
-    private final ObjectMapper objectMapper;
-
     private static final String DEFAULT_HOST = "lapi.transitchicago.com";
-
     private static final String ARRIVALS_ENDPOINT = "/api/1.0/ttarrivals.aspx";
-
     private static final String FOLLOW_ENDPOINT = "/api/1.0/ttfollow.aspx";
+
+    private final String host;
+    private final String apiKey;
+    private final ObjectMapper objectMapper;
 
     private TrainClientImpl(String host, String apiKey) {
         this.host = Objects.requireNonNull(host);
@@ -49,7 +46,7 @@ public final class TrainClientImpl implements TrainClient {
     }
 
     @Override
-    public List<StationArrival> getStationArrivals(String stationId) {
+    public @NonNull List<StationArrival> getStationArrivals(String stationId) {
         Objects.requireNonNull(stationId);
 
         String url = new URIBuilder()
@@ -91,7 +88,7 @@ public final class TrainClientImpl implements TrainClient {
     }
 
     @Override
-    public Optional<Train> getTrain(String run) {
+    public @NonNull Optional<Train> getTrain(String run) {
         Objects.requireNonNull(run);
 
         String url = new URIBuilder()
@@ -161,21 +158,21 @@ public final class TrainClientImpl implements TrainClient {
         }
 
         @Override
-        public Builder host(String host) {
+        public @NonNull Builder host(String host) {
             this.host = Objects.requireNonNull(host);
 
             return this;
         }
 
         @Override
-        public Builder apiKey(String apiKey) {
+        public @NonNull Builder apiKey(String apiKey) {
             this.apiKey = Objects.requireNonNull(apiKey);
 
             return this;
         }
 
         @Override
-        public TrainClient build() {
+        public @NonNull TrainClient build() {
             String finalHost = (this.host == null) ? DEFAULT_HOST : this.host;
 
             if (this.apiKey == null) {

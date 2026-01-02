@@ -3,6 +3,7 @@ package com.cta4j.bus.client;
 import com.cta4j.bus.client.internal.BusClientImpl;
 import com.cta4j.bus.model.*;
 import com.cta4j.exception.Cta4jException;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public interface BusClient {
      * @return a {@link List} of all bus routes
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Route> getRoutes();
+    @NonNull List<Route> getRoutes();
 
     /**
      * Retrieves a {@link List} of directions for a specific bus route.
@@ -27,7 +28,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<String> getDirections(String routeId);
+    @NonNull List<String> getDirections(String routeId);
 
     /**
      * Retrieves a {@link List} of stops for a specific bus route and direction.
@@ -38,7 +39,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Stop> getStops(String routeId, String direction);
+    @NonNull List<Stop> getStops(String routeId, String direction);
 
     /**
      * Retrieves a {@link List} of upcoming arrivals for a specific bus route and stop.
@@ -49,7 +50,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route or stop is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<StopArrival> getStopArrivals(String routeId, String stopId);
+    @NonNull List<StopArrival> getStopArrivals(String routeId, String stopId);
 
     /**
      * Retrieves a {@link List} of detours for a specific bus route and direction.
@@ -60,7 +61,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Detour> getDetours(String routeId, String direction);
+    @NonNull List<Detour> getDetours(String routeId, String direction);
 
     /**
      * Retrieves information about a specific bus by its ID.
@@ -70,7 +71,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    Optional<Bus> getBus(String id);
+    @NonNull Optional<Bus> getBus(String id);
 
     /**
      * A builder for configuring and creating {@link BusClient} instances.
@@ -85,7 +86,7 @@ public interface BusClient {
          * @return this {@link Builder} for method chaining
          * @throws NullPointerException if {@code host} is {@code null}
          */
-        Builder host(String host);
+        @NonNull Builder host(String host);
 
         /**
          * Sets the API key used for authentication.
@@ -94,14 +95,14 @@ public interface BusClient {
          * @return this {@link Builder} for method chaining
          * @throws NullPointerException if {@code apiKey} is {@code null}
          */
-        Builder apiKey(String apiKey);
+        @NonNull Builder apiKey(String apiKey);
 
         /**
          * Builds a configured {@link BusClient} instance.
          *
          * @return a new {@link BusClient}
          */
-        BusClient build();
+        @NonNull BusClient build();
     }
 
     /**
@@ -109,7 +110,7 @@ public interface BusClient {
      *
      * @return a new {@link Builder} instance
      */
-    static Builder builder() {
+    static @NonNull Builder builder() {
         return new BusClientImpl.BuilderImpl();
     }
 }

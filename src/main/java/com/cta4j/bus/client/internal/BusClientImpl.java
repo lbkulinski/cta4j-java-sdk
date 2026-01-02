@@ -23,6 +23,7 @@ import com.cta4j.bus.external.vehicle.CtaVehicle;
 import com.cta4j.bus.external.vehicle.CtaVehicleBustimeResponse;
 import com.cta4j.bus.external.vehicle.CtaVehicleResponse;
 import com.cta4j.util.HttpUtils;
+import org.jspecify.annotations.NonNull;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
@@ -34,36 +35,26 @@ import java.util.Optional;
 
 @ApiStatus.Internal
 public final class BusClientImpl implements BusClient {
-    private final String host;
-
-    private final String apiKey;
-
-    private final ObjectMapper objectMapper;
-
     private static final String DEFAULT_HOST = "ctabustracker.com";
-
     private static final String ROUTES_ENDPOINT = "/bustime/api/v3/getroutes";
-
     private static final String DIRECTIONS_ENDPOINT = "/bustime/api/v3/getdirections";
-
     private static final String STOPS_ENDPOINT = "/bustime/api/v3/getstops";
-
     private static final String PREDICTIONS_ENDPOINT = "/bustime/api/v3/getpredictions";
-
     private static final String DETOURS_ENDPOINT = "/bustime/api/v3/getdetours";
-
     private static final String VEHICLES_ENDPOINT = "/bustime/api/v3/getvehicles";
+
+    private final String host;
+    private final String apiKey;
+    private final ObjectMapper objectMapper;
 
     private BusClientImpl(String host, String apiKey) {
         this.host = Objects.requireNonNull(host);
-
         this.apiKey = Objects.requireNonNull(apiKey);
-
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
-    public List<Route> getRoutes() {
+    public @NonNull List<Route> getRoutes() {
         String url = new URIBuilder()
             .setScheme("https")
             .setHost(this.host)
@@ -102,7 +93,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<String> getDirections(String routeId) {
+    public @NonNull List<String> getDirections(String routeId) {
         Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
@@ -144,9 +135,8 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Stop> getStops(String routeId, String direction) {
+    public @NonNull List<Stop> getStops(String routeId, String direction) {
         Objects.requireNonNull(routeId);
-
         Objects.requireNonNull(direction);
 
         String url = new URIBuilder()
@@ -189,9 +179,8 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<StopArrival> getStopArrivals(String routeId, String stopId) {
+    public @NonNull List<StopArrival> getStopArrivals(String routeId, String stopId) {
         Objects.requireNonNull(routeId);
-
         Objects.requireNonNull(stopId);
 
         String url = new URIBuilder()
@@ -234,9 +223,8 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Detour> getDetours(String routeId, String direction) {
+    public @NonNull List<Detour> getDetours(String routeId, String direction) {
         Objects.requireNonNull(routeId);
-
         Objects.requireNonNull(direction);
 
         String url = new URIBuilder()
@@ -320,7 +308,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public Optional<Bus> getBus(String id) {
+    public @NonNull Optional<Bus> getBus(String id) {
         Objects.requireNonNull(id);
 
         String url = new URIBuilder()
@@ -391,21 +379,21 @@ public final class BusClientImpl implements BusClient {
         }
 
         @Override
-        public Builder host(String host) {
+        public @NonNull Builder host(String host) {
             this.host = Objects.requireNonNull(host);
 
             return this;
         }
 
         @Override
-        public Builder apiKey(String apiKey) {
+        public @NonNull Builder apiKey(String apiKey) {
             this.apiKey = Objects.requireNonNull(apiKey);
 
             return this;
         }
 
         @Override
-        public BusClient build() {
+        public @NonNull BusClient build() {
             String finalHost = (this.host == null) ? DEFAULT_HOST : this.host;
 
             if (this.apiKey == null) {
