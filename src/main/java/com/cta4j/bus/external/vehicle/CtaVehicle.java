@@ -25,6 +25,7 @@ public record CtaVehicle(
     Integer pid,
 
     String rt,
+
     String des,
 
     Integer pdist,
@@ -62,7 +63,7 @@ public record CtaVehicle(
 
     String zone,
 
-    Byte mode,
+    Integer mode,
 
     String psgld,
 
