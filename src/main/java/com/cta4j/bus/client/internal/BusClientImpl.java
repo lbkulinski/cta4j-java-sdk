@@ -23,7 +23,8 @@ import com.cta4j.bus.external.vehicle.CtaVehicle;
 import com.cta4j.bus.external.vehicle.CtaVehicleBustimeResponse;
 import com.cta4j.bus.external.vehicle.CtaVehicleResponse;
 import com.cta4j.util.HttpUtils;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
@@ -33,6 +34,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@NullMarked
 @ApiStatus.Internal
 public final class BusClientImpl implements BusClient {
     private static final String DEFAULT_HOST = "ctabustracker.com";
@@ -54,7 +56,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public @NonNull List<Route> getRoutes() {
+    public List<Route> getRoutes() {
         String url = new URIBuilder()
             .setScheme("https")
             .setHost(this.host)
@@ -93,7 +95,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public @NonNull List<String> getDirections(String routeId) {
+    public List<String> getDirections(String routeId) {
         Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
@@ -135,7 +137,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public @NonNull List<Stop> getStops(String routeId, String direction) {
+    public List<Stop> getStops(String routeId, String direction) {
         Objects.requireNonNull(routeId);
         Objects.requireNonNull(direction);
 
@@ -179,7 +181,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public @NonNull List<StopArrival> getStopArrivals(String routeId, String stopId) {
+    public List<StopArrival> getStopArrivals(String routeId, String stopId) {
         Objects.requireNonNull(routeId);
         Objects.requireNonNull(stopId);
 
@@ -223,7 +225,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public @NonNull List<Detour> getDetours(String routeId, String direction) {
+    public List<Detour> getDetours(String routeId, String direction) {
         Objects.requireNonNull(routeId);
         Objects.requireNonNull(direction);
 
@@ -308,7 +310,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public @NonNull Optional<Bus> getBus(String id) {
+    public Optional<Bus> getBus(String id) {
         Objects.requireNonNull(id);
 
         String url = new URIBuilder()
@@ -368,32 +370,33 @@ public final class BusClientImpl implements BusClient {
     }
 
     public static final class BuilderImpl implements BusClient.Builder {
+        @Nullable
         private String host;
 
+        @Nullable
         private String apiKey;
 
         public BuilderImpl() {
             this.host = null;
-
             this.apiKey = null;
         }
 
         @Override
-        public @NonNull Builder host(String host) {
+        public Builder host(String host) {
             this.host = Objects.requireNonNull(host);
 
             return this;
         }
 
         @Override
-        public @NonNull Builder apiKey(String apiKey) {
+        public Builder apiKey(String apiKey) {
             this.apiKey = Objects.requireNonNull(apiKey);
 
             return this;
         }
 
         @Override
-        public @NonNull BusClient build() {
+        public BusClient build() {
             String finalHost = (this.host == null) ? DEFAULT_HOST : this.host;
 
             if (this.apiKey == null) {

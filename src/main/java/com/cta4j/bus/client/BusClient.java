@@ -3,7 +3,7 @@ package com.cta4j.bus.client;
 import com.cta4j.bus.client.internal.BusClientImpl;
 import com.cta4j.bus.model.*;
 import com.cta4j.exception.Cta4jException;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +11,7 @@ import java.util.Optional;
 /**
  * A client for interacting with the CTA Bus Tracker API.
  */
+@NullMarked
 public interface BusClient {
     /**
      * Retrieves a {@link List} of all bus routes.
@@ -18,7 +19,7 @@ public interface BusClient {
      * @return a {@link List} of all bus routes
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull List<Route> getRoutes();
+    List<Route> getRoutes();
 
     /**
      * Retrieves a {@link List} of directions for a specific bus route.
@@ -28,7 +29,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull List<String> getDirections(String routeId);
+    List<String> getDirections(String routeId);
 
     /**
      * Retrieves a {@link List} of stops for a specific bus route and direction.
@@ -39,7 +40,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull List<Stop> getStops(String routeId, String direction);
+    List<Stop> getStops(String routeId, String direction);
 
     /**
      * Retrieves a {@link List} of upcoming arrivals for a specific bus route and stop.
@@ -50,7 +51,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route or stop is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull List<StopArrival> getStopArrivals(String routeId, String stopId);
+    List<StopArrival> getStopArrivals(String routeId, String stopId);
 
     /**
      * Retrieves a {@link List} of detours for a specific bus route and direction.
@@ -61,7 +62,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull List<Detour> getDetours(String routeId, String direction);
+    List<Detour> getDetours(String routeId, String direction);
 
     /**
      * Retrieves information about a specific bus by its ID.
@@ -71,7 +72,7 @@ public interface BusClient {
      * @throws NullPointerException if the specified bus ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull Optional<Bus> getBus(String id);
+    Optional<Bus> getBus(String id);
 
     /**
      * A builder for configuring and creating {@link BusClient} instances.
@@ -86,7 +87,7 @@ public interface BusClient {
          * @return this {@link Builder} for method chaining
          * @throws NullPointerException if {@code host} is {@code null}
          */
-        @NonNull Builder host(String host);
+        Builder host(String host);
 
         /**
          * Sets the API key used for authentication.
@@ -95,14 +96,14 @@ public interface BusClient {
          * @return this {@link Builder} for method chaining
          * @throws NullPointerException if {@code apiKey} is {@code null}
          */
-        @NonNull Builder apiKey(String apiKey);
+        Builder apiKey(String apiKey);
 
         /**
          * Builds a configured {@link BusClient} instance.
          *
          * @return a new {@link BusClient}
          */
-        @NonNull BusClient build();
+        BusClient build();
     }
 
     /**
@@ -110,7 +111,7 @@ public interface BusClient {
      *
      * @return a new {@link Builder} instance
      */
-    static @NonNull Builder builder() {
+    static Builder builder() {
         return new BusClientImpl.BuilderImpl();
     }
 }

@@ -4,7 +4,7 @@ import com.cta4j.train.client.internal.TrainClientImpl;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.train.model.StationArrival;
 import com.cta4j.train.model.Train;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +12,7 @@ import java.util.Optional;
 /**
  * A client for interacting with the CTA Train Tracker API.
  */
+@NullMarked
 public interface TrainClient {
     /**
      * Retrieves a {@link List} of upcoming arrivals for a specific station.
@@ -21,7 +22,7 @@ public interface TrainClient {
      * @throws NullPointerException if the specified station ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull List<StationArrival> getStationArrivals(String stationId);
+    List<StationArrival> getStationArrivals(String stationId);
 
     /**
      * Retrieves information about a specific train by its run number.
@@ -31,7 +32,7 @@ public interface TrainClient {
      * @throws NullPointerException if the specified run number is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    @NonNull Optional<Train> getTrain(String run);
+    Optional<Train> getTrain(String run);
 
     /**
      * A builder for configuring and creating {@link TrainClient} instances.
@@ -46,7 +47,7 @@ public interface TrainClient {
          * @return this {@link Builder} for method chaining
          * @throws NullPointerException if {@code host} is {@code null}
          */
-        @NonNull Builder host(String host);
+        Builder host(String host);
 
         /**
          * Sets the API key used for authentication.
@@ -55,14 +56,14 @@ public interface TrainClient {
          * @return this {@link Builder} for method chaining
          * @throws NullPointerException if {@code apiKey} is {@code null}
          */
-        @NonNull Builder apiKey(String apiKey);
+        Builder apiKey(String apiKey);
 
         /**
          * Builds a configured {@link TrainClient} instance.
          *
          * @return a new {@link TrainClient}
          */
-        @NonNull TrainClient build();
+        TrainClient build();
     }
 
     /**
@@ -70,7 +71,7 @@ public interface TrainClient {
      *
      * @return a new {@link Builder} instance
      */
-    static @NonNull Builder builder() {
+    static Builder builder() {
         return new TrainClientImpl.BuilderImpl();
     }
 }
