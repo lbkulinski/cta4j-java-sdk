@@ -1,7 +1,11 @@
 package com.cta4j.bus.client;
 
 import com.cta4j.bus.client.internal.BusClientImpl;
-import com.cta4j.bus.model.*;
+import com.cta4j.bus.model.Bus;
+import com.cta4j.bus.model.Detour;
+import com.cta4j.bus.model.Route;
+import com.cta4j.bus.model.Stop;
+import com.cta4j.bus.model.StopArrival;
 import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
@@ -26,7 +30,7 @@ public interface BusClient {
      *
      * @param routeId the ID of the bus route
      * @return a {@link List} of directions for the specified bus route
-     * @throws NullPointerException if the specified bus route is {@code null}
+     * @throws IllegalArgumentException if the specified bus route is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     List<String> getDirections(String routeId);
@@ -37,7 +41,7 @@ public interface BusClient {
      * @param routeId the ID of the bus route
      * @param direction the direction of the bus route
      * @return a {@link List} of stops for the specified bus route and direction
-     * @throws NullPointerException if the specified bus route or direction is {@code null}
+     * @throws IllegalArgumentException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     List<Stop> getStops(String routeId, String direction);
@@ -48,7 +52,7 @@ public interface BusClient {
      * @param routeId the ID of the bus route
      * @param stopId the ID of the bus stop
      * @return a {@link List} of upcoming arrivals for the specified bus route and stop
-     * @throws NullPointerException if the specified bus route or stop is {@code null}
+     * @throws IllegalArgumentException if the specified bus route or stop is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     List<StopArrival> getStopArrivals(String routeId, String stopId);
@@ -59,7 +63,7 @@ public interface BusClient {
      * @param routeId the ID of the bus route
      * @param direction the direction of the bus route
      * @return a {@link List} of detours for the specified bus route and direction
-     * @throws NullPointerException if the specified bus route or direction is {@code null}
+     * @throws IllegalArgumentException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     List<Detour> getDetours(String routeId, String direction);
@@ -69,7 +73,7 @@ public interface BusClient {
      *
      * @param id the ID of the bus
      * @return an {@link Optional} containing the bus information if found, or an empty {@link Optional} if not found
-     * @throws NullPointerException if the specified bus ID is {@code null}
+     * @throws IllegalArgumentException if the specified bus ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
     Optional<Bus> getBus(String id);
@@ -85,7 +89,7 @@ public interface BusClient {
          *
          * @param host the host
          * @return this {@link Builder} for method chaining
-         * @throws NullPointerException if {@code host} is {@code null}
+         * @throws IllegalArgumentException if {@code host} is {@code null}
          */
         Builder host(String host);
 
@@ -94,7 +98,7 @@ public interface BusClient {
          *
          * @param apiKey the API key
          * @return this {@link Builder} for method chaining
-         * @throws NullPointerException if {@code apiKey} is {@code null}
+         * @throws IllegalArgumentException if {@code apiKey} is {@code null}
          */
         Builder apiKey(String apiKey);
 

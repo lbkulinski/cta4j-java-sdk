@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
 import java.util.List;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public final class DetourMapper {
@@ -26,7 +25,9 @@ public final class DetourMapper {
     }
 
     public static Detour fromExternal(CtaDetour detour) {
-        Objects.requireNonNull(detour);
+        if (detour == null) {
+            throw new IllegalArgumentException("detour must not be null");
+        }
 
         Boolean active = null;
 

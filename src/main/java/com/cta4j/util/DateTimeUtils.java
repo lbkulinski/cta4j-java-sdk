@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public final class DateTimeUtils {
@@ -15,7 +14,9 @@ public final class DateTimeUtils {
     }
 
     public static Instant parseTrainTimestamp(String timestamp) {
-        Objects.requireNonNull(timestamp);
+        if (timestamp == null) {
+            throw new IllegalArgumentException("timestamp must not be null");
+        }
 
         ZoneId chicagoId = ZoneId.of("America/Chicago");
 
@@ -25,7 +26,9 @@ public final class DateTimeUtils {
     }
 
     public static Instant parseBusTimestamp(String timestamp) {
-        Objects.requireNonNull(timestamp);
+        if (timestamp == null) {
+            throw new IllegalArgumentException("timestamp must not be null");
+        }
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
 

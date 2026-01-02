@@ -25,11 +25,11 @@ import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @NullMarked
 @ApiStatus.Internal
+@SuppressWarnings("ConstantConditions")
 public final class TrainClientImpl implements TrainClient {
     private static final String DEFAULT_HOST = "lapi.transitchicago.com";
     private static final String ARRIVALS_ENDPOINT = "/api/1.0/ttarrivals.aspx";
@@ -40,16 +40,24 @@ public final class TrainClientImpl implements TrainClient {
     private final ObjectMapper objectMapper;
 
     private TrainClientImpl(String host, String apiKey) {
-        this.host = Objects.requireNonNull(host);
+        if (host == null) {
+            throw new IllegalArgumentException("host must not be null");
+        }
 
-        this.apiKey = Objects.requireNonNull(apiKey);
+        if (apiKey == null) {
+            throw new IllegalArgumentException("apiKey must not be null");
+        }
 
+        this.host = host;
+        this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
     public List<StationArrival> getStationArrivals(String stationId) {
-        Objects.requireNonNull(stationId);
+        if (stationId == null) {
+            throw new IllegalArgumentException("stationId must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -91,7 +99,9 @@ public final class TrainClientImpl implements TrainClient {
 
     @Override
     public Optional<Train> getTrain(String run) {
-        Objects.requireNonNull(run);
+        if (run == null) {
+            throw new IllegalArgumentException("run must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -162,14 +172,22 @@ public final class TrainClientImpl implements TrainClient {
 
         @Override
         public Builder host(String host) {
-            this.host = Objects.requireNonNull(host);
+            if (host == null) {
+                throw new IllegalArgumentException("host must not be null");
+            }
+
+            this.host = host;
 
             return this;
         }
 
         @Override
         public Builder apiKey(String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey);
+            if (apiKey == null) {
+                throw new IllegalArgumentException("apiKey must not be null");
+            }
+
+            this.apiKey = apiKey;
 
             return this;
         }

@@ -1,5 +1,6 @@
 package com.cta4j.train.mapper;
 
+import com.cta4j.exception.Cta4jException;
 import com.cta4j.train.external.follow.CtaFollowEta;
 import com.cta4j.train.model.Route;
 import com.cta4j.train.model.UpcomingTrainArrival;
@@ -9,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public final class UpcomingTrainArrivalMapper {
@@ -24,16 +24,24 @@ public final class UpcomingTrainArrivalMapper {
     }
 
     public static UpcomingTrainArrival fromExternal(CtaFollowEta eta) {
-        Objects.requireNonNull(eta);
+        if (eta == null) {
+            throw new IllegalArgumentException("eta must not be null");
+        }
 
-        Route route = null;
+        if (eta.rt() == null) {
+            throw new Cta4jException("ETA route is missing");
+        }
 
-        if (eta.rt() != null) {
-            try {
-                route = RouteMapper.fromExternal(eta.rt());
-            } catch (IllegalArgumentException e) {
-                logger.warn("Invalid route {}", eta.rt());
-            }
+
+
+        Route route;
+
+        try {
+            route = RouteMapper.fromExternal(eta.rt());
+        } catch (IllegalArgumentException e) {
+            String message = String.format("Invalid route value %s", eta.rt());
+
+            throw new Cta4jException(message, e);
         }
 
         Integer direction = null;

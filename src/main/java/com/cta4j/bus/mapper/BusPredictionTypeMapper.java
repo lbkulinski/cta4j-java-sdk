@@ -3,8 +3,6 @@ package com.cta4j.bus.mapper;
 import com.cta4j.bus.model.BusPredictionType;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Objects;
-
 @ApiStatus.Internal
 public final class BusPredictionTypeMapper {
     private BusPredictionTypeMapper() {
@@ -12,7 +10,9 @@ public final class BusPredictionTypeMapper {
     }
 
     public static BusPredictionType fromExternal(String string) {
-        Objects.requireNonNull(string);
+        if (string == null) {
+            throw new IllegalArgumentException("string must not be null");
+        }
 
         string = string.toUpperCase();
 

@@ -2,27 +2,74 @@ package com.cta4j.bus.external.vehicle;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CtaVehicle(
     String vid,
-    String tmstmp,
-    String lat,
-    String lon,
-    String hdg,
-    String pid,
+
+    @Nullable
+    String rtpidatafeed,
+
+    String tmpstmp,
+
+    Double lat,
+
+    Double lon,
+
+    Integer hdg,
+
+    Integer pid,
+
     String rt,
     String des,
-    String pdist,
+
+    Integer pdist,
+
+    @Nullable
+    Byte stopstatus,
+
+    @Nullable
+    Integer timepointid,
+
+    @Nullable
+    String stopid,
+
+    @Nullable
+    Integer sequence,
+
+    @Nullable
+    Integer gtfsseq,
+
     Boolean dly,
-    String tatripid,
-    String origtatripno,
+
+    @Nullable
+    String srvtmstmp,
+
+    Integer spd,
+
+    @Nullable
+    Integer blk,
+
     String tablockid,
+
+    String tatripid,
+
+    String origtatripno,
+
     String zone,
-    String mode,
+
+    Byte mode,
+
     String psgld,
-    String stst,
+
+    @Nullable
+    Integer stst,
+
+    @Nullable
     String stsd
 ) {
 }

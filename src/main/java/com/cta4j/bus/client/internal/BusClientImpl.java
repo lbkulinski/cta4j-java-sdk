@@ -1,8 +1,19 @@
 package com.cta4j.bus.client.internal;
 
 import com.cta4j.bus.client.BusClient;
-import com.cta4j.bus.mapper.*;
-import com.cta4j.bus.model.*;
+import com.cta4j.bus.mapper.BusCoordinatesMapper;
+import com.cta4j.bus.mapper.DetourMapper;
+import com.cta4j.bus.mapper.RouteMapper;
+import com.cta4j.bus.mapper.StopArrivalMapper;
+import com.cta4j.bus.mapper.StopMapper;
+import com.cta4j.bus.mapper.UpcomingBusArrivalMapper;
+import com.cta4j.bus.model.Bus;
+import com.cta4j.bus.model.BusCoordinates;
+import com.cta4j.bus.model.Detour;
+import com.cta4j.bus.model.Route;
+import com.cta4j.bus.model.Stop;
+import com.cta4j.bus.model.StopArrival;
+import com.cta4j.bus.model.UpcomingBusArrival;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.bus.external.detour.CtaDetour;
 import com.cta4j.bus.external.detour.CtaDetoursBustimeResponse;
@@ -31,11 +42,11 @@ import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @NullMarked
 @ApiStatus.Internal
+@SuppressWarnings("ConstantConditions")
 public final class BusClientImpl implements BusClient {
     private static final String DEFAULT_HOST = "ctabustracker.com";
     private static final String ROUTES_ENDPOINT = "/bustime/api/v3/getroutes";
@@ -50,8 +61,16 @@ public final class BusClientImpl implements BusClient {
     private final ObjectMapper objectMapper;
 
     private BusClientImpl(String host, String apiKey) {
-        this.host = Objects.requireNonNull(host);
-        this.apiKey = Objects.requireNonNull(apiKey);
+        if (host == null) {
+            throw new IllegalArgumentException("host must not be null");
+        }
+
+        if (apiKey == null) {
+            throw new IllegalArgumentException("apiKey must not be null");
+        }
+
+        this.host = host;
+        this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
     }
 
@@ -96,7 +115,9 @@ public final class BusClientImpl implements BusClient {
 
     @Override
     public List<String> getDirections(String routeId) {
-        Objects.requireNonNull(routeId);
+        if (routeId == null) {
+            throw new IllegalArgumentException("routeId must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -138,8 +159,13 @@ public final class BusClientImpl implements BusClient {
 
     @Override
     public List<Stop> getStops(String routeId, String direction) {
-        Objects.requireNonNull(routeId);
-        Objects.requireNonNull(direction);
+        if (routeId == null) {
+            throw new IllegalArgumentException("routeId must not be null");
+        }
+
+        if (direction == null) {
+            throw new IllegalArgumentException("direction must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -182,8 +208,13 @@ public final class BusClientImpl implements BusClient {
 
     @Override
     public List<StopArrival> getStopArrivals(String routeId, String stopId) {
-        Objects.requireNonNull(routeId);
-        Objects.requireNonNull(stopId);
+        if (routeId == null) {
+            throw new IllegalArgumentException("routeId must not be null");
+        }
+
+        if (stopId == null) {
+            throw new IllegalArgumentException("stopId must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -226,8 +257,13 @@ public final class BusClientImpl implements BusClient {
 
     @Override
     public List<Detour> getDetours(String routeId, String direction) {
-        Objects.requireNonNull(routeId);
-        Objects.requireNonNull(direction);
+        if (routeId == null) {
+            throw new IllegalArgumentException("routeId must not be null");
+        }
+
+        if (direction == null) {
+            throw new IllegalArgumentException("direction must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -269,7 +305,9 @@ public final class BusClientImpl implements BusClient {
     }
 
     private List<UpcomingBusArrival> getUpcomingBusArrivals(String id) {
-        Objects.requireNonNull(id);
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -311,7 +349,9 @@ public final class BusClientImpl implements BusClient {
 
     @Override
     public Optional<Bus> getBus(String id) {
-        Objects.requireNonNull(id);
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -383,14 +423,22 @@ public final class BusClientImpl implements BusClient {
 
         @Override
         public Builder host(String host) {
-            this.host = Objects.requireNonNull(host);
+            if (host == null) {
+                throw new IllegalArgumentException("host must not be null");
+            }
+
+            this.host = host;
 
             return this;
         }
 
         @Override
         public Builder apiKey(String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey);
+            if (apiKey == null) {
+                throw new IllegalArgumentException("apiKey must not be null");
+            }
+
+            this.apiKey = apiKey;
 
             return this;
         }

@@ -4,8 +4,6 @@ import com.cta4j.bus.external.route.CtaRoute;
 import com.cta4j.bus.model.Route;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Objects;
-
 @ApiStatus.Internal
 public final class RouteMapper {
     private RouteMapper() {
@@ -13,7 +11,9 @@ public final class RouteMapper {
     }
 
     public static Route fromExternal(CtaRoute route) {
-        Objects.requireNonNull(route);
+        if (route == null) {
+            throw new  IllegalArgumentException("route must not be null");
+        }
 
         return new Route(
             route.rt(),

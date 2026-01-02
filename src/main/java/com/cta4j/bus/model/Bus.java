@@ -1,17 +1,10 @@
 package com.cta4j.bus.model;
 
-import java.util.List;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-/**
- * A bus currently in service.
- *
- * @param id the unique identifier of the bus
- * @param coordinates the coordinates and heading of the bus
- * @param arrivals the list of upcoming bus arrivals for the bus
- * @param route the route identifier the bus is serving
- * @param destination the destination of the bus
- * @param delayed whether the bus is currently delayed
- */
+@NullMarked
+@SuppressWarnings("ConstantConditions")
 public record Bus(
     String id,
 
@@ -21,8 +14,26 @@ public record Bus(
 
     BusCoordinates coordinates,
 
-    List<UpcomingBusArrival> arrivals,
+    boolean delayed,
 
-    Boolean delayed
+    @Nullable
+    BusMetadata metadata
 ) {
+    public Bus {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+
+        if (route == null) {
+            throw new IllegalArgumentException("route must not be null");
+        }
+
+        if (destination == null) {
+            throw new IllegalArgumentException("destination must not be null");
+        }
+
+        if (coordinates == null) {
+            throw new IllegalArgumentException("coordinates must not be null");
+        }
+    }
 }

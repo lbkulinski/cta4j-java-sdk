@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public final class StationArrivalMapper {
@@ -25,7 +24,9 @@ public final class StationArrivalMapper {
     }
 
     public static StationArrival fromExternal(CtaArrivalsEta eta) {
-        Objects.requireNonNull(eta);
+        if (eta == null) {
+            throw new IllegalArgumentException("eta must not be null");
+        }
 
         Route route = null;
 

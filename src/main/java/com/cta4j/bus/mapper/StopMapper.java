@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public final class StopMapper {
@@ -22,7 +21,9 @@ public final class StopMapper {
     }
 
     public static Stop fromExternal(CtaStop stop) {
-        Objects.requireNonNull(stop);
+        if (stop == null) {
+            throw new IllegalArgumentException("stop must not be null");
+        }
 
         BigDecimal latitude = null;
 

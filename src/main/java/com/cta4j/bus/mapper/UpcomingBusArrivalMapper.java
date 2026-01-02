@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.time.format.DateTimeParseException;
-import java.util.Objects;
 
 @ApiStatus.Internal
 public final class UpcomingBusArrivalMapper {
@@ -26,7 +25,9 @@ public final class UpcomingBusArrivalMapper {
     }
 
     public static UpcomingBusArrival fromExternal(CtaPredictionsPrd prd) {
-        Objects.requireNonNull(prd);
+        if (prd == null) {
+            throw new IllegalArgumentException("prd must not be null");
+        }
 
         BusPredictionType type = null;
 
