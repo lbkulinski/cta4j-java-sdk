@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.0.5] - 2026-01-02
+
+### Added
+
+- JSpecify `@NonNull` annotations to public API methods and classes for improved nullability contracts.
+- `org.jspecify:jspecify:1.0.0` dependency for nullability annotations.
+
 ## [3.0.4] - 2025-12-30
 
 ### Changed
