@@ -7,62 +7,60 @@ import java.time.LocalDate;
 
 public record BusMetadata(
     @Nullable
-    String dataFeed,              // rtpidatafeed
+    String dataFeed,
 
     @Nullable
-    Instant serverTimestamp,      // srvtmstmp (if you parse it)
+    Instant serverTimestamp,
 
     @Nullable
-    Integer speed,                // spd
+    Integer speed,
 
     @Nullable
-    Integer patternId,            // pid
+    Integer patternId,
 
     @Nullable
-    Integer distanceToPatternPoint, // pdist (or rename if you prefer)
+    Integer distanceToPatternPoint,
 
     @Nullable
-    Byte stopStatus,              // stopstatus
+    Byte stopStatus,
 
     @Nullable
-    Integer timepointId,          // timepointid
+    Integer timepointId,
 
     @Nullable
-    String stopId,                // stopid
+    String stopId,
 
     @Nullable
-    Integer sequence,             // sequence
+    Integer sequence,
 
     @Nullable
-    Integer gtfsSequence,         // gtfsseq
+    Integer gtfsSequence,
 
     @Nullable
-    Integer block,                // blk
-
-    // CTA ops/schedule identifiers
-    @Nullable
-    String taBlockId,             // tablockid
+    Integer block,
 
     @Nullable
-    String taTripId,              // tatripid
+    String taBlockId,
 
     @Nullable
-    String originalTaTripNo,      // origtatripno
+    String taTripId,
 
     @Nullable
-    String zone,                  // zone
+    String originalTaTripNo,
 
     @Nullable
-    TransitMode mode,             // mode
+    String zone,
 
     @Nullable
-    PassengerLoad passengerLoad,  // psgld
-
-    // schedule start
-    @Nullable
-    Integer scheduledStartSeconds, // stst
+    TransitMode mode,
 
     @Nullable
-    LocalDate scheduledStartDate   // stsd
+    PassengerLoad passengerLoad,
+
+    @Nullable
+    Integer scheduledStartSeconds,
+
+    @Nullable
+    LocalDate scheduledStartDate
 ) {
 }

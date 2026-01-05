@@ -10,13 +10,10 @@ public interface BusMapper {
     @Mapping(source = "vid", target = "id")
     @Mapping(source = "rt", target = "route")
     @Mapping(source = "des", target = "destination")
-
     @Mapping(source = "lat", target = "coordinates.latitude")
     @Mapping(source = "lon", target = "coordinates.longitude")
     @Mapping(source = "hdg", target = "coordinates.heading")
-
     @Mapping(source = "dly", target = "delayed")
-
     @Mapping(source = "rtpidatafeed", target = "metadata.dataFeed")
     @Mapping(source = "srvtmstmp", target = "metadata.serverTimestamp")
     @Mapping(source = "spd", target = "metadata.speed")

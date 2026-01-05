@@ -1,19 +1,16 @@
 package com.cta4j.bus.client.internal;
 
 import com.cta4j.bus.client.BusClient;
-import com.cta4j.bus.mapper.BusCoordinatesMapper;
+import com.cta4j.bus.mapper.BusMapper;
 import com.cta4j.bus.mapper.DetourMapper;
 import com.cta4j.bus.mapper.RouteMapper;
 import com.cta4j.bus.mapper.StopArrivalMapper;
 import com.cta4j.bus.mapper.StopMapper;
-import com.cta4j.bus.mapper.UpcomingBusArrivalMapper;
 import com.cta4j.bus.model.Bus;
-import com.cta4j.bus.model.BusCoordinates;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.Route;
 import com.cta4j.bus.model.Stop;
 import com.cta4j.bus.model.StopArrival;
-import com.cta4j.bus.model.UpcomingBusArrival;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.bus.external.detour.CtaDetour;
 import com.cta4j.bus.external.detour.CtaDetoursBustimeResponse;
@@ -36,6 +33,7 @@ import com.cta4j.bus.external.vehicle.CtaVehicleResponse;
 import com.cta4j.util.HttpUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.mapstruct.factory.Mappers;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
@@ -59,6 +57,7 @@ public final class BusClientImpl implements BusClient {
     private final String host;
     private final String apiKey;
     private final ObjectMapper objectMapper;
+    private final BusMapper busMapper;
 
     private BusClientImpl(String host, String apiKey) {
         if (host == null) {
@@ -72,6 +71,7 @@ public final class BusClientImpl implements BusClient {
         this.host = host;
         this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
+        this.busMapper = Mappers.getMapper(BusMapper.class);
     }
 
     @Override
@@ -304,49 +304,6 @@ public final class BusClientImpl implements BusClient {
                    .toList();
     }
 
-    private List<UpcomingBusArrival> getUpcomingBusArrivals(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException("id must not be null");
-        }
-
-        String url = new URIBuilder()
-            .setScheme("https")
-            .setHost(this.host)
-            .setPath(PREDICTIONS_ENDPOINT)
-            .addParameter("vid", id)
-            .addParameter("key", this.apiKey)
-            .addParameter("format", "json")
-            .toString();
-
-        String response = HttpUtils.get(url);
-
-        CtaPredictionsResponse predictionsResponse;
-
-        try {
-            predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
-        } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
-
-        CtaPredictionsBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
-
-        if (bustimeResponse == null) {
-            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
-        }
-
-        List<CtaPredictionsPrd> prd = bustimeResponse.prd();
-
-        if ((prd == null) || prd.isEmpty()) {
-            return List.of();
-        }
-
-        return prd.stream()
-                  .map(UpcomingBusArrivalMapper::fromExternal)
-                  .toList();
-    }
-
     @Override
     public Optional<Bus> getBus(String id) {
         if (id == null) {
@@ -394,17 +351,7 @@ public final class BusClientImpl implements BusClient {
 
         CtaVehicle vehicle = vehicles.getFirst();
 
-        String route = vehicle.rt();
-
-        String destination = vehicle.des();
-
-        BusCoordinates coordinates = BusCoordinatesMapper.fromExternal(vehicle);
-
-        List<UpcomingBusArrival> upcomingArrivals = this.getUpcomingBusArrivals(id);
-
-        Boolean delayed = vehicle.dly();
-
-        Bus bus = new Bus(id, route, destination, coordinates, upcomingArrivals, delayed);
+        Bus bus = this.busMapper.toDomain(vehicle);
 
         return Optional.of(bus);
     }
