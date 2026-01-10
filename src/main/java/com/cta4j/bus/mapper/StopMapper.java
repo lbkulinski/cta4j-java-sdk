@@ -1,6 +1,6 @@
 package com.cta4j.bus.mapper;
 
-import com.cta4j.bus.external.stop.CtaStop;
+import com.cta4j.bus.external.CtaStop;
 import com.cta4j.bus.model.Stop;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;

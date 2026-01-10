@@ -1,6 +1,9 @@
 package com.cta4j.bus.client.internal;
 
 import com.cta4j.bus.client.BusClient;
+import com.cta4j.bus.external.CtaBustimeResponse;
+import com.cta4j.bus.external.CtaError;
+import com.cta4j.bus.external.CtaResponse;
 import com.cta4j.bus.mapper.ArrivalMapper;
 import com.cta4j.bus.mapper.BusMapper;
 import com.cta4j.bus.mapper.DetourMapper;
@@ -15,18 +18,12 @@ import com.cta4j.exception.Cta4jException;
 import com.cta4j.bus.external.detour.CtaDetour;
 import com.cta4j.bus.external.detour.CtaDetoursBustimeResponse;
 import com.cta4j.bus.external.detour.CtaDetoursResponse;
-import com.cta4j.bus.external.direction.CtaDirection;
-import com.cta4j.bus.external.direction.CtaDirectionsBustimeResponse;
-import com.cta4j.bus.external.direction.CtaDirectionsResponse;
+import com.cta4j.bus.external.CtaDirection;
 import com.cta4j.bus.external.prediction.CtaPredictionsBustimeResponse;
 import com.cta4j.bus.external.prediction.CtaPredictionsPrd;
 import com.cta4j.bus.external.prediction.CtaPredictionsResponse;
-import com.cta4j.bus.external.route.CtaRoute;
-import com.cta4j.bus.external.route.CtaRoutesBustimeResponse;
-import com.cta4j.bus.external.route.CtaRoutesResponse;
-import com.cta4j.bus.external.stop.CtaStop;
-import com.cta4j.bus.external.stop.CtaStopsBustimeResponse;
-import com.cta4j.bus.external.stop.CtaStopsResponse;
+import com.cta4j.bus.external.CtaRoute;
+import com.cta4j.bus.external.CtaStop;
 import com.cta4j.bus.external.vehicle.CtaVehicle;
 import com.cta4j.bus.external.vehicle.CtaVehicleBustimeResponse;
 import com.cta4j.bus.external.vehicle.CtaVehicleResponse;
@@ -35,6 +32,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.factory.Mappers;
 import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -94,23 +92,31 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        CtaRoutesResponse routesResponse;
+        TypeReference<CtaResponse<CtaRoute>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaRoute> routesResponse;
 
         try {
-            routesResponse = this.objectMapper.readValue(response, CtaRoutesResponse.class);
+            routesResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(ROUTES_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
 
-        CtaRoutesBustimeResponse bustimeResponse = routesResponse.bustimeResponse();
+        CtaBustimeResponse<CtaRoute> bustimeResponse = routesResponse.bustimeResponse();
 
-        if (bustimeResponse == null) {
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaRoute> routes = bustimeResponse.data();
+
+        if ((errors == null) && (routes == null)) {
             throw new Cta4jException("Invalid response from %s".formatted(ROUTES_ENDPOINT));
         }
 
-        List<CtaRoute> routes = bustimeResponse.routes();
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(ROUTES_ENDPOINT, errors);
+
+            throw new Cta4jException("Error response from %s: %s".formatted(ROUTES_ENDPOINT, message));
+        }
 
         if ((routes == null) || routes.isEmpty()) {
             return List.of();
@@ -138,23 +144,31 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        CtaDirectionsResponse directionsResponse;
+        TypeReference<CtaResponse<CtaDirection>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaDirection> directionsResponse;
 
         try {
-            directionsResponse = this.objectMapper.readValue(response, CtaDirectionsResponse.class);
+            directionsResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
 
-        CtaDirectionsBustimeResponse bustimeResponse = directionsResponse.bustimeResponse();
+        CtaBustimeResponse<CtaDirection> bustimeResponse = directionsResponse.bustimeResponse();
 
-        if (bustimeResponse == null) {
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaDirection> directions = bustimeResponse.data();
+
+        if ((errors == null) && (directions == null)) {
             throw new Cta4jException("Invalid response from %s".formatted(DIRECTIONS_ENDPOINT));
         }
 
-        List<CtaDirection> directions = bustimeResponse.directions();
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(DIRECTIONS_ENDPOINT, errors);
+
+            throw new Cta4jException("Error response from %s: %s".formatted(DIRECTIONS_ENDPOINT, message));
+        }
 
         if ((directions == null) || directions.isEmpty()) {
             return List.of();
@@ -187,23 +201,31 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        CtaStopsResponse stopsResponse;
+        TypeReference<CtaResponse<CtaStop>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaStop> stopsResponse;
 
         try {
-            stopsResponse = this.objectMapper.readValue(response, CtaStopsResponse.class);
+            stopsResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(STOPS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
 
-        CtaStopsBustimeResponse bustimeResponse = stopsResponse.bustimeResponse();
+        CtaBustimeResponse<CtaStop> bustimeResponse = stopsResponse.bustimeResponse();
 
-        if (bustimeResponse == null) {
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaStop> stops = bustimeResponse.data();
+
+        if ((errors == null) && (stops == null)) {
             throw new Cta4jException("Invalid response from %s".formatted(STOPS_ENDPOINT));
         }
 
-        List<CtaStop> stops = bustimeResponse.stops();
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(STOPS_ENDPOINT, errors);
+
+            throw new Cta4jException("Error response from %s: %s".formatted(STOPS_ENDPOINT, message));
+        }
 
         if ((stops == null) || stops.isEmpty()) {
             return List.of();
@@ -354,6 +376,15 @@ public final class BusClientImpl implements BusClient {
         Bus bus = this.busMapper.toDomain(vehicle);
 
         return Optional.of(bus);
+    }
+
+    private String buildErrorMessage(String endpoint, List<CtaError> errors) {
+        String message = errors.stream()
+                               .map(CtaError::msg)
+                               .reduce("%s; %s"::formatted)
+                               .orElse("Unknown error");
+
+        return "Error response from %s: %s".formatted(endpoint, message);
     }
 
     private List<Arrival> getArrivals(String url) {
