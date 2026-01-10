@@ -10,8 +10,10 @@ public record CtaRoute(
 
     String rtnm,
 
+    String rtclr,
+
     String rtdd,
 
-    String rtclr
+    String rtpidatafeed
 ) {
 }

@@ -11,7 +11,8 @@ import org.mapstruct.Mapping;
 public interface RouteMapper {
     @Mapping(source = "rt", target = "id")
     @Mapping(source = "rtnm", target = "name")
-    @Mapping(source = "rtdd", target = "description")
     @Mapping(source = "rtclr", target = "color")
+    @Mapping(source = "rtdd", target = "designator")
+    @Mapping(source = "rtpidatafeed", target = "dataFeed")
     Route toDomain(CtaRoute route);
 }

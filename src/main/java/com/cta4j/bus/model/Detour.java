@@ -36,7 +36,7 @@ public record Detour(
         }
 
         if (description == null) {
-            throw new IllegalArgumentException("description must not be null");
+            throw new IllegalArgumentException("designator must not be null");
         }
 
         if (routeDirections == null) {
