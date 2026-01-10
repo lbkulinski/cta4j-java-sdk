@@ -9,12 +9,19 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CtaStop(
     String stpid,
+
     String stpnm,
-    double lat,
-    double lon,
+
+    Double lat,
+
+    Double lon,
+
     List<Integer> dtradd,
+
     List<Integer> dtrrem,
+
     Integer gtfsseq,
+
     Boolean ada
 ) {
 }

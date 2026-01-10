@@ -7,8 +7,11 @@ import org.jetbrains.annotations.ApiStatus;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CtaRoute(
     String rt,
+
     String rtnm,
+
     String rtdd,
+
     String rtclr
 ) {
 }
