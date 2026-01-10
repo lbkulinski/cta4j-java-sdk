@@ -21,7 +21,7 @@ public interface ArrivalMapper {
     @Mapping(source = "prdtm", target = "arrivalTime")
     @Mapping(source = "dly", target = "delayed")
     @Mapping(source = "tmstmp", target = "metadata.timestamp")
-    @Mapping(source = "dyn", target = "metadata.dynamic")
+    @Mapping(source = "dyn", target = "metadata.dynamicAction")
     @Mapping(source = "tablockid", target = "metadata.blockId")
     @Mapping(source = "tatripid", target = "metadata.tripId")
     @Mapping(source = "origtatripno", target = "metadata.originalTripNumber")

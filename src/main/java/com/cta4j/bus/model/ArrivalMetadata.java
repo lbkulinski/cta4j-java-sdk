@@ -8,7 +8,7 @@ import org.jspecify.annotations.Nullable;
 public record ArrivalMetadata(
     String timestamp,
 
-    int dynamic,
+    DynamicAction dynamicAction,
 
     String blockId,
 
