@@ -1,28 +1,26 @@
 package com.cta4j.bus.model;
 
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.time.LocalDate;
 
+@NullMarked
+@SuppressWarnings("ConstantConditions")
 public record BusMetadata(
     @Nullable
     String dataFeed,
 
     @Nullable
-    Instant serverTimestamp,
+    Instant lastUpdated,
+
+    int patternId,
+
+    int distanceToPatternPoint,
 
     @Nullable
-    Integer speed,
-
-    @Nullable
-    Integer patternId,
-
-    @Nullable
-    Integer distanceToPatternPoint,
-
-    @Nullable
-    Byte stopStatus,
+    Integer stopStatus,
 
     @Nullable
     Integer timepointId,
@@ -37,24 +35,23 @@ public record BusMetadata(
     Integer gtfsSequence,
 
     @Nullable
+    Instant serverTimestamp,
+
+    int speed,
+
+    @Nullable
     Integer block,
 
-    @Nullable
-    String taBlockId,
+    String blockId,
 
-    @Nullable
-    String taTripId,
+    String tripId,
 
-    @Nullable
-    String originalTaTripNo,
+    String originalTripNumber,
 
-    @Nullable
     String zone,
 
-    @Nullable
     TransitMode mode,
 
-    @Nullable
     PassengerLoad passengerLoad,
 
     @Nullable
@@ -63,4 +60,29 @@ public record BusMetadata(
     @Nullable
     LocalDate scheduledStartDate
 ) {
+    public BusMetadata {
+        if (blockId == null) {
+            throw new IllegalArgumentException("blockId must not be null");
+        }
+
+        if (tripId == null) {
+            throw new IllegalArgumentException("tripId must not be null");
+        }
+
+        if (originalTripNumber == null) {
+            throw new IllegalArgumentException("originalTripNumber must not be null");
+        }
+
+        if (zone == null) {
+            throw new IllegalArgumentException("zone must not be null");
+        }
+
+        if (mode == null) {
+            throw new IllegalArgumentException("mode must not be null");
+        }
+
+        if (passengerLoad == null) {
+            throw new IllegalArgumentException("passengerLoad must not be null");
+        }
+    }
 }

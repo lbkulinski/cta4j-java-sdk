@@ -1,7 +1,6 @@
 package com.cta4j.bus.model;
 
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 @SuppressWarnings("ConstantConditions")
@@ -16,7 +15,6 @@ public record Bus(
 
     boolean delayed,
 
-    @Nullable
     BusMetadata metadata
 ) {
     public Bus {
@@ -34,6 +32,10 @@ public record Bus(
 
         if (coordinates == null) {
             throw new IllegalArgumentException("coordinates must not be null");
+        }
+
+        if (metadata == null) {
+            throw new IllegalArgumentException("metadata must not be null");
         }
     }
 }
