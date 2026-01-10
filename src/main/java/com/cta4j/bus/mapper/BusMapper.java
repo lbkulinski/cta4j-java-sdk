@@ -1,6 +1,6 @@
 package com.cta4j.bus.mapper;
 
-import com.cta4j.bus.external.vehicle.CtaVehicle;
+import com.cta4j.bus.external.CtaVehicle;
 import com.cta4j.bus.model.Bus;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;

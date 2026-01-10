@@ -1,7 +1,7 @@
 package com.cta4j.bus.mapper;
 
-import com.cta4j.bus.external.detour.CtaDetour;
-import com.cta4j.bus.external.detour.CtaDetoursRouteDirection;
+import com.cta4j.bus.external.CtaDetour;
+import com.cta4j.bus.external.CtaDetoursRouteDirection;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.DetourRouteDirection;
 import org.jetbrains.annotations.ApiStatus;

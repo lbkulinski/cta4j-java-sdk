@@ -16,15 +16,11 @@ import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.Route;
 import com.cta4j.bus.model.Stop;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.bus.external.detour.CtaDetour;
-import com.cta4j.bus.external.detour.CtaDetoursBustimeResponse;
-import com.cta4j.bus.external.detour.CtaDetoursResponse;
+import com.cta4j.bus.external.CtaDetour;
 import com.cta4j.bus.external.CtaDirection;
 import com.cta4j.bus.external.CtaRoute;
 import com.cta4j.bus.external.CtaStop;
-import com.cta4j.bus.external.vehicle.CtaVehicle;
-import com.cta4j.bus.external.vehicle.CtaVehicleBustimeResponse;
-import com.cta4j.bus.external.vehicle.CtaVehicleResponse;
+import com.cta4j.bus.external.CtaVehicle;
 import com.cta4j.util.HttpUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -297,29 +293,37 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        CtaDetoursResponse detoursResponse;
+        TypeReference<CtaResponse<CtaDetour>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaDetour> detoursResponse;
 
         try {
-            detoursResponse = this.objectMapper.readValue(response, CtaDetoursResponse.class);
+            detoursResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
 
-        CtaDetoursBustimeResponse bustimeResponse = detoursResponse.bustimeResponse();
+        CtaBustimeResponse<CtaDetour> bustimeResponse = detoursResponse.bustimeResponse();
 
-        if (bustimeResponse == null) {
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaDetour> detours = bustimeResponse.data();
+
+        if ((errors == null) && (detours == null)) {
             throw new Cta4jException("Invalid response from %s".formatted(DETOURS_ENDPOINT));
         }
 
-        List<CtaDetour> dtrs = bustimeResponse.dtrs();
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(DETOURS_ENDPOINT, errors);
 
-        if ((dtrs == null) || dtrs.isEmpty()) {
+            throw new Cta4jException("Error response from %s: %s".formatted(DETOURS_ENDPOINT, message));
+        }
+
+        if ((detours == null) || detours.isEmpty()) {
             return List.of();
         }
 
-        return dtrs.stream()
+        return detours.stream()
                    .map(this.detourMapper::toDomain)
                    .toList();
     }
@@ -341,23 +345,31 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        CtaVehicleResponse vehicleResponse;
+        TypeReference<CtaResponse<CtaVehicle>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaVehicle> vehicleResponse;
 
         try {
-            vehicleResponse = this.objectMapper.readValue(response, CtaVehicleResponse.class);
+            vehicleResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
 
-        CtaVehicleBustimeResponse bustimeResponse = vehicleResponse.bustimeResponse();
+        CtaBustimeResponse<CtaVehicle> bustimeResponse = vehicleResponse.bustimeResponse();
 
-        if (bustimeResponse == null) {
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaVehicle> vehicles = bustimeResponse.data();
+
+        if ((errors == null) && (vehicleResponse == null)) {
             throw new Cta4jException("Invalid response from %s".formatted(VEHICLES_ENDPOINT));
         }
 
-        List<CtaVehicle> vehicles = bustimeResponse.vehicle();
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(VEHICLES_ENDPOINT, errors);
+
+            throw new Cta4jException("Error response from %s: %s".formatted(VEHICLES_ENDPOINT, message));
+        }
 
         if ((vehicles == null) || vehicles.isEmpty()) {
             return Optional.empty();

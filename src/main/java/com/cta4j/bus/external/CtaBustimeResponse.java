@@ -15,7 +15,12 @@ public record CtaBustimeResponse<T>(
 
     @Nullable
     @JsonAlias({
-        "routes"
+        "routes",
+        "directions",
+        "stops",
+        "prd",
+        "dtrs",
+        "vehicle",
     })
     List<T> data
 ) {
