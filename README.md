@@ -54,7 +54,7 @@ implementation("com.cta4j:cta4j-java-sdk:3.0.4")
 import com.cta4j.train.client.TrainClient;
 
 public final class Application {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         TrainClient trainClient = TrainClient.builder()
                                              .apiKey("TRAIN_API_KEY")
                                              .build();
@@ -85,12 +85,12 @@ public final class Application {
 import com.cta4j.bus.client.BusClient;
 
 public final class Application {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         BusClient busClient = BusClient.builder()
                                        .apiKey("BUS_API_KEY")
                                        .build();
 
-        busClient.getStopArrivals("22", "1828")
+        busClient.getArrivalsByStop("22", "1828")
                  .stream()
                  .map(arrival -> String.format(
                      "%s-bound bus is arriving at %s in %d minutes",

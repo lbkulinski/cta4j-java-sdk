@@ -3,53 +3,19 @@ package com.cta4j.bus.mapper;
 import com.cta4j.bus.external.stop.CtaStop;
 import com.cta4j.bus.model.Stop;
 import org.jetbrains.annotations.ApiStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import java.math.BigDecimal;
-
+@Mapper
 @ApiStatus.Internal
-public final class StopMapper {
-    private static final Logger logger;
-
-    static {
-        logger = LoggerFactory.getLogger(StopMapper.class);
-    }
-
-    private StopMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-    }
-
-    public static Stop fromExternal(CtaStop stop) {
-        if (stop == null) {
-            throw new IllegalArgumentException("stop must not be null");
-        }
-
-        BigDecimal latitude = null;
-
-        if (stop.lat() != null) {
-            try {
-                latitude = new BigDecimal(stop.lat());
-            } catch (NumberFormatException e) {
-                logger.warn("Invalid latitude value {}", stop.lat());
-            }
-        }
-
-        BigDecimal longitude = null;
-
-        if (stop.lon() != null) {
-            try {
-                longitude = new BigDecimal(stop.lon());
-            } catch (NumberFormatException e) {
-                logger.warn("Invalid longitude value {}", stop.lon());
-            }
-        }
-
-        return new Stop(
-            stop.stpid(),
-            stop.stpnm(),
-            latitude,
-            longitude
-        );
-    }
+public interface StopMapper {
+    @Mapping(source = "stpid", target = "id")
+    @Mapping(source = "stpnm", target = "name")
+    @Mapping(source = "lat", target = "latitude")
+    @Mapping(source = "lon", target = "longitude")
+    @Mapping(source = "dtradd", target = "detoursAdded")
+    @Mapping(source = "dtrrem", target = "detoursRemoved")
+    @Mapping(source = "gtfsseq", target = "gtfsSequence")
+    @Mapping(source = "ada", target = "adaAccessible")
+    Stop toDomain(CtaStop stop);
 }

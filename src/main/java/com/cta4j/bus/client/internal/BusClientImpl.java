@@ -1,16 +1,16 @@
 package com.cta4j.bus.client.internal;
 
 import com.cta4j.bus.client.BusClient;
+import com.cta4j.bus.mapper.ArrivalMapper;
 import com.cta4j.bus.mapper.BusMapper;
 import com.cta4j.bus.mapper.DetourMapper;
 import com.cta4j.bus.mapper.RouteMapper;
-import com.cta4j.bus.mapper.StopArrivalMapper;
 import com.cta4j.bus.mapper.StopMapper;
+import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.model.Bus;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.Route;
 import com.cta4j.bus.model.Stop;
-import com.cta4j.bus.model.StopArrival;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.bus.external.detour.CtaDetour;
 import com.cta4j.bus.external.detour.CtaDetoursBustimeResponse;
@@ -57,6 +57,9 @@ public final class BusClientImpl implements BusClient {
     private final String host;
     private final String apiKey;
     private final ObjectMapper objectMapper;
+    private final ArrivalMapper arrivalMapper;
+    private final RouteMapper routeMapper;
+    private final StopMapper stopMapper;
     private final BusMapper busMapper;
 
     private BusClientImpl(String host, String apiKey) {
@@ -71,6 +74,9 @@ public final class BusClientImpl implements BusClient {
         this.host = host;
         this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
+        this.arrivalMapper = Mappers.getMapper(ArrivalMapper.class);
+        this.routeMapper = Mappers.getMapper(RouteMapper.class);
+        this.stopMapper = Mappers.getMapper(StopMapper.class);
         this.busMapper = Mappers.getMapper(BusMapper.class);
     }
 
@@ -109,7 +115,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         return routes.stream()
-                     .map(RouteMapper::fromExternal)
+                     .map(this.routeMapper::toDomain)
                      .toList();
     }
 
@@ -202,12 +208,12 @@ public final class BusClientImpl implements BusClient {
         }
 
         return stops.stream()
-                    .map(StopMapper::fromExternal)
+                    .map(this.stopMapper::toDomain)
                     .toList();
     }
 
     @Override
-    public List<StopArrival> getStopArrivals(String routeId, String stopId) {
+    public List<Arrival> getArrivalsByStop(String routeId, String stopId) {
         if (routeId == null) {
             throw new IllegalArgumentException("routeId must not be null");
         }
@@ -251,7 +257,51 @@ public final class BusClientImpl implements BusClient {
         }
 
         return prd.stream()
-                  .map(StopArrivalMapper::fromExternal)
+                  .map(this.arrivalMapper::toDomain)
+                  .toList();
+    }
+
+    @Override
+    public List<Arrival> getArrivalsByBus(String busId) {
+        if (busId == null) {
+            throw new IllegalArgumentException("busId must not be null");
+        }
+
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(PREDICTIONS_ENDPOINT)
+            .addParameter("vid", busId)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        CtaPredictionsResponse predictionsResponse;
+
+        try {
+            predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
+        } catch (JacksonException e) {
+            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaPredictionsBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
+        }
+
+        List<CtaPredictionsPrd> prd = bustimeResponse.prd();
+
+        if ((prd == null) || prd.isEmpty()) {
+            return List.of();
+        }
+
+        return prd.stream()
+                  .map(this.arrivalMapper::toDomain)
                   .toList();
     }
 
