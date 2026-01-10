@@ -2,76 +2,19 @@ package com.cta4j.bus.mapper;
 
 import com.cta4j.bus.external.detour.CtaDetour;
 import com.cta4j.bus.model.Detour;
-import com.cta4j.bus.model.DetourRouteDirection;
-import com.cta4j.util.DateTimeUtils;
 import org.jetbrains.annotations.ApiStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import java.time.Instant;
-import java.time.format.DateTimeParseException;
-import java.util.List;
-
+@Mapper
 @ApiStatus.Internal
-public final class DetourMapper {
-    private static final Logger logger;
-
-    static {
-        logger = LoggerFactory.getLogger(DetourMapper.class);
-    }
-
-    private DetourMapper() {
-        throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-    }
-
-    public static Detour fromExternal(CtaDetour detour) {
-        if (detour == null) {
-            throw new IllegalArgumentException("detour must not be null");
-        }
-
-        Boolean active = null;
-
-        if (detour.st() != null) {
-            active = "1".equals(detour.st());
-        }
-
-        List<DetourRouteDirection> routeDirections = null;
-
-        if (detour.rtdirs() != null) {
-            routeDirections = detour.rtdirs()
-                                    .stream()
-                                    .map(rd -> new DetourRouteDirection(rd.rt(), rd.dir()))
-                                    .toList();
-        }
-
-        Instant startTime = null;
-
-        if (detour.startdt() != null) {
-            try {
-                startTime = DateTimeUtils.parseBusTimestamp(detour.startdt());
-            } catch (DateTimeParseException e) {
-                logger.warn("Invalid start time value {}", detour.startdt());
-            }
-        }
-
-        Instant endTime = null;
-
-        if (detour.enddt() != null) {
-            try {
-                endTime = DateTimeUtils.parseBusTimestamp(detour.enddt());
-            } catch (DateTimeParseException e) {
-                logger.warn("Invalid end time value {}", detour.enddt());
-            }
-        }
-
-        return new Detour(
-            detour.id(),
-            detour.ver(),
-            active,
-            detour.desc(),
-            routeDirections,
-            startTime,
-            endTime
-        );
-    }
+public interface DetourMapper {
+    @Mapping(source = "ver", target = "version")
+    @Mapping(source = "st", target = "active", qualifiedByName = "stToActive")
+    @Mapping(source = "desc", target = "description")
+    @Mapping(source = "rtdirs", target = "routeDirections")
+    @Mapping(source = "startdt", target = "startTime", qualifiedByName = "toInstant")
+    @Mapping(source = "enddt", target = "endTime", qualifiedByName = "toInstant")
+    @Mapping(source = "rtpidatafeed", target = "dataFeed")
+    Detour toDomain(CtaDetour dto);
 }

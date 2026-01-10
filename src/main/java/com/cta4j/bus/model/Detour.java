@@ -1,21 +1,11 @@
 package com.cta4j.bus.model;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.List;
 
-/**
- * A detour affecting one or more bus routes.
- *
- * @param id the unique identifier of the detour
- * @param version the version number of the detour
- * @param active whether the detour is currently active
- * @param description a description of the detour
- * @param routeDirections the list of route directions affected by the detour
- * @param startTime the start time of the detour
- * @param endTime the end time of the detour
- */
 @NullMarked
 @SuppressWarnings("ConstantConditions")
 public record Detour(
@@ -23,7 +13,7 @@ public record Detour(
 
     String version,
 
-    Boolean active,
+    boolean active,
 
     String description,
 
@@ -31,7 +21,10 @@ public record Detour(
 
     Instant startTime,
 
-    Instant endTime
+    Instant endTime,
+
+    @Nullable
+    String dataFeed
 ) {
     public Detour {
         if (id == null) {
@@ -40,10 +33,6 @@ public record Detour(
 
         if (version == null) {
             throw new IllegalArgumentException("version must not be null");
-        }
-
-        if (active == null) {
-            throw new IllegalArgumentException("active must not be null");
         }
 
         if (description == null) {

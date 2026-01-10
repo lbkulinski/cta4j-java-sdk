@@ -60,6 +60,7 @@ public final class BusClientImpl implements BusClient {
     private final ArrivalMapper arrivalMapper;
     private final RouteMapper routeMapper;
     private final StopMapper stopMapper;
+    private final DetourMapper detourMapper;
     private final BusMapper busMapper;
 
     private BusClientImpl(String host, String apiKey) {
@@ -77,6 +78,7 @@ public final class BusClientImpl implements BusClient {
         this.arrivalMapper = Mappers.getMapper(ArrivalMapper.class);
         this.routeMapper = Mappers.getMapper(RouteMapper.class);
         this.stopMapper = Mappers.getMapper(StopMapper.class);
+        this.detourMapper = Mappers.getMapper(DetourMapper.class);
         this.busMapper = Mappers.getMapper(BusMapper.class);
     }
 
@@ -232,33 +234,7 @@ public final class BusClientImpl implements BusClient {
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpUtils.get(url);
-
-        CtaPredictionsResponse predictionsResponse;
-
-        try {
-            predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
-        } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
-
-        CtaPredictionsBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
-
-        if (bustimeResponse == null) {
-            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
-        }
-
-        List<CtaPredictionsPrd> prd = bustimeResponse.prd();
-
-        if ((prd == null) || prd.isEmpty()) {
-            return List.of();
-        }
-
-        return prd.stream()
-                  .map(this.arrivalMapper::toDomain)
-                  .toList();
+        return this.getArrivals(url);
     }
 
     @Override
@@ -276,33 +252,7 @@ public final class BusClientImpl implements BusClient {
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpUtils.get(url);
-
-        CtaPredictionsResponse predictionsResponse;
-
-        try {
-            predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
-        } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
-
-        CtaPredictionsBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
-
-        if (bustimeResponse == null) {
-            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
-        }
-
-        List<CtaPredictionsPrd> prd = bustimeResponse.prd();
-
-        if ((prd == null) || prd.isEmpty()) {
-            return List.of();
-        }
-
-        return prd.stream()
-                  .map(this.arrivalMapper::toDomain)
-                  .toList();
+        return this.getArrivals(url);
     }
 
     @Override
@@ -350,7 +300,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         return dtrs.stream()
-                   .map(DetourMapper::fromExternal)
+                   .map(this.detourMapper::toDomain)
                    .toList();
     }
 
@@ -404,6 +354,36 @@ public final class BusClientImpl implements BusClient {
         Bus bus = this.busMapper.toDomain(vehicle);
 
         return Optional.of(bus);
+    }
+
+    private List<Arrival> getArrivals(String url) {
+        String response = HttpUtils.get(url);
+
+        CtaPredictionsResponse predictionsResponse;
+
+        try {
+            predictionsResponse = this.objectMapper.readValue(response, CtaPredictionsResponse.class);
+        } catch (JacksonException e) {
+            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaPredictionsBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
+
+        if (bustimeResponse == null) {
+            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
+        }
+
+        List<CtaPredictionsPrd> prd = bustimeResponse.prd();
+
+        if ((prd == null) || prd.isEmpty()) {
+            return List.of();
+        }
+
+        return prd.stream()
+                  .map(this.arrivalMapper::toDomain)
+                  .toList();
     }
 
     public static final class BuilderImpl implements BusClient.Builder {

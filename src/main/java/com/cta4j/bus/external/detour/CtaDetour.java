@@ -20,6 +20,8 @@ public record CtaDetour(
 
     String startdt,
 
-    String enddt
+    String enddt,
+
+    String rtpidatafeed
 ) {
 }

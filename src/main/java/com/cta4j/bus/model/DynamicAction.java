@@ -44,14 +44,4 @@ public enum DynamicAction {
     public int getId() {
         return this.id;
     }
-
-    public static DynamicAction fromId(int id) {
-        for (DynamicAction action : DynamicAction.values()) {
-            if (action.id == id) {
-                return action;
-            }
-        }
-
-        throw new IllegalArgumentException("Invalid dynamic action id: " + id);
-    }
 }
