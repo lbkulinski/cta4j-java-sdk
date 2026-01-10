@@ -1,6 +1,6 @@
 package com.cta4j.bus.mapper;
 
-import com.cta4j.bus.external.prediction.CtaPredictionsPrd;
+import com.cta4j.bus.external.CtaPrediction;
 import com.cta4j.bus.model.Arrival;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
@@ -32,5 +32,5 @@ public interface ArrivalMapper {
     @Mapping(source = "stst", target = "metadata.stopStatus")
     @Mapping(source = "stsd", target = "metadata.stopStatusDescription")
     @Mapping(source = "flagstop", target = "metadata.flagStop")
-    Arrival toDomain(CtaPredictionsPrd prediction);
+    Arrival toDomain(CtaPrediction prediction);
 }
