@@ -90,7 +90,7 @@ public final class Application {
                                        .apiKey("BUS_API_KEY")
                                        .build();
 
-        busClient.getArrivalsByStop("22", "1828")
+        busClient.findArrivalsByRouteIdAndStopId("22", "1828")
                  .stream()
                  .map(arrival -> String.format(
                      "%s-bound bus is arriving at %s in %d minutes",

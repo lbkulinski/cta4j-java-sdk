@@ -102,17 +102,17 @@ public interface BusClient {
     List<Route> getRoutes();
 
     /**
-     * Retrieves a {@link List} of directions for a specific bus route.
+     * Finds directions for the specified route ID.
      *
      * @param routeId the ID of the bus route
      * @return a {@link List} of directions for the specified bus route
      * @throws IllegalArgumentException if the specified bus route is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<String> getDirections(String routeId);
+    List<String> findDirectionsByRouteId(String routeId);
 
     /**
-     * Retrieves a {@link List} of stops for a specific bus route and direction.
+     * Finds stops for the specified route ID and direction.
      *
      * @param routeId the ID of the bus route
      * @param direction the direction of the bus route
@@ -120,31 +120,31 @@ public interface BusClient {
      * @throws IllegalArgumentException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Stop> getStops(String routeId, String direction);
+    List<Stop> findStopsByRouteIdAndDirection(String routeId, String direction);
 
     /**
-     * Retrieves a {@link List} of upcoming arrivals for a specific bus route and stop.
+     * Finds arrivals for the specified route ID and stop ID.
      *
      * @param routeId the ID of the bus route
      * @param stopId the ID of the bus stop
-     * @return a {@link List} of upcoming arrivals for the specified bus route and stop
+     * @return a {@link List} of arrivals for the specified bus route and stop
      * @throws IllegalArgumentException if the specified bus route or stop is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Arrival> getArrivalsByStop(String routeId, String stopId);
+    List<Arrival> findArrivalsByRouteIdAndStopId(String routeId, String stopId);
 
     /**
-     * Retrieves a {@link List} of upcoming arrivals for a specific bus by its ID.
+     * Finds arrivals for the specified bus ID.
      *
      * @param busId the ID of the bus
-     * @return a {@link List} of upcoming arrivals for the specified bus
+     * @return a {@link List} of arrivals for the specified bus
      * @throws IllegalArgumentException if the specified bus ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Arrival> getArrivalsByBus(String busId);
+    List<Arrival> findArrivalsByBusId(String busId);
 
     /**
-     * Retrieves a {@link List} of detours for a specific bus route and direction.
+     * Finds detours for the specified route ID and direction.
      *
      * @param routeId the ID of the bus route
      * @param direction the direction of the bus route
@@ -152,7 +152,7 @@ public interface BusClient {
      * @throws IllegalArgumentException if the specified bus route or direction is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Detour> getDetours(String routeId, String direction);
+    List<Detour> findDetoursByRouteIdAndDirection(String routeId, String direction);
 
     /**
      * A builder for configuring and creating {@link BusClient} instances.

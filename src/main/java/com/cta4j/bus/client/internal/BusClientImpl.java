@@ -238,7 +238,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<String> getDirections(String routeId) {
+    public List<String> findDirectionsByRouteId(String routeId) {
         if (routeId == null) {
             throw new IllegalArgumentException("routeId must not be null");
         }
@@ -292,7 +292,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Stop> getStops(String routeId, String direction) {
+    public List<Stop> findStopsByRouteIdAndDirection(String routeId, String direction) {
         if (routeId == null) {
             throw new IllegalArgumentException("routeId must not be null");
         }
@@ -351,7 +351,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Arrival> getArrivalsByStop(String routeId, String stopId) {
+    public List<Arrival> findArrivalsByRouteIdAndStopId(String routeId, String stopId) {
         if (routeId == null) {
             throw new IllegalArgumentException("routeId must not be null");
         }
@@ -374,7 +374,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Arrival> getArrivalsByBus(String busId) {
+    public List<Arrival> findArrivalsByBusId(String busId) {
         if (busId == null) {
             throw new IllegalArgumentException("busId must not be null");
         }
@@ -392,7 +392,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Detour> getDetours(String routeId, String direction) {
+    public List<Detour> findDetoursByRouteIdAndDirection(String routeId, String direction) {
         if (routeId == null) {
             throw new IllegalArgumentException("routeId must not be null");
         }
