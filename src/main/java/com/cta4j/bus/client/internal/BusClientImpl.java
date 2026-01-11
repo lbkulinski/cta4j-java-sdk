@@ -36,7 +36,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 
 @NullMarked
 @ApiStatus.Internal
@@ -44,6 +43,7 @@ import java.util.Optional;
 public final class BusClientImpl implements BusClient {
     private static final Logger log = LoggerFactory.getLogger(BusClientImpl.class);
 
+    private static final String SCHEME = "https";
     private static final String DEFAULT_HOST = "ctabustracker.com";
     private static final String API_VERSION = "v3";
     private static final String SYSTEM_TIME_ENDPOINT = String.format("/bustime/api/%s/gettime", API_VERSION);
@@ -83,9 +83,9 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public Optional<Instant> getSystemTime() {
+    public Instant getSystemTime() {
         String url = new URIBuilder()
-            .setScheme("https")
+            .setScheme(SCHEME)
             .setHost(this.host)
             .setPath(SYSTEM_TIME_ENDPOINT)
             .addParameter("key", this.apiKey)
@@ -111,9 +111,12 @@ public final class BusClientImpl implements BusClient {
         String systemTime = bustimeResponse.data();
 
         if ((errors == null) && (systemTime == null)) {
-            log.debug("System time bustime response missing both error and data from {}", SYSTEM_TIME_ENDPOINT);
+            String message = String.format(
+                "System time bustime response missing both error and data from %s",
+                SYSTEM_TIME_ENDPOINT
+            );
 
-            return Optional.empty();
+            throw new Cta4jException(message);
         }
 
         if ((errors != null) && !errors.isEmpty()) {
@@ -128,15 +131,67 @@ public final class BusClientImpl implements BusClient {
             throw new Cta4jException(message);
         }
 
-        Instant instant = CtaBusMappingQualifiers.mapTimestamp(systemTime);
+        return CtaBusMappingQualifiers.mapTimestamp(systemTime);
+    }
 
-        return Optional.of(instant);
+    @Override
+    public List<Bus> findBusesById(Iterable<String> ids) {
+        if (ids == null) {
+            throw new IllegalArgumentException("ids must not be null");
+        }
+
+        for (String id : ids) {
+            if (id == null) {
+                throw new IllegalArgumentException("ids must not contain null elements");
+            }
+        }
+
+        String idsString = String.join(",", ids);
+
+        String url = new URIBuilder()
+            .setScheme(SCHEME)
+            .setHost(this.host)
+            .setPath(VEHICLES_ENDPOINT)
+            .addParameter("vid", idsString)
+            .addParameter("tmres", "s")
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        return this.getBuses(url);
+    }
+
+    @Override
+    public List<Bus> findBusesByRouteId(Iterable<String> routeIds) {
+        if (routeIds == null) {
+            throw new IllegalArgumentException("routeIds must not be null");
+        }
+
+        for (String routeId : routeIds) {
+            if (routeId == null) {
+                throw new IllegalArgumentException("routeIds must not contain null elements");
+            }
+        }
+
+        String routeIdsString = String.join(",", routeIds);
+
+        String url = new URIBuilder()
+            .setScheme(SCHEME)
+            .setHost(this.host)
+            .setPath(VEHICLES_ENDPOINT)
+            .addParameter("rt", routeIdsString)
+            .addParameter("tmres", "s")
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        return this.getBuses(url);
     }
 
     @Override
     public List<Route> getRoutes() {
         String url = new URIBuilder()
-            .setScheme("https")
+            .setScheme(SCHEME)
             .setHost(this.host)
             .setPath(ROUTES_ENDPOINT)
             .addParameter("key", this.apiKey)
@@ -189,7 +244,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         String url = new URIBuilder()
-            .setScheme("https")
+            .setScheme(SCHEME)
             .setHost(this.host)
             .setPath(DIRECTIONS_ENDPOINT)
             .addParameter("rt", routeId)
@@ -247,7 +302,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         String url = new URIBuilder()
-            .setScheme("https")
+            .setScheme(SCHEME)
             .setHost(this.host)
             .setPath(STOPS_ENDPOINT)
             .addParameter("rt", routeId)
@@ -306,7 +361,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         String url = new URIBuilder()
-            .setScheme("https")
+            .setScheme(SCHEME)
             .setHost(this.host)
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("rt", routeId)
@@ -325,7 +380,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         String url = new URIBuilder()
-            .setScheme("https")
+            .setScheme(SCHEME)
             .setHost(this.host)
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("vid", busId)
@@ -347,7 +402,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         String url = new URIBuilder()
-            .setScheme("https")
+            .setScheme(SCHEME)
             .setHost(this.host)
             .setPath(DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
@@ -395,21 +450,16 @@ public final class BusClientImpl implements BusClient {
                    .toList();
     }
 
-    @Override
-    public Optional<Bus> getBus(String id) {
-        if (id == null) {
-            throw new IllegalArgumentException("id must not be null");
-        }
+    private String buildErrorMessage(String endpoint, List<CtaError> errors) {
+        String message = errors.stream()
+                               .map(CtaError::msg)
+                               .reduce("%s; %s"::formatted)
+                               .orElse("Unknown error");
 
-        String url = new URIBuilder()
-            .setScheme("https")
-            .setHost(this.host)
-            .setPath(VEHICLES_ENDPOINT)
-            .addParameter("vid", id)
-            .addParameter("key", this.apiKey)
-            .addParameter("format", "json")
-            .toString();
+        return String.format("Error response from %s: %s", endpoint, message);
+    }
 
+    private List<Bus> getBuses(String url) {
         String response = HttpUtils.get(url);
 
         TypeReference<CtaResponse<List<CtaVehicle>>> typeReference = new TypeReference<>() {};
@@ -431,7 +481,7 @@ public final class BusClientImpl implements BusClient {
         if ((errors == null) && (vehicleResponse == null)) {
             log.debug("Vehicles bustime response missing both error and data from {}", VEHICLES_ENDPOINT);
 
-            return Optional.empty();
+            return List.of();
         }
 
         if ((errors != null) && !errors.isEmpty()) {
@@ -441,29 +491,12 @@ public final class BusClientImpl implements BusClient {
         }
 
         if ((vehicles == null) || vehicles.isEmpty()) {
-            return Optional.empty();
+            return List.of();
         }
 
-        if (vehicles.size() > 1) {
-            String message = String.format("Multiple buses found for ID %s", id);
-
-            throw new Cta4jException(message);
-        }
-
-        CtaVehicle vehicle = vehicles.getFirst();
-
-        Bus bus = this.busMapper.toDomain(vehicle);
-
-        return Optional.of(bus);
-    }
-
-    private String buildErrorMessage(String endpoint, List<CtaError> errors) {
-        String message = errors.stream()
-                               .map(CtaError::msg)
-                               .reduce("%s; %s"::formatted)
-                               .orElse("Unknown error");
-
-        return String.format("Error response from %s: %s", endpoint, message);
+        return vehicles.stream()
+                       .map(this.busMapper::toDomain)
+                       .toList();
     }
 
     private List<Arrival> getArrivals(String url) {

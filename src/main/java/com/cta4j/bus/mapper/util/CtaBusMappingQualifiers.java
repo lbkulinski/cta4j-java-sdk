@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 @ApiStatus.Internal
 public final class CtaBusMappingQualifiers {
-    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm[:ss]");
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
 
     private CtaBusMappingQualifiers() {

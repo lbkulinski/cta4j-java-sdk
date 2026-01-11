@@ -17,8 +17,81 @@ import java.util.Optional;
  * A client for interacting with the CTA Bus Tracker API.
  */
 @NullMarked
+@SuppressWarnings("ConstantConditions")
 public interface BusClient {
-    Optional<Instant> getSystemTime();
+    /**
+     * Retrieves the current system time from the CTA Bus Tracker API.
+     *
+     * @return the current system time as an {@link Instant}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    Instant getSystemTime();
+
+    /**
+     * Finds buses matching the specified bus IDs.
+     *
+     * @param ids an {@link Iterable} of bus IDs
+     * @return a {@link List} of buses corresponding to the specified IDs
+     * @throws IllegalArgumentException if the specified IDs are {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    List<Bus> findBusesById(Iterable<String> ids);
+
+    /**
+     * Finds buses operating on the specified route IDs.
+     *
+     * @param routeIds an {@link Iterable} of bus route IDs
+     * @return a {@link List} of buses corresponding to the specified route IDs
+     * @throws IllegalArgumentException if the specified route IDs are {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    List<Bus> findBusesByRouteId(Iterable<String> routeIds);
+
+    /**
+     * Finds buses operating on the specified route ID.
+     *
+     * @param routeId the bus route ID
+     * @return a {@link List} of buses corresponding to the specified route ID
+     * @throws IllegalArgumentException if the specified route ID is {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    default List<Bus> findBusesByRouteId(String routeId) {
+        if (routeId == null) {
+            throw new IllegalArgumentException("routeId must not be null");
+        }
+
+        List<String> routeIds = List.of(routeId);
+
+        return this.findBusesByRouteId(routeIds);
+    }
+
+    /**
+     * Finds a bus by its ID.
+     *
+     * @param id the ID of the bus
+     * @return an {@link Optional} containing the bus information if found, or an empty {@link Optional} if not found
+     * @throws IllegalArgumentException if the specified bus ID is {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    default Optional<Bus> findBusById(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+
+        List<String> ids = List.of(id);
+
+        List<Bus> buses = this.findBusesById(ids);
+
+        if (buses.isEmpty()) {
+            return Optional.empty();
+        } if (buses.size() > 1) {
+            throw new Cta4jException("Multiple buses found for ID: " + id);
+        }
+
+        Bus bus = buses.getFirst();
+
+        return Optional.of(bus);
+    }
 
     /**
      * Retrieves a {@link List} of all bus routes.
@@ -80,16 +153,6 @@ public interface BusClient {
      * @throws Cta4jException if an error occurs while fetching the data
      */
     List<Detour> getDetours(String routeId, String direction);
-
-    /**
-     * Retrieves information about a specific bus by its ID.
-     *
-     * @param id the ID of the bus
-     * @return an {@link Optional} containing the bus information if found, or an empty {@link Optional} if not found
-     * @throws IllegalArgumentException if the specified bus ID is {@code null}
-     * @throws Cta4jException if an error occurs while fetching the data
-     */
-    Optional<Bus> getBus(String id);
 
     /**
      * A builder for configuring and creating {@link BusClient} instances.
