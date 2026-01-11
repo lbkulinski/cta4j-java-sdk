@@ -6,8 +6,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper
 @ApiStatus.Internal
+@Mapper
 public interface StopMapper {
     @Mapping(source = "stpid", target = "id")
     @Mapping(source = "stpnm", target = "name")

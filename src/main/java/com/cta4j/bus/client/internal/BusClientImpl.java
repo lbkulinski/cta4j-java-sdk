@@ -316,9 +316,7 @@ public final class BusClientImpl implements BusClient {
         List<CtaDetour> detours = bustimeResponse.data();
 
         if ((errors == null) && (detours == null)) {
-            String message = String.format("Invalid response from %s", DETOURS_ENDPOINT);
-
-            throw new Cta4jException(message);
+            return List.of();
         }
 
         if ((errors != null) && !errors.isEmpty()) {

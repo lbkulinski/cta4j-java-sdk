@@ -5,6 +5,7 @@ import com.cta4j.bus.model.FlagStop;
 import com.cta4j.bus.model.PassengerLoad;
 import com.cta4j.bus.model.PredictionType;
 import com.cta4j.bus.model.TransitMode;
+import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Named;
 
 import java.time.Instant;
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
+@ApiStatus.Internal
 public final class CtaBusMappingQualifiers {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
 

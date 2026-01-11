@@ -7,8 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(uses = CtaBusMappingQualifiers.class)
 @ApiStatus.Internal
+@Mapper(uses = CtaBusMappingQualifiers.class)
 public interface BusMapper {
     @Mapping(source = "vid", target = "id")
     @Mapping(source = "rtpidatafeed", target = "metadata.dataFeed")

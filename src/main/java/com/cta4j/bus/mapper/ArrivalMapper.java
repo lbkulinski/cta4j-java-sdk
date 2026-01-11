@@ -7,8 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(uses = CtaBusMappingQualifiers.class)
 @ApiStatus.Internal
+@Mapper(uses = CtaBusMappingQualifiers.class)
 public interface ArrivalMapper {
     @Mapping(source = "typ", target = "predictionType", qualifiedByName = "mapPredictionType")
     @Mapping(source = "stpid", target = "stopId")
