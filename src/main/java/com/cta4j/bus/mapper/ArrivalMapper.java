@@ -2,6 +2,7 @@ package com.cta4j.bus.mapper;
 
 import com.cta4j.bus.external.CtaPrediction;
 import com.cta4j.bus.model.Arrival;
+import com.cta4j.bus.model.DynamicAction;
 import com.cta4j.bus.model.PassengerLoad;
 import com.cta4j.bus.model.PredictionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -26,10 +27,10 @@ public interface ArrivalMapper {
     @Mapping(source = "rtdd", target = "routeDesignator")
     @Mapping(source = "rtdir", target = "routeDirection")
     @Mapping(source = "des", target = "destination")
-    @Mapping(source = "prdtm", target = "arrivalTime", qualifiedByName = "mapArrivalTime")
+    @Mapping(source = "prdtm", target = "arrivalTime", qualifiedByName = "mapTimestamp")
     @Mapping(source = "dly", target = "delayed")
-    @Mapping(source = "tmstmp", target = "metadata.timestamp")
-    @Mapping(source = "dyn", target = "metadata.dynamicAction")
+    @Mapping(source = "tmstmp", target = "metadata.timestamp", qualifiedByName = "mapTimestamp")
+    @Mapping(source = "dyn", target = "metadata.dynamicAction", qualifiedByName = "mapDynamicAction")
     @Mapping(source = "tablockid", target = "metadata.blockId")
     @Mapping(source = "tatripid", target = "metadata.tripId")
     @Mapping(source = "origtatripno", target = "metadata.originalTripNumber")
@@ -59,17 +60,30 @@ public interface ArrivalMapper {
         };
     }
 
-    DateTimeFormatter ARRIVAL_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
+    DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
 
-    @Named("mapArrivalTime")
-    static Instant mapArrivalTime(String prdtm) {
-        if (prdtm == null) {
-            throw new IllegalArgumentException("prdtm must not be null");
+    @Named("mapTimestamp")
+    static Instant mapTimestamp(String timestamp) {
+        if (timestamp == null) {
+            throw new IllegalArgumentException("timestamp must not be null");
         }
 
-        return LocalDateTime.parse(prdtm, ARRIVAL_TIME_FORMATTER)
+        return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
                             .atZone(ZoneOffset.UTC)
                             .toInstant();
+    }
+
+    @Named("mapDynamicAction")
+    static DynamicAction mapDynamicAction(int dyn) {
+        for (DynamicAction dynamicAction : DynamicAction.values()) {
+            if (dynamicAction.getId() == dyn) {
+                return dynamicAction;
+            }
+        }
+
+        String message = String.format("Unknown dynamic action id: %d", dyn);
+
+        throw new IllegalArgumentException(message);
     }
 
     @Named("mapPassengerLoad")

@@ -3,10 +3,12 @@ package com.cta4j.bus.model;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Instant;
+
 @NullMarked
 @SuppressWarnings("ConstantConditions")
 public record ArrivalMetadata(
-    String timestamp,
+    Instant timestamp,
 
     DynamicAction dynamicAction,
 

@@ -16,4 +16,8 @@ public enum TransitMode {
     TransitMode(int code) {
         this.code = code;
     }
+
+    public int getCode() {
+        return this.code;
+    }
 }
