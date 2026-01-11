@@ -20,16 +20,17 @@ public record ArrivalMetadata(
 
     PassengerLoad passengerLoad,
 
-    int gtfsSequence,
+    @Nullable
+    Integer gtfsSequence,
 
     @Nullable
     String nextBus,
 
     @Nullable
-    Integer stopStatus,
+    Integer scheduledStartTimeSeconds,
 
     @Nullable
-    String stopStatusDescription,
+    String scheduledStartDate,
 
     int flagStop
 ) {

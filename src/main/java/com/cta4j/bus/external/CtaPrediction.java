@@ -47,7 +47,8 @@ public record CtaPrediction(
 
     String psgld,
 
-    int gtfsseq,
+    @Nullable
+    Integer gtfsseq,
 
     @Nullable
     String nbus,

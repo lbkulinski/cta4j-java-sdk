@@ -92,7 +92,7 @@ public final class BusClientImpl implements BusClient {
         try {
             routesResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(ROUTES_ENDPOINT);
+            String message = String.format("Failed to parse response from %s", ROUTES_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
@@ -103,13 +103,15 @@ public final class BusClientImpl implements BusClient {
         List<CtaRoute> routes = bustimeResponse.data();
 
         if ((errors == null) && (routes == null)) {
-            throw new Cta4jException("Invalid response from %s".formatted(ROUTES_ENDPOINT));
+            String message = String.format("Invalid response from %s", ROUTES_ENDPOINT);
+
+            throw new Cta4jException(message);
         }
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = this.buildErrorMessage(ROUTES_ENDPOINT, errors);
 
-            throw new Cta4jException("Error response from %s: %s".formatted(ROUTES_ENDPOINT, message));
+            throw new Cta4jException(message);
         }
 
         if ((routes == null) || routes.isEmpty()) {
@@ -144,7 +146,7 @@ public final class BusClientImpl implements BusClient {
         try {
             directionsResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
+            String message = String.format("Failed to parse response from %s", DIRECTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
@@ -155,13 +157,15 @@ public final class BusClientImpl implements BusClient {
         List<CtaDirection> directions = bustimeResponse.data();
 
         if ((errors == null) && (directions == null)) {
-            throw new Cta4jException("Invalid response from %s".formatted(DIRECTIONS_ENDPOINT));
+            String message = String.format("Invalid response from %s", DIRECTIONS_ENDPOINT);
+
+            throw new Cta4jException(message);
         }
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = this.buildErrorMessage(DIRECTIONS_ENDPOINT, errors);
 
-            throw new Cta4jException("Error response from %s: %s".formatted(DIRECTIONS_ENDPOINT, message));
+            throw new Cta4jException(message);
         }
 
         if ((directions == null) || directions.isEmpty()) {
@@ -201,7 +205,7 @@ public final class BusClientImpl implements BusClient {
         try {
             stopsResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(STOPS_ENDPOINT);
+            String message = String.format("Failed to parse response from %s", STOPS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
@@ -212,13 +216,15 @@ public final class BusClientImpl implements BusClient {
         List<CtaStop> stops = bustimeResponse.data();
 
         if ((errors == null) && (stops == null)) {
-            throw new Cta4jException("Invalid response from %s".formatted(STOPS_ENDPOINT));
+            String message = String.format("Invalid response from %s", STOPS_ENDPOINT);
+
+            throw new Cta4jException(message);
         }
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = this.buildErrorMessage(STOPS_ENDPOINT, errors);
 
-            throw new Cta4jException("Error response from %s: %s".formatted(STOPS_ENDPOINT, message));
+            throw new Cta4jException(message);
         }
 
         if ((stops == null) || stops.isEmpty()) {
@@ -299,7 +305,7 @@ public final class BusClientImpl implements BusClient {
         try {
             detoursResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
+            String message = String.format("Failed to parse response from %s", DETOURS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
@@ -310,13 +316,15 @@ public final class BusClientImpl implements BusClient {
         List<CtaDetour> detours = bustimeResponse.data();
 
         if ((errors == null) && (detours == null)) {
-            throw new Cta4jException("Invalid response from %s".formatted(DETOURS_ENDPOINT));
+            String message = String.format("Invalid response from %s", DETOURS_ENDPOINT);
+
+            throw new Cta4jException(message);
         }
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = this.buildErrorMessage(DETOURS_ENDPOINT, errors);
 
-            throw new Cta4jException("Error response from %s: %s".formatted(DETOURS_ENDPOINT, message));
+            throw new Cta4jException(message);
         }
 
         if ((detours == null) || detours.isEmpty()) {
@@ -351,7 +359,7 @@ public final class BusClientImpl implements BusClient {
         try {
             vehicleResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
+            String message = String.format("Failed to parse response from %s", VEHICLES_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
@@ -362,13 +370,15 @@ public final class BusClientImpl implements BusClient {
         List<CtaVehicle> vehicles = bustimeResponse.data();
 
         if ((errors == null) && (vehicleResponse == null)) {
-            throw new Cta4jException("Invalid response from %s".formatted(VEHICLES_ENDPOINT));
+            String message = String.format("Invalid response from %s", VEHICLES_ENDPOINT);
+
+            throw new Cta4jException(message);
         }
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = this.buildErrorMessage(VEHICLES_ENDPOINT, errors);
 
-            throw new Cta4jException("Error response from %s: %s".formatted(VEHICLES_ENDPOINT, message));
+            throw new Cta4jException(message);
         }
 
         if ((vehicles == null) || vehicles.isEmpty()) {
@@ -376,7 +386,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         if (vehicles.size() > 1) {
-            String message = "Multiple buses found for ID %s".formatted(id);
+            String message = String.format("Multiple buses found for ID %s", id);
 
             throw new Cta4jException(message);
         }
@@ -394,7 +404,7 @@ public final class BusClientImpl implements BusClient {
                                .reduce("%s; %s"::formatted)
                                .orElse("Unknown error");
 
-        return "Error response from %s: %s".formatted(endpoint, message);
+        return String.format("Error response from %s: %s", endpoint, message);
     }
 
     private List<Arrival> getArrivals(String url) {
@@ -406,7 +416,7 @@ public final class BusClientImpl implements BusClient {
         try {
             predictionsResponse = this.objectMapper.readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
+            String message = String.format("Failed to parse response from %s", PREDICTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
@@ -417,13 +427,15 @@ public final class BusClientImpl implements BusClient {
         List<CtaPrediction> predictions = bustimeResponse.data();
 
         if ((errors == null) && (predictions == null)) {
-            throw new Cta4jException("Invalid response from %s".formatted(PREDICTIONS_ENDPOINT));
+            String message = String.format("Invalid response from %s", PREDICTIONS_ENDPOINT);
+
+            throw new Cta4jException(message);
         }
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = this.buildErrorMessage(PREDICTIONS_ENDPOINT, errors);
 
-            throw new Cta4jException("Error response from %s: %s".formatted(PREDICTIONS_ENDPOINT, message));
+            throw new Cta4jException(message);
         }
 
         if ((predictions == null) || predictions.isEmpty()) {

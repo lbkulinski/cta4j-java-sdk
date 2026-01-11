@@ -26,7 +26,7 @@ public interface DetourMapper {
     DetourRouteDirection toDomain(CtaDetoursRouteDirection dto);
 
     @Named("mapActive")
-    default boolean mapActive(int st) {
+    static boolean mapActive(int st) {
         return st == 1;
     }
 }

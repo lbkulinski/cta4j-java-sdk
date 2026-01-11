@@ -2,14 +2,22 @@ package com.cta4j.bus.mapper;
 
 import com.cta4j.bus.external.CtaPrediction;
 import com.cta4j.bus.model.Arrival;
+import com.cta4j.bus.model.PassengerLoad;
+import com.cta4j.bus.model.PredictionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.Named;
+
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 
 @Mapper
 @ApiStatus.Internal
 public interface ArrivalMapper {
-    @Mapping(source = "typ", target = "predictionType")
+    @Mapping(source = "typ", target = "predictionType", qualifiedByName = "mapPredictionType")
     @Mapping(source = "stpid", target = "stopId")
     @Mapping(source = "stpnm", target = "stopName")
     @Mapping(source = "vid", target = "vehicleId")
@@ -18,7 +26,7 @@ public interface ArrivalMapper {
     @Mapping(source = "rtdd", target = "routeDesignator")
     @Mapping(source = "rtdir", target = "routeDirection")
     @Mapping(source = "des", target = "destination")
-    @Mapping(source = "prdtm", target = "arrivalTime")
+    @Mapping(source = "prdtm", target = "arrivalTime", qualifiedByName = "mapArrivalTime")
     @Mapping(source = "dly", target = "delayed")
     @Mapping(source = "tmstmp", target = "metadata.timestamp")
     @Mapping(source = "dyn", target = "metadata.dynamicAction")
@@ -26,11 +34,55 @@ public interface ArrivalMapper {
     @Mapping(source = "tatripid", target = "metadata.tripId")
     @Mapping(source = "origtatripno", target = "metadata.originalTripNumber")
     @Mapping(source = "zone", target = "metadata.zone")
-    @Mapping(source = "psgld", target = "metadata.passengerLoad")
+    @Mapping(source = "psgld", target = "metadata.passengerLoad", qualifiedByName = "mapPassengerLoad")
     @Mapping(source = "gtfsseq", target = "metadata.gtfsSequence")
     @Mapping(source = "nbus", target = "metadata.nextBus")
-    @Mapping(source = "stst", target = "metadata.stopStatus")
-    @Mapping(source = "stsd", target = "metadata.stopStatusDescription")
+    @Mapping(source = "stst", target = "metadata.scheduledStartTimeSeconds")
+    @Mapping(source = "stsd", target = "metadata.scheduledStartDate")
     @Mapping(source = "flagstop", target = "metadata.flagStop")
     Arrival toDomain(CtaPrediction prediction);
+
+    @Named("mapPredictionType")
+    static PredictionType mapPredictionType(String typ) {
+        if (typ == null) {
+            throw new IllegalArgumentException("typ must not be null");
+        }
+
+        return switch (typ) {
+            case "A" -> PredictionType.ARRIVAL;
+            case "D" -> PredictionType.DEPARTURE;
+            default -> {
+                String message = String.format("Unknown prediction type: %s", typ);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
+    }
+
+    DateTimeFormatter ARRIVAL_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
+
+    @Named("mapArrivalTime")
+    static Instant mapArrivalTime(String prdtm) {
+        if (prdtm == null) {
+            throw new IllegalArgumentException("prdtm must not be null");
+        }
+
+        return LocalDateTime.parse(prdtm, ARRIVAL_TIME_FORMATTER)
+                            .atZone(ZoneOffset.UTC)
+                            .toInstant();
+    }
+
+    @Named("mapPassengerLoad")
+    static PassengerLoad mapPassengerLoad(String psgld) {
+        if (psgld == null) {
+            throw new IllegalArgumentException("psgld must not be null");
+        }
+
+        return switch (psgld) {
+            case "FULL" -> PassengerLoad.FULL;
+            case "HALF_EMPTY" -> PassengerLoad.HALF_EMPTY;
+            case "EMPTY" -> PassengerLoad.EMPTY;
+            default -> PassengerLoad.UNKNOWN;
+        };
+    }
 }

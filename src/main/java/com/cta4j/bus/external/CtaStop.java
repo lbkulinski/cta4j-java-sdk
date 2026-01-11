@@ -16,9 +16,9 @@ public record CtaStop(
 
     String stpnm,
 
-    Double lat,
+    double lat,
 
-    Double lon,
+    double lon,
 
     @Nullable
     List<Integer> dtradd,
@@ -32,4 +32,13 @@ public record CtaStop(
     @Nullable
     Boolean ada
 ) {
+    public CtaStop {
+        if (stpid == null) {
+            throw new IllegalArgumentException("stpid must not be null");
+        }
+
+        if (stpnm == null) {
+            throw new IllegalArgumentException("stpnm must not be null");
+        }
+    }
 }
