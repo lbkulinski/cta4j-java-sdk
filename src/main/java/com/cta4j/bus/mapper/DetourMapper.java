@@ -2,14 +2,14 @@ package com.cta4j.bus.mapper;
 
 import com.cta4j.bus.external.CtaDetour;
 import com.cta4j.bus.external.CtaDetoursRouteDirection;
+import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.DetourRouteDirection;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
-@Mapper
+@Mapper(uses = CtaBusMappingQualifiers.class)
 @ApiStatus.Internal
 public interface DetourMapper {
     @Mapping(source = "ver", target = "version")
@@ -24,9 +24,4 @@ public interface DetourMapper {
     @Mapping(source = "rt", target = "route")
     @Mapping(source = "dir", target = "direction")
     DetourRouteDirection toDomain(CtaDetoursRouteDirection dto);
-
-    @Named("mapActive")
-    static boolean mapActive(int st) {
-        return st == 1;
-    }
 }
