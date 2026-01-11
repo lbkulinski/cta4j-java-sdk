@@ -25,6 +25,8 @@ import com.cta4j.util.HttpUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.factory.Mappers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
@@ -38,6 +40,8 @@ import java.util.Optional;
 @ApiStatus.Internal
 @SuppressWarnings("ConstantConditions")
 public final class BusClientImpl implements BusClient {
+    private static final Logger log = LoggerFactory.getLogger(BusClientImpl.class);
+
     private static final String DEFAULT_HOST = "ctabustracker.com";
     private static final String ROUTES_ENDPOINT = "/bustime/api/v3/getroutes";
     private static final String DIRECTIONS_ENDPOINT = "/bustime/api/v3/getdirections";
@@ -103,9 +107,9 @@ public final class BusClientImpl implements BusClient {
         List<CtaRoute> routes = bustimeResponse.data();
 
         if ((errors == null) && (routes == null)) {
-            String message = String.format("Invalid response from %s", ROUTES_ENDPOINT);
+            log.debug("Routes bustime response missing both error and data from {}", ROUTES_ENDPOINT);
 
-            throw new Cta4jException(message);
+            return List.of();
         }
 
         if ((errors != null) && !errors.isEmpty()) {
@@ -157,9 +161,9 @@ public final class BusClientImpl implements BusClient {
         List<CtaDirection> directions = bustimeResponse.data();
 
         if ((errors == null) && (directions == null)) {
-            String message = String.format("Invalid response from %s", DIRECTIONS_ENDPOINT);
+            log.debug("Directions bustime response missing both error and data from {}", DIRECTIONS_ENDPOINT);
 
-            throw new Cta4jException(message);
+            return List.of();
         }
 
         if ((errors != null) && !errors.isEmpty()) {
@@ -216,9 +220,9 @@ public final class BusClientImpl implements BusClient {
         List<CtaStop> stops = bustimeResponse.data();
 
         if ((errors == null) && (stops == null)) {
-            String message = String.format("Invalid response from %s", STOPS_ENDPOINT);
+            log.debug("Stops bustime response missing both error and data from {}", STOPS_ENDPOINT);
 
-            throw new Cta4jException(message);
+            return List.of();
         }
 
         if ((errors != null) && !errors.isEmpty()) {
@@ -316,6 +320,8 @@ public final class BusClientImpl implements BusClient {
         List<CtaDetour> detours = bustimeResponse.data();
 
         if ((errors == null) && (detours == null)) {
+            log.debug("Detours bustime response missing both error and data from {}", DETOURS_ENDPOINT);
+
             return List.of();
         }
 
@@ -368,9 +374,9 @@ public final class BusClientImpl implements BusClient {
         List<CtaVehicle> vehicles = bustimeResponse.data();
 
         if ((errors == null) && (vehicleResponse == null)) {
-            String message = String.format("Invalid response from %s", VEHICLES_ENDPOINT);
+            log.debug("Vehicles bustime response missing both error and data from {}", VEHICLES_ENDPOINT);
 
-            throw new Cta4jException(message);
+            return Optional.empty();
         }
 
         if ((errors != null) && !errors.isEmpty()) {
@@ -425,9 +431,9 @@ public final class BusClientImpl implements BusClient {
         List<CtaPrediction> predictions = bustimeResponse.data();
 
         if ((errors == null) && (predictions == null)) {
-            String message = String.format("Invalid response from %s", PREDICTIONS_ENDPOINT);
+            log.debug("Predictions bustime response missing both error and data from {}", PREDICTIONS_ENDPOINT);
 
-            throw new Cta4jException(message);
+            return List.of();
         }
 
         if ((errors != null) && !errors.isEmpty()) {
