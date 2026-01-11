@@ -29,7 +29,7 @@ public record ArrivalMetadata(
     String nextBus,
 
     @Nullable
-    Integer scheduledStartTimeSeconds,
+    Integer scheduledStartSeconds,
 
     @Nullable
     String scheduledStartDate,

@@ -4,6 +4,7 @@ import com.cta4j.bus.model.DynamicAction;
 import com.cta4j.bus.model.FlagStop;
 import com.cta4j.bus.model.PassengerLoad;
 import com.cta4j.bus.model.PredictionType;
+import com.cta4j.bus.model.TransitMode;
 import org.mapstruct.Named;
 
 import java.time.Instant;
@@ -38,7 +39,7 @@ public final class CtaBusMappingQualifiers {
     @Named("mapTimestamp")
     public static Instant mapTimestamp(String timestamp) {
         if (timestamp == null) {
-            throw new IllegalArgumentException("timestamp must not be null");
+            return null;
         }
 
         return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
@@ -87,6 +88,19 @@ public final class CtaBusMappingQualifiers {
         }
 
         String message = String.format("Unknown flag stop code: %d", flagstop);
+
+        throw new IllegalArgumentException(message);
+    }
+
+    @Named("mapTransitMode")
+    public static TransitMode mapTransitMode(int mode) {
+        for (TransitMode transitMode : TransitMode.values()) {
+            if (transitMode.getCode() == mode) {
+                return transitMode;
+            }
+        }
+
+        String message = String.format("Unknown transit mode code: %d", mode);
 
         throw new IllegalArgumentException(message);
     }

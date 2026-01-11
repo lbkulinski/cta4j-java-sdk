@@ -15,6 +15,7 @@ public record CtaVehicle(
     @Nullable
     String rtpidatafeed,
 
+    @Nullable
     String tmpstmp,
 
     double lat,
@@ -51,7 +52,8 @@ public record CtaVehicle(
     @Nullable
     String srvtmstmp,
 
-    int spd,
+    @Nullable
+    Integer spd,
 
     @Nullable
     Integer blk,
@@ -77,10 +79,6 @@ public record CtaVehicle(
     public CtaVehicle {
         if (vid == null) {
             throw new IllegalArgumentException("vid must not be null");
-        }
-
-        if (tmpstmp == null) {
-            throw new IllegalArgumentException("tmpstmp must not be null");
         }
 
         if (rt == null) {

@@ -30,7 +30,7 @@ public interface ArrivalMapper {
     @Mapping(source = "psgld", target = "metadata.passengerLoad", qualifiedByName = "mapPassengerLoad")
     @Mapping(source = "gtfsseq", target = "metadata.gtfsSequence")
     @Mapping(source = "nbus", target = "metadata.nextBus")
-    @Mapping(source = "stst", target = "metadata.scheduledStartTimeSeconds")
+    @Mapping(source = "stst", target = "metadata.scheduledStartSeconds")
     @Mapping(source = "stsd", target = "metadata.scheduledStartDate")
     @Mapping(source = "flagstop", target = "metadata.flagStop", qualifiedByName = "mapFlagStop")
     Arrival toDomain(CtaPrediction prediction);

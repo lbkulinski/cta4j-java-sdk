@@ -37,7 +37,8 @@ public record BusMetadata(
     @Nullable
     Instant serverTimestamp,
 
-    int speed,
+    @Nullable
+    Integer speed,
 
     @Nullable
     Integer block,
