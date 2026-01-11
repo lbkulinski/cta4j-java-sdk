@@ -35,13 +35,13 @@ public enum DynamicAction {
 
     STOPS_AFFECTED_NEW(19);
 
-    private final int id;
+    private final int code;
 
-    DynamicAction(int id) {
-        this.id = id;
+    DynamicAction(int code) {
+        this.code = code;
     }
 
-    public int getId() {
-        return this.id;
+    public int getCode() {
+        return this.code;
     }
 }

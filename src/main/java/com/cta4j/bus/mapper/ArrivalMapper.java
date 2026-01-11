@@ -3,6 +3,7 @@ package com.cta4j.bus.mapper;
 import com.cta4j.bus.external.CtaPrediction;
 import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.model.DynamicAction;
+import com.cta4j.bus.model.FlagStop;
 import com.cta4j.bus.model.PassengerLoad;
 import com.cta4j.bus.model.PredictionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -40,7 +41,7 @@ public interface ArrivalMapper {
     @Mapping(source = "nbus", target = "metadata.nextBus")
     @Mapping(source = "stst", target = "metadata.scheduledStartTimeSeconds")
     @Mapping(source = "stsd", target = "metadata.scheduledStartDate")
-    @Mapping(source = "flagstop", target = "metadata.flagStop")
+    @Mapping(source = "flagstop", target = "metadata.flagStop", qualifiedByName = "mapFlagStop")
     Arrival toDomain(CtaPrediction prediction);
 
     @Named("mapPredictionType")
@@ -76,12 +77,12 @@ public interface ArrivalMapper {
     @Named("mapDynamicAction")
     static DynamicAction mapDynamicAction(int dyn) {
         for (DynamicAction dynamicAction : DynamicAction.values()) {
-            if (dynamicAction.getId() == dyn) {
+            if (dynamicAction.getCode() == dyn) {
                 return dynamicAction;
             }
         }
 
-        String message = String.format("Unknown dynamic action id: %d", dyn);
+        String message = String.format("Unknown dynamic action code: %d", dyn);
 
         throw new IllegalArgumentException(message);
     }
@@ -96,7 +97,25 @@ public interface ArrivalMapper {
             case "FULL" -> PassengerLoad.FULL;
             case "HALF_EMPTY" -> PassengerLoad.HALF_EMPTY;
             case "EMPTY" -> PassengerLoad.EMPTY;
-            default -> PassengerLoad.UNKNOWN;
+            case "N/A", "" -> PassengerLoad.UNKNOWN;
+            default -> {
+                String message = String.format("Unknown passenger load: %s", psgld);
+
+                throw new IllegalArgumentException(message);
+            }
         };
+    }
+
+    @Named("mapFlagStop")
+    static FlagStop mapFlagStop(int flagstop) {
+        for (FlagStop flagStop : FlagStop.values()) {
+            if (flagStop.getCode() == flagstop) {
+                return flagStop;
+            }
+        }
+
+        String message = String.format("Unknown flag stop code: %d", flagstop);
+
+        throw new IllegalArgumentException(message);
     }
 }

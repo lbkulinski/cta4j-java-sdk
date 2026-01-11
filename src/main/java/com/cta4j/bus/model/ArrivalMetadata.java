@@ -34,7 +34,7 @@ public record ArrivalMetadata(
     @Nullable
     String scheduledStartDate,
 
-    int flagStop
+    FlagStop flagStop
 ) {
     public ArrivalMetadata {
         if (timestamp == null) {
