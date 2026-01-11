@@ -10,12 +10,13 @@ import org.mapstruct.Named;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 @ApiStatus.Internal
 public final class CtaBusMappingQualifiers {
-    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm[:ss]");
+    private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
 
     private CtaBusMappingQualifiers() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
@@ -45,7 +46,7 @@ public final class CtaBusMappingQualifiers {
         }
 
         return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
-                            .atZone(ZoneOffset.UTC)
+                            .atZone(CHICAGO_ZONE_ID)
                             .toInstant();
     }
 

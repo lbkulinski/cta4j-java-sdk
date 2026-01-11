@@ -10,6 +10,7 @@ import com.cta4j.bus.mapper.BusMapper;
 import com.cta4j.bus.mapper.DetourMapper;
 import com.cta4j.bus.mapper.RouteMapper;
 import com.cta4j.bus.mapper.StopMapper;
+import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
 import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.model.Bus;
 import com.cta4j.bus.model.Detour;
@@ -33,6 +34,7 @@ import tools.jackson.databind.ObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,12 +45,14 @@ public final class BusClientImpl implements BusClient {
     private static final Logger log = LoggerFactory.getLogger(BusClientImpl.class);
 
     private static final String DEFAULT_HOST = "ctabustracker.com";
-    private static final String ROUTES_ENDPOINT = "/bustime/api/v3/getroutes";
-    private static final String DIRECTIONS_ENDPOINT = "/bustime/api/v3/getdirections";
-    private static final String STOPS_ENDPOINT = "/bustime/api/v3/getstops";
-    private static final String PREDICTIONS_ENDPOINT = "/bustime/api/v3/getpredictions";
-    private static final String DETOURS_ENDPOINT = "/bustime/api/v3/getdetours";
-    private static final String VEHICLES_ENDPOINT = "/bustime/api/v3/getvehicles";
+    private static final String API_VERSION = "v3";
+    private static final String SYSTEM_TIME_ENDPOINT = String.format("/bustime/api/%s/gettime", API_VERSION);
+    private static final String ROUTES_ENDPOINT = String.format("/bustime/api/%s/getroutes", API_VERSION);
+    private static final String DIRECTIONS_ENDPOINT = String.format("/bustime/api/%s/getdirections", API_VERSION);
+    private static final String STOPS_ENDPOINT = String.format("/bustime/api/%s/getstops", API_VERSION);
+    private static final String PREDICTIONS_ENDPOINT = String.format("/bustime/api/%s/getpredictions", API_VERSION);
+    private static final String DETOURS_ENDPOINT = String.format("/bustime/api/%s/getdetours", API_VERSION);
+    private static final String VEHICLES_ENDPOINT = String.format("/bustime/api/%s/getvehicles", API_VERSION);
 
     private final String host;
     private final String apiKey;
@@ -79,6 +83,57 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
+    public Optional<Instant> getSystemTime() {
+        String url = new URIBuilder()
+            .setScheme("https")
+            .setHost(this.host)
+            .setPath(SYSTEM_TIME_ENDPOINT)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        TypeReference<CtaResponse<String>> typeReference = new TypeReference<>() {};
+        CtaResponse<String> timeResponse;
+
+        try {
+            timeResponse = this.objectMapper.readValue(response, typeReference);
+        } catch (JacksonException e) {
+            String message = String.format("Failed to parse response from %s", SYSTEM_TIME_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaBustimeResponse<String> bustimeResponse = timeResponse.bustimeResponse();
+
+        List<CtaError> errors = bustimeResponse.error();
+        String systemTime = bustimeResponse.data();
+
+        if ((errors == null) && (systemTime == null)) {
+            log.debug("System time bustime response missing both error and data from {}", SYSTEM_TIME_ENDPOINT);
+
+            return Optional.empty();
+        }
+
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(SYSTEM_TIME_ENDPOINT, errors);
+
+            throw new Cta4jException(message);
+        }
+
+        if (systemTime == null) {
+            String message = String.format("No system time data returned from %s", SYSTEM_TIME_ENDPOINT);
+
+            throw new Cta4jException(message);
+        }
+
+        Instant instant = CtaBusMappingQualifiers.mapTimestamp(systemTime);
+
+        return Optional.of(instant);
+    }
+
+    @Override
     public List<Route> getRoutes() {
         String url = new URIBuilder()
             .setScheme("https")
@@ -90,8 +145,8 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        TypeReference<CtaResponse<CtaRoute>> typeReference = new TypeReference<>() {};
-        CtaResponse<CtaRoute> routesResponse;
+        TypeReference<CtaResponse<List<CtaRoute>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaRoute>> routesResponse;
 
         try {
             routesResponse = this.objectMapper.readValue(response, typeReference);
@@ -101,7 +156,7 @@ public final class BusClientImpl implements BusClient {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<CtaRoute> bustimeResponse = routesResponse.bustimeResponse();
+        CtaBustimeResponse<List<CtaRoute>> bustimeResponse = routesResponse.bustimeResponse();
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaRoute> routes = bustimeResponse.data();
@@ -144,8 +199,8 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        TypeReference<CtaResponse<CtaDirection>> typeReference = new TypeReference<>() {};
-        CtaResponse<CtaDirection> directionsResponse;
+        TypeReference<CtaResponse<List<CtaDirection>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaDirection>> directionsResponse;
 
         try {
             directionsResponse = this.objectMapper.readValue(response, typeReference);
@@ -155,7 +210,7 @@ public final class BusClientImpl implements BusClient {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<CtaDirection> bustimeResponse = directionsResponse.bustimeResponse();
+        CtaBustimeResponse<List<CtaDirection>> bustimeResponse = directionsResponse.bustimeResponse();
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaDirection> directions = bustimeResponse.data();
@@ -203,8 +258,8 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        TypeReference<CtaResponse<CtaStop>> typeReference = new TypeReference<>() {};
-        CtaResponse<CtaStop> stopsResponse;
+        TypeReference<CtaResponse<List<CtaStop>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaStop>> stopsResponse;
 
         try {
             stopsResponse = this.objectMapper.readValue(response, typeReference);
@@ -214,7 +269,7 @@ public final class BusClientImpl implements BusClient {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<CtaStop> bustimeResponse = stopsResponse.bustimeResponse();
+        CtaBustimeResponse<List<CtaStop>> bustimeResponse = stopsResponse.bustimeResponse();
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaStop> stops = bustimeResponse.data();
@@ -303,8 +358,8 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        TypeReference<CtaResponse<CtaDetour>> typeReference = new TypeReference<>() {};
-        CtaResponse<CtaDetour> detoursResponse;
+        TypeReference<CtaResponse<List<CtaDetour>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaDetour>> detoursResponse;
 
         try {
             detoursResponse = this.objectMapper.readValue(response, typeReference);
@@ -314,7 +369,7 @@ public final class BusClientImpl implements BusClient {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<CtaDetour> bustimeResponse = detoursResponse.bustimeResponse();
+        CtaBustimeResponse<List<CtaDetour>> bustimeResponse = detoursResponse.bustimeResponse();
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaDetour> detours = bustimeResponse.data();
@@ -357,8 +412,8 @@ public final class BusClientImpl implements BusClient {
 
         String response = HttpUtils.get(url);
 
-        TypeReference<CtaResponse<CtaVehicle>> typeReference = new TypeReference<>() {};
-        CtaResponse<CtaVehicle> vehicleResponse;
+        TypeReference<CtaResponse<List<CtaVehicle>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaVehicle>> vehicleResponse;
 
         try {
             vehicleResponse = this.objectMapper.readValue(response, typeReference);
@@ -368,7 +423,7 @@ public final class BusClientImpl implements BusClient {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<CtaVehicle> bustimeResponse = vehicleResponse.bustimeResponse();
+        CtaBustimeResponse<List<CtaVehicle>> bustimeResponse = vehicleResponse.bustimeResponse();
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaVehicle> vehicles = bustimeResponse.data();
@@ -414,8 +469,8 @@ public final class BusClientImpl implements BusClient {
     private List<Arrival> getArrivals(String url) {
         String response = HttpUtils.get(url);
 
-        TypeReference<CtaResponse<CtaPrediction>> typeReference = new TypeReference<>() {};
-        CtaResponse<CtaPrediction> predictionsResponse;
+        TypeReference<CtaResponse<List<CtaPrediction>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaPrediction>> predictionsResponse;
 
         try {
             predictionsResponse = this.objectMapper.readValue(response, typeReference);
@@ -425,7 +480,7 @@ public final class BusClientImpl implements BusClient {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<CtaPrediction> bustimeResponse = predictionsResponse.bustimeResponse();
+        CtaBustimeResponse<List<CtaPrediction>> bustimeResponse = predictionsResponse.bustimeResponse();
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaPrediction> predictions = bustimeResponse.data();

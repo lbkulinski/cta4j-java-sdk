@@ -9,6 +9,7 @@ import com.cta4j.bus.model.Stop;
 import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ import java.util.Optional;
  */
 @NullMarked
 public interface BusClient {
+    Optional<Instant> getSystemTime();
+
     /**
      * Retrieves a {@link List} of all bus routes.
      *
