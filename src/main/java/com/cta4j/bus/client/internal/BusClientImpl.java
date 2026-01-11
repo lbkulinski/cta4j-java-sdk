@@ -45,14 +45,14 @@ public final class BusClientImpl implements BusClient {
 
     private static final String SCHEME = "https";
     private static final String DEFAULT_HOST = "ctabustracker.com";
-    private static final String API_VERSION = "v3";
-    private static final String SYSTEM_TIME_ENDPOINT = String.format("/bustime/api/%s/gettime", API_VERSION);
-    private static final String ROUTES_ENDPOINT = String.format("/bustime/api/%s/getroutes", API_VERSION);
-    private static final String DIRECTIONS_ENDPOINT = String.format("/bustime/api/%s/getdirections", API_VERSION);
-    private static final String STOPS_ENDPOINT = String.format("/bustime/api/%s/getstops", API_VERSION);
-    private static final String PREDICTIONS_ENDPOINT = String.format("/bustime/api/%s/getpredictions", API_VERSION);
-    private static final String DETOURS_ENDPOINT = String.format("/bustime/api/%s/getdetours", API_VERSION);
-    private static final String VEHICLES_ENDPOINT = String.format("/bustime/api/%s/getvehicles", API_VERSION);
+    private static final String API_PREFIX = "/bustime/api/v3";
+    private static final String SYSTEM_TIME_ENDPOINT = String.format("%s/gettime", API_PREFIX);
+    private static final String ROUTES_ENDPOINT = String.format("%s/getroutes", API_PREFIX);
+    private static final String DIRECTIONS_ENDPOINT = String.format("%s/getdirections", API_PREFIX);
+    private static final String STOPS_ENDPOINT = String.format("%s/getstops", API_PREFIX);
+    private static final String PREDICTIONS_ENDPOINT = String.format("%s/getpredictions", API_PREFIX);
+    private static final String DETOURS_ENDPOINT = String.format("%s/getdetours", API_PREFIX);
+    private static final String VEHICLES_ENDPOINT = String.format("%s/getvehicles", API_PREFIX);
 
     private final String host;
     private final String apiKey;
@@ -366,6 +366,7 @@ public final class BusClientImpl implements BusClient {
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("stpid", stopId)
+            .addParameter("tmres", "s")
             .addParameter("key", this.apiKey)
             .addParameter("format", "json")
             .toString();
@@ -384,6 +385,7 @@ public final class BusClientImpl implements BusClient {
             .setHost(this.host)
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("vid", busId)
+            .addParameter("tmres", "s")
             .addParameter("key", this.apiKey)
             .addParameter("format", "json")
             .toString();
@@ -407,6 +409,7 @@ public final class BusClientImpl implements BusClient {
             .setPath(DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("dir", direction)
+            .addParameter("tmres", "s") //TODO: Is tmres an option for detours?
             .addParameter("key", this.apiKey)
             .addParameter("format", "json")
             .toString();
