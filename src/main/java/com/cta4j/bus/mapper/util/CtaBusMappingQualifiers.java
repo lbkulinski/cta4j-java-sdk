@@ -43,7 +43,7 @@ public final class CtaBusMappingQualifiers {
     @Named("mapTimestamp")
     public static Instant mapTimestamp(String timestamp) {
         if (timestamp == null) {
-            throw new IllegalArgumentException("timestamp must not be null");
+            return null;
         }
 
         return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
