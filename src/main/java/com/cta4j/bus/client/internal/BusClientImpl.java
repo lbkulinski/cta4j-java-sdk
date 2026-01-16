@@ -3,18 +3,21 @@ package com.cta4j.bus.client.internal;
 import com.cta4j.bus.client.BusClient;
 import com.cta4j.bus.external.CtaBustimeResponse;
 import com.cta4j.bus.external.CtaError;
+import com.cta4j.bus.external.CtaPattern;
 import com.cta4j.bus.external.CtaResponse;
 import com.cta4j.bus.external.CtaPrediction;
 import com.cta4j.bus.mapper.ArrivalMapper;
 import com.cta4j.bus.mapper.BusMapper;
 import com.cta4j.bus.mapper.DetourMapper;
 import com.cta4j.bus.mapper.RouteMapper;
+import com.cta4j.bus.mapper.RoutePatternMapper;
 import com.cta4j.bus.mapper.StopMapper;
 import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
 import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.model.Bus;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.Route;
+import com.cta4j.bus.model.RoutePattern;
 import com.cta4j.bus.model.Stop;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.bus.external.CtaDetour;
@@ -50,6 +53,7 @@ public final class BusClientImpl implements BusClient {
     private static final String ROUTES_ENDPOINT = String.format("%s/getroutes", API_PREFIX);
     private static final String DIRECTIONS_ENDPOINT = String.format("%s/getdirections", API_PREFIX);
     private static final String STOPS_ENDPOINT = String.format("%s/getstops", API_PREFIX);
+    private static final String PATTERNS_ENDPOINT = String.format("%s/getpatterns", API_PREFIX);
     private static final String PREDICTIONS_ENDPOINT = String.format("%s/getpredictions", API_PREFIX);
     private static final String DETOURS_ENDPOINT = String.format("%s/getdetours", API_PREFIX);
     private static final String VEHICLES_ENDPOINT = String.format("%s/getvehicles", API_PREFIX);
@@ -60,6 +64,7 @@ public final class BusClientImpl implements BusClient {
     private final ArrivalMapper arrivalMapper;
     private final RouteMapper routeMapper;
     private final StopMapper stopMapper;
+    private final RoutePatternMapper routePatternMapper;
     private final DetourMapper detourMapper;
     private final BusMapper busMapper;
 
@@ -78,6 +83,7 @@ public final class BusClientImpl implements BusClient {
         this.arrivalMapper = Mappers.getMapper(ArrivalMapper.class);
         this.routeMapper = Mappers.getMapper(RouteMapper.class);
         this.stopMapper = Mappers.getMapper(StopMapper.class);
+        this.routePatternMapper = Mappers.getMapper(RoutePatternMapper.class);
         this.detourMapper = Mappers.getMapper(DetourMapper.class);
         this.busMapper = Mappers.getMapper(BusMapper.class);
     }
@@ -330,7 +336,12 @@ public final class BusClientImpl implements BusClient {
         List<CtaStop> stops = bustimeResponse.data();
 
         if ((errors == null) && (stops == null)) {
-            log.debug("Stops bustime response missing both error and data from {}", STOPS_ENDPOINT);
+            log.debug(
+                "Stops bustime response missing both error and data for route={} direction={} from {}",
+                routeId,
+                direction,
+                STOPS_ENDPOINT
+            );
 
             return List.of();
         }
@@ -348,6 +359,116 @@ public final class BusClientImpl implements BusClient {
         return stops.stream()
                     .map(this.stopMapper::toDomain)
                     .toList();
+    }
+
+    @Override
+    public List<Stop> findStopsByStopId(Iterable<String> stopIds) {
+        if (stopIds == null) {
+            throw new IllegalArgumentException("stopIds must not be null");
+        }
+
+        for (String stopId : stopIds) {
+            if (stopId == null) {
+                throw new IllegalArgumentException("stopIds must not contain null elements");
+            }
+        }
+
+        String stopIdsString = String.join(",", stopIds);
+
+        String url = new URIBuilder()
+            .setScheme(SCHEME)
+            .setHost(this.host)
+            .setPath(STOPS_ENDPOINT)
+            .addParameter("stpid", stopIdsString)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        TypeReference<CtaResponse<List<CtaStop>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaStop>> stopsResponse;
+
+        try {
+            stopsResponse = this.objectMapper.readValue(response, typeReference);
+        } catch (JacksonException e) {
+            String message = String.format("Failed to parse response from %s", STOPS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaBustimeResponse<List<CtaStop>> bustimeResponse = stopsResponse.bustimeResponse();
+
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaStop> stops = bustimeResponse.data();
+
+        if ((errors == null) && (stops == null)) {
+            log.debug(
+                "Stop bustime response missing both error and data for stopIds={} from {}",
+                stopIds,
+                STOPS_ENDPOINT
+            );
+
+            return List.of();
+        }
+
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(STOPS_ENDPOINT, errors);
+
+            throw new Cta4jException(message);
+        }
+
+        if ((stops == null) || stops.isEmpty()) {
+            return List.of();
+        }
+
+        return stops.stream()
+                    .map(this.stopMapper::toDomain)
+                    .toList();
+    }
+
+    @Override
+    public List<RoutePattern> findPatternsByPatternId(Iterable<String> patternIds) {
+        if (patternIds == null) {
+            throw new IllegalArgumentException("patternIds must not be null");
+        }
+
+        for (String patternId : patternIds) {
+            if (patternId == null) {
+                throw new IllegalArgumentException("patternIds must not contain null elements");
+            }
+        }
+
+        String patternIdsString = String.join(",", patternIds);
+
+        String url = new URIBuilder()
+            .setScheme(SCHEME)
+            .setHost(this.host)
+            .setPath(PATTERNS_ENDPOINT)
+            .addParameter("pid", patternIdsString)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        return this.getPatterns(url);
+    }
+
+    @Override
+    public List<RoutePattern> findPatternsByRouteId(String routeId) {
+        if (routeId == null) {
+            throw new IllegalArgumentException("routeId must not be null");
+        }
+
+        String url = new URIBuilder()
+            .setScheme(SCHEME)
+            .setHost(this.host)
+            .setPath(PATTERNS_ENDPOINT)
+            .addParameter("rt", routeId)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        return this.getPatterns(url);
     }
 
     @Override
@@ -499,6 +620,46 @@ public final class BusClientImpl implements BusClient {
 
         return vehicles.stream()
                        .map(this.busMapper::toDomain)
+                       .toList();
+    }
+
+    private List<RoutePattern> getPatterns(String url) {
+        String response = HttpUtils.get(url);
+
+        TypeReference<CtaResponse<List<CtaPattern>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaPattern>> patternsResponse;
+
+        try {
+            patternsResponse = this.objectMapper.readValue(response, typeReference);
+        } catch (JacksonException e) {
+            String message = String.format("Failed to parse response from %s", PATTERNS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaBustimeResponse<List<CtaPattern>> bustimeResponse = patternsResponse.bustimeResponse();
+
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaPattern> patterns = bustimeResponse.data();
+
+        if ((errors == null) && (patterns == null)) {
+            log.debug("Pattern bustime response missing both error and data from {}", PATTERNS_ENDPOINT);
+
+            return List.of();
+        }
+
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = this.buildErrorMessage(PATTERNS_ENDPOINT, errors);
+
+            throw new Cta4jException(message);
+        }
+
+        if ((patterns == null) || patterns.isEmpty()) {
+            return List.of();
+        }
+
+        return patterns.stream()
+                       .map(this.routePatternMapper::toDomain)
                        .toList();
     }
 

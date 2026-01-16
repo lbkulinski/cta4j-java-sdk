@@ -5,6 +5,7 @@ import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.model.Bus;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.Route;
+import com.cta4j.bus.model.RoutePattern;
 import com.cta4j.bus.model.Stop;
 import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
@@ -85,7 +86,9 @@ public interface BusClient {
         if (buses.isEmpty()) {
             return Optional.empty();
         } if (buses.size() > 1) {
-            throw new Cta4jException("Multiple buses found for ID: " + id);
+            String message = String.format("Multiple buses found for ID: %s", id);
+
+            throw new Cta4jException(message);
         }
 
         Bus bus = buses.getFirst();
@@ -121,6 +124,84 @@ public interface BusClient {
      * @throws Cta4jException if an error occurs while fetching the data
      */
     List<Stop> findStopsByRouteIdAndDirection(String routeId, String direction);
+
+    /**
+     * Finds stops for the specified stop IDs.
+     *
+     * @param stopIds an {@link Iterable} of stop IDs
+     * @return a {@link List} of stops corresponding to the specified stop IDs
+     * @throws IllegalArgumentException if the specified stop IDs are {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    List<Stop> findStopsByStopId(Iterable<String> stopIds);
+
+    /**
+     * Finds a stop by its ID.
+     *
+     * @param stopId the ID of the stop
+     * @return an {@link Optional} containing the stop information if found, or an empty {@link Optional} if not found
+     * @throws IllegalArgumentException if the specified stop ID is {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    default Optional<Stop> findStopsByStopId(String stopId) {
+        if (stopId == null) {
+            throw new IllegalArgumentException("stopId must not be null");
+        }
+
+        List<String> ids = List.of(stopId);
+
+        List<Stop> stops = this.findStopsByStopId(ids);
+
+        if (stops.isEmpty()) {
+            return Optional.empty();
+        } if (stops.size() > 1) {
+            String message = String.format("Multiple stops found for ID: %s", stopId);
+
+            throw new Cta4jException(message);
+        }
+
+        Stop stop = stops.getFirst();
+
+        return Optional.of(stop);
+    }
+
+    /**
+     * Finds route patterns for the specified pattern IDs.
+     *
+     * @param patternIds an {@link Iterable} of route pattern IDs
+     * @return a {@link List} of route patterns corresponding to the specified pattern IDs
+     * @throws IllegalArgumentException if the specified pattern IDs are {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    List<RoutePattern> findPatternsByPatternId(Iterable<String> patternIds);
+
+    /**
+     * Finds route patterns for the specified pattern ID.
+     *
+     * @param patternId the ID of the route pattern
+     * @return a {@link List} of route patterns corresponding to the specified pattern ID
+     * @throws IllegalArgumentException if the specified pattern ID is {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    default List<RoutePattern> findPatternsByPatternId(String patternId) {
+        if (patternId == null) {
+            throw new IllegalArgumentException("patternId must not be null");
+        }
+
+        List<String> ids = List.of(patternId);
+
+        return this.findPatternsByPatternId(ids);
+    }
+
+    /**
+     * Finds route patterns for the specified route ID.
+     *
+     * @param routeId the ID of the bus route
+     * @return a {@link List} of route patterns for the specified bus route
+     * @throws IllegalArgumentException if the specified bus route is {@code null}
+     * @throws Cta4jException if an error occurs while fetching the data
+     */
+    List<RoutePattern> findPatternsByRouteId(String routeId);
 
     /**
      * Finds arrivals for the specified route ID and stop ID.
