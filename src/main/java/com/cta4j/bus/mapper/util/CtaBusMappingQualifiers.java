@@ -3,6 +3,7 @@ package com.cta4j.bus.mapper.util;
 import com.cta4j.bus.model.DynamicAction;
 import com.cta4j.bus.model.FlagStop;
 import com.cta4j.bus.model.PassengerLoad;
+import com.cta4j.bus.model.PatternPointType;
 import com.cta4j.bus.model.PredictionType;
 import com.cta4j.bus.model.TransitMode;
 import org.jetbrains.annotations.ApiStatus;
@@ -42,7 +43,7 @@ public final class CtaBusMappingQualifiers {
     @Named("mapTimestamp")
     public static Instant mapTimestamp(String timestamp) {
         if (timestamp == null) {
-            return null;
+            throw new IllegalArgumentException("timestamp must not be null");
         }
 
         return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
@@ -111,5 +112,22 @@ public final class CtaBusMappingQualifiers {
     @Named("mapActive")
     public static boolean mapActive(int st) {
         return st == 1;
+    }
+
+    @Named("mapPatternPointType")
+    public static PatternPointType mapPatternPointType(String type) {
+        if (type == null) {
+            throw new IllegalArgumentException("type must not be null");
+        }
+
+        return switch (type) {
+            case "S" -> PatternPointType.STOP;
+            case "W" -> PatternPointType.WAYPOINT;
+            default -> {
+                String message = String.format("Unknown pattern point type: %s", type);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
     }
 }

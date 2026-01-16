@@ -17,6 +17,7 @@ public record CtaBustimeResponse<T>(
         "routes",
         "directions",
         "stops",
+        "ptr",
         "prd",
         "dtrs",
         "vehicle",
