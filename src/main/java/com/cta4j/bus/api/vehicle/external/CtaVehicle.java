@@ -1,4 +1,4 @@
-package com.cta4j.bus.external;
+package com.cta4j.bus.api.vehicle.external;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jetbrains.annotations.ApiStatus;

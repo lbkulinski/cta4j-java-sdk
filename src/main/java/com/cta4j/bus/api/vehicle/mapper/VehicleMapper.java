@@ -1,15 +1,15 @@
-package com.cta4j.bus.mapper;
+package com.cta4j.bus.api.vehicle.mapper;
 
-import com.cta4j.bus.external.CtaVehicle;
+import com.cta4j.bus.api.vehicle.external.CtaVehicle;
 import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
-import com.cta4j.bus.model.Bus;
+import com.cta4j.bus.api.vehicle.model.Vehicle;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 @ApiStatus.Internal
 @Mapper(uses = CtaBusMappingQualifiers.class)
-public interface BusMapper {
+public interface VehicleMapper {
     @Mapping(source = "vid", target = "id")
     @Mapping(source = "rtpidatafeed", target = "metadata.dataFeed")
     @Mapping(source = "tmpstmp", target = "metadata.lastUpdated", qualifiedByName = "mapTimestamp")
@@ -37,5 +37,5 @@ public interface BusMapper {
     @Mapping(source = "psgld", target = "metadata.passengerLoad", qualifiedByName = "mapPassengerLoad")
     @Mapping(source = "stst", target = "metadata.scheduledStartSeconds")
     @Mapping(source = "stsd", target = "metadata.scheduledStartDate")
-    Bus toDomain(CtaVehicle vehicle);
+    Vehicle toDomain(CtaVehicle vehicle);
 }

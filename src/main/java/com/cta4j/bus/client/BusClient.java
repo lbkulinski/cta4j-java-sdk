@@ -2,7 +2,7 @@ package com.cta4j.bus.client;
 
 import com.cta4j.bus.client.internal.BusClientImpl;
 import com.cta4j.bus.model.Arrival;
-import com.cta4j.bus.model.Bus;
+import com.cta4j.bus.api.vehicle.model.Vehicle;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.Route;
 import com.cta4j.bus.model.RoutePattern;
@@ -36,7 +36,7 @@ public interface BusClient {
      * @throws IllegalArgumentException if the specified IDs are {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Bus> findBusesById(Iterable<String> ids);
+    List<Vehicle> findBusesById(Iterable<String> ids);
 
     /**
      * Finds buses operating on the specified route IDs.
@@ -46,7 +46,7 @@ public interface BusClient {
      * @throws IllegalArgumentException if the specified route IDs are {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    List<Bus> findBusesByRouteId(Iterable<String> routeIds);
+    List<Vehicle> findBusesByRouteId(Iterable<String> routeIds);
 
     /**
      * Finds buses operating on the specified route ID.
@@ -56,7 +56,7 @@ public interface BusClient {
      * @throws IllegalArgumentException if the specified route ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    default List<Bus> findBusesByRouteId(String routeId) {
+    default List<Vehicle> findBusesByRouteId(String routeId) {
         if (routeId == null) {
             throw new IllegalArgumentException("routeId must not be null");
         }
@@ -74,26 +74,26 @@ public interface BusClient {
      * @throws IllegalArgumentException if the specified bus ID is {@code null}
      * @throws Cta4jException if an error occurs while fetching the data
      */
-    default Optional<Bus> findBusById(String id) {
+    default Optional<Vehicle> findBusById(String id) {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
 
         List<String> ids = List.of(id);
 
-        List<Bus> buses = this.findBusesById(ids);
+        List<Vehicle> vehicles = this.findBusesById(ids);
 
-        if (buses.isEmpty()) {
+        if (vehicles.isEmpty()) {
             return Optional.empty();
-        } if (buses.size() > 1) {
+        } if (vehicles.size() > 1) {
             String message = String.format("Multiple buses found for ID: %s", id);
 
             throw new Cta4jException(message);
         }
 
-        Bus bus = buses.getFirst();
+        Vehicle vehicle = vehicles.getFirst();
 
-        return Optional.of(bus);
+        return Optional.of(vehicle);
     }
 
     /**

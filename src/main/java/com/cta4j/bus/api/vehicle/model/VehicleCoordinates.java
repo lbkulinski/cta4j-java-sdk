@@ -1,4 +1,4 @@
-package com.cta4j.bus.model;
+package com.cta4j.bus.api.vehicle.model;
 
 import org.jspecify.annotations.NullMarked;
 
@@ -13,14 +13,14 @@ import java.math.BigDecimal;
  */
 @NullMarked
 @SuppressWarnings("ConstantConditions")
-public record BusCoordinates(
+public record VehicleCoordinates(
     BigDecimal latitude,
 
     BigDecimal longitude,
 
     int heading
 ) {
-    public BusCoordinates {
+    public VehicleCoordinates {
         if (latitude == null) {
             throw new IllegalArgumentException("latitude must not be null");
         }

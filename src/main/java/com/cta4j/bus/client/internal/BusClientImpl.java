@@ -7,14 +7,14 @@ import com.cta4j.bus.external.CtaPattern;
 import com.cta4j.bus.external.CtaResponse;
 import com.cta4j.bus.external.CtaPrediction;
 import com.cta4j.bus.mapper.ArrivalMapper;
-import com.cta4j.bus.mapper.BusMapper;
+import com.cta4j.bus.api.vehicle.mapper.VehicleMapper;
 import com.cta4j.bus.mapper.DetourMapper;
 import com.cta4j.bus.mapper.RouteMapper;
 import com.cta4j.bus.mapper.RoutePatternMapper;
 import com.cta4j.bus.mapper.StopMapper;
 import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
 import com.cta4j.bus.model.Arrival;
-import com.cta4j.bus.model.Bus;
+import com.cta4j.bus.api.vehicle.model.Vehicle;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.bus.model.Route;
 import com.cta4j.bus.model.RoutePattern;
@@ -24,7 +24,7 @@ import com.cta4j.bus.external.CtaDetour;
 import com.cta4j.bus.external.CtaDirection;
 import com.cta4j.bus.external.CtaRoute;
 import com.cta4j.bus.external.CtaStop;
-import com.cta4j.bus.external.CtaVehicle;
+import com.cta4j.bus.api.vehicle.external.CtaVehicle;
 import com.cta4j.util.HttpUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -66,7 +66,7 @@ public final class BusClientImpl implements BusClient {
     private final StopMapper stopMapper;
     private final RoutePatternMapper routePatternMapper;
     private final DetourMapper detourMapper;
-    private final BusMapper busMapper;
+    private final VehicleMapper vehicleMapper;
 
     private BusClientImpl(String host, String apiKey) {
         if (host == null) {
@@ -85,7 +85,7 @@ public final class BusClientImpl implements BusClient {
         this.stopMapper = Mappers.getMapper(StopMapper.class);
         this.routePatternMapper = Mappers.getMapper(RoutePatternMapper.class);
         this.detourMapper = Mappers.getMapper(DetourMapper.class);
-        this.busMapper = Mappers.getMapper(BusMapper.class);
+        this.vehicleMapper = Mappers.getMapper(VehicleMapper.class);
     }
 
     @Override
@@ -141,7 +141,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Bus> findBusesById(Iterable<String> ids) {
+    public List<Vehicle> findBusesById(Iterable<String> ids) {
         if (ids == null) {
             throw new IllegalArgumentException("ids must not be null");
         }
@@ -168,7 +168,7 @@ public final class BusClientImpl implements BusClient {
     }
 
     @Override
-    public List<Bus> findBusesByRouteId(Iterable<String> routeIds) {
+    public List<Vehicle> findBusesByRouteId(Iterable<String> routeIds) {
         if (routeIds == null) {
             throw new IllegalArgumentException("routeIds must not be null");
         }
@@ -583,7 +583,7 @@ public final class BusClientImpl implements BusClient {
         return String.format("Error response from %s: %s", endpoint, message);
     }
 
-    private List<Bus> getBuses(String url) {
+    private List<Vehicle> getBuses(String url) {
         String response = HttpUtils.get(url);
 
         TypeReference<CtaResponse<List<CtaVehicle>>> typeReference = new TypeReference<>() {};
@@ -619,7 +619,7 @@ public final class BusClientImpl implements BusClient {
         }
 
         return vehicles.stream()
-                       .map(this.busMapper::toDomain)
+                       .map(this.vehicleMapper::toDomain)
                        .toList();
     }
 

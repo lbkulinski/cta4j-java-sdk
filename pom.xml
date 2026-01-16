@@ -92,9 +92,9 @@
                         <goals><goal>jar</goal></goals>
                         <configuration>
                             <excludes>
-                                <exclude>com/cta4j/bus/client/internal/**</exclude>
-                                <exclude>com/cta4j/bus/external/**</exclude>
-                                <exclude>com/cta4j/bus/mapper/**</exclude>
+                                <exclude>com/cta4j/vehicle/client/internal/**</exclude>
+                                <exclude>com/cta4j/vehicle/external/**</exclude>
+                                <exclude>com/cta4j/vehicle/mapper/**</exclude>
                                 <exclude>com/cta4j/train/client/internal/**</exclude>
                                 <exclude>com/cta4j/train/external/**</exclude>
                                 <exclude>com/cta4j/train/mapper/**</exclude>
@@ -116,7 +116,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <excludePackageNames>com.cta4j.bus.client.internal.*,com.cta4j.bus.external.*,com.cta4j.bus.mapper.*,com.cta4j.train.client.internal.*,com.cta4j.train.external.*,com.cta4j.train.mapper.*,com.cta4j.util.*</excludePackageNames>
+                    <excludePackageNames>com.cta4j.vehicle.client.internal.*,com.cta4j.vehicle.external.*,com.cta4j.vehicle.mapper.*,com.cta4j.train.client.internal.*,com.cta4j.train.external.*,com.cta4j.train.mapper.*,com.cta4j.util.*</excludePackageNames>
                 </configuration>
             </plugin>
             <plugin>

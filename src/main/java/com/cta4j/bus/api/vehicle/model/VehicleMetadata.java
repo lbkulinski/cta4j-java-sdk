@@ -1,5 +1,7 @@
-package com.cta4j.bus.model;
+package com.cta4j.bus.api.vehicle.model;
 
+import com.cta4j.bus.model.PassengerLoad;
+import com.cta4j.bus.model.TransitMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -8,7 +10,7 @@ import java.time.LocalDate;
 
 @NullMarked
 @SuppressWarnings("ConstantConditions")
-public record BusMetadata(
+public record VehicleMetadata(
     @Nullable
     String dataFeed,
 
@@ -61,7 +63,7 @@ public record BusMetadata(
     @Nullable
     LocalDate scheduledStartDate
 ) {
-    public BusMetadata {
+    public VehicleMetadata {
         if (blockId == null) {
             throw new IllegalArgumentException("blockId must not be null");
         }
