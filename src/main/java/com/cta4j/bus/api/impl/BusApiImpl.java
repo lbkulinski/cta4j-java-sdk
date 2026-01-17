@@ -3,10 +3,11 @@ package com.cta4j.bus.api.impl;
 import com.cta4j.bus.api.ApiUtils;
 import com.cta4j.bus.api.BusApi;
 import com.cta4j.bus.api.DetoursApi;
-import com.cta4j.bus.api.DirectionsApi;
+import com.cta4j.bus.api.direction.DirectionsApi;
 import com.cta4j.bus.api.LocalesApi;
 import com.cta4j.bus.api.PatternsApi;
 import com.cta4j.bus.api.PredictionsApi;
+import com.cta4j.bus.api.direction.impl.DirectionsApiImpl;
 import com.cta4j.bus.api.route.RoutesApi;
 import com.cta4j.bus.api.StopsApi;
 import com.cta4j.bus.api.route.impl.RoutesApiImpl;
@@ -35,6 +36,9 @@ public final class BusApiImpl implements BusApi {
     private final String host;
     private final String apiKey;
     private final ObjectMapper objectMapper;
+    private final VehiclesApi vehiclesApi;
+    private final RoutesApi routesApi;
+    private final DirectionsApi directionsApi;
 
     public BusApiImpl(
         @Nullable String host,
@@ -51,6 +55,9 @@ public final class BusApiImpl implements BusApi {
         this.host = host;
         this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
+        this.vehiclesApi = new VehiclesApiImpl(this.host, this.apiKey, this.objectMapper);
+        this.routesApi = new RoutesApiImpl(this.host, this.apiKey, this.objectMapper);
+        this.directionsApi = new DirectionsApiImpl(this.host, this.apiKey, this.objectMapper);
     }
 
     @Override
@@ -107,17 +114,17 @@ public final class BusApiImpl implements BusApi {
 
     @Override
     public VehiclesApi vehicles() {
-        return new VehiclesApiImpl(this.host, this.apiKey, this.objectMapper);
+        return this.vehiclesApi;
     }
 
     @Override
     public RoutesApi routes() {
-        return new RoutesApiImpl(this.host, this.apiKey, this.objectMapper);
+        return this.routesApi;
     }
 
     @Override
     public DirectionsApi directions() {
-        return null;
+        return this.directionsApi;
     }
 
     @Override

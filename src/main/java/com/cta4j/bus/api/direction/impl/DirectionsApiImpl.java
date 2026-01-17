@@ -1,0 +1,97 @@
+package com.cta4j.bus.api.direction.impl;
+
+import com.cta4j.bus.api.ApiUtils;
+import com.cta4j.bus.api.direction.DirectionsApi;
+import com.cta4j.bus.external.CtaBustimeResponse;
+import com.cta4j.bus.external.CtaDirection;
+import com.cta4j.bus.external.CtaError;
+import com.cta4j.bus.external.CtaResponse;
+import com.cta4j.exception.Cta4jException;
+import com.cta4j.util.HttpUtils;
+import org.apache.hc.core5.net.URIBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+
+import java.util.List;
+
+@NullMarked
+public final class DirectionsApiImpl implements DirectionsApi {
+    private static final String DIRECTIONS_ENDPOINT = String.format("%s/getdirections", ApiUtils.API_PREFIX);
+
+    private final String host;
+    private final String apiKey;
+    private final ObjectMapper objectMapper;
+
+    public DirectionsApiImpl(
+        @Nullable String host,
+        @Nullable String apiKey,
+        @Nullable ObjectMapper objectMapper
+    ) {
+        if (host == null) {
+            throw new IllegalArgumentException("host must not be null");
+        }
+
+        if (apiKey == null) {
+            throw new IllegalArgumentException("apiKey must not be null");
+        }
+
+        if (objectMapper == null) {
+            throw new IllegalArgumentException("objectMapper must not be null");
+        }
+
+        this.host = host;
+        this.apiKey = apiKey;
+        this.objectMapper = objectMapper;
+    }
+
+    @Override
+    public List<String> findDirectionsByRouteId(@Nullable String routeId) {
+        if (routeId == null) {
+            throw new IllegalArgumentException("routeId must not be null");
+        }
+
+        String url = new URIBuilder()
+            .setScheme(ApiUtils.SCHEME)
+            .setHost(this.host)
+            .setPath(DIRECTIONS_ENDPOINT)
+            .addParameter("rt", routeId)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        TypeReference<CtaResponse<List<CtaDirection>>> typeReference = new TypeReference<>() {};
+        CtaResponse<List<CtaDirection>> directionsResponse;
+
+        try {
+            directionsResponse = this.objectMapper.readValue(response, typeReference);
+        } catch (JacksonException e) {
+            String message = String.format("Failed to parse response from %s", DIRECTIONS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaBustimeResponse<List<CtaDirection>> bustimeResponse = directionsResponse.bustimeResponse();
+
+        List<CtaError> errors = bustimeResponse.error();
+        List<CtaDirection> directions = bustimeResponse.data();
+
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = ApiUtils.buildErrorMessage(DIRECTIONS_ENDPOINT, errors);
+
+            throw new Cta4jException(message);
+        }
+
+        if ((directions == null) || directions.isEmpty()) {
+            return List.of();
+        }
+
+        return directions.stream()
+                         .map(CtaDirection::id)
+                         .toList();
+    }
+}
