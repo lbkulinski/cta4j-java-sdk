@@ -1,13 +1,13 @@
-package com.cta4j.bus.mapper;
+package com.cta4j.bus.api.route.mapper;
 
-import com.cta4j.bus.external.CtaRoute;
-import com.cta4j.bus.model.Route;
+import com.cta4j.bus.api.route.external.CtaRoute;
+import com.cta4j.bus.api.route.model.Route;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@ApiStatus.Internal
 @Mapper
+@ApiStatus.Internal
 public interface RouteMapper {
     @Mapping(source = "rt", target = "id")
     @Mapping(source = "rtnm", target = "name")

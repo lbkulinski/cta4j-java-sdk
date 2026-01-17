@@ -7,21 +7,39 @@ import com.cta4j.bus.api.DirectionsApi;
 import com.cta4j.bus.api.LocalesApi;
 import com.cta4j.bus.api.PatternsApi;
 import com.cta4j.bus.api.PredictionsApi;
-import com.cta4j.bus.api.RoutesApi;
+import com.cta4j.bus.api.route.RoutesApi;
 import com.cta4j.bus.api.StopsApi;
+import com.cta4j.bus.api.route.impl.RoutesApiImpl;
 import com.cta4j.bus.api.vehicle.VehiclesApi;
 import com.cta4j.bus.api.vehicle.impl.VehiclesApiImpl;
-import org.jspecify.annotations.NonNull;
+import com.cta4j.bus.external.CtaBustimeResponse;
+import com.cta4j.bus.external.CtaError;
+import com.cta4j.bus.external.CtaResponse;
+import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
+import com.cta4j.exception.Cta4jException;
+import com.cta4j.util.HttpUtils;
+import org.apache.hc.core5.net.URIBuilder;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.Instant;
+import java.util.List;
 
+@NullMarked
 public final class BusApiImpl implements BusApi {
+    private static final String SYSTEM_TIME_ENDPOINT = String.format("%s/gettime", ApiUtils.API_PREFIX);
+
     private final String host;
     private final String apiKey;
     private final ObjectMapper objectMapper;
 
-    public BusApiImpl(String host, String apiKey) {
+    public BusApiImpl(
+        @Nullable String host,
+        @Nullable String apiKey
+    ) {
         if (host == null) {
             throw new IllegalArgumentException("host must not be null");
         }
@@ -37,7 +55,54 @@ public final class BusApiImpl implements BusApi {
 
     @Override
     public Instant systemTime() {
-        return null;
+        String url = new URIBuilder()
+            .setScheme(ApiUtils.SCHEME)
+            .setHost(this.host)
+            .setPath(SYSTEM_TIME_ENDPOINT)
+            .addParameter("key", this.apiKey)
+            .addParameter("format", "json")
+            .toString();
+
+        String response = HttpUtils.get(url);
+
+        TypeReference<CtaResponse<String>> typeReference = new TypeReference<>() {};
+        CtaResponse<String> timeResponse;
+
+        try {
+            timeResponse = this.objectMapper.readValue(response, typeReference);
+        } catch (JacksonException e) {
+            String message = String.format("Failed to parse response from %s", SYSTEM_TIME_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        CtaBustimeResponse<String> bustimeResponse = timeResponse.bustimeResponse();
+
+        List<CtaError> errors = bustimeResponse.error();
+        String systemTime = bustimeResponse.data();
+
+        if ((errors == null) && (systemTime == null)) {
+            String message = String.format(
+                "System time bustime response missing both error and data from %s",
+                SYSTEM_TIME_ENDPOINT
+            );
+
+            throw new Cta4jException(message);
+        }
+
+        if ((errors != null) && !errors.isEmpty()) {
+            String message = ApiUtils.buildErrorMessage(SYSTEM_TIME_ENDPOINT, errors);
+
+            throw new Cta4jException(message);
+        }
+
+        if (systemTime == null) {
+            String message = String.format("No system time data returned from %s", SYSTEM_TIME_ENDPOINT);
+
+            throw new Cta4jException(message);
+        }
+
+        return CtaBusMappingQualifiers.mapTimestamp(systemTime);
     }
 
     @Override
@@ -47,7 +112,7 @@ public final class BusApiImpl implements BusApi {
 
     @Override
     public RoutesApi routes() {
-        return null;
+        return new RoutesApiImpl(this.host, this.apiKey, this.objectMapper);
     }
 
     @Override
@@ -81,8 +146,8 @@ public final class BusApiImpl implements BusApi {
     }
 
     public static final class BuilderImpl implements BusApi.Builder {
-        private String host;
-        private String apiKey;
+        private @Nullable String host;
+        private @Nullable String apiKey;
 
         public BuilderImpl() {
             this.host = null;
@@ -90,7 +155,7 @@ public final class BusApiImpl implements BusApi {
         }
 
         @Override
-        public @NonNull Builder host(String host) {
+        public Builder host(@Nullable String host) {
             if (host == null) {
                 throw new IllegalArgumentException("host must not be null");
             }
@@ -101,7 +166,7 @@ public final class BusApiImpl implements BusApi {
         }
 
         @Override
-        public @NonNull Builder apiKey(String apiKey) {
+        public Builder apiKey(@Nullable String apiKey) {
             if (apiKey == null) {
                 throw new IllegalArgumentException("apiKey must not be null");
             }

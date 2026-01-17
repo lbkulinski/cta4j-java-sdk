@@ -12,10 +12,9 @@ import com.cta4j.exception.Cta4jException;
 import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.mapstruct.factory.Mappers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
@@ -23,10 +22,9 @@ import tools.jackson.databind.ObjectMapper;
 import java.util.Collection;
 import java.util.List;
 
+@NullMarked
 @ApiStatus.Internal
 public final class VehiclesApiImpl implements VehiclesApi {
-    private static final Logger log = LoggerFactory.getLogger(VehiclesApiImpl.class);
-
     private static final String VEHICLES_ENDPOINT = String.format("%s/getvehicles", ApiUtils.API_PREFIX);
 
     private final String host;
@@ -34,7 +32,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
     private final ObjectMapper objectMapper;
     private final VehicleMapper vehicleMapper;
 
-    public VehiclesApiImpl(String host, String apiKey, ObjectMapper objectMapper) {
+    public VehiclesApiImpl(
+        @Nullable String host,
+        @Nullable String apiKey,
+        @Nullable ObjectMapper objectMapper
+    ) {
         if (host == null) {
             throw new IllegalArgumentException("host must not be null");
         }
@@ -54,7 +56,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     @Override
-    public @NonNull List<Vehicle> findByIds(Collection<String> ids) {
+    public List<Vehicle> findByIds(@Nullable Collection<@Nullable String> ids) {
         if (ids == null) {
             throw new IllegalArgumentException("ids must not be null");
         }
@@ -85,7 +87,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     @Override
-    public @NonNull List<Vehicle> findByRouteIds(Collection<String> routeIds) {
+    public List<Vehicle> findByRouteIds(@Nullable Collection<@Nullable String> routeIds) {
         if (routeIds == null) {
             throw new IllegalArgumentException("routeIds must not be null");
         }
@@ -133,12 +135,6 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaVehicle> vehicles = bustimeResponse.data();
-
-        if ((errors == null) && (vehicleResponse == null)) {
-            log.debug("Vehicles bustime response missing both error and data from {}", VEHICLES_ENDPOINT);
-
-            return List.of();
-        }
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = ApiUtils.buildErrorMessage(VEHICLES_ENDPOINT, errors);

@@ -1,9 +1,9 @@
 package com.cta4j.bus.api.vehicle.model;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
-@SuppressWarnings("ConstantConditions")
 public record Vehicle(
     String id,
 
@@ -17,7 +17,14 @@ public record Vehicle(
 
     VehicleMetadata metadata
 ) {
-    public Vehicle {
+    public Vehicle(
+        @Nullable String id,
+        @Nullable String route,
+        @Nullable String destination,
+        @Nullable VehicleCoordinates coordinates,
+        boolean delayed,
+        @Nullable VehicleMetadata metadata
+    ) {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -37,5 +44,12 @@ public record Vehicle(
         if (metadata == null) {
             throw new IllegalArgumentException("metadata must not be null");
         }
+
+        this.id = id;
+        this.route = route;
+        this.destination = destination;
+        this.coordinates = coordinates;
+        this.delayed = delayed;
+        this.metadata = metadata;
     }
 }

@@ -9,7 +9,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 
 @NullMarked
-@SuppressWarnings("ConstantConditions")
 public record VehicleMetadata(
     @Nullable
     String dataFeed,
@@ -63,7 +62,28 @@ public record VehicleMetadata(
     @Nullable
     LocalDate scheduledStartDate
 ) {
-    public VehicleMetadata {
+    public VehicleMetadata(
+        @Nullable String dataFeed,
+        @Nullable Instant lastUpdated,
+        int patternId,
+        int distanceToPatternPoint,
+        @Nullable Integer stopStatus,
+        @Nullable Integer timepointId,
+        @Nullable String stopId,
+        @Nullable Integer sequence,
+        @Nullable Integer gtfsSequence,
+        @Nullable Instant serverTimestamp,
+        @Nullable Integer speed,
+        @Nullable Integer block,
+        @Nullable String blockId,
+        @Nullable String tripId,
+        @Nullable String originalTripNumber,
+        @Nullable String zone,
+        @Nullable TransitMode mode,
+        @Nullable PassengerLoad passengerLoad,
+        @Nullable Integer scheduledStartSeconds,
+        @Nullable LocalDate scheduledStartDate
+    ) {
         if (blockId == null) {
             throw new IllegalArgumentException("blockId must not be null");
         }
@@ -87,5 +107,26 @@ public record VehicleMetadata(
         if (passengerLoad == null) {
             throw new IllegalArgumentException("passengerLoad must not be null");
         }
+
+        this.dataFeed = dataFeed;
+        this.lastUpdated = lastUpdated;
+        this.patternId = patternId;
+        this.distanceToPatternPoint = distanceToPatternPoint;
+        this.stopStatus = stopStatus;
+        this.timepointId = timepointId;
+        this.stopId = stopId;
+        this.sequence = sequence;
+        this.gtfsSequence = gtfsSequence;
+        this.serverTimestamp = serverTimestamp;
+        this.speed = speed;
+        this.block = block;
+        this.blockId = blockId;
+        this.tripId = tripId;
+        this.originalTripNumber = originalTripNumber;
+        this.zone = zone;
+        this.mode = mode;
+        this.passengerLoad = passengerLoad;
+        this.scheduledStartSeconds = scheduledStartSeconds;
+        this.scheduledStartDate = scheduledStartDate;
     }
 }

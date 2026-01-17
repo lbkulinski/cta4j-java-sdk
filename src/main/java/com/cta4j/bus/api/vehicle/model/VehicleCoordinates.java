@@ -1,6 +1,7 @@
 package com.cta4j.bus.api.vehicle.model;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 
@@ -12,7 +13,6 @@ import java.math.BigDecimal;
  * @param heading the heading of the bus in degrees (0-359)
  */
 @NullMarked
-@SuppressWarnings("ConstantConditions")
 public record VehicleCoordinates(
     BigDecimal latitude,
 
@@ -20,7 +20,11 @@ public record VehicleCoordinates(
 
     int heading
 ) {
-    public VehicleCoordinates {
+    public VehicleCoordinates(
+        @Nullable BigDecimal latitude,
+        @Nullable BigDecimal longitude,
+        int heading
+    ) {
         if (latitude == null) {
             throw new IllegalArgumentException("latitude must not be null");
         }
@@ -30,7 +34,11 @@ public record VehicleCoordinates(
         }
 
         if ((heading < 0) || (heading > 359)) {
-            throw new IllegalArgumentException("heading must be between 0 and 359");
+            throw new IllegalArgumentException("heading must be between 0 and 359 (inclusive)");
         }
+
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.heading = heading;
     }
 }

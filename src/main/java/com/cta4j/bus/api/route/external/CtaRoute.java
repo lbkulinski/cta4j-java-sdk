@@ -1,4 +1,4 @@
-package com.cta4j.bus.external;
+package com.cta4j.bus.api.route.external;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jetbrains.annotations.ApiStatus;
@@ -7,7 +7,6 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 @ApiStatus.Internal
-@SuppressWarnings("ConstantConditions")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CtaRoute(
     String rt,
@@ -21,7 +20,13 @@ public record CtaRoute(
     @Nullable
     String rtpidatafeed
 ) {
-    public CtaRoute {
+    public CtaRoute(
+        @Nullable String rt,
+        @Nullable String rtnm,
+        @Nullable String rtclr,
+        @Nullable String rtdd,
+        @Nullable String rtpidatafeed
+    ) {
         if (rt == null) {
             throw new IllegalArgumentException("rt must not be null");
         }
@@ -37,5 +42,11 @@ public record CtaRoute(
         if (rtdd == null) {
             throw new IllegalArgumentException("rtdd must not be null");
         }
+
+        this.rt = rt;
+        this.rtnm = rtnm;
+        this.rtclr = rtclr;
+        this.rtdd = rtdd;
+        this.rtpidatafeed = rtpidatafeed;
     }
 }

@@ -4,7 +4,7 @@ import com.cta4j.bus.client.internal.BusClientImpl;
 import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.api.vehicle.model.Vehicle;
 import com.cta4j.bus.model.Detour;
-import com.cta4j.bus.model.Route;
+import com.cta4j.bus.api.route.model.Route;
 import com.cta4j.bus.model.RoutePattern;
 import com.cta4j.bus.model.Stop;
 import com.cta4j.exception.Cta4jException;

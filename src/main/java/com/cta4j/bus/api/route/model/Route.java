@@ -1,10 +1,9 @@
-package com.cta4j.bus.model;
+package com.cta4j.bus.api.route.model;
 
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 @NullMarked
-@SuppressWarnings("ConstantConditions")
 public record Route(
     String id,
 
@@ -17,7 +16,13 @@ public record Route(
     @Nullable
     String dataFeed
 ) {
-    public Route {
+    public Route(
+        @Nullable String id,
+        @Nullable String name,
+        @Nullable String color,
+        @Nullable String designator,
+        @Nullable String dataFeed
+    ) {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -33,5 +38,11 @@ public record Route(
         if (color == null) {
             throw new IllegalArgumentException("color must not be null");
         }
+
+        this.id = id;
+        this.name = name;
+        this.color = color;
+        this.designator = designator;
+        this.dataFeed = dataFeed;
     }
 }

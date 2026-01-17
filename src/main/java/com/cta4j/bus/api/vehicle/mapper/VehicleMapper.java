@@ -7,8 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@ApiStatus.Internal
 @Mapper(uses = CtaBusMappingQualifiers.class)
+@ApiStatus.Internal
 public interface VehicleMapper {
     @Mapping(source = "vid", target = "id")
     @Mapping(source = "rtpidatafeed", target = "metadata.dataFeed")
