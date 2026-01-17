@@ -7,5 +7,5 @@ import java.util.List;
 
 @NullMarked
 public interface RoutesApi {
-    List<Route> getRoutes();
+    List<Route> list();
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 @NullMarked
 public interface DirectionsApi {
-    List<String> findDirectionsByRouteId(@Nullable String routeId);
+    List<String> findByRouteId(@Nullable String routeId);
 }

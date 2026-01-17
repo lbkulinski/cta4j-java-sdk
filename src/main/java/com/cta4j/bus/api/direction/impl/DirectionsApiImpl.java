@@ -48,7 +48,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
     }
 
     @Override
-    public List<String> findDirectionsByRouteId(@Nullable String routeId) {
+    public List<String> findByRouteId(@Nullable String routeId) {
         if (routeId == null) {
             throw new IllegalArgumentException("routeId must not be null");
         }

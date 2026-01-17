@@ -59,7 +59,7 @@ public final class RoutesApiImpl implements RoutesApi {
     }
 
     @Override
-    public List<Route> getRoutes() {
+    public List<Route> list() {
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
             .setHost(this.host)

@@ -83,7 +83,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             .addParameter("format", "json")
             .toString();
 
-        return this.getVehicles(url);
+        return this.makeRequest(url);
     }
 
     @Override
@@ -114,10 +114,10 @@ public final class VehiclesApiImpl implements VehiclesApi {
             .addParameter("format", "json")
             .toString();
 
-        return this.getVehicles(url);
+        return this.makeRequest(url);
     }
 
-    private List<Vehicle> getVehicles(String url) {
+    private List<Vehicle> makeRequest(String url) {
         String response = HttpUtils.get(url);
 
         TypeReference<CtaResponse<List<CtaVehicle>>> typeReference = new TypeReference<>() {};

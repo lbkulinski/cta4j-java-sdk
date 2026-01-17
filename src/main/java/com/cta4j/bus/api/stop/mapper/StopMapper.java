@@ -1,13 +1,13 @@
-package com.cta4j.bus.mapper;
+package com.cta4j.bus.api.stop.mapper;
 
-import com.cta4j.bus.external.CtaStop;
-import com.cta4j.bus.model.Stop;
+import com.cta4j.bus.api.stop.external.CtaStop;
+import com.cta4j.bus.api.stop.model.Stop;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@ApiStatus.Internal
 @Mapper
+@ApiStatus.Internal
 public interface StopMapper {
     @Mapping(source = "stpid", target = "id")
     @Mapping(source = "stpnm", target = "name")

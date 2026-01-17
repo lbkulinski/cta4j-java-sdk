@@ -9,8 +9,9 @@ import com.cta4j.bus.api.PatternsApi;
 import com.cta4j.bus.api.PredictionsApi;
 import com.cta4j.bus.api.direction.impl.DirectionsApiImpl;
 import com.cta4j.bus.api.route.RoutesApi;
-import com.cta4j.bus.api.StopsApi;
+import com.cta4j.bus.api.stop.StopsApi;
 import com.cta4j.bus.api.route.impl.RoutesApiImpl;
+import com.cta4j.bus.api.stop.impl.StopsApiImpl;
 import com.cta4j.bus.api.vehicle.VehiclesApi;
 import com.cta4j.bus.api.vehicle.impl.VehiclesApiImpl;
 import com.cta4j.bus.external.CtaBustimeResponse;
@@ -39,6 +40,7 @@ public final class BusApiImpl implements BusApi {
     private final VehiclesApi vehiclesApi;
     private final RoutesApi routesApi;
     private final DirectionsApi directionsApi;
+    private final StopsApi stopsApi;
 
     public BusApiImpl(
         @Nullable String host,
@@ -58,6 +60,7 @@ public final class BusApiImpl implements BusApi {
         this.vehiclesApi = new VehiclesApiImpl(this.host, this.apiKey, this.objectMapper);
         this.routesApi = new RoutesApiImpl(this.host, this.apiKey, this.objectMapper);
         this.directionsApi = new DirectionsApiImpl(this.host, this.apiKey, this.objectMapper);
+        this.stopsApi = new StopsApiImpl(this.host, this.apiKey, this.objectMapper);
     }
 
     @Override
@@ -129,7 +132,7 @@ public final class BusApiImpl implements BusApi {
 
     @Override
     public StopsApi stops() {
-        return null;
+        return this.stopsApi;
     }
 
     @Override
