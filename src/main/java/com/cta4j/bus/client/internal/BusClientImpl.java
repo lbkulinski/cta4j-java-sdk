@@ -3,17 +3,12 @@ package com.cta4j.bus.client.internal;
 import com.cta4j.bus.client.BusClient;
 import com.cta4j.bus.external.CtaBustimeResponse;
 import com.cta4j.bus.external.CtaError;
-import com.cta4j.bus.external.CtaPattern;
 import com.cta4j.bus.external.CtaResponse;
 import com.cta4j.bus.external.CtaPrediction;
 import com.cta4j.bus.mapper.ArrivalMapper;
-import com.cta4j.bus.api.vehicle.mapper.VehicleMapper;
 import com.cta4j.bus.mapper.DetourMapper;
-import com.cta4j.bus.mapper.RoutePatternMapper;
-import com.cta4j.bus.api.stop.mapper.StopMapper;
 import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.model.Detour;
-import com.cta4j.bus.model.RoutePattern;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.bus.external.CtaDetour;
 import com.cta4j.util.HttpUtils;
@@ -39,7 +34,6 @@ public final class BusClientImpl implements BusClient {
     private static final String SCHEME = "https";
     private static final String DEFAULT_HOST = "ctabustracker.com";
     private static final String API_PREFIX = "/bustime/api/v3";
-    private static final String PATTERNS_ENDPOINT = String.format("%s/getpatterns", API_PREFIX);
     private static final String PREDICTIONS_ENDPOINT = String.format("%s/getpredictions", API_PREFIX);
     private static final String DETOURS_ENDPOINT = String.format("%s/getdetours", API_PREFIX);
 
@@ -47,7 +41,6 @@ public final class BusClientImpl implements BusClient {
     private final String apiKey;
     private final ObjectMapper objectMapper;
     private final ArrivalMapper arrivalMapper;
-    private final RoutePatternMapper routePatternMapper;
     private final DetourMapper detourMapper;
 
     private BusClientImpl(String host, String apiKey) {
@@ -63,52 +56,7 @@ public final class BusClientImpl implements BusClient {
         this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
         this.arrivalMapper = Mappers.getMapper(ArrivalMapper.class);
-        this.routePatternMapper = Mappers.getMapper(RoutePatternMapper.class);
         this.detourMapper = Mappers.getMapper(DetourMapper.class);
-    }
-
-    @Override
-    public List<RoutePattern> findPatternsByPatternId(Iterable<String> patternIds) {
-        if (patternIds == null) {
-            throw new IllegalArgumentException("patternIds must not be null");
-        }
-
-        for (String patternId : patternIds) {
-            if (patternId == null) {
-                throw new IllegalArgumentException("patternIds must not contain null elements");
-            }
-        }
-
-        String patternIdsString = String.join(",", patternIds);
-
-        String url = new URIBuilder()
-            .setScheme(SCHEME)
-            .setHost(this.host)
-            .setPath(PATTERNS_ENDPOINT)
-            .addParameter("pid", patternIdsString)
-            .addParameter("key", this.apiKey)
-            .addParameter("format", "json")
-            .toString();
-
-        return this.getPatterns(url);
-    }
-
-    @Override
-    public List<RoutePattern> findPatternsByRouteId(String routeId) {
-        if (routeId == null) {
-            throw new IllegalArgumentException("routeId must not be null");
-        }
-
-        String url = new URIBuilder()
-            .setScheme(SCHEME)
-            .setHost(this.host)
-            .setPath(PATTERNS_ENDPOINT)
-            .addParameter("rt", routeId)
-            .addParameter("key", this.apiKey)
-            .addParameter("format", "json")
-            .toString();
-
-        return this.getPatterns(url);
     }
 
     @Override
@@ -221,46 +169,6 @@ public final class BusClientImpl implements BusClient {
                                .orElse("Unknown error");
 
         return String.format("Error response from %s: %s", endpoint, message);
-    }
-
-    private List<RoutePattern> getPatterns(String url) {
-        String response = HttpUtils.get(url);
-
-        TypeReference<CtaResponse<List<CtaPattern>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaPattern>> patternsResponse;
-
-        try {
-            patternsResponse = this.objectMapper.readValue(response, typeReference);
-        } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", PATTERNS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
-
-        CtaBustimeResponse<List<CtaPattern>> bustimeResponse = patternsResponse.bustimeResponse();
-
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaPattern> patterns = bustimeResponse.data();
-
-        if ((errors == null) && (patterns == null)) {
-            log.debug("Pattern bustime response missing both error and data from {}", PATTERNS_ENDPOINT);
-
-            return List.of();
-        }
-
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = this.buildErrorMessage(PATTERNS_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
-        }
-
-        if ((patterns == null) || patterns.isEmpty()) {
-            return List.of();
-        }
-
-        return patterns.stream()
-                       .map(this.routePatternMapper::toDomain)
-                       .toList();
     }
 
     private List<Arrival> getArrivals(String url) {

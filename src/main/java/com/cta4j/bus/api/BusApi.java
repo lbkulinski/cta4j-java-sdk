@@ -2,6 +2,7 @@ package com.cta4j.bus.api;
 
 import com.cta4j.bus.api.direction.DirectionsApi;
 import com.cta4j.bus.api.impl.BusApiImpl;
+import com.cta4j.bus.api.pattern.PatternsApi;
 import com.cta4j.bus.api.route.RoutesApi;
 import com.cta4j.bus.api.stop.StopsApi;
 import com.cta4j.bus.api.vehicle.VehiclesApi;

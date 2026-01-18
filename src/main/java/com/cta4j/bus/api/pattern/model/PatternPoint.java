@@ -1,4 +1,4 @@
-package com.cta4j.bus.model;
+package com.cta4j.bus.api.pattern.model;
 
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -6,7 +6,6 @@ import org.jspecify.annotations.Nullable;
 import java.math.BigDecimal;
 
 @NullMarked
-@SuppressWarnings("ConstantConditions")
 public record PatternPoint(
     int sequence,
 
@@ -25,7 +24,15 @@ public record PatternPoint(
 
     BigDecimal longitude
 ) {
-    public PatternPoint {
+    public PatternPoint(
+        int sequence,
+        @Nullable PatternPointType type,
+        @Nullable String stopId,
+        @Nullable String stopName,
+        @Nullable BigDecimal distanceToPatternPoint,
+        @Nullable BigDecimal latitude,
+        @Nullable BigDecimal longitude
+    ) {
         if (type == null) {
             throw new IllegalArgumentException("type must not be null");
         }
@@ -37,5 +44,13 @@ public record PatternPoint(
         if (longitude == null) {
             throw new IllegalArgumentException("longitude must not be null");
         }
+
+        this.sequence = sequence;
+        this.type = type;
+        this.stopId = stopId;
+        this.stopName = stopName;
+        this.distanceToPatternPoint = distanceToPatternPoint;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 }

@@ -1,16 +1,16 @@
-package com.cta4j.bus.mapper;
+package com.cta4j.bus.api.pattern.mapper;
 
-import com.cta4j.bus.external.CtaPattern;
-import com.cta4j.bus.external.CtaPoint;
+import com.cta4j.bus.api.pattern.external.CtaPattern;
+import com.cta4j.bus.api.pattern.external.CtaPoint;
 import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
-import com.cta4j.bus.model.PatternPoint;
-import com.cta4j.bus.model.RoutePattern;
+import com.cta4j.bus.api.pattern.model.PatternPoint;
+import com.cta4j.bus.api.pattern.model.RoutePattern;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@ApiStatus.Internal
 @Mapper(uses = CtaBusMappingQualifiers.class)
+@ApiStatus.Internal
 public interface RoutePatternMapper {
     @Mapping(source = "pid", target = "patternId")
     @Mapping(source = "ln", target = "patternCount")

@@ -3,7 +3,7 @@ package com.cta4j.bus.mapper.util;
 import com.cta4j.bus.model.DynamicAction;
 import com.cta4j.bus.model.FlagStop;
 import com.cta4j.bus.model.PassengerLoad;
-import com.cta4j.bus.model.PatternPointType;
+import com.cta4j.bus.api.pattern.model.PatternPointType;
 import com.cta4j.bus.model.PredictionType;
 import com.cta4j.bus.model.TransitMode;
 import org.jetbrains.annotations.ApiStatus;

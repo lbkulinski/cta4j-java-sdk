@@ -5,9 +5,10 @@ import com.cta4j.bus.api.BusApi;
 import com.cta4j.bus.api.DetoursApi;
 import com.cta4j.bus.api.direction.DirectionsApi;
 import com.cta4j.bus.api.LocalesApi;
-import com.cta4j.bus.api.PatternsApi;
+import com.cta4j.bus.api.pattern.PatternsApi;
 import com.cta4j.bus.api.PredictionsApi;
 import com.cta4j.bus.api.direction.impl.DirectionsApiImpl;
+import com.cta4j.bus.api.pattern.impl.PatternsApiImpl;
 import com.cta4j.bus.api.route.RoutesApi;
 import com.cta4j.bus.api.stop.StopsApi;
 import com.cta4j.bus.api.route.impl.RoutesApiImpl;
@@ -41,6 +42,7 @@ public final class BusApiImpl implements BusApi {
     private final RoutesApi routesApi;
     private final DirectionsApi directionsApi;
     private final StopsApi stopsApi;
+    private final PatternsApi patternsApi;
 
     public BusApiImpl(
         @Nullable String host,
@@ -61,6 +63,7 @@ public final class BusApiImpl implements BusApi {
         this.routesApi = new RoutesApiImpl(this.host, this.apiKey, this.objectMapper);
         this.directionsApi = new DirectionsApiImpl(this.host, this.apiKey, this.objectMapper);
         this.stopsApi = new StopsApiImpl(this.host, this.apiKey, this.objectMapper);
+        this.patternsApi = new PatternsApiImpl(this.host, this.apiKey, this.objectMapper);
     }
 
     @Override
@@ -137,7 +140,7 @@ public final class BusApiImpl implements BusApi {
 
     @Override
     public PatternsApi patterns() {
-        return null;
+        return this.patternsApi;
     }
 
     @Override
