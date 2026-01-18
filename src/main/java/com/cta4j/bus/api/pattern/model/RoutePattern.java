@@ -4,6 +4,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public record RoutePattern(
@@ -21,49 +22,19 @@ public record RoutePattern(
     @Nullable
     List<PatternPoint> detourPoints
 ) {
-    public RoutePattern(
-        @Nullable String patternId,
-        int patternCount,
-        @Nullable String direction,
-        @Nullable List<@Nullable PatternPoint> points,
-        @Nullable String detourId,
-        @Nullable List<@Nullable PatternPoint> detourPoints
-    ) {
-        if (patternId == null) {
-            throw new IllegalArgumentException("patternId must not be null");
-        }
+    public RoutePattern {
+        Objects.requireNonNull(patternId);
+        Objects.requireNonNull(direction);
+        Objects.requireNonNull(points);
 
-        if (direction == null) {
-            throw new IllegalArgumentException("direction must not be null");
-        }
+        points.forEach(Objects::requireNonNull);
 
-        if (points == null) {
-            throw new IllegalArgumentException("points must not be null");
-        }
-
-        for (PatternPoint point : points) {
-            if (point == null) {
-                throw new IllegalArgumentException("points must not contain null elements");
-            }
-        }
-
-        List<PatternPoint> detourPointsCopy = null;
+        points = List.copyOf(points);
 
         if (detourPoints != null) {
-            for (PatternPoint detourPoint : detourPoints) {
-                if (detourPoint == null) {
-                    throw new IllegalArgumentException("detourPoints must not contain null elements");
-                }
-            }
+            detourPoints.forEach(Objects::requireNonNull);
 
-            detourPointsCopy = List.copyOf(detourPoints);
+            detourPoints = List.copyOf(detourPoints);
         }
-
-        this.patternId = patternId;
-        this.patternCount = patternCount;
-        this.direction = direction;
-        this.points = List.copyOf(points);
-        this.detourId = detourId;
-        this.detourPoints = detourPointsCopy;
     }
 }

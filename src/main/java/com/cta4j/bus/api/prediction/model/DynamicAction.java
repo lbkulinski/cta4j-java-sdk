@@ -1,4 +1,4 @@
-package com.cta4j.bus.model;
+package com.cta4j.bus.api.prediction.model;
 
 public enum DynamicAction {
     NONE(0),

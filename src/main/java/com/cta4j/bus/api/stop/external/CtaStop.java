@@ -6,6 +6,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -31,55 +32,20 @@ public record CtaStop(
     @Nullable
     Boolean ada
 ) {
-    public CtaStop(
-        @Nullable String stpid,
-        @Nullable String stpnm,
-        double lat,
-        double lon,
-        @Nullable List<@Nullable Integer> dtradd,
-        @Nullable List<@Nullable Integer> dtrrem,
-        @Nullable Integer gtfsseq,
-        @Nullable Boolean ada
-    ) {
-        if (stpid == null) {
-            throw new IllegalArgumentException("stpid must not be null");
-        }
-
-        if (stpnm == null) {
-            throw new IllegalArgumentException("stpnm must not be null");
-        }
-
-        List<Integer> dtraddCopy = null;
+    public CtaStop {
+        Objects.requireNonNull(stpid);
+        Objects.requireNonNull(stpnm);
 
         if (dtradd != null) {
-            for (Integer detourId : dtradd) {
-                if (detourId == null) {
-                    throw new IllegalArgumentException("dtradd must not contain null values");
-                }
-            }
+            dtradd.forEach(Objects::requireNonNull);
 
-            dtraddCopy = List.copyOf(dtradd);
+            dtradd = List.copyOf(dtradd);
         }
-
-        List<Integer> dtrremCopy = null;
 
         if (dtrrem != null) {
-            for (Integer detourId : dtrrem) {
-                if (detourId == null) {
-                    throw new IllegalArgumentException("dtrrem must not contain null values");
-                }
-            }
+            dtrrem.forEach(Objects::requireNonNull);
 
-            dtrremCopy = List.copyOf(dtrrem);
+            dtrrem = List.copyOf(dtrrem);
         }
-
-        this.stpid = stpid;
-        this.stpnm = stpnm;
-        this.lat = lat;
-        this.lon = lon;
-        this.dtradd = dtraddCopy;
-        this.dtrrem = dtrremCopy;
-        this.gtfsseq = gtfsseq;
-        this.ada = ada;
     }
 }

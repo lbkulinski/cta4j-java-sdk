@@ -3,6 +3,7 @@ package com.cta4j.bus.api;
 import com.cta4j.bus.api.direction.DirectionsApi;
 import com.cta4j.bus.api.impl.BusApiImpl;
 import com.cta4j.bus.api.pattern.PatternsApi;
+import com.cta4j.bus.api.prediction.PredictionsApi;
 import com.cta4j.bus.api.route.RoutesApi;
 import com.cta4j.bus.api.stop.StopsApi;
 import com.cta4j.bus.api.vehicle.VehiclesApi;
@@ -41,7 +42,7 @@ public interface BusApi {
          *
          * @param host the host
          * @return this {@link Builder} for method chaining
-         * @throws IllegalArgumentException if {@code host} is {@code null}
+         * @throws NullPointerException if {@code host} is {@code null}
          */
         Builder host(String host);
 
@@ -50,7 +51,7 @@ public interface BusApi {
          *
          * @param apiKey the API key
          * @return this {@link Builder} for method chaining
-         * @throws IllegalArgumentException if {@code apiKey} is {@code null}
+         * @throws NullPointerException if {@code apiKey} is {@code null}
          */
         Builder apiKey(String apiKey);
 

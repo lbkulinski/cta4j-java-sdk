@@ -1,4 +1,4 @@
-package com.cta4j.bus.api.vehicle.external;
+package com.cta4j.bus.api.prediction.external;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jetbrains.annotations.ApiStatus;
@@ -10,54 +10,33 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CtaVehicle(
-    String vid,
+public record CtaPrediction(
+    String tmstmp,
 
-    @Nullable
-    String rtpidatafeed,
+    String typ,
 
-    @Nullable
-    String tmpstmp,
+    String stpid,
 
-    double lat,
+    String stpnm,
 
-    double lon,
+    int vid,
 
-    int hdg,
-
-    int pid,
+    int dstp,
 
     String rt,
 
+    String rtdd,
+
+    String rtdir,
+
     String des,
 
-    int pdist,
+    String prdtm,
 
     @Nullable
-    Integer stopstatus,
+    Boolean dly,
 
-    @Nullable
-    Integer timepointid,
-
-    @Nullable
-    String stopid,
-
-    @Nullable
-    Integer sequence,
-
-    @Nullable
-    Integer gtfsseq,
-
-    boolean dly,
-
-    @Nullable
-    String srvtmstmp,
-
-    @Nullable
-    Integer spd,
-
-    @Nullable
-    Integer blk,
+    int dyn,
 
     String tablockid,
 
@@ -67,20 +46,32 @@ public record CtaVehicle(
 
     String zone,
 
-    int mode,
-
     String psgld,
+
+    @Nullable
+    Integer gtfsseq,
+
+    @Nullable
+    String nbus,
 
     @Nullable
     Integer stst,
 
     @Nullable
-    String stsd
+    String stsd,
+
+    int flagstop
 ) {
-    public CtaVehicle {
-        Objects.requireNonNull(vid);
+    public CtaPrediction {
+        Objects.requireNonNull(tmstmp);
+        Objects.requireNonNull(typ);
+        Objects.requireNonNull(stpid);
+        Objects.requireNonNull(stpnm);
         Objects.requireNonNull(rt);
+        Objects.requireNonNull(rtdd);
+        Objects.requireNonNull(rtdir);
         Objects.requireNonNull(des);
+        Objects.requireNonNull(prdtm);
         Objects.requireNonNull(tablockid);
         Objects.requireNonNull(tatripid);
         Objects.requireNonNull(origtatripno);

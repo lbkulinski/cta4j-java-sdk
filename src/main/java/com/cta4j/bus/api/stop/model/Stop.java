@@ -5,6 +5,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public record Stop(
@@ -28,63 +29,22 @@ public record Stop(
     @Nullable
     Boolean adaAccessible
 ) {
-    public Stop(
-        @Nullable String id,
-        @Nullable String name,
-        @Nullable BigDecimal latitude,
-        @Nullable BigDecimal longitude,
-        @Nullable List<@Nullable Integer> detoursAdded,
-        @Nullable List<@Nullable Integer> detoursRemoved,
-        @Nullable Integer gtfsSequence,
-        @Nullable Boolean adaAccessible
-    ) {
-        if (id == null) {
-            throw new IllegalArgumentException("id must not be null");
-        }
-
-        if (name == null) {
-            throw new IllegalArgumentException("name must not be null");
-        }
-
-        if (latitude == null) {
-            throw new IllegalArgumentException("latitude must not be null");
-        }
-
-        if (longitude == null) {
-            throw new IllegalArgumentException("longitude must not be null");
-        }
-
-        List<Integer> detoursAddedCopy = null;
+    public Stop {
+        Objects.requireNonNull(id);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(latitude);
+        Objects.requireNonNull(longitude);
 
         if (detoursAdded != null) {
-            for (Integer detourId : detoursAdded) {
-                if (detourId == null) {
-                    throw new IllegalArgumentException("detoursAdded must not contain null values");
-                }
-            }
+            detoursAdded.forEach(Objects::requireNonNull);
 
-            detoursAddedCopy = List.copyOf(detoursAdded);
+            detoursAdded = List.copyOf(detoursAdded);
         }
-
-        List<Integer> detoursRemovedCopy = null;
 
         if (detoursRemoved != null) {
-            for (Integer detourId : detoursRemoved) {
-                if (detourId == null) {
-                    throw new IllegalArgumentException("detoursRemoved must not contain null values");
-                }
-            }
+            detoursRemoved.forEach(Objects::requireNonNull);
 
-            detoursRemovedCopy = List.copyOf(detoursRemoved);
+            detoursRemoved = List.copyOf(detoursRemoved);
         }
-
-        this.id = id;
-        this.name = name;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.detoursAdded = detoursAddedCopy;
-        this.detoursRemoved = detoursRemovedCopy;
-        this.gtfsSequence = gtfsSequence;
-        this.adaAccessible = adaAccessible;
     }
 }

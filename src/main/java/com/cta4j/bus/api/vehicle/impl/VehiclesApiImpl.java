@@ -13,7 +13,6 @@ import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.mapstruct.factory.Mappers;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
@@ -21,6 +20,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -33,21 +33,13 @@ public final class VehiclesApiImpl implements VehiclesApi {
     private final VehicleMapper vehicleMapper;
 
     public VehiclesApiImpl(
-        @Nullable String host,
-        @Nullable String apiKey,
-        @Nullable ObjectMapper objectMapper
+        String host,
+        String apiKey,
+        ObjectMapper objectMapper
     ) {
-        if (host == null) {
-            throw new IllegalArgumentException("host must not be null");
-        }
-
-        if (apiKey == null) {
-            throw new IllegalArgumentException("apiKey must not be null");
-        }
-
-        if (objectMapper == null) {
-            throw new IllegalArgumentException("objectMapper must not be null");
-        }
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(apiKey);
+        Objects.requireNonNull(objectMapper);
 
         this.host = host;
         this.apiKey = apiKey;
@@ -56,19 +48,13 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     @Override
-    public List<Vehicle> findByIds(@Nullable Collection<@Nullable String> ids) {
-        if (ids == null) {
-            throw new IllegalArgumentException("ids must not be null");
-        }
+    public List<Vehicle> findByIds(Collection<String> ids) {
+        Objects.requireNonNull(ids);
+
+        ids.forEach(Objects::requireNonNull);
 
         if (ids.isEmpty()) {
             return List.of();
-        }
-
-        for (String id : ids) {
-            if (id == null) {
-                throw new IllegalArgumentException("ids must not contain null elements");
-            }
         }
 
         String idsString = String.join(",", ids);
@@ -87,19 +73,13 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     @Override
-    public List<Vehicle> findByRouteIds(@Nullable Collection<@Nullable String> routeIds) {
-        if (routeIds == null) {
-            throw new IllegalArgumentException("routeIds must not be null");
-        }
+    public List<Vehicle> findByRouteIds(Collection<String> routeIds) {
+        Objects.requireNonNull(routeIds);
+
+        routeIds.forEach(Objects::requireNonNull);
 
         if (routeIds.isEmpty()) {
             return List.of();
-        }
-
-        for (String routeId : routeIds) {
-            if (routeId == null) {
-                throw new IllegalArgumentException("routeIds must not contain null elements");
-            }
         }
 
         String routeIdsString = String.join(",", routeIds);

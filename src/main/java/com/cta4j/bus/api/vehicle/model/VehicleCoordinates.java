@@ -1,17 +1,10 @@
 package com.cta4j.bus.api.vehicle.model;
 
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
-/**
- * The coordinates and heading of a bus.
- *
- * @param latitude the latitude of the bus's current location
- * @param longitude the longitude of the bus's current location
- * @param heading the heading of the bus in degrees (0-359)
- */
 @NullMarked
 public record VehicleCoordinates(
     BigDecimal latitude,
@@ -20,25 +13,17 @@ public record VehicleCoordinates(
 
     int heading
 ) {
-    public VehicleCoordinates(
-        @Nullable BigDecimal latitude,
-        @Nullable BigDecimal longitude,
-        int heading
-    ) {
-        if (latitude == null) {
-            throw new IllegalArgumentException("latitude must not be null");
-        }
+    private static final int MIN_HEADING = 0;
+    private static final int MAX_HEADING = 359;
 
-        if (longitude == null) {
-            throw new IllegalArgumentException("longitude must not be null");
-        }
+    public VehicleCoordinates {
+        Objects.requireNonNull(latitude);
+        Objects.requireNonNull(longitude);
 
-        if ((heading < 0) || (heading > 359)) {
-            throw new IllegalArgumentException("heading must be between 0 and 359 (inclusive)");
-        }
+        if ((heading < MIN_HEADING) || (heading > MAX_HEADING)) {
+            String message = String.format("heading must be between %d and %d (inclusive)", MIN_HEADING, MAX_HEADING);
 
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.heading = heading;
+            throw new IllegalArgumentException(message);
+        }
     }
 }

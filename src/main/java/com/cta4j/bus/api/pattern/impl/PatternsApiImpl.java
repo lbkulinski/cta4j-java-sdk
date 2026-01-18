@@ -13,7 +13,6 @@ import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.mapstruct.factory.Mappers;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
@@ -21,6 +20,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -34,21 +34,13 @@ public final class PatternsApiImpl implements PatternsApi {
     private final RoutePatternMapper routePatternMapper;
 
     public PatternsApiImpl(
-        @Nullable String host,
-        @Nullable String apiKey,
-        @Nullable ObjectMapper objectMapper
+        String host,
+        String apiKey,
+        ObjectMapper objectMapper
     ) {
-        if (host == null) {
-            throw new IllegalArgumentException("host must not be null");
-        }
-
-        if (apiKey == null) {
-            throw new IllegalArgumentException("apiKey must not be null");
-        }
-
-        if (objectMapper == null) {
-            throw new IllegalArgumentException("objectMapper must not be null");
-        }
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(apiKey);
+        Objects.requireNonNull(objectMapper);
 
         this.host = host;
         this.apiKey = apiKey;
@@ -57,16 +49,10 @@ public final class PatternsApiImpl implements PatternsApi {
     }
 
     @Override
-    public List<RoutePattern> findByIds(@Nullable Collection<@Nullable String> patternIds) {
-        if (patternIds == null) {
-            throw new IllegalArgumentException("patternIds must not be null");
-        }
+    public List<RoutePattern> findByIds(Collection<String> patternIds) {
+        Objects.requireNonNull(patternIds);
 
-        for (String patternId : patternIds) {
-            if (patternId == null) {
-                throw new IllegalArgumentException("patternIds must not contain null elements");
-            }
-        }
+        patternIds.forEach(Objects::requireNonNull);
 
         if (patternIds.size() > MAX_PATTERN_IDS_PER_REQUEST) {
             String message = String.format(
@@ -93,10 +79,8 @@ public final class PatternsApiImpl implements PatternsApi {
     }
 
     @Override
-    public List<RoutePattern> findByRouteId(@Nullable String routeId) {
-        if (routeId == null) {
-            throw new IllegalArgumentException("routeId must not be null");
-        }
+    public List<RoutePattern> findByRouteId(String routeId) {
+        Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)

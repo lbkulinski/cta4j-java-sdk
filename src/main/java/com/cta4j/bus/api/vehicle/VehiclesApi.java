@@ -3,20 +3,18 @@ package com.cta4j.bus.api.vehicle;
 import com.cta4j.bus.api.vehicle.model.Vehicle;
 import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @NullMarked
 public interface VehiclesApi {
-    List<Vehicle> findByIds(@Nullable Collection<@Nullable String> ids);
+    List<Vehicle> findByIds(Collection<String> ids);
 
-    default Optional<Vehicle> findById(@Nullable String id) {
-        if (id == null) {
-            throw new IllegalArgumentException("id must not be null");
-        }
+    default Optional<Vehicle> findById(String id) {
+        Objects.requireNonNull(id);
 
         List<String> ids = List.of(id);
 
@@ -35,12 +33,10 @@ public interface VehiclesApi {
         return Optional.of(vehicle);
     }
 
-    List<Vehicle> findByRouteIds(@Nullable Collection<@Nullable String> routeIds);
+    List<Vehicle> findByRouteIds(Collection<String> routeIds);
 
-    default List<Vehicle> findByRouteId(@Nullable String routeId) {
-        if (routeId == null) {
-            throw new IllegalArgumentException("routeId must not be null");
-        }
+    default List<Vehicle> findByRouteId(String routeId) {
+        Objects.requireNonNull(routeId);
 
         List<String> routeIds = List.of(routeId);
 

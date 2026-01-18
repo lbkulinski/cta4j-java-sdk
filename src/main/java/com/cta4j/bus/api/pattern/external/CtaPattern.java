@@ -6,6 +6,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -25,45 +26,18 @@ public record CtaPattern(
     @Nullable
     List<CtaPoint> dtrpt
 ) {
-    public CtaPattern(
-        int pid,
-        int ln,
-        @Nullable String rtdir,
-        @Nullable List<@Nullable CtaPoint> pt,
-        @Nullable String dtrid,
-        @Nullable List<@Nullable CtaPoint> dtrpt
-    ) {
-        if (rtdir == null) {
-            throw new IllegalArgumentException("rtdir must not be null");
-        }
+    public CtaPattern {
+        Objects.requireNonNull(rtdir);
+        Objects.requireNonNull(pt);
 
-        if (pt == null) {
-            throw new IllegalArgumentException("pt must not be null");
-        }
+        pt.forEach(Objects::requireNonNull);
 
-        for (CtaPoint point : pt) {
-            if (point == null) {
-                throw new IllegalArgumentException("pt must not contain null elements");
-            }
-        }
-
-        List<CtaPoint> dtrptCopy = null;
+        pt = List.copyOf(pt);
 
         if (dtrpt != null) {
-            for (CtaPoint point : dtrpt) {
-                if (point == null) {
-                    throw new IllegalArgumentException("dtrpt must not contain null elements");
-                }
-            }
+            dtrpt.forEach(Objects::requireNonNull);
 
-            dtrptCopy = List.copyOf(dtrpt);
+            dtrpt = List.copyOf(dtrpt);
         }
-
-        this.pid = pid;
-        this.ln = ln;
-        this.rtdir = rtdir;
-        this.pt = List.copyOf(pt);
-        this.dtrid = dtrid;
-        this.dtrpt = dtrptCopy;
     }
 }

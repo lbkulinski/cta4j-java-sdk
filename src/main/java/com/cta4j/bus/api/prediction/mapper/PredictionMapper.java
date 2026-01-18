@@ -1,15 +1,15 @@
-package com.cta4j.bus.mapper;
+package com.cta4j.bus.api.prediction.mapper;
 
-import com.cta4j.bus.external.CtaPrediction;
+import com.cta4j.bus.api.prediction.external.CtaPrediction;
 import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
-import com.cta4j.bus.model.Arrival;
+import com.cta4j.bus.api.prediction.model.Prediction;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@ApiStatus.Internal
 @Mapper(uses = CtaBusMappingQualifiers.class)
-public interface ArrivalMapper {
+@ApiStatus.Internal
+public interface PredictionMapper {
     @Mapping(source = "typ", target = "predictionType", qualifiedByName = "mapPredictionType")
     @Mapping(source = "stpid", target = "stopId")
     @Mapping(source = "stpnm", target = "stopName")
@@ -33,5 +33,5 @@ public interface ArrivalMapper {
     @Mapping(source = "stst", target = "metadata.scheduledStartSeconds")
     @Mapping(source = "stsd", target = "metadata.scheduledStartDate")
     @Mapping(source = "flagstop", target = "metadata.flagStop", qualifiedByName = "mapFlagStop")
-    Arrival toDomain(CtaPrediction prediction);
+    Prediction toDomain(CtaPrediction prediction);
 }

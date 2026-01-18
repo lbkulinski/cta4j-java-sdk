@@ -13,7 +13,6 @@ import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.mapstruct.factory.Mappers;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
@@ -21,6 +20,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -34,21 +34,13 @@ public final class StopsApiImpl implements StopsApi {
     private final StopMapper stopMapper;
 
     public StopsApiImpl(
-        @Nullable String host,
-        @Nullable String apiKey,
-        @Nullable ObjectMapper objectMapper
+        String host,
+        String apiKey,
+        ObjectMapper objectMapper
     ) {
-        if (host == null) {
-            throw new IllegalArgumentException("host must not be null");
-        }
-
-        if (apiKey == null) {
-            throw new IllegalArgumentException("apiKey must not be null");
-        }
-
-        if (objectMapper == null) {
-            throw new IllegalArgumentException("objectMapper must not be null");
-        }
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(apiKey);
+        Objects.requireNonNull(objectMapper);
 
         this.host = host;
         this.apiKey = apiKey;
@@ -57,14 +49,9 @@ public final class StopsApiImpl implements StopsApi {
     }
 
     @Override
-    public List<Stop> findByRouteIdAndDirection(@Nullable String routeId, @Nullable String direction) {
-        if (routeId == null) {
-            throw new IllegalArgumentException("routeId must not be null");
-        }
-
-        if (direction == null) {
-            throw new IllegalArgumentException("direction must not be null");
-        }
+    public List<Stop> findByRouteIdAndDirection(String routeId, String direction) {
+        Objects.requireNonNull(routeId);
+        Objects.requireNonNull(direction);
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
@@ -80,16 +67,10 @@ public final class StopsApiImpl implements StopsApi {
     }
 
     @Override
-    public List<Stop> findByIds(@Nullable Collection<@Nullable String> stopIds) {
-        if (stopIds == null) {
-            throw new IllegalArgumentException("stopIds must not be null");
-        }
+    public List<Stop> findByIds(Collection<String> stopIds) {
+        Objects.requireNonNull(stopIds);
 
-        for (String stopId : stopIds) {
-            if (stopId == null) {
-                throw new IllegalArgumentException("stopIds must not contain null elements");
-            }
-        }
+        stopIds.forEach(Objects::requireNonNull);
 
         if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
             String message = String.format(

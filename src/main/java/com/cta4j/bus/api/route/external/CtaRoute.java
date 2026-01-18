@@ -5,6 +5,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
+
 @NullMarked
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,33 +22,10 @@ public record CtaRoute(
     @Nullable
     String rtpidatafeed
 ) {
-    public CtaRoute(
-        @Nullable String rt,
-        @Nullable String rtnm,
-        @Nullable String rtclr,
-        @Nullable String rtdd,
-        @Nullable String rtpidatafeed
-    ) {
-        if (rt == null) {
-            throw new IllegalArgumentException("rt must not be null");
-        }
-
-        if (rtnm == null) {
-            throw new IllegalArgumentException("rtnm must not be null");
-        }
-
-        if (rtclr == null) {
-            throw new IllegalArgumentException("rtclr must not be null");
-        }
-
-        if (rtdd == null) {
-            throw new IllegalArgumentException("rtdd must not be null");
-        }
-
-        this.rt = rt;
-        this.rtnm = rtnm;
-        this.rtclr = rtclr;
-        this.rtdd = rtdd;
-        this.rtpidatafeed = rtpidatafeed;
+    public CtaRoute {
+        Objects.requireNonNull(rt);
+        Objects.requireNonNull(rtnm);
+        Objects.requireNonNull(rtclr);
+        Objects.requireNonNull(rtdd);
     }
 }

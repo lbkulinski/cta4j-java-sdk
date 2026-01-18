@@ -3,22 +3,20 @@ package com.cta4j.bus.api.stop;
 import com.cta4j.bus.api.stop.model.Stop;
 import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @NullMarked
 public interface StopsApi {
-    List<Stop> findByRouteIdAndDirection(@Nullable String routeId, @Nullable String direction);
+    List<Stop> findByRouteIdAndDirection(String routeId, String direction);
 
-    List<Stop> findByIds(@Nullable Collection<@Nullable String> stopIds);
+    List<Stop> findByIds(Collection<String> stopIds);
 
-    default Optional<Stop> findById(@Nullable String stopId) {
-        if (stopId == null) {
-            throw new IllegalArgumentException("stopId must not be null");
-        }
+    default Optional<Stop> findById(String stopId) {
+        Objects.requireNonNull(stopId);
 
         List<String> ids = List.of(stopId);
 

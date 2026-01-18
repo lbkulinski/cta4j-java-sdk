@@ -3,19 +3,19 @@ package com.cta4j.bus.api.direction.impl;
 import com.cta4j.bus.api.ApiUtils;
 import com.cta4j.bus.api.direction.DirectionsApi;
 import com.cta4j.bus.external.CtaBustimeResponse;
-import com.cta4j.bus.external.CtaDirection;
+import com.cta4j.bus.api.direction.external.CtaDirection;
 import com.cta4j.bus.external.CtaError;
 import com.cta4j.bus.external.CtaResponse;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public final class DirectionsApiImpl implements DirectionsApi {
@@ -26,21 +26,13 @@ public final class DirectionsApiImpl implements DirectionsApi {
     private final ObjectMapper objectMapper;
 
     public DirectionsApiImpl(
-        @Nullable String host,
-        @Nullable String apiKey,
-        @Nullable ObjectMapper objectMapper
+        String host,
+        String apiKey,
+        ObjectMapper objectMapper
     ) {
-        if (host == null) {
-            throw new IllegalArgumentException("host must not be null");
-        }
-
-        if (apiKey == null) {
-            throw new IllegalArgumentException("apiKey must not be null");
-        }
-
-        if (objectMapper == null) {
-            throw new IllegalArgumentException("objectMapper must not be null");
-        }
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(apiKey);
+        Objects.requireNonNull(objectMapper);
 
         this.host = host;
         this.apiKey = apiKey;
@@ -48,10 +40,8 @@ public final class DirectionsApiImpl implements DirectionsApi {
     }
 
     @Override
-    public List<String> findByRouteId(@Nullable String routeId) {
-        if (routeId == null) {
-            throw new IllegalArgumentException("routeId must not be null");
-        }
+    public List<String> findByRouteId(String routeId) {
+        Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)

@@ -3,9 +3,9 @@ package com.cta4j.bus.api;
 import com.cta4j.bus.external.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -18,27 +18,16 @@ public final class ApiUtils {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static String buildErrorMessage(@Nullable String endpoint, @Nullable List<@Nullable CtaError> errors) {
-        if (endpoint == null) {
-            throw new IllegalArgumentException("endpoint must not be null");
-        }
+    public static String buildErrorMessage(String endpoint, List<CtaError> errors) {
+        Objects.requireNonNull(endpoint);
+        Objects.requireNonNull(errors);
 
-        if (errors == null) {
-            throw new IllegalArgumentException("errors must not be null");
-        }
+        errors.forEach(Objects::requireNonNull);
 
-        for (CtaError error : errors) {
-            if (error == null) {
-                throw new IllegalArgumentException("errors must not contain null elements");
-            }
-        }
-
-        List<CtaError> errorsCopy = List.copyOf(errors);
-
-        String message = errorsCopy.stream()
-                                   .map(CtaError::msg)
-                                   .reduce("%s; %s"::formatted)
-                                   .orElse("Unknown error");
+        String message = errors.stream()
+                               .map(CtaError::msg)
+                               .reduce("%s; %s"::formatted)
+                               .orElse("Unknown error");
 
         return String.format("Error response from %s: %s", endpoint, message);
     }

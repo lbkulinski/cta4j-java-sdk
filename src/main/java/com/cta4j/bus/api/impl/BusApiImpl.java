@@ -6,7 +6,7 @@ import com.cta4j.bus.api.DetoursApi;
 import com.cta4j.bus.api.direction.DirectionsApi;
 import com.cta4j.bus.api.LocalesApi;
 import com.cta4j.bus.api.pattern.PatternsApi;
-import com.cta4j.bus.api.PredictionsApi;
+import com.cta4j.bus.api.prediction.PredictionsApi;
 import com.cta4j.bus.api.direction.impl.DirectionsApiImpl;
 import com.cta4j.bus.api.pattern.impl.PatternsApiImpl;
 import com.cta4j.bus.api.route.RoutesApi;
@@ -30,6 +30,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public final class BusApiImpl implements BusApi {
@@ -45,16 +46,11 @@ public final class BusApiImpl implements BusApi {
     private final PatternsApi patternsApi;
 
     public BusApiImpl(
-        @Nullable String host,
-        @Nullable String apiKey
+        String host,
+        String apiKey
     ) {
-        if (host == null) {
-            throw new IllegalArgumentException("host must not be null");
-        }
-
-        if (apiKey == null) {
-            throw new IllegalArgumentException("apiKey must not be null");
-        }
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(apiKey);
 
         this.host = host;
         this.apiKey = apiKey;
@@ -159,8 +155,11 @@ public final class BusApiImpl implements BusApi {
     }
 
     public static final class BuilderImpl implements BusApi.Builder {
-        private @Nullable String host;
-        private @Nullable String apiKey;
+        @Nullable
+        private String host;
+
+        @Nullable
+        private String apiKey;
 
         public BuilderImpl() {
             this.host = null;
@@ -168,23 +167,15 @@ public final class BusApiImpl implements BusApi {
         }
 
         @Override
-        public Builder host(@Nullable String host) {
-            if (host == null) {
-                throw new IllegalArgumentException("host must not be null");
-            }
-
-            this.host = host;
+        public Builder host(String host) {
+            this.host = Objects.requireNonNull(host);
 
             return this;
         }
 
         @Override
-        public Builder apiKey(@Nullable String apiKey) {
-            if (apiKey == null) {
-                throw new IllegalArgumentException("apiKey must not be null");
-            }
-
-            this.apiKey = apiKey;
+        public Builder apiKey(String apiKey) {
+            this.apiKey = Objects.requireNonNull(apiKey);
 
             return this;
         }

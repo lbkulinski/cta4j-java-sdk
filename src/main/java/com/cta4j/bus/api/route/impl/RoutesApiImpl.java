@@ -13,7 +13,6 @@ import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +21,7 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -36,21 +36,13 @@ public final class RoutesApiImpl implements RoutesApi {
     private final RouteMapper routeMapper;
 
     public RoutesApiImpl(
-        @Nullable String host,
-        @Nullable String apiKey,
-        @Nullable ObjectMapper objectMapper
+        String host,
+        String apiKey,
+        ObjectMapper objectMapper
     ) {
-        if (host == null) {
-            throw new IllegalArgumentException("host must not be null");
-        }
-
-        if (apiKey == null) {
-            throw new IllegalArgumentException("apiKey must not be null");
-        }
-
-        if (objectMapper == null) {
-            throw new IllegalArgumentException("objectMapper must not be null");
-        }
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(apiKey);
+        Objects.requireNonNull(objectMapper);
 
         this.host = host;
         this.apiKey = apiKey;

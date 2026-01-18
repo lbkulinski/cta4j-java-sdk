@@ -1,7 +1,6 @@
 package com.cta4j.bus.client;
 
 import com.cta4j.bus.client.internal.BusClientImpl;
-import com.cta4j.bus.model.Arrival;
 import com.cta4j.bus.model.Detour;
 import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
@@ -14,27 +13,6 @@ import java.util.List;
 @NullMarked
 @SuppressWarnings("ConstantConditions")
 public interface BusClient {
-    /**
-     * Finds arrivals for the specified route ID and stop ID.
-     *
-     * @param routeId the ID of the bus route
-     * @param stopId the ID of the bus stop
-     * @return a {@link List} of arrivals for the specified bus route and stop
-     * @throws IllegalArgumentException if the specified bus route or stop is {@code null}
-     * @throws Cta4jException if an error occurs while fetching the data
-     */
-    List<Arrival> findArrivalsByRouteIdAndStopId(String routeId, String stopId);
-
-    /**
-     * Finds arrivals for the specified bus ID.
-     *
-     * @param busId the ID of the bus
-     * @return a {@link List} of arrivals for the specified bus
-     * @throws IllegalArgumentException if the specified bus ID is {@code null}
-     * @throws Cta4jException if an error occurs while fetching the data
-     */
-    List<Arrival> findArrivalsByBusId(String busId);
-
     /**
      * Finds detours for the specified route ID and direction.
      *
