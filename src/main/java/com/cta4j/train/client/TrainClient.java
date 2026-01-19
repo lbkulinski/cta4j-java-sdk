@@ -1,7 +1,7 @@
 package com.cta4j.train.client;
 
 import com.cta4j.train.client.internal.TrainClientImpl;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.model.StationArrival;
 import com.cta4j.train.model.Train;
 import org.jspecify.annotations.NullMarked;

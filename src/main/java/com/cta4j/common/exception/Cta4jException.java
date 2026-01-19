@@ -1,4 +1,4 @@
-package com.cta4j.exception;
+package com.cta4j.common.exception;
 
 /**
  * A custom exception class for handling cta4j specific errors.

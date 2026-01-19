@@ -1,10 +1,10 @@
 package com.cta4j.train.mapper;
 
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.external.follow.CtaFollowEta;
 import com.cta4j.train.model.Route;
 import com.cta4j.train.model.UpcomingTrainArrival;
-import com.cta4j.util.DateTimeUtils;
+import com.cta4j.common.util.DateTimeUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

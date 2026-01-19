@@ -8,8 +8,8 @@ import com.cta4j.bus.api.detour.DetoursApi;
 import com.cta4j.bus.api.detour.external.CtaDetour;
 import com.cta4j.bus.api.detour.mapper.DetourMapper;
 import com.cta4j.bus.api.detour.model.Detour;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.common.exception.Cta4jException;
+import com.cta4j.common.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -100,7 +100,6 @@ public final class DetoursApiImpl implements DetoursApi {
 
         List<CtaError> errors = bustimeResponse.error();
         List<CtaDetour> detours = bustimeResponse.data();
-
 
         if ((errors != null) && !errors.isEmpty()) {
             String message = ApiUtils.buildErrorMessage(DETOURS_ENDPOINT, errors);

@@ -1,11 +1,10 @@
-package com.cta4j.util;
+package com.cta4j.common.util;
 
 import org.jetbrains.annotations.ApiStatus;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 @ApiStatus.Internal
 public final class DateTimeUtils {
@@ -21,20 +20,6 @@ public final class DateTimeUtils {
         ZoneId chicagoId = ZoneId.of("America/Chicago");
 
         return LocalDateTime.parse(timestamp)
-                            .atZone(chicagoId)
-                            .toInstant();
-    }
-
-    public static Instant parseBusTimestamp(String timestamp) {
-        if (timestamp == null) {
-            throw new IllegalArgumentException("timestamp must not be null");
-        }
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
-
-        ZoneId chicagoId = ZoneId.of("America/Chicago");
-
-        return LocalDateTime.parse(timestamp, formatter)
                             .atZone(chicagoId)
                             .toInstant();
     }

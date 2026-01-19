@@ -3,7 +3,7 @@ package com.cta4j.train.mapper;
 import com.cta4j.train.external.arrival.CtaArrivalsEta;
 import com.cta4j.train.model.Route;
 import com.cta4j.train.model.StationArrival;
-import com.cta4j.util.DateTimeUtils;
+import com.cta4j.common.util.DateTimeUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
