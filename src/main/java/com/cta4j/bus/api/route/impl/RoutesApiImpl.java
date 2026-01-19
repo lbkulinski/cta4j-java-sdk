@@ -1,19 +1,18 @@
 package com.cta4j.bus.api.route.impl;
 
-import com.cta4j.bus.api.ApiUtils;
+import com.cta4j.bus.api.common.util.ApiUtils;
 import com.cta4j.bus.api.route.RoutesApi;
 import com.cta4j.bus.api.route.external.CtaRoute;
 import com.cta4j.bus.api.route.mapper.RouteMapper;
 import com.cta4j.bus.api.route.model.Route;
-import com.cta4j.bus.external.CtaBustimeResponse;
-import com.cta4j.bus.external.CtaError;
-import com.cta4j.bus.external.CtaResponse;
+import com.cta4j.bus.api.common.external.CtaBustimeResponse;
+import com.cta4j.bus.api.common.external.CtaError;
+import com.cta4j.bus.api.common.external.CtaResponse;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.mapstruct.factory.Mappers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
@@ -33,21 +32,15 @@ public final class RoutesApiImpl implements RoutesApi {
     private final String host;
     private final String apiKey;
     private final ObjectMapper objectMapper;
-    private final RouteMapper routeMapper;
 
     public RoutesApiImpl(
         String host,
         String apiKey,
         ObjectMapper objectMapper
     ) {
-        Objects.requireNonNull(host);
-        Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(objectMapper);
-
-        this.host = host;
-        this.apiKey = apiKey;
-        this.objectMapper = objectMapper;
-        this.routeMapper = Mappers.getMapper(RouteMapper.class);
+        this.host = Objects.requireNonNull(host);
+        this.apiKey = Objects.requireNonNull(apiKey);
+        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override
@@ -95,7 +88,7 @@ public final class RoutesApiImpl implements RoutesApi {
         }
 
         return routes.stream()
-                     .map(this.routeMapper::toDomain)
+                     .map(RouteMapper.MAPPER::toDomain)
                      .toList();
     }
 }

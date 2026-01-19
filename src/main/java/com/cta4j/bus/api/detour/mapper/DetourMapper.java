@@ -1,17 +1,20 @@
-package com.cta4j.bus.mapper;
+package com.cta4j.bus.api.detour.mapper;
 
-import com.cta4j.bus.external.CtaDetour;
-import com.cta4j.bus.external.CtaDetoursRouteDirection;
-import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
-import com.cta4j.bus.model.Detour;
-import com.cta4j.bus.model.DetourRouteDirection;
+import com.cta4j.bus.api.detour.external.CtaDetour;
+import com.cta4j.bus.api.detour.external.CtaDetoursRouteDirection;
+import com.cta4j.bus.api.common.util.CtaBusMappingQualifiers;
+import com.cta4j.bus.api.detour.model.Detour;
+import com.cta4j.bus.api.detour.model.DetourRouteDirection;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-@ApiStatus.Internal
 @Mapper(uses = CtaBusMappingQualifiers.class)
+@ApiStatus.Internal
 public interface DetourMapper {
+    DetourMapper MAPPER = Mappers.getMapper(DetourMapper.class);
+
     @Mapping(source = "ver", target = "version")
     @Mapping(source = "st", target = "active", qualifiedByName = "mapActive")
     @Mapping(source = "desc", target = "description")

@@ -1,6 +1,6 @@
-package com.cta4j.bus.api;
+package com.cta4j.bus.api.common.util;
 
-import com.cta4j.bus.external.CtaError;
+import com.cta4j.bus.api.common.external.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

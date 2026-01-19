@@ -1,19 +1,18 @@
 package com.cta4j.bus.api.pattern.impl;
 
-import com.cta4j.bus.api.ApiUtils;
+import com.cta4j.bus.api.common.util.ApiUtils;
 import com.cta4j.bus.api.pattern.PatternsApi;
 import com.cta4j.bus.api.pattern.external.CtaPattern;
 import com.cta4j.bus.api.pattern.mapper.RoutePatternMapper;
 import com.cta4j.bus.api.pattern.model.RoutePattern;
-import com.cta4j.bus.external.CtaBustimeResponse;
-import com.cta4j.bus.external.CtaError;
-import com.cta4j.bus.external.CtaResponse;
+import com.cta4j.bus.api.common.external.CtaBustimeResponse;
+import com.cta4j.bus.api.common.external.CtaError;
+import com.cta4j.bus.api.common.external.CtaResponse;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.mapstruct.factory.Mappers;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
@@ -31,21 +30,15 @@ public final class PatternsApiImpl implements PatternsApi {
     private final String host;
     private final String apiKey;
     private final ObjectMapper objectMapper;
-    private final RoutePatternMapper routePatternMapper;
 
     public PatternsApiImpl(
         String host,
         String apiKey,
         ObjectMapper objectMapper
     ) {
-        Objects.requireNonNull(host);
-        Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(objectMapper);
-
-        this.host = host;
-        this.apiKey = apiKey;
-        this.objectMapper = objectMapper;
-        this.routePatternMapper = Mappers.getMapper(RoutePatternMapper.class);
+        this.host = Objects.requireNonNull(host);
+        this.apiKey = Objects.requireNonNull(apiKey);
+        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override
@@ -124,7 +117,7 @@ public final class PatternsApiImpl implements PatternsApi {
         }
 
         return patterns.stream()
-                       .map(this.routePatternMapper::toDomain)
+                       .map(RoutePatternMapper.MAPPER::toDomain)
                        .toList();
     }
 }

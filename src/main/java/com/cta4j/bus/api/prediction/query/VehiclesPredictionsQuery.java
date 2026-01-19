@@ -3,13 +3,12 @@ package com.cta4j.bus.api.prediction.query;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 @NullMarked
 public record VehiclesPredictionsQuery(
-    Collection<String> vehicleIds,
+    List<String> vehicleIds,
 
     @Nullable
     Integer maxResults
@@ -26,17 +25,21 @@ public record VehiclesPredictionsQuery(
         }
     }
 
-    public static Builder builder(Collection<String> stopIds) {
+    public static Builder builder(List<String> stopIds) {
+        Objects.requireNonNull(stopIds);
+
+        stopIds.forEach(Objects::requireNonNull);
+
         return new Builder(stopIds);
     }
 
     public static final class Builder {
-        private final Collection<String> vehicleIds;
+        private final List<String> vehicleIds;
 
         @Nullable
         private Integer maxResults;
 
-        public Builder(Collection<String> vehicleIds) {
+        public Builder(List<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
 
             vehicleIds.forEach(Objects::requireNonNull);

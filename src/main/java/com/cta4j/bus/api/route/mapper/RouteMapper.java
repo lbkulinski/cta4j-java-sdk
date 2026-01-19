@@ -5,10 +5,13 @@ import com.cta4j.bus.api.route.model.Route;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 @ApiStatus.Internal
 public interface RouteMapper {
+    RouteMapper MAPPER = Mappers.getMapper(RouteMapper.class);
+
     @Mapping(source = "rt", target = "id")
     @Mapping(source = "rtnm", target = "name")
     @Mapping(source = "rtclr", target = "color")

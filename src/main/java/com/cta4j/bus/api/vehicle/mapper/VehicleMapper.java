@@ -1,15 +1,18 @@
 package com.cta4j.bus.api.vehicle.mapper;
 
 import com.cta4j.bus.api.vehicle.external.CtaVehicle;
-import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
+import com.cta4j.bus.api.common.util.CtaBusMappingQualifiers;
 import com.cta4j.bus.api.vehicle.model.Vehicle;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = CtaBusMappingQualifiers.class)
 @ApiStatus.Internal
 public interface VehicleMapper {
+    VehicleMapper MAPPER = Mappers.getMapper(VehicleMapper.class);
+
     @Mapping(source = "vid", target = "id")
     @Mapping(source = "rtpidatafeed", target = "metadata.dataFeed")
     @Mapping(source = "tmpstmp", target = "metadata.lastUpdated", qualifiedByName = "mapTimestamp")

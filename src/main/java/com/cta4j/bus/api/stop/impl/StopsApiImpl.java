@@ -1,19 +1,18 @@
 package com.cta4j.bus.api.stop.impl;
 
-import com.cta4j.bus.api.ApiUtils;
+import com.cta4j.bus.api.common.util.ApiUtils;
 import com.cta4j.bus.api.stop.StopsApi;
 import com.cta4j.bus.api.stop.external.CtaStop;
 import com.cta4j.bus.api.stop.mapper.StopMapper;
 import com.cta4j.bus.api.stop.model.Stop;
-import com.cta4j.bus.external.CtaBustimeResponse;
-import com.cta4j.bus.external.CtaError;
-import com.cta4j.bus.external.CtaResponse;
+import com.cta4j.bus.api.common.external.CtaBustimeResponse;
+import com.cta4j.bus.api.common.external.CtaError;
+import com.cta4j.bus.api.common.external.CtaResponse;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.mapstruct.factory.Mappers;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
@@ -31,21 +30,15 @@ public final class StopsApiImpl implements StopsApi {
     private final String host;
     private final String apiKey;
     private final ObjectMapper objectMapper;
-    private final StopMapper stopMapper;
 
     public StopsApiImpl(
         String host,
         String apiKey,
         ObjectMapper objectMapper
     ) {
-        Objects.requireNonNull(host);
-        Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(objectMapper);
-
-        this.host = host;
-        this.apiKey = apiKey;
-        this.objectMapper = objectMapper;
-        this.stopMapper = Mappers.getMapper(StopMapper.class);
+        this.host = Objects.requireNonNull(host);
+        this.apiKey = Objects.requireNonNull(apiKey);
+        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override
@@ -126,7 +119,7 @@ public final class StopsApiImpl implements StopsApi {
         }
 
         return stops.stream()
-                    .map(this.stopMapper::toDomain)
+                    .map(StopMapper.MAPPER::toDomain)
                     .toList();
     }
 }

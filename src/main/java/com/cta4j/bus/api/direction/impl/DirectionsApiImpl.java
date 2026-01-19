@@ -1,14 +1,15 @@
 package com.cta4j.bus.api.direction.impl;
 
-import com.cta4j.bus.api.ApiUtils;
+import com.cta4j.bus.api.common.util.ApiUtils;
 import com.cta4j.bus.api.direction.DirectionsApi;
-import com.cta4j.bus.external.CtaBustimeResponse;
+import com.cta4j.bus.api.common.external.CtaBustimeResponse;
 import com.cta4j.bus.api.direction.external.CtaDirection;
-import com.cta4j.bus.external.CtaError;
-import com.cta4j.bus.external.CtaResponse;
+import com.cta4j.bus.api.common.external.CtaError;
+import com.cta4j.bus.api.common.external.CtaResponse;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 @NullMarked
+@ApiStatus.Internal
 public final class DirectionsApiImpl implements DirectionsApi {
     private static final String DIRECTIONS_ENDPOINT = String.format("%s/getdirections", ApiUtils.API_PREFIX);
 
@@ -30,13 +32,9 @@ public final class DirectionsApiImpl implements DirectionsApi {
         String apiKey,
         ObjectMapper objectMapper
     ) {
-        Objects.requireNonNull(host);
-        Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(objectMapper);
-
-        this.host = host;
-        this.apiKey = apiKey;
-        this.objectMapper = objectMapper;
+        this.host = Objects.requireNonNull(host);
+        this.apiKey = Objects.requireNonNull(apiKey);
+        this.objectMapper = Objects.requireNonNull(objectMapper);
     }
 
     @Override

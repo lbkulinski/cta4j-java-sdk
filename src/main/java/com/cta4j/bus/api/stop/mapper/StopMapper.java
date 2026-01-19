@@ -5,10 +5,13 @@ import com.cta4j.bus.api.stop.model.Stop;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper
 @ApiStatus.Internal
 public interface StopMapper {
+    StopMapper MAPPER = Mappers.getMapper(StopMapper.class);
+
     @Mapping(source = "stpid", target = "id")
     @Mapping(source = "stpnm", target = "name")
     @Mapping(source = "lat", target = "latitude")

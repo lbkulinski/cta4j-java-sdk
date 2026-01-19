@@ -1,27 +1,31 @@
 package com.cta4j.bus.api.impl;
 
-import com.cta4j.bus.api.ApiUtils;
+import com.cta4j.bus.api.common.util.ApiUtils;
 import com.cta4j.bus.api.BusApi;
-import com.cta4j.bus.api.DetoursApi;
+import com.cta4j.bus.api.detour.DetoursApi;
+import com.cta4j.bus.api.detour.impl.DetoursApiImpl;
 import com.cta4j.bus.api.direction.DirectionsApi;
-import com.cta4j.bus.api.LocalesApi;
+import com.cta4j.bus.api.locale.LocalesApi;
+import com.cta4j.bus.api.locale.impl.LocalesApiImpl;
 import com.cta4j.bus.api.pattern.PatternsApi;
 import com.cta4j.bus.api.prediction.PredictionsApi;
 import com.cta4j.bus.api.direction.impl.DirectionsApiImpl;
 import com.cta4j.bus.api.pattern.impl.PatternsApiImpl;
+import com.cta4j.bus.api.prediction.impl.PredictionsApiImpl;
 import com.cta4j.bus.api.route.RoutesApi;
 import com.cta4j.bus.api.stop.StopsApi;
 import com.cta4j.bus.api.route.impl.RoutesApiImpl;
 import com.cta4j.bus.api.stop.impl.StopsApiImpl;
 import com.cta4j.bus.api.vehicle.VehiclesApi;
 import com.cta4j.bus.api.vehicle.impl.VehiclesApiImpl;
-import com.cta4j.bus.external.CtaBustimeResponse;
-import com.cta4j.bus.external.CtaError;
-import com.cta4j.bus.external.CtaResponse;
-import com.cta4j.bus.mapper.util.CtaBusMappingQualifiers;
+import com.cta4j.bus.api.common.external.CtaBustimeResponse;
+import com.cta4j.bus.api.common.external.CtaError;
+import com.cta4j.bus.api.common.external.CtaResponse;
+import com.cta4j.bus.api.common.util.CtaBusMappingQualifiers;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.core.JacksonException;
@@ -33,6 +37,7 @@ import java.util.List;
 import java.util.Objects;
 
 @NullMarked
+@ApiStatus.Internal
 public final class BusApiImpl implements BusApi {
     private static final String SYSTEM_TIME_ENDPOINT = String.format("%s/gettime", ApiUtils.API_PREFIX);
 
@@ -44,22 +49,25 @@ public final class BusApiImpl implements BusApi {
     private final DirectionsApi directionsApi;
     private final StopsApi stopsApi;
     private final PatternsApi patternsApi;
+    private final PredictionsApi predictionsApi;
+    private final LocalesApi localesApi;
+    private final DetoursApi detoursApi;
 
     public BusApiImpl(
         String host,
         String apiKey
     ) {
-        Objects.requireNonNull(host);
-        Objects.requireNonNull(apiKey);
-
-        this.host = host;
-        this.apiKey = apiKey;
+        this.host = Objects.requireNonNull(host);
+        this.apiKey = Objects.requireNonNull(apiKey);
         this.objectMapper = new ObjectMapper();
         this.vehiclesApi = new VehiclesApiImpl(this.host, this.apiKey, this.objectMapper);
         this.routesApi = new RoutesApiImpl(this.host, this.apiKey, this.objectMapper);
         this.directionsApi = new DirectionsApiImpl(this.host, this.apiKey, this.objectMapper);
         this.stopsApi = new StopsApiImpl(this.host, this.apiKey, this.objectMapper);
         this.patternsApi = new PatternsApiImpl(this.host, this.apiKey, this.objectMapper);
+        this.predictionsApi = new PredictionsApiImpl(this.host, this.apiKey, this.objectMapper);
+        this.localesApi = new LocalesApiImpl(this.host, this.apiKey, this.objectMapper);
+        this.detoursApi = new DetoursApiImpl(this.host, this.apiKey, this.objectMapper);
     }
 
     @Override
@@ -141,29 +149,28 @@ public final class BusApiImpl implements BusApi {
 
     @Override
     public PredictionsApi predictions() {
-        return null;
+        return this.predictionsApi;
     }
 
     @Override
     public LocalesApi locales() {
-        return null;
+        return this.localesApi;
     }
 
     @Override
     public DetoursApi detours() {
-        return null;
+        return this.detoursApi;
     }
 
     public static final class BuilderImpl implements BusApi.Builder {
+        private final String apiKey;
+
         @Nullable
         private String host;
 
-        @Nullable
-        private String apiKey;
-
-        public BuilderImpl() {
+        public BuilderImpl(String apiKey) {
+            this.apiKey = Objects.requireNonNull(apiKey);
             this.host = null;
-            this.apiKey = null;
         }
 
         @Override
@@ -174,19 +181,8 @@ public final class BusApiImpl implements BusApi {
         }
 
         @Override
-        public Builder apiKey(String apiKey) {
-            this.apiKey = Objects.requireNonNull(apiKey);
-
-            return this;
-        }
-
-        @Override
         public BusApi build() {
             String finalHost = (this.host == null) ? ApiUtils.DEFAULT_HOST : this.host;
-
-            if (this.apiKey == null) {
-                throw new IllegalStateException("API key must not be null");
-            }
 
             return new BusApiImpl(finalHost, this.apiKey);
         }
