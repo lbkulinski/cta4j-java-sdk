@@ -22,22 +22,22 @@ public interface DetoursApi {
     List<Detour> list();
 
     /**
-     * Retrieves all active detours for the specified route.
+     * Retrieves all active detours for the specified route ID.
      *
-     * @param routeId the route identifier
-     * @return a {@link List} of {@link Detour}s associated with the route;
-     * an empty {@link List} if no detours exist for the route
+     * @param routeId the route ID
+     * @return a {@link List} of {@link Detour}s associated with the route ID;
+     * an empty {@link List} if no detours exist for the route ID
      * @throws NullPointerException if {@code routeId} is {@code null}
      */
     List<Detour> findByRouteId(String routeId);
 
     /**
-     * Retrieves all active detours for the specified route and direction.
+     * Retrieves all active detours for the specified route ID and direction.
      *
-     * @param routeId   the route identifier
+     * @param routeId the route ID
      * @param direction the travel direction (e.g. Northbound, Southbound)
-     * @return a {@link List} of {@link Detour}s matching the route and direction;
-     * an empty {@link List} if no detours match
+     * @return a {@link List} of {@link Detour}s associated with the route ID and direction;
+     * an empty {@link List} if no detours exist for the route ID and direction
      * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
      */
     List<Detour> findByRouteIdAndDirection(String routeId, String direction);

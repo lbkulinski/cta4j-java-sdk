@@ -21,7 +21,7 @@ public record DetourRouteDirection(
      *
      * @param routeId the route ID of the detour
      * @param direction the direction of the detour
-     * @throws NullPointerException if {@code route} or {@code direction} is {@code null}
+     * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
      */
     public DetourRouteDirection {
         Objects.requireNonNull(routeId);
