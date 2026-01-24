@@ -10,7 +10,13 @@ public record RequestOptions(
     @Nullable
     Locale locale
 ) {
+    private static final RequestOptions DEFAULTS = new RequestOptions();
+
     public RequestOptions() {
         this(null);
+    }
+
+    public static RequestOptions defaults() {
+        return DEFAULTS;
     }
 }
