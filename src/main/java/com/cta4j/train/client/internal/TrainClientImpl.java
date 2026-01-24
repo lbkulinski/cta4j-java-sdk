@@ -1,7 +1,7 @@
 package com.cta4j.train.client.internal;
 
 import com.cta4j.train.client.TrainClient;
-import com.cta4j.common.exception.Cta4jException;
+import com.cta4j.exception.Cta4jException;
 import com.cta4j.train.external.arrival.CtaArrivalsCtatt;
 import com.cta4j.train.external.arrival.CtaArrivalsEta;
 import com.cta4j.train.external.arrival.CtaArrivalsResponse;
@@ -16,7 +16,7 @@ import com.cta4j.train.model.TrainCoordinates;
 import com.cta4j.train.model.Train;
 import com.cta4j.train.model.UpcomingTrainArrival;
 import com.cta4j.train.model.StationArrival;
-import com.cta4j.common.util.HttpUtils;
+import com.cta4j.bus.internal.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
