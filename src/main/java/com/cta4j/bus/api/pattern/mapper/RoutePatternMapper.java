@@ -2,7 +2,7 @@ package com.cta4j.bus.api.pattern.mapper;
 
 import com.cta4j.bus.api.pattern.external.CtaPattern;
 import com.cta4j.bus.api.pattern.external.CtaPoint;
-import com.cta4j.bus.api.common.util.CtaBusMappingQualifiers;
+import com.cta4j.bus.api.core.util.CtaBusMappingQualifiers;
 import com.cta4j.bus.api.pattern.model.PatternPoint;
 import com.cta4j.bus.api.pattern.model.RoutePattern;
 import org.jetbrains.annotations.ApiStatus;
@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(uses = CtaBusMappingQualifiers.class)
 @ApiStatus.Internal
 public interface RoutePatternMapper {
-    RoutePatternMapper MAPPER = Mappers.getMapper(RoutePatternMapper.class);
+    RoutePatternMapper INSTANCE = Mappers.getMapper(RoutePatternMapper.class);
 
     @Mapping(source = "pid", target = "patternId")
     @Mapping(source = "ln", target = "patternCount")

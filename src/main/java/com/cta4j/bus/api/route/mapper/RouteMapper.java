@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 @ApiStatus.Internal
 public interface RouteMapper {
-    RouteMapper MAPPER = Mappers.getMapper(RouteMapper.class);
+    RouteMapper INSTANCE = Mappers.getMapper(RouteMapper.class);
 
     @Mapping(source = "rt", target = "id")
     @Mapping(source = "rtnm", target = "name")

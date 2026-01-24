@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 @ApiStatus.Internal
 public interface StopMapper {
-    StopMapper MAPPER = Mappers.getMapper(StopMapper.class);
+    StopMapper INSTANCE = Mappers.getMapper(StopMapper.class);
 
     @Mapping(source = "stpid", target = "id")
     @Mapping(source = "stpnm", target = "name")

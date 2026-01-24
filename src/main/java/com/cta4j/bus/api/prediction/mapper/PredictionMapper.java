@@ -1,7 +1,7 @@
 package com.cta4j.bus.api.prediction.mapper;
 
 import com.cta4j.bus.api.prediction.external.CtaPrediction;
-import com.cta4j.bus.api.common.util.CtaBusMappingQualifiers;
+import com.cta4j.bus.api.core.util.CtaBusMappingQualifiers;
 import com.cta4j.bus.api.prediction.model.Prediction;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
@@ -11,7 +11,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(uses = CtaBusMappingQualifiers.class)
 @ApiStatus.Internal
 public interface PredictionMapper {
-    PredictionMapper MAPPER = Mappers.getMapper(PredictionMapper.class);
+    PredictionMapper INSTANCE = Mappers.getMapper(PredictionMapper.class);
 
     @Mapping(source = "typ", target = "predictionType", qualifiedByName = "mapPredictionType")
     @Mapping(source = "stpid", target = "stopId")

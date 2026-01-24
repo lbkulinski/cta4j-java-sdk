@@ -1,4 +1,4 @@
-package com.cta4j.bus.api.common.util;
+package com.cta4j.bus.api.core.util;
 
 import com.cta4j.bus.api.prediction.model.DynamicAction;
 import com.cta4j.bus.api.prediction.model.FlagStop;
@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Objects;
 
 @NullMarked
@@ -127,5 +128,12 @@ public final class CtaBusMappingQualifiers {
                 throw new IllegalArgumentException(message);
             }
         };
+    }
+
+    @Named("mapLocale")
+    public static Locale mapLocale(String locale) {
+        Objects.requireNonNull(locale);
+
+        return Locale.of(locale);
     }
 }

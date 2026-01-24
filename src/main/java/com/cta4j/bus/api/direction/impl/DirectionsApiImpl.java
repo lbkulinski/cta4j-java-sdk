@@ -1,11 +1,12 @@
 package com.cta4j.bus.api.direction.impl;
 
-import com.cta4j.bus.api.common.util.ApiUtils;
+import com.cta4j.bus.api.core.context.BusApiContext;
+import com.cta4j.bus.api.core.util.ApiUtils;
 import com.cta4j.bus.api.direction.DirectionsApi;
-import com.cta4j.bus.api.common.external.CtaBustimeResponse;
+import com.cta4j.bus.api.core.external.CtaBustimeResponse;
 import com.cta4j.bus.api.direction.external.CtaDirection;
-import com.cta4j.bus.api.common.external.CtaError;
-import com.cta4j.bus.api.common.external.CtaResponse;
+import com.cta4j.bus.api.core.external.CtaError;
+import com.cta4j.bus.api.core.external.CtaResponse;
 import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
@@ -13,7 +14,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -23,18 +23,10 @@ import java.util.Objects;
 public final class DirectionsApiImpl implements DirectionsApi {
     private static final String DIRECTIONS_ENDPOINT = String.format("%s/getdirections", ApiUtils.API_PREFIX);
 
-    private final String host;
-    private final String apiKey;
-    private final ObjectMapper objectMapper;
+    private final BusApiContext context;
 
-    public DirectionsApiImpl(
-        String host,
-        String apiKey,
-        ObjectMapper objectMapper
-    ) {
-        this.host = Objects.requireNonNull(host);
-        this.apiKey = Objects.requireNonNull(apiKey);
-        this.objectMapper = Objects.requireNonNull(objectMapper);
+    public DirectionsApiImpl(BusApiContext context) {
+        this.context = Objects.requireNonNull(context);
     }
 
     @Override
@@ -43,10 +35,10 @@ public final class DirectionsApiImpl implements DirectionsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.host)
+            .setHost(this.context.host())
             .setPath(DIRECTIONS_ENDPOINT)
             .addParameter("rt", routeId)
-            .addParameter("key", this.apiKey)
+            .addParameter("key", this.context.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -56,7 +48,8 @@ public final class DirectionsApiImpl implements DirectionsApi {
         CtaResponse<List<CtaDirection>> directionsResponse;
 
         try {
-            directionsResponse = this.objectMapper.readValue(response, typeReference);
+            directionsResponse = this.context.objectMapper()
+                                             .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", DIRECTIONS_ENDPOINT);
 

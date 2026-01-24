@@ -1,15 +1,16 @@
 package com.cta4j.bus.api.prediction.impl;
 
-import com.cta4j.bus.api.common.util.ApiUtils;
+import com.cta4j.bus.api.core.context.BusApiContext;
+import com.cta4j.bus.api.core.util.ApiUtils;
 import com.cta4j.bus.api.prediction.PredictionsApi;
 import com.cta4j.bus.api.prediction.external.CtaPrediction;
 import com.cta4j.bus.api.prediction.mapper.PredictionMapper;
 import com.cta4j.bus.api.prediction.model.Prediction;
 import com.cta4j.bus.api.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.api.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.bus.api.common.external.CtaBustimeResponse;
-import com.cta4j.bus.api.common.external.CtaError;
-import com.cta4j.bus.api.common.external.CtaResponse;
+import com.cta4j.bus.api.core.external.CtaBustimeResponse;
+import com.cta4j.bus.api.core.external.CtaError;
+import com.cta4j.bus.api.core.external.CtaResponse;
 import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
@@ -17,7 +18,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,18 +29,10 @@ public final class PredictionsApiImpl implements PredictionsApi {
     private static final int MAX_STOP_IDS_PER_REQUEST = 10;
     private static final int MAX_VEHICLE_IDS_PER_REQUEST = 10;
 
-    private final String host;
-    private final String apiKey;
-    private final ObjectMapper objectMapper;
+    private final BusApiContext context;
 
-    public PredictionsApiImpl(
-        String host,
-        String apiKey,
-        ObjectMapper objectMapper
-    ) {
-        this.host = Objects.requireNonNull(host);
-        this.apiKey = Objects.requireNonNull(apiKey);
-        this.objectMapper = Objects.requireNonNull(objectMapper);
+    public PredictionsApiImpl(BusApiContext context) {
+        this.context = Objects.requireNonNull(context);
     }
 
     @Override
@@ -63,11 +55,11 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
         URIBuilder builder = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.host)
+            .setHost(this.context.host())
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.apiKey)
+            .addParameter("key", this.context.apiKey())
             .addParameter("format", "json");
 
         if (query.routeIds() != null) {
@@ -107,11 +99,11 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
         URIBuilder builder = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.host)
+            .setHost(this.context.host())
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("vid", vehicleIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.apiKey)
+            .addParameter("key", this.context.apiKey())
             .addParameter("format", "json");
 
         if (query.maxResults() != null) {
@@ -132,7 +124,8 @@ public final class PredictionsApiImpl implements PredictionsApi {
         CtaResponse<List<CtaPrediction>> predictionsResponse;
 
         try {
-            predictionsResponse = this.objectMapper.readValue(response, typeReference);
+            predictionsResponse = this.context.objectMapper()
+                                              .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", PREDICTIONS_ENDPOINT);
 
@@ -155,7 +148,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
         }
 
         return predictions.stream()
-                          .map(PredictionMapper.MAPPER::toDomain)
+                          .map(PredictionMapper.INSTANCE::toDomain)
                           .toList();
     }
 }

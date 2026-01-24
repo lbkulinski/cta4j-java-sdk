@@ -1,6 +1,8 @@
 package com.cta4j.bus.api.impl;
 
-import com.cta4j.bus.api.common.util.ApiUtils;
+import com.cta4j.bus.api.core.context.BusApiContext;
+import com.cta4j.bus.api.core.request.RequestOptions;
+import com.cta4j.bus.api.core.util.ApiUtils;
 import com.cta4j.bus.api.BusApi;
 import com.cta4j.bus.api.detour.DetoursApi;
 import com.cta4j.bus.api.detour.impl.DetoursApiImpl;
@@ -18,10 +20,10 @@ import com.cta4j.bus.api.route.impl.RoutesApiImpl;
 import com.cta4j.bus.api.stop.impl.StopsApiImpl;
 import com.cta4j.bus.api.vehicle.VehiclesApi;
 import com.cta4j.bus.api.vehicle.impl.VehiclesApiImpl;
-import com.cta4j.bus.api.common.external.CtaBustimeResponse;
-import com.cta4j.bus.api.common.external.CtaError;
-import com.cta4j.bus.api.common.external.CtaResponse;
-import com.cta4j.bus.api.common.util.CtaBusMappingQualifiers;
+import com.cta4j.bus.api.core.external.CtaBustimeResponse;
+import com.cta4j.bus.api.core.external.CtaError;
+import com.cta4j.bus.api.core.external.CtaResponse;
+import com.cta4j.bus.api.core.util.CtaBusMappingQualifiers;
 import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
@@ -41,9 +43,7 @@ import java.util.Objects;
 public final class BusApiImpl implements BusApi {
     private static final String SYSTEM_TIME_ENDPOINT = String.format("%s/gettime", ApiUtils.API_PREFIX);
 
-    private final String host;
-    private final String apiKey;
-    private final ObjectMapper objectMapper;
+    private final BusApiContext context;
     private final VehiclesApi vehiclesApi;
     private final RoutesApi routesApi;
     private final DirectionsApi directionsApi;
@@ -55,28 +55,38 @@ public final class BusApiImpl implements BusApi {
 
     public BusApiImpl(
         String host,
-        String apiKey
+        String apiKey,
+        RequestOptions defaultRequestOptions
     ) {
-        this.host = Objects.requireNonNull(host);
-        this.apiKey = Objects.requireNonNull(apiKey);
-        this.objectMapper = new ObjectMapper();
-        this.vehiclesApi = new VehiclesApiImpl(this.host, this.apiKey, this.objectMapper);
-        this.routesApi = new RoutesApiImpl(this.host, this.apiKey, this.objectMapper);
-        this.directionsApi = new DirectionsApiImpl(this.host, this.apiKey, this.objectMapper);
-        this.stopsApi = new StopsApiImpl(this.host, this.apiKey, this.objectMapper);
-        this.patternsApi = new PatternsApiImpl(this.host, this.apiKey, this.objectMapper);
-        this.predictionsApi = new PredictionsApiImpl(this.host, this.apiKey, this.objectMapper);
-        this.localesApi = new LocalesApiImpl(this.host, this.apiKey, this.objectMapper);
-        this.detoursApi = new DetoursApiImpl(this.host, this.apiKey, this.objectMapper);
+        Objects.requireNonNull(host);
+        Objects.requireNonNull(apiKey);
+        Objects.requireNonNull(defaultRequestOptions);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        this.context = new BusApiContext(
+            host,
+            apiKey,
+            defaultRequestOptions,
+            objectMapper
+        );
+        this.vehiclesApi = new VehiclesApiImpl(this.context);
+        this.routesApi = new RoutesApiImpl(this.context);
+        this.directionsApi = new DirectionsApiImpl(this.context);
+        this.stopsApi = new StopsApiImpl(this.context);
+        this.patternsApi = new PatternsApiImpl(this.context);
+        this.predictionsApi = new PredictionsApiImpl(this.context);
+        this.localesApi = new LocalesApiImpl(this.context);
+        this.detoursApi = new DetoursApiImpl(this.context);
     }
 
     @Override
     public Instant systemTime() {
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.host)
+            .setHost(this.context.host())
             .setPath(SYSTEM_TIME_ENDPOINT)
-            .addParameter("key", this.apiKey)
+            .addParameter("key", this.context.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -86,7 +96,8 @@ public final class BusApiImpl implements BusApi {
         CtaResponse<String> timeResponse;
 
         try {
-            timeResponse = this.objectMapper.readValue(response, typeReference);
+            timeResponse = this.context.objectMapper()
+                                       .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", SYSTEM_TIME_ENDPOINT);
 
@@ -119,7 +130,19 @@ public final class BusApiImpl implements BusApi {
             throw new Cta4jException(message);
         }
 
-        return CtaBusMappingQualifiers.mapTimestamp(systemTime);
+        Instant systemInstant = CtaBusMappingQualifiers.mapTimestamp(systemTime);
+
+        if (systemInstant == null) {
+            String message = String.format(
+                "Failed to map system time '%s' to Instant from %s",
+                systemTime,
+                SYSTEM_TIME_ENDPOINT
+            );
+
+            throw new Cta4jException(message);
+        }
+
+        return systemInstant;
     }
 
     @Override
@@ -168,9 +191,13 @@ public final class BusApiImpl implements BusApi {
         @Nullable
         private String host;
 
+        @Nullable
+        private RequestOptions defaultRequestOptions;
+
         public BuilderImpl(String apiKey) {
             this.apiKey = Objects.requireNonNull(apiKey);
             this.host = null;
+            this.defaultRequestOptions = null;
         }
 
         @Override
@@ -181,10 +208,24 @@ public final class BusApiImpl implements BusApi {
         }
 
         @Override
-        public BusApi build() {
-            String finalHost = (this.host == null) ? ApiUtils.DEFAULT_HOST : this.host;
+        public Builder defaultRequestOptions(RequestOptions requestOptions) {
+            this.defaultRequestOptions = Objects.requireNonNull(requestOptions);
 
-            return new BusApiImpl(finalHost, this.apiKey);
+            return this;
+        }
+
+        @Override
+        public BusApi build() {
+            String finalHost = Objects.requireNonNullElse(
+                this.host,
+                ApiUtils.DEFAULT_HOST
+            );
+            RequestOptions finalRequestOptions = Objects.requireNonNullElse(
+                this.defaultRequestOptions,
+                new RequestOptions()
+            );
+
+            return new BusApiImpl(finalHost, this.apiKey, finalRequestOptions);
         }
     }
 }

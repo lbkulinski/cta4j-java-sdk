@@ -1,13 +1,14 @@
 package com.cta4j.bus.api.stop.impl;
 
-import com.cta4j.bus.api.common.util.ApiUtils;
+import com.cta4j.bus.api.core.context.BusApiContext;
+import com.cta4j.bus.api.core.util.ApiUtils;
 import com.cta4j.bus.api.stop.StopsApi;
 import com.cta4j.bus.api.stop.external.CtaStop;
 import com.cta4j.bus.api.stop.mapper.StopMapper;
 import com.cta4j.bus.api.stop.model.Stop;
-import com.cta4j.bus.api.common.external.CtaBustimeResponse;
-import com.cta4j.bus.api.common.external.CtaError;
-import com.cta4j.bus.api.common.external.CtaResponse;
+import com.cta4j.bus.api.core.external.CtaBustimeResponse;
+import com.cta4j.bus.api.core.external.CtaError;
+import com.cta4j.bus.api.core.external.CtaResponse;
 import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
@@ -15,7 +16,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,18 +27,10 @@ public final class StopsApiImpl implements StopsApi {
     private static final String STOPS_ENDPOINT = String.format("%s/getstops", ApiUtils.API_PREFIX);
     private static final int MAX_STOP_IDS_PER_REQUEST = 10;
 
-    private final String host;
-    private final String apiKey;
-    private final ObjectMapper objectMapper;
+    private final BusApiContext context;
 
-    public StopsApiImpl(
-        String host,
-        String apiKey,
-        ObjectMapper objectMapper
-    ) {
-        this.host = Objects.requireNonNull(host);
-        this.apiKey = Objects.requireNonNull(apiKey);
-        this.objectMapper = Objects.requireNonNull(objectMapper);
+    public StopsApiImpl(BusApiContext context) {
+        this.context = Objects.requireNonNull(context);
     }
 
     @Override
@@ -48,11 +40,11 @@ public final class StopsApiImpl implements StopsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.host)
+            .setHost(this.context.host())
             .setPath(STOPS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("dir", direction)
-            .addParameter("key", this.apiKey)
+            .addParameter("key", this.context.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -79,10 +71,10 @@ public final class StopsApiImpl implements StopsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.host)
+            .setHost(this.context.host())
             .setPath(STOPS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
-            .addParameter("key", this.apiKey)
+            .addParameter("key", this.context.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -96,7 +88,8 @@ public final class StopsApiImpl implements StopsApi {
         CtaResponse<List<CtaStop>> stopsResponse;
 
         try {
-            stopsResponse = this.objectMapper.readValue(response, typeReference);
+            stopsResponse = this.context.objectMapper()
+                                        .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", STOPS_ENDPOINT);
 
@@ -119,7 +112,7 @@ public final class StopsApiImpl implements StopsApi {
         }
 
         return stops.stream()
-                    .map(StopMapper.MAPPER::toDomain)
+                    .map(StopMapper.INSTANCE::toDomain)
                     .toList();
     }
 }

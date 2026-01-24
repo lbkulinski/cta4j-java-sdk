@@ -1,4 +1,4 @@
-package com.cta4j.bus.api.common.external;
+package com.cta4j.bus.api.core.external;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,6 +25,7 @@ public record CtaBustimeResponse<T>(
         "prd",
         "dtrs",
         "vehicle",
+        "locale"
     })
     T data
 ) {

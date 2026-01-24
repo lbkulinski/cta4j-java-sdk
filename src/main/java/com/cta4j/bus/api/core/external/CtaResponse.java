@@ -1,4 +1,4 @@
-package com.cta4j.bus.api.common.external;
+package com.cta4j.bus.api.core.external;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
