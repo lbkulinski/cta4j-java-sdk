@@ -24,7 +24,7 @@ public interface DetourMapper {
     @Mapping(source = "rtpidatafeed", target = "dataFeed")
     Detour toDomain(CtaDetour dto);
 
-    @Mapping(source = "rt", target = "route")
+    @Mapping(source = "rt", target = "routeId")
     @Mapping(source = "dir", target = "direction")
     DetourRouteDirection toDomain(CtaDetoursRouteDirection dto);
 }
