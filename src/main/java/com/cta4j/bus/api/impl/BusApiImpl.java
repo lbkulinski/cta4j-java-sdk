@@ -61,11 +61,7 @@ public final class BusApiImpl implements BusApi {
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        this.context = new BusApiContext(
-            host,
-            apiKey,
-            objectMapper
-        );
+        this.context = new BusApiContext(host, apiKey, objectMapper);
         this.vehiclesApi = new VehiclesApiImpl(this.context);
         this.routesApi = new RoutesApiImpl(this.context);
         this.directionsApi = new DirectionsApiImpl(this.context);
@@ -201,10 +197,7 @@ public final class BusApiImpl implements BusApi {
 
         @Override
         public BusApi build() {
-            String finalHost = Objects.requireNonNullElse(
-                this.host,
-                ApiUtils.DEFAULT_HOST
-            );
+            String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
 
             return new BusApiImpl(finalHost, this.apiKey);
         }
