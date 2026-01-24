@@ -1,6 +1,5 @@
 package com.cta4j.bus.api;
 
-import com.cta4j.bus.api.core.request.RequestOptions;
 import com.cta4j.bus.api.detour.DetoursApi;
 import com.cta4j.bus.api.direction.DirectionsApi;
 import com.cta4j.bus.api.impl.BusApiImpl;
@@ -103,16 +102,6 @@ public interface BusApi {
          * @return this builder instance
          */
         Builder host(String host);
-
-        /**
-         * Sets the default request options to use for requests.
-         * <p>
-         * If not specified, default request options are used.
-         *
-         * @param requestOptions the default request options
-         * @return this builder instance
-         */
-        Builder defaultRequestOptions(RequestOptions requestOptions);
 
         /**
          * Builds a configured {@link BusApi} instance.

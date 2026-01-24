@@ -1,7 +1,6 @@
 package com.cta4j.bus.api.impl;
 
 import com.cta4j.bus.api.core.context.BusApiContext;
-import com.cta4j.bus.api.core.request.RequestOptions;
 import com.cta4j.bus.api.core.util.ApiUtils;
 import com.cta4j.bus.api.BusApi;
 import com.cta4j.bus.api.detour.DetoursApi;
@@ -55,19 +54,16 @@ public final class BusApiImpl implements BusApi {
 
     public BusApiImpl(
         String host,
-        String apiKey,
-        RequestOptions defaultRequestOptions
+        String apiKey
     ) {
         Objects.requireNonNull(host);
         Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(defaultRequestOptions);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
         this.context = new BusApiContext(
             host,
             apiKey,
-            defaultRequestOptions,
             objectMapper
         );
         this.vehiclesApi = new VehiclesApiImpl(this.context);
@@ -191,13 +187,9 @@ public final class BusApiImpl implements BusApi {
         @Nullable
         private String host;
 
-        @Nullable
-        private RequestOptions defaultRequestOptions;
-
         public BuilderImpl(String apiKey) {
             this.apiKey = Objects.requireNonNull(apiKey);
             this.host = null;
-            this.defaultRequestOptions = null;
         }
 
         @Override
@@ -208,24 +200,13 @@ public final class BusApiImpl implements BusApi {
         }
 
         @Override
-        public Builder defaultRequestOptions(RequestOptions requestOptions) {
-            this.defaultRequestOptions = Objects.requireNonNull(requestOptions);
-
-            return this;
-        }
-
-        @Override
         public BusApi build() {
             String finalHost = Objects.requireNonNullElse(
                 this.host,
                 ApiUtils.DEFAULT_HOST
             );
-            RequestOptions finalRequestOptions = Objects.requireNonNullElse(
-                this.defaultRequestOptions,
-                new RequestOptions()
-            );
 
-            return new BusApiImpl(finalHost, this.apiKey, finalRequestOptions);
+            return new BusApiImpl(finalHost, this.apiKey);
         }
     }
 }
