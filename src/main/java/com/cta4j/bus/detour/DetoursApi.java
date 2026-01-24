@@ -16,7 +16,7 @@ public interface DetoursApi {
     /**
      * Retrieves all active detours.
      *
-     * @return a {@link List} of active {@link Detour} instances;
+     * @return a {@link List} of active {@link Detour}s;
      * an empty {@link List} if no detours are currently active
      */
     List<Detour> list();
@@ -25,7 +25,7 @@ public interface DetoursApi {
      * Retrieves all active detours for the specified route.
      *
      * @param routeId the route identifier
-     * @return a {@link List} of {@link Detour} instances associated with the route;
+     * @return a {@link List} of {@link Detour}s associated with the route;
      * an empty {@link List} if no detours exist for the route
      * @throws NullPointerException if {@code routeId} is {@code null}
      */
@@ -36,7 +36,7 @@ public interface DetoursApi {
      *
      * @param routeId   the route identifier
      * @param direction the travel direction (e.g. Northbound, Southbound)
-     * @return a {@link List} of {@link Detour} instances matching the route and direction;
+     * @return a {@link List} of {@link Detour}s matching the route and direction;
      * an empty {@link List} if no detours match
      * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
      */

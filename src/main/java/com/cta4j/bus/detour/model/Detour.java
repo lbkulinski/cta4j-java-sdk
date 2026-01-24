@@ -41,14 +41,14 @@ public record Detour(
     /**
      * Creates a {@code Detour}.
      *
-     * @param id the detour ID
-     * @param version the detour version
-     * @param active whether the detour is active
-     * @param description the detour description
-     * @param routeDirections the {@code List} of route directions affected by the detour
-     * @param startTime the detour start time
-     * @param endTime the detour end time
-     * @param dataFeed the data feed ID, or {@code null} if not available
+     * @param id the unique ID of the detour
+     * @param version the version of the detour
+     * @param active whether the detour is currently active
+     * @param description the human-readable description of the detour
+     * @param routeDirections the routes and directions affected by the detour
+     * @param startTime the time at which the detour begins
+     * @param endTime the time at which the detour ends
+     * @param dataFeed the identifier for the data feed that supplied the detour, or {@code null} if not available
      * @throws NullPointerException if {@code id}, {@code version}, {@code description}, {@code routeDirections},
      * {@code startTime}, or {@code endTime} is {@code null}
      */
