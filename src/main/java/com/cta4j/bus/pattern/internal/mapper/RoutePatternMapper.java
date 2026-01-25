@@ -15,8 +15,8 @@ import org.mapstruct.factory.Mappers;
 public interface RoutePatternMapper {
     RoutePatternMapper INSTANCE = Mappers.getMapper(RoutePatternMapper.class);
 
-    @Mapping(source = "pid", target = "patternId")
-    @Mapping(source = "ln", target = "patternCount")
+    @Mapping(source = "pid", target = "id")
+    @Mapping(source = "ln", target = "length")
     @Mapping(source = "rtdir", target = "direction")
     @Mapping(source = "pt", target = "points")
     @Mapping(source = "dtrid", target = "detourId")

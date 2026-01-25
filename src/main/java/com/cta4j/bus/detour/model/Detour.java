@@ -10,14 +10,14 @@ import java.util.Objects;
 /**
  * Represents a service detour affecting one or more routes and directions within a specific time window.
  *
- * @param id The unique ID of the detour
- * @param version The version of the detour
- * @param active Whether the detour is currently active
- * @param description The human-readable description of the detour
- * @param routeDirections The routes and directions affected by the detour
- * @param startTime The time at which the detour begins
- * @param endTime The time at which the detour ends
- * @param dataFeed The identifier for the data feed that supplied the detour, or {@code null} if not available
+ * @param id the unique ID of the detour
+ * @param version the version of the detour
+ * @param active whether the detour is currently active
+ * @param description the human-readable description of the detour
+ * @param routeDirections the routes and directions affected by the detour
+ * @param startTime the time at which the detour begins
+ * @param endTime the time at which the detour ends
+ * @param dataFeed the identifier for the data feed that supplied the detour, or {@code null} if not available
  */
 @NullMarked
 public record Detour(
