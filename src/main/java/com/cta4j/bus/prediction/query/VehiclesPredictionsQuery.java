@@ -6,6 +6,12 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a query for vehicle arrival predictions.
+ *
+ * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
+ * @param maxResults the optional maximum number of predictions to return
+ */
 @NullMarked
 public record VehiclesPredictionsQuery(
     List<String> vehicleIds,
@@ -13,6 +19,14 @@ public record VehiclesPredictionsQuery(
     @Nullable
     Integer maxResults
 ) {
+    /**
+     * Constructs a {@code VehiclesPredictionsQuery}.
+     *
+     * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
+     * @param maxResults the optional maximum number of predictions to return
+     * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
+     * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
+     */
     public VehiclesPredictionsQuery {
         Objects.requireNonNull(vehicleIds);
 
@@ -25,6 +39,13 @@ public record VehiclesPredictionsQuery(
         }
     }
 
+    /**
+     * Creates a builder for {@code VehiclesPredictionsQuery}.
+     *
+     * @param stopIds the {@code List} of stop IDs to retrieve predictions for
+     * @return a new {@code Builder} instance
+     * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
+     */
     public static Builder builder(List<String> stopIds) {
         Objects.requireNonNull(stopIds);
 
@@ -33,12 +54,27 @@ public record VehiclesPredictionsQuery(
         return new Builder(stopIds);
     }
 
+    /**
+     * Builder for {@code VehiclesPredictionsQuery}.
+     */
     public static final class Builder {
+        /**
+         * The {@code List} of vehicle IDs to retrieve predictions for.
+         */
         private final List<String> vehicleIds;
 
+        /**
+         * The optional maximum number of predictions to return.
+         */
         @Nullable
         private Integer maxResults;
 
+        /**
+         * Constructs a {@code Builder}.
+         *
+         * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
+         * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
+         */
         public Builder(List<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
 
@@ -47,6 +83,14 @@ public record VehiclesPredictionsQuery(
             this.vehicleIds = List.copyOf(vehicleIds);
         }
 
+        /**
+         * Sets the maximum number of predictions to return.
+         *
+         * @param maxResults the maximum number of predictions to return
+         * @return this {@code Builder} instance
+         * @throws NullPointerException if {@code maxResults} is {@code null}
+         * @throws IllegalArgumentException if {@code maxResults} is not positive
+         */
         public Builder maxResults(Integer maxResults) {
             Objects.requireNonNull(maxResults);
 
@@ -59,6 +103,11 @@ public record VehiclesPredictionsQuery(
             return this;
         }
 
+        /**
+         * Builds the {@code VehiclesPredictionsQuery}.
+         *
+         * @return the constructed {@code VehiclesPredictionsQuery}
+         */
         public VehiclesPredictionsQuery build() {
             return new VehiclesPredictionsQuery(
                 this.vehicleIds,
