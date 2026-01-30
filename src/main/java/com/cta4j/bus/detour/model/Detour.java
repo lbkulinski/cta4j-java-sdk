@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Represents a service detour affecting one or more routes and directions within a specific time window.
  *
- * @param id the unique ID of this detour
+ * @param id the unique identifier of this detour
  * @param version the version of this detour
  * @param active whether this detour is currently active
  * @param description the human-readable description of this detour
@@ -41,7 +41,7 @@ public record Detour(
     /**
      * Creates a {@code Detour}.
      *
-     * @param id the unique ID of the detour
+     * @param id the unique identifier of the detour
      * @param version the version of the detour
      * @param active whether the detour is currently active
      * @param description the human-readable description of the detour
