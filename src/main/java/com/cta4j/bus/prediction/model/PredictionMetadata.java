@@ -6,6 +6,22 @@ import org.jspecify.annotations.Nullable;
 import java.time.Instant;
 import java.util.Objects;
 
+/**
+ * Represents metadata associated with a bus arrival prediction.
+ *
+ * @param timestamp
+ * @param dynamicAction
+ * @param blockId
+ * @param tripId
+ * @param originalTripNumber
+ * @param zone
+ * @param passengerLoad
+ * @param gtfsSequence
+ * @param nextBus
+ * @param scheduledStartSeconds
+ * @param scheduledStartDate
+ * @param flagStop
+ */
 @NullMarked
 public record PredictionMetadata(
     Instant timestamp,
