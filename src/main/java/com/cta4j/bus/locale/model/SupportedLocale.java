@@ -18,7 +18,7 @@ public record SupportedLocale(
     String displayName
 ) {
     /**
-     * Creates a {@code SupportedLocale}.
+     * Constructs a {@code SupportedLocale}.
      *
      * @param locale the supported {@link Locale}
      * @param displayName the human-readable name of the locale

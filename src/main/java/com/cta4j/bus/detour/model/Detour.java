@@ -39,7 +39,7 @@ public record Detour(
     String dataFeed
 ) {
     /**
-     * Creates a {@code Detour}.
+     * Constructs a {@code Detour}.
      *
      * @param id the unique identifier of the detour
      * @param version the version of the detour

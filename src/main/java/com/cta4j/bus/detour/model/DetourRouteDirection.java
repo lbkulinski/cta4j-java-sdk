@@ -17,7 +17,7 @@ public record DetourRouteDirection(
     String direction
 ) {
     /**
-     * Creates a {@code DetourRouteDirection}.
+     * Constructs a {@code DetourRouteDirection}.
      *
      * @param routeId the route ID of the detour
      * @param direction the direction of the detour
