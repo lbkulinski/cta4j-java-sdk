@@ -10,6 +10,11 @@ import java.util.Objects;
 /**
  * Represents metadata associated with a bus arrival prediction.
  *
+ * <p>
+ *     <b>NOTE:</b> {@code gtfsSequence} and {@code nextBus} are not well-documented by the CTA. As such, their
+ *     presence here is primarily for completeness and may not be populated or described correctly.
+ * </p>
+ *
  * @param timestamp the date and time (UTC) this prediction was generated
  * @param dynamicAction the {@link DynamicAction} affecting this prediction
  * @param blockId the scheduled block identifier for the vehicle associated with this prediction
