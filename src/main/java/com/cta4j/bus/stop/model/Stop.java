@@ -7,6 +7,18 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Represents a bus stop.
+ *
+ * @param id the unique identifier of this stop
+ * @param name the name of this stop
+ * @param latitude
+ * @param longitude
+ * @param detoursAdded
+ * @param detoursRemoved
+ * @param gtfsSequence
+ * @param adaAccessible
+ */
 @NullMarked
 public record Stop(
     String id,
