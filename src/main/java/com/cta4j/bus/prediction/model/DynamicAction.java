@@ -116,4 +116,38 @@ public enum DynamicAction {
     public int getCode() {
         return this.code;
     }
+
+    /**
+     * Returns the {@code DynamicAction} corresponding to the given code.
+     *
+     * @param code the dynamic action code
+     * @return the corresponding {@code DynamicAction}
+     * @throws IllegalArgumentException if the code does not correspond to any known dynamic action
+     */
+    public static DynamicAction fromCode(int code) {
+        return switch (code) {
+            case 0 -> NONE;
+            case 1 -> CANCELLED;
+            case 2 -> REASSIGNED;
+            case 3 -> SHIFTED;
+            case 4 -> EXPRESSED;
+            case 6 -> STOPS_AFFECTED;
+            case 8 -> NEW_TRIP;
+            case 9 -> PARTIAL_TRIP;
+            case 10 -> PARTIAL_TRIP_NEW;
+            case 12 -> DELAYED_CANCEL;
+            case 13 -> ADDED_STOP;
+            case 14 -> UNKNOWN_DELAY;
+            case 15 -> UNKNOWN_DELAY_NEW;
+            case 16 -> INVALIDATED_TRIP;
+            case 17 -> INVALIDATED_TRIP_NEW;
+            case 18 -> CANCELLED_TRIP_NEW;
+            case 19 -> STOPS_AFFECTED_NEW;
+            default -> {
+                String message = String.format("Unknown dynamic action code: %d", code);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
+    }
 }

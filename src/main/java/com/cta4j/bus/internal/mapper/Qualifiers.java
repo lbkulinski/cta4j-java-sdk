@@ -56,15 +56,7 @@ public final class Qualifiers {
 
     @Named("mapDynamicAction")
     public static DynamicAction mapDynamicAction(int dyn) {
-        for (DynamicAction dynamicAction : DynamicAction.values()) {
-            if (dynamicAction.getCode() == dyn) {
-                return dynamicAction;
-            }
-        }
-
-        String message = String.format("Unknown dynamic action code: %d", dyn);
-
-        throw new IllegalArgumentException(message);
+        return DynamicAction.fromCode(dyn);
     }
 
     @Named("mapPassengerLoad")
@@ -86,28 +78,12 @@ public final class Qualifiers {
 
     @Named("mapFlagStop")
     public static FlagStop mapFlagStop(int flagstop) {
-        for (FlagStop flagStop : FlagStop.values()) {
-            if (flagStop.getCode() == flagstop) {
-                return flagStop;
-            }
-        }
-
-        String message = String.format("Unknown flag stop code: %d", flagstop);
-
-        throw new IllegalArgumentException(message);
+        return FlagStop.fromCode(flagstop);
     }
 
     @Named("mapTransitMode")
     public static TransitMode mapTransitMode(int mode) {
-        for (TransitMode transitMode : TransitMode.values()) {
-            if (transitMode.getCode() == mode) {
-                return transitMode;
-            }
-        }
-
-        String message = String.format("Unknown transit mode code: %d", mode);
-
-        throw new IllegalArgumentException(message);
+        return TransitMode.fromCode(mode);
     }
 
     @Named("mapActive")

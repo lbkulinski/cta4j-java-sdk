@@ -38,4 +38,25 @@ public enum FlagStop {
     public int getCode() {
         return this.code;
     }
+
+    /**
+     * Returns the {@code FlagStop} corresponding to the given code.
+     *
+     * @param code the flag-stop code
+     * @return the corresponding {@code FlagStop}
+     * @throws IllegalArgumentException if the code does not correspond to any known flag-stop
+     */
+    public static FlagStop fromCode(int code) {
+        return switch (code) {
+            case -1 -> UNDEFINED;
+            case 0 -> NORMAL;
+            case 1 -> PICKUP_AND_DISCHARGE;
+            case 2 -> ONLY_DISCHARGE;
+            default -> {
+                String message = String.format("Unknown flag stop code: %d", code);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
+    }
 }

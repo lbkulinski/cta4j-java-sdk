@@ -43,4 +43,26 @@ public enum TransitMode {
     public int getCode() {
         return this.code;
     }
+
+    /**
+     * Returns the {@code TransitMode} corresponding to the given code.
+     *
+     * @param code the transit mode code
+     * @return the corresponding {@code TransitMode}
+     * @throws IllegalArgumentException if the code does not correspond to any known transit mode
+     */
+    public static TransitMode fromCode(int code) {
+        return switch (code) {
+            case 0 -> NONE;
+            case 1 -> BUS;
+            case 2 -> FERRY;
+            case 3 -> RAIL;
+            case 4 -> PEOPLE_MOVER;
+            default -> {
+                String message = String.format("Unknown transit mode code: %d", code);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
+    }
 }
