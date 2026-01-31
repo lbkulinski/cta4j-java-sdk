@@ -18,7 +18,7 @@ public interface PatternsApi {
     /**
      * Retrieves route patterns by their pattern IDs.
      *
-     * @param patternIds a collection of route pattern IDs
+     * @param patternIds a {@link Collection} of route pattern IDs
      * @return a {@link List} of {@link RoutePattern}s corresponding to the provided IDs, or an empty {@link List} if
      * no patterns are found
      * @throws NullPointerException if {@code patternIds} is {@code null} or contains {@code null} elements
