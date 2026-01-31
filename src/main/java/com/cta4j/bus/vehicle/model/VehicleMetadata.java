@@ -47,7 +47,7 @@ public record VehicleMetadata(
     @Nullable
     Instant lastUpdated,
 
-    int patternId,
+    String patternId,
 
     int distanceToPatternPoint,
 
