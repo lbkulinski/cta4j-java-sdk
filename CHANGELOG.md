@@ -48,14 +48,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- A new type `UpcomingBusArrival` representing upcoming vehicle arrival information.
-- A new type `BusCoordinates` representing vehicle coordinates (latitude, longitude, heading).
-- An `arrivals` field of type `List<UpcomingBusArrival>` has been added to the `Bus` class to provide information about upcoming vehicle arrivals.
+- A new type `UpcomingBusArrival` representing upcoming bus arrival information.
+- A new type `BusCoordinates` representing bus coordinates (latitude, longitude, heading).
+- An `arrivals` field of type `List<UpcomingBusArrival>` has been added to the `Bus` class to provide information about upcoming bus arrivals.
 
 ### Changed
 
 - BREAKING CHANGE: Organized classes into packages by functionality:
-  - `com.cta4j.vehicle` for vehicle-related classes
+  - `com.cta4j.bus` for vehicle-related classes
   - `com.cta4j.train` for train-related classes
   - `com.cta4j.common` for shared/common classes
 - BREAKING CHANGE: Public concrete client classes replaced by interfaces with a fluent `Builder` API (e.g. `BusClient`, `TrainClient`)
@@ -136,7 +136,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `Vehicle` class and `getVehicle` method in `BusClient` class.
 - `parseString` method from `BusPredictionType` enum.
 - `fromExternal` method from `Detour` class.
-- `fromExternal` method from vehicle `Route` class.
+- `fromExternal` method from bus `Route` class.
 - `fromExternal` method from `Stop` class.
 - `fromExternal` method from `StopArrival` class.
 - `parseString` method from train `Route` enum.
