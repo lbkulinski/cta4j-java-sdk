@@ -7,6 +7,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] – 2026-01-31
+
+### Added
+
+- JSpecify nullability annotations (using `@NullMarked` / `@Nullable`) on public API types and methods for improved
+  nullability contracts.
+- `org.jspecify:jspecify:1.0.0` dependency to provide these annotations.
+- A new composed Bus API surface (`BusApi`) that exposes domain-specific sub-APIs (e.g. routes, stops, vehicles,
+  predictions, detours) instead of a flat client.
+- Dedicated API interfaces for each Bus domain (e.g. `RoutesApi`, `StopsApi`, `VehiclesApi`, `PredictionsApi`,
+  `DetoursApi`, etc.), improving discoverability and separation of concerns.
+- Clear separation between public domain models, internal wire models, and implementation details, enabling safer
+  evolution of the SDK.
+
+### Changed
+
+- Major refactor of the Bus API architecture, replacing the previous flat `BusClient`-style interface with a
+  hierarchical, capability-based API.
+- Method names across the Bus API were aligned to more consistent, domain-driven naming conventions.
+- Error-handling behavior for some Bus endpoints was standardized to better reflect CTA API semantics.
+- Package structure was reorganized to clearly distinguish public APIs, internal implementations, and wire / CTA
+  response models.
+- Public APIs are now explicitly null-annotated, tightening contracts and surfacing potential misuse at compile time.
+
+### Removed
+
+- Deprecated or legacy Bus client entry points that no longer fit the new API model.
+
+### Breaking Changes ⚠️
+
+- This release is not source-compatible with earlier versions.
+- Consumers must migrate from the previous Bus client interfaces to the new `BusApi` and its sub-APIs.
+- Method signatures, return types, and package names for Bus-related APIs have changed as part of the refactor.
+
 ## [3.0.4] - 2025-12-30
 
 ### Changed
@@ -146,7 +180,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.4...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.0...HEAD
+[4.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.4...v4.0.0
 [3.0.4]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.3...v3.0.4
 [3.0.3]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.2...v3.0.3
 [3.0.2]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v3.0.1...v3.0.2

@@ -1,13 +1,8 @@
 package com.cta4j.util;
 
 import com.cta4j.exception.Cta4jException;
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
-import org.apache.hc.core5.http.ClassicHttpResponse;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.ParseException;
-import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.client5.http.HttpResponseException;
+import org.apache.hc.client5.http.fluent.Request;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.io.IOException;
@@ -15,30 +10,8 @@ import java.net.URI;
 
 @ApiStatus.Internal
 public final class HttpUtils {
-    private static final CloseableHttpClient httpClient;
-
-    static {
-        httpClient = HttpClients.createDefault();
-    }
-
     private HttpUtils() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-    }
-
-    private static String handleResponse(URI uri, ClassicHttpResponse httpResponse) throws IOException, ParseException {
-        int status = httpResponse.getCode();
-
-        if (status >= 200 && status < 300) {
-            HttpEntity entity = httpResponse.getEntity();
-
-            return EntityUtils.toString(entity);
-        }
-
-        String path = uri.getPath();
-
-        String message = String.format("Request to %s failed with status code %d", path, status);
-
-        throw new Cta4jException(message);
     }
 
     public static String get(String url) {
@@ -52,12 +25,20 @@ public final class HttpUtils {
             throw new Cta4jException(message, e);
         }
 
-        HttpGet httpGet = new HttpGet(uri);
-
         String response;
 
         try {
-            response = httpClient.execute(httpGet, httpResponse -> HttpUtils.handleResponse(uri, httpResponse));
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (HttpResponseException e) {
+            String path = uri.getPath();
+            int statusCode = e.getStatusCode();
+
+            String message = String.format("Request to %s failed with status code %d", path, statusCode);
+
+            throw new Cta4jException(message, e);
         } catch (IOException e) {
             String path = uri.getPath();
 
