@@ -15,8 +15,8 @@ public interface DirectionsApi {
      * Retrieves the available travel directions for the specified route (e.g., Northbound, Southbound).
      *
      * @param routeId the route identifier
-     * @return a {@link List} of direction identifiers for the route;
-     * an empty {@link List} if the route has no associated directions
+     * @return a {@link List} of direction identifiers for the route, or an empty {@link List} if the route has no
+     * associated directions
      * @throws NullPointerException if {@code routeId} is {@code null}
      */
     List<String> findByRouteId(String routeId);

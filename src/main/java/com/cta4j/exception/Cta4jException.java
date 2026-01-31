@@ -5,7 +5,7 @@ package com.cta4j.exception;
  */
 public class Cta4jException extends RuntimeException {
     /**
-     * Constructs a new {@code Cta4jException} with the specified detail message.
+     * Constructs a {@code Cta4jException}.
      *
      * @param message the detail message
      */
@@ -14,7 +14,7 @@ public class Cta4jException extends RuntimeException {
     }
 
     /**
-     * Constructs a new {@code Cta4jException} with the specified detail message and cause.
+     * Constructs a {@code Cta4jException}.
      *
      * @param message the detail message
      * @param cause the cause of the exception

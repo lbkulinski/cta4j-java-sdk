@@ -16,8 +16,7 @@ public interface DetoursApi {
     /**
      * Retrieves all active detours.
      *
-     * @return a {@link List} of active {@link Detour}s;
-     * an empty {@link List} if no detours are currently active
+     * @return a {@link List} of active {@link Detour}s, or an empty {@link List} if no detours are currently active
      */
     List<Detour> list();
 
@@ -25,8 +24,8 @@ public interface DetoursApi {
      * Retrieves all active detours for the specified route ID.
      *
      * @param routeId the route ID
-     * @return a {@link List} of {@link Detour}s associated with the route ID;
-     * an empty {@link List} if no detours exist for the route ID
+     * @return a {@link List} of {@link Detour}s associated with the route ID, or an empty {@link List} if no detours
+     * exist for the route ID
      * @throws NullPointerException if {@code routeId} is {@code null}
      */
     List<Detour> findByRouteId(String routeId);
@@ -36,8 +35,8 @@ public interface DetoursApi {
      *
      * @param routeId the route ID
      * @param direction the travel direction (e.g. Northbound, Southbound)
-     * @return a {@link List} of {@link Detour}s associated with the route ID and direction;
-     * an empty {@link List} if no detours exist for the route ID and direction
+     * @return a {@link List} of {@link Detour}s associated with the route ID and direction, or an empty {@link List}
+     * if no detours exist for the route ID and direction
      * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
      */
     List<Detour> findByRouteIdAndDirection(String routeId, String direction);
