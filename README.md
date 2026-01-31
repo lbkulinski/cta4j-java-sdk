@@ -54,7 +54,7 @@ implementation("com.cta4j:cta4j-java-sdk:3.0.4")
 import com.cta4j.train.client.TrainClient;
 
 public final class Application {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         TrainClient trainClient = TrainClient.builder()
                                              .apiKey("TRAIN_API_KEY")
                                              .build();
@@ -79,21 +79,21 @@ public final class Application {
 }
 ```
 
-### Fetch upcoming vehicle arrivals for a stop
+### Fetch upcoming bus arrivals for a stop
 
 ```java
-import com.cta4j.vehicle.client.BusClient;
+import com.cta4j.bus.client.BusClient;
 
 public final class Application {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         BusClient busClient = BusClient.builder()
                                        .apiKey("BUS_API_KEY")
                                        .build();
 
-        busClient.findArrivalsByRouteIdAndStopId("22", "1828")
+        busClient.getStopArrivals("22", "1828")
                  .stream()
                  .map(arrival -> String.format(
-                     "%s-bound vehicle is arriving at %s in %d minutes",
+                     "%s-bound bus is arriving at %s in %d minutes",
                      arrival.destination(),
                      arrival.stopName(),
                      arrival.etaMinutes()
@@ -101,8 +101,8 @@ public final class Application {
                  .forEach(System.out::println);
 
         // Example output:
-        // Harrison-bound vehicle is arriving at Clark & Belmont in 1 minutes
-        // Harrison-bound vehicle is arriving at Clark & Belmont in 26 minutes
+        // Harrison-bound bus is arriving at Clark & Belmont in 1 minutes
+        // Harrison-bound bus is arriving at Clark & Belmont in 26 minutes
     }
 }
 ```

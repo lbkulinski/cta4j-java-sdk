@@ -88,7 +88,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
         if (vehicleIds.size() > MAX_VEHICLE_IDS_PER_REQUEST) {
             String message = String.format(
                 "A maximum of %d vehicle IDs can be requested at once, but %d were provided",
-                MAX_STOP_IDS_PER_REQUEST,
+                MAX_VEHICLE_IDS_PER_REQUEST,
                 vehicleIds.size()
             );
 

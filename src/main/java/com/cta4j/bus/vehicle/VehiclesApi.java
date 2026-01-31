@@ -45,7 +45,11 @@ public interface VehiclesApi {
         if (vehicles.isEmpty()) {
             return Optional.empty();
         } else if (vehicles.size() > 1) {
-            String message = String.format("Expected at most one bus for ID: %s, but found %d", id, vehicles.size());
+            String message = String.format(
+                "Expected at most one vehicle for ID: %s, but found %d",
+                id,
+                vehicles.size()
+            );
 
             throw new Cta4jException(message);
         }

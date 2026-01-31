@@ -55,7 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - BREAKING CHANGE: Organized classes into packages by functionality:
-  - `com.cta4j.bus` for vehicle-related classes
+  - `com.cta4j.bus` for bus-related classes
   - `com.cta4j.train` for train-related classes
   - `com.cta4j.common` for shared/common classes
 - BREAKING CHANGE: Public concrete client classes replaced by interfaces with a fluent `Builder` API (e.g. `BusClient`, `TrainClient`)
