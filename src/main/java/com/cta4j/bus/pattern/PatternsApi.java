@@ -1,6 +1,7 @@
 package com.cta4j.bus.pattern;
 
 import com.cta4j.bus.pattern.model.RoutePattern;
+import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
@@ -42,6 +43,10 @@ public interface PatternsApi {
 
         if (patterns.isEmpty()) {
             return Optional.empty();
+        } else if (patterns.size() > 1) {
+            String message = String.format("Multiple route patterns found for ID: %s", patternId);
+
+            throw new Cta4jException(message);
         }
 
         RoutePattern pattern = patterns.getFirst();
