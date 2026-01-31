@@ -118,10 +118,11 @@ public record VehicleMetadata(
      * @param scheduledStartSeconds the scheduled start time in seconds past midnight associated with the vehicle, if
      *                              applicable
      * @param scheduledStartDate the scheduled start date associated with the vehicle, if applicable
-     * @throws NullPointerException if {@code blockId}, {@code tripId}, {@code originalTripNumber}, {@code zone},
-     * {@code mode}, or {@code passengerLoad} is {@code null}
+     * @throws NullPointerException if {@code patternId}, {@code blockId}, {@code tripId}, {@code originalTripNumber},
+     * {@code zone}, {@code mode}, or {@code passengerLoad} is {@code null}
      */
     public VehicleMetadata {
+        Objects.requireNonNull(patternId);
         Objects.requireNonNull(blockId);
         Objects.requireNonNull(tripId);
         Objects.requireNonNull(originalTripNumber);
