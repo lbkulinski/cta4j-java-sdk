@@ -16,48 +16,41 @@ import com.cta4j.train.model.TrainCoordinates;
 import com.cta4j.train.model.Train;
 import com.cta4j.train.model.UpcomingTrainArrival;
 import com.cta4j.train.model.StationArrival;
-import com.cta4j.bus.internal.util.HttpUtils;
-import org.apache.hc.core5.net.URIBuilder;
-import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
+import com.cta4j.util.HttpUtils;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
+import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-@NullMarked
 @ApiStatus.Internal
-@SuppressWarnings("ConstantConditions")
 public final class TrainClientImpl implements TrainClient {
-    private static final String DEFAULT_HOST = "lapi.transitchicago.com";
-    private static final String ARRIVALS_ENDPOINT = "/api/1.0/ttarrivals.aspx";
-    private static final String FOLLOW_ENDPOINT = "/api/1.0/ttfollow.aspx";
-
     private final String host;
+
     private final String apiKey;
+
     private final ObjectMapper objectMapper;
 
+    private static final String DEFAULT_HOST = "lapi.transitchicago.com";
+
+    private static final String ARRIVALS_ENDPOINT = "/api/1.0/ttarrivals.aspx";
+
+    private static final String FOLLOW_ENDPOINT = "/api/1.0/ttfollow.aspx";
+
     private TrainClientImpl(String host, String apiKey) {
-        if (host == null) {
-            throw new IllegalArgumentException("host must not be null");
-        }
+        this.host = Objects.requireNonNull(host);
 
-        if (apiKey == null) {
-            throw new IllegalArgumentException("apiKey must not be null");
-        }
+        this.apiKey = Objects.requireNonNull(apiKey);
 
-        this.host = host;
-        this.apiKey = apiKey;
         this.objectMapper = new ObjectMapper();
     }
 
     @Override
     public List<StationArrival> getStationArrivals(String stationId) {
-        if (stationId == null) {
-            throw new IllegalArgumentException("stationId must not be null");
-        }
+        Objects.requireNonNull(stationId);
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -99,9 +92,7 @@ public final class TrainClientImpl implements TrainClient {
 
     @Override
     public Optional<Train> getTrain(String run) {
-        if (run == null) {
-            throw new IllegalArgumentException("run must not be null");
-        }
+        Objects.requireNonNull(run);
 
         String url = new URIBuilder()
             .setScheme("https")
@@ -159,35 +150,26 @@ public final class TrainClientImpl implements TrainClient {
     }
 
     public static final class BuilderImpl implements TrainClient.Builder {
-        @Nullable
         private String host;
 
-        @Nullable
         private String apiKey;
 
         public BuilderImpl() {
             this.host = null;
+
             this.apiKey = null;
         }
 
         @Override
         public Builder host(String host) {
-            if (host == null) {
-                throw new IllegalArgumentException("host must not be null");
-            }
-
-            this.host = host;
+            this.host = Objects.requireNonNull(host);
 
             return this;
         }
 
         @Override
         public Builder apiKey(String apiKey) {
-            if (apiKey == null) {
-                throw new IllegalArgumentException("apiKey must not be null");
-            }
-
-            this.apiKey = apiKey;
+            this.apiKey = Objects.requireNonNull(apiKey);
 
             return this;
         }

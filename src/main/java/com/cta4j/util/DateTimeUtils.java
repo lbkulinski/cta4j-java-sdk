@@ -1,4 +1,4 @@
-package com.cta4j.bus.internal.util;
+package com.cta4j.util;
 
 import org.jetbrains.annotations.ApiStatus;
 

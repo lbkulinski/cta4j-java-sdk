@@ -1,8 +1,5 @@
 package com.cta4j.train.model;
 
-import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
-
 import java.time.Duration;
 import java.time.Instant;
 
@@ -26,8 +23,6 @@ import java.time.Instant;
  * @param faulted whether there is a fault affecting the train
  * @param flags additional flags associated with the prediction
  */
-@NullMarked
-@SuppressWarnings("ConstantConditions")
 public record UpcomingTrainArrival(
     String stationId,
 
@@ -51,51 +46,16 @@ public record UpcomingTrainArrival(
 
     Instant arrivalTime,
 
-    boolean approaching,
+    Boolean approaching,
 
-    boolean scheduled,
+    Boolean scheduled,
 
-    boolean delayed,
+    Boolean delayed,
 
-    boolean faulted,
+    Boolean faulted,
 
-    @Nullable
     String flags
 ) {
-    public UpcomingTrainArrival {
-        if (stationId == null) {
-            throw new IllegalArgumentException("stationId must not be null");
-        }
-
-        if (stopId == null) {
-            throw new IllegalArgumentException("stopId must not be null");
-        }
-
-        if (stationName == null) {
-            throw new IllegalArgumentException("stationName must not be null");
-        }
-
-        if (stopDescription == null) {
-            throw new IllegalArgumentException("stopDescription must not be null");
-        }
-
-        if (run == null) {
-            throw new IllegalArgumentException("run must not be null");
-        }
-
-        if (route == null) {
-            throw new IllegalArgumentException("route must not be null");
-        }
-
-        if (predictionTime == null) {
-            throw new IllegalArgumentException("predictionTime must not be null");
-        }
-
-        if (arrivalTime == null) {
-            throw new IllegalArgumentException("arrivalTime must not be null");
-        }
-    }
-
     /**
      * Calculates the estimated time of arrival (ETA) in minutes from the prediction time to the arrival time. If the
      * arrival time is before the prediction time, it returns 0.

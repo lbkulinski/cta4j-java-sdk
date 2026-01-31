@@ -3,13 +3,14 @@ package com.cta4j.train.mapper;
 import com.cta4j.train.external.arrival.CtaArrivalsEta;
 import com.cta4j.train.model.Route;
 import com.cta4j.train.model.StationArrival;
-import com.cta4j.bus.internal.util.DateTimeUtils;
+import com.cta4j.util.DateTimeUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 @ApiStatus.Internal
 public final class StationArrivalMapper {
@@ -24,9 +25,7 @@ public final class StationArrivalMapper {
     }
 
     public static StationArrival fromExternal(CtaArrivalsEta eta) {
-        if (eta == null) {
-            throw new IllegalArgumentException("eta must not be null");
-        }
+        Objects.requireNonNull(eta);
 
         Route route = null;
 

@@ -1,4 +1,4 @@
-package com.cta4j.bus.internal.util;
+package com.cta4j.util;
 
 import com.cta4j.exception.Cta4jException;
 import org.apache.hc.client5.http.fluent.Request;

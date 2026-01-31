@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @ApiStatus.Internal
 public final class TrainCoordinatesMapper {
@@ -21,9 +22,7 @@ public final class TrainCoordinatesMapper {
     }
 
     public static TrainCoordinates fromExternal(CtaFollowPosition position) {
-        if (position == null) {
-            throw new IllegalArgumentException("position must not be null");
-        }
+        Objects.requireNonNull(position);
 
         BigDecimal latitude = null;
 

@@ -3,6 +3,8 @@ package com.cta4j.train.mapper;
 import com.cta4j.train.model.Route;
 import org.jetbrains.annotations.ApiStatus;
 
+import java.util.Objects;
+
 @ApiStatus.Internal
 public final class RouteMapper {
     private RouteMapper() {
@@ -10,9 +12,7 @@ public final class RouteMapper {
     }
 
     public static Route fromExternal(String string) {
-        if (string == null) {
-            throw new IllegalArgumentException("string must not be null");
-        }
+        Objects.requireNonNull(string);
 
         string = string.toUpperCase();
 

@@ -10,7 +10,7 @@ import com.cta4j.bus.locale.internal.wire.CtaLocale;
 import com.cta4j.bus.locale.internal.mapper.SupportedLocaleMapper;
 import com.cta4j.bus.locale.model.SupportedLocale;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.bus.internal.util.HttpUtils;
+import com.cta4j.util.HttpUtils;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
