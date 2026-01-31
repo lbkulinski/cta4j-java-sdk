@@ -1,6 +1,7 @@
 package com.cta4j.util;
 
 import com.cta4j.exception.Cta4jException;
+import org.apache.hc.client5.http.HttpResponseException;
 import org.apache.hc.client5.http.fluent.Request;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -31,6 +32,13 @@ public final class HttpUtils {
                               .execute()
                               .returnContent()
                               .asString();
+        } catch (HttpResponseException e) {
+            String path = uri.getPath();
+            int statusCode = e.getStatusCode();
+
+            String message = String.format("Request to %s failed with status code %d", path, statusCode);
+
+            throw new Cta4jException(message, e);
         } catch (IOException e) {
             String path = uri.getPath();
 

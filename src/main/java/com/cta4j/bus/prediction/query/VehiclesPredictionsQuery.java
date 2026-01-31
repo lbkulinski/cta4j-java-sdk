@@ -42,16 +42,16 @@ public record VehiclesPredictionsQuery(
     /**
      * Creates a builder for {@code VehiclesPredictionsQuery}.
      *
-     * @param stopIds the {@code List} of stop IDs to retrieve predictions for
+     * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
      * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
+     * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
      */
-    public static Builder builder(List<String> stopIds) {
-        Objects.requireNonNull(stopIds);
+    public static Builder builder(List<String> vehicleIds) {
+        Objects.requireNonNull(vehicleIds);
 
-        stopIds.forEach(Objects::requireNonNull);
+        vehicleIds.forEach(Objects::requireNonNull);
 
-        return new Builder(stopIds);
+        return new Builder(vehicleIds);
     }
 
     /**
