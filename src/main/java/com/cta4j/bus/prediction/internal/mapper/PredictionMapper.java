@@ -29,6 +29,7 @@ public interface PredictionMapper {
     @Mapping(source = "tablockid", target = "metadata.blockId")
     @Mapping(source = "tatripid", target = "metadata.tripId")
     @Mapping(source = "origtatripno", target = "metadata.originalTripNumber")
+    @Mapping(source = "prdctdn", target = "metadata.countdownLabel")
     @Mapping(source = "zone", target = "metadata.zone")
     @Mapping(source = "psgld", target = "metadata.passengerLoad", qualifiedByName = "mapPassengerLoad")
     @Mapping(source = "gtfsseq", target = "metadata.gtfsSequence")

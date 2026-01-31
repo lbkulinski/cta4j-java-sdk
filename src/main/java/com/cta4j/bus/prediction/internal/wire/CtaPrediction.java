@@ -44,6 +44,9 @@ public record CtaPrediction(
 
     String origtatripno,
 
+    @Nullable
+    String prdctdn,
+
     String zone,
 
     String psgld,

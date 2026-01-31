@@ -20,6 +20,7 @@ import java.util.Objects;
  * @param blockId the scheduled block identifier for the vehicle associated with this prediction
  * @param tripId the scheduled trip identifier for the vehicle associated with this prediction
  * @param originalTripNumber the trip identifier for the vehicle associated with this prediction
+ * @param countdownLabel the countdown label associated with this prediction (e.g., "10", "DUE")
  * @param zone the zone name for the vehicle associated with this prediction, otherwise blank
  * @param passengerLoad the {@link PassengerLoad} of the vehicle associated with this prediction
  * @param gtfsSequence the GTFS sequence number associated with this prediction, if applicable
@@ -40,6 +41,9 @@ public record PredictionMetadata(
     String tripId,
 
     String originalTripNumber,
+
+    @Nullable
+    String countdownLabel,
 
     String zone,
 
@@ -67,6 +71,7 @@ public record PredictionMetadata(
      * @param blockId the scheduled block identifier for the vehicle associated with the prediction
      * @param tripId the scheduled trip identifier for the vehicle associated with the prediction
      * @param originalTripNumber the trip identifier for the vehicle associated with the prediction
+     * @param countdownLabel the countdown label associated with this prediction (e.g., "10", "DUE")
      * @param zone the zone name for the vehicle associated with the prediction, otherwise blank
      * @param passengerLoad the {@link PassengerLoad} of the vehicle associated with the prediction
      * @param gtfsSequence the GTFS sequence number associated with the prediction, if applicable

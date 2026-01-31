@@ -12,9 +12,9 @@ import java.util.Objects;
  * Represents metadata associated with a vehicle.
  *
  * <p>
- *     <b>NOTE:</b> {@code stopStatus}, {@code timepointId}, {@code stopId}, {@code sequence}, {@code gtfsSequence},
- *     {@code serverTimestamp}, {@code speed}, and {@code block} are not well-documented by the CTA. As such, their
- *     presence here is primarily for completeness and may not be populated or described correctly.
+ *     <b>NOTE:</b> {@code dataFeed}, {@code stopStatus}, {@code timepointId}, {@code stopId}, {@code sequence},
+ *     {@code gtfsSequence}, {@code serverTimestamp}, {@code speed}, and {@code block} are not well-documented by the
+ *     CTA. As such, their presence here is primarily for completeness and may not be populated or described correctly.
  * </p>
  *
  * @param dataFeed the data feed from which this vehicle information was obtained, if applicable

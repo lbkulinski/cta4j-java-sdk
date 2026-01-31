@@ -10,6 +10,11 @@ import java.util.Objects;
 /**
  * Represents a bus stop.
  *
+ * <p>
+ *     <b>NOTE:</b> {@code gtfsSequence} is not well-documented by the CTA. As such, its presence here is primarily for
+ *     completeness and may not be populated or described correctly.
+ * </p>
+ *
  * @param id the unique identifier of this stop
  * @param name the display name of this stop (e.g. "Madison and Clark")
  * @param latitude the latitude coordinate of this stop

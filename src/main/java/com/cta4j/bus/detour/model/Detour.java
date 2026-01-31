@@ -10,6 +10,11 @@ import java.util.Objects;
 /**
  * Represents a service detour affecting one or more routes and directions within a specific time window.
  *
+ * <p>
+ *     <b>NOTE:</b> {@code dataFeed} is not well-documented by the CTA. As such, its presence here is primarily for
+ *     completeness and may not be populated or described correctly.
+ * </p>
+ *
  * @param id the unique identifier of this detour
  * @param version the version of this detour
  * @param active whether this detour is currently active
