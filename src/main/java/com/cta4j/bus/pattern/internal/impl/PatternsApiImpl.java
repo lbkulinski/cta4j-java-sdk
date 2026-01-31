@@ -37,6 +37,10 @@ public final class PatternsApiImpl implements PatternsApi {
     public List<RoutePattern> findByIds(Collection<String> patternIds) {
         Objects.requireNonNull(patternIds);
 
+        if (patternIds.isEmpty()) {
+            return List.of();
+        }
+
         patternIds.forEach(Objects::requireNonNull);
 
         if (patternIds.size() > MAX_PATTERN_IDS_PER_REQUEST) {

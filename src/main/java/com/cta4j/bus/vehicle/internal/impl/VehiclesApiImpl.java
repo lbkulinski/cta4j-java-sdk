@@ -36,11 +36,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
     public List<Vehicle> findByIds(Collection<String> ids) {
         Objects.requireNonNull(ids);
 
-        ids.forEach(Objects::requireNonNull);
-
         if (ids.isEmpty()) {
             return List.of();
         }
+
+        ids.forEach(Objects::requireNonNull);
 
         String idsString = String.join(",", ids);
 
@@ -61,11 +61,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
     public List<Vehicle> findByRouteIds(Collection<String> routeIds) {
         Objects.requireNonNull(routeIds);
 
-        routeIds.forEach(Objects::requireNonNull);
-
         if (routeIds.isEmpty()) {
             return List.of();
         }
+
+        routeIds.forEach(Objects::requireNonNull);
 
         String routeIdsString = String.join(",", routeIds);
 

@@ -55,6 +55,10 @@ public final class StopsApiImpl implements StopsApi {
     public List<Stop> findByIds(Collection<String> stopIds) {
         Objects.requireNonNull(stopIds);
 
+        if (stopIds.isEmpty()) {
+            return List.of();
+        }
+
         stopIds.forEach(Objects::requireNonNull);
 
         if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
