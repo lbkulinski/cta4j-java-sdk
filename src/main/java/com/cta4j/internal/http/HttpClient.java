@@ -1,16 +1,18 @@
-package com.cta4j.util;
+package com.cta4j.internal.http;
 
 import com.cta4j.exception.Cta4jException;
 import org.apache.hc.client5.http.HttpResponseException;
 import org.apache.hc.client5.http.fluent.Request;
 import org.jetbrains.annotations.ApiStatus;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.net.URI;
 
+@NullMarked
 @ApiStatus.Internal
-public final class HttpUtils {
-    private HttpUtils() {
+public final class HttpClient {
+    private HttpClient() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

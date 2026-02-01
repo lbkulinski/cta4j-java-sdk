@@ -1,10 +1,13 @@
 package com.cta4j.train.station.model;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.Objects;
 
 /**
  * Represents the four cardinal directions.
  */
+@NullMarked
 public enum CardinalDirection {
     /**
      * North direction.

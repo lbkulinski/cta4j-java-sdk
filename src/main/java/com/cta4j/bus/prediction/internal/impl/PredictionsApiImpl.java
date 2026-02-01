@@ -12,7 +12,7 @@ import com.cta4j.bus.internal.wire.CtaBustimeResponse;
 import com.cta4j.bus.internal.wire.CtaError;
 import com.cta4j.bus.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -122,7 +122,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
     }
 
     private List<Prediction> makeRequest(String url) {
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaPrediction>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaPrediction>> predictionsResponse;

@@ -8,7 +8,7 @@ import com.cta4j.bus.direction.internal.wire.CtaDirection;
 import com.cta4j.bus.internal.wire.CtaError;
 import com.cta4j.bus.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -42,7 +42,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaDirection>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaDirection>> directionsResponse;

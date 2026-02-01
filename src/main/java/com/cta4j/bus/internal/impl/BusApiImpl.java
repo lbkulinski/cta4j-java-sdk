@@ -24,7 +24,8 @@ import com.cta4j.bus.internal.wire.CtaError;
 import com.cta4j.bus.internal.wire.CtaResponse;
 import com.cta4j.bus.internal.mapper.Qualifiers;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.internal.http.HttpClient;
+import com.cta4j.internal.json.Cta4jObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -54,12 +55,12 @@ public final class BusApiImpl implements BusApi {
 
     public BusApiImpl(
         String host,
-        String apiKey
+        String apiKey,
+        ObjectMapper objectMapper
     ) {
         Objects.requireNonNull(host);
         Objects.requireNonNull(apiKey);
-
-        ObjectMapper objectMapper = new ObjectMapper();
+        Objects.requireNonNull(objectMapper);
 
         this.context = new BusApiContext(host, apiKey, objectMapper);
         this.vehiclesApi = new VehiclesApiImpl(this.context);
@@ -82,7 +83,7 @@ public final class BusApiImpl implements BusApi {
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<String>> typeReference = new TypeReference<>() {};
         CtaResponse<String> timeResponse;
@@ -198,8 +199,9 @@ public final class BusApiImpl implements BusApi {
         @Override
         public BusApi build() {
             String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
+            ObjectMapper objectMapper = Cta4jObjectMapper.instance();
 
-            return new BusApiImpl(finalHost, this.apiKey);
+            return new BusApiImpl(finalHost, this.apiKey, objectMapper);
         }
     }
 }
