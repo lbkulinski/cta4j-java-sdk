@@ -8,6 +8,7 @@ import org.jspecify.annotations.NullMarked;
 public final class ApiUtils {
     public static final String SCHEME = "https";
     public static final String DEFAULT_HOST = "lapi.transitchicago.com";
+    public static final String DEFAULT_STATIONS_URL = "https://data.cityofchicago.org/resource/8pix-ypme.json";
     public static final String API_PREFIX = "/api/1.0";
 
     private ApiUtils() {

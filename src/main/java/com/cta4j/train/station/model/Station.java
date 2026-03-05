@@ -11,8 +11,8 @@ import java.util.Objects;
  * @param stopId the unique stop identifier of this station
  * @param direction the {@link CardinalDirection} of this station
  * @param stopName the stop name of this station
- * @param stationName the name of this station
- * @param stationDescriptiveName the descriptive name of this station
+ * @param name the name of this station
+ * @param descriptiveName the descriptive name of this station
  * @param mapId the map identifier of this station
  * @param adaAccessible whether this station is ADA accessible
  * @param lines the {@code List} of {@link TrainLine}s that serve this station
@@ -26,9 +26,9 @@ public record Station(
 
     String stopName,
 
-    String stationName,
+    String name,
 
-    String stationDescriptiveName,
+    String descriptiveName,
 
     String mapId,
 
@@ -44,8 +44,8 @@ public record Station(
      * @param stopId the unique stop identifier of the station
      * @param direction the {@link CardinalDirection} of the station
      * @param stopName the stop name of the station
-     * @param stationName the name of the station
-     * @param stationDescriptiveName the descriptive name of the station
+     * @param name the name of the station
+     * @param descriptiveName the descriptive name of the station
      * @param mapId the map identifier of the station
      * @param adaAccessible whether the station is ADA accessible
      * @param lines the {@code List} of {@link TrainLine}s that serve the station
@@ -55,8 +55,8 @@ public record Station(
         Objects.requireNonNull(stopId);
         Objects.requireNonNull(direction);
         Objects.requireNonNull(stopName);
-        Objects.requireNonNull(stationName);
-        Objects.requireNonNull(stationDescriptiveName);
+        Objects.requireNonNull(name);
+        Objects.requireNonNull(descriptiveName);
         Objects.requireNonNull(mapId);
         Objects.requireNonNull(lines);
         Objects.requireNonNull(location);

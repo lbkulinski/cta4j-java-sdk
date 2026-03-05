@@ -11,12 +11,15 @@ import java.util.Objects;
 public record TrainApiContext(
     String host,
 
+    String stationsUrl,
+
     String apiKey,
 
     ObjectMapper objectMapper
 ) {
     public TrainApiContext {
         Objects.requireNonNull(host);
+        Objects.requireNonNull(stationsUrl);
         Objects.requireNonNull(apiKey);
         Objects.requireNonNull(objectMapper);
     }

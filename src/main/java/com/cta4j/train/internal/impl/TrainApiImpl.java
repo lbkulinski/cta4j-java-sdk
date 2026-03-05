@@ -21,6 +21,7 @@ public final class TrainApiImpl implements TrainApi {
 
     public TrainApiImpl(
         String host,
+        String stationsUrl,
         String apiKey,
         ObjectMapper objectMapper
     ) {
@@ -28,7 +29,7 @@ public final class TrainApiImpl implements TrainApi {
         Objects.requireNonNull(apiKey);
         Objects.requireNonNull(objectMapper);
 
-        this.context = new TrainApiContext(host, apiKey, objectMapper);
+        this.context = new TrainApiContext(host, stationsUrl, apiKey, objectMapper);
         this.stationsApi = new StationsApiImpl(this.context);
     }
 
@@ -43,9 +44,13 @@ public final class TrainApiImpl implements TrainApi {
         @Nullable
         private String host;
 
+        @Nullable
+        private String stationsUrl;
+
         public BuilderImpl(String apiKey) {
             this.apiKey = Objects.requireNonNull(apiKey);
             this.host = null;
+            this.stationsUrl = null;
         }
 
         @Override
@@ -56,11 +61,19 @@ public final class TrainApiImpl implements TrainApi {
         }
 
         @Override
+        public Builder stationsUrl(String stationsUrl) {
+            this.stationsUrl = Objects.requireNonNull(stationsUrl);
+
+            return this;
+        }
+
+        @Override
         public TrainApi build() {
             String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
+            String finalStationsUrl = Objects.requireNonNullElse(this.stationsUrl, ApiUtils.DEFAULT_STATIONS_URL);
             ObjectMapper objectMapper = Cta4jObjectMapper.instance();
 
-            return new TrainApiImpl(finalHost, this.apiKey, objectMapper);
+            return new TrainApiImpl(finalHost, finalStationsUrl, this.apiKey, objectMapper);
         }
     }
 }

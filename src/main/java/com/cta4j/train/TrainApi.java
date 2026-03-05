@@ -25,6 +25,16 @@ public interface TrainApi {
         Builder host(String host);
 
         /**
+         * Sets the URL to fetch station data from.
+         * <p>
+         * If not specified, the default URL for station data is used.
+         *
+         * @param stationsUrl the URL for station data
+         * @return this builder instance
+         */
+        Builder stationsUrl(String stationsUrl);
+
+        /**
          * Builds a configured {@link TrainApi} instance.
          *
          * @return a new {@link TrainApi}
