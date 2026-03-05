@@ -21,6 +21,8 @@ public interface StationMapper {
     @Mapping(target = "mapId", source = "mapId")
     @Mapping(target = "adaAccessible", source = "ada")
     @Mapping(target = "lines", source = ".", qualifiedByName = "mapTrainLines")
-    @Mapping(target = "location", source = "location", qualifiedByName = "mapLocation")
+    @Mapping(target = "location.latitude", source = "location.latitude")
+    @Mapping(target = "location.longitude", source = "location.longitude")
+    @Mapping(target = "location.humanAddress", source = "location.humanAddress", qualifiedByName = "mapHumanAddress")
     Station toDomain(CtaStation station);
 }

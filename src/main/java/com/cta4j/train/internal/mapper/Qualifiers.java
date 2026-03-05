@@ -1,18 +1,15 @@
 package com.cta4j.train.internal.mapper;
 
 import com.cta4j.internal.json.Cta4jObjectMapper;
-import com.cta4j.train.station.internal.wire.CtaLocation;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.CardinalDirection;
 import com.cta4j.train.station.model.HumanAddress;
-import com.cta4j.train.station.model.Location;
 import com.cta4j.train.station.model.TrainLine;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.mapstruct.Named;
 import tools.jackson.databind.ObjectMapper;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -78,25 +75,22 @@ public final class Qualifiers {
         return List.copyOf(lines);
     }
 
-    @Named("mapLocation")
-    public static Location mapLocation(CtaLocation location) {
-        Objects.requireNonNull(location);
+    @Named("mapHumanAddress")
+    public static HumanAddress mapHumanAddress(String humanAddress) {
+        Objects.requireNonNull(humanAddress);
 
         ObjectMapper objectMapper = Cta4jObjectMapper.instance();
 
-        BigDecimal latitude = new BigDecimal(location.latitude());
-        BigDecimal longitude = new BigDecimal(location.longitude());
-
-        HumanAddress humanAddress;
+        HumanAddress address;
 
         try {
-            humanAddress = objectMapper.readValue(location.humanAddress(), HumanAddress.class);
+            address = objectMapper.readValue(humanAddress, HumanAddress.class);
         } catch (Exception e) {
-            String message = String.format("Failed to parse human address: %s", location.humanAddress());
+            String message = String.format("Failed to parse human address: %s", humanAddress);
 
             throw new IllegalArgumentException(message, e);
         }
 
-        return new Location(latitude, longitude, humanAddress);
+        return address;
     }
 }
