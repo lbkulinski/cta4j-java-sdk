@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 public interface SupportedLocaleMapper {
     SupportedLocaleMapper INSTANCE = Mappers.getMapper(SupportedLocaleMapper.class);
 
-    @Mapping(source = "localestring", target = "locale", qualifiedByName = "mapLocale")
-    @Mapping(source = "displayname", target = "displayName")
+    @Mapping(target = "locale", source = "localestring", qualifiedByName = "mapLocale")
+    @Mapping(target = "displayName", source = "displayname")
     SupportedLocale toDomain(CtaLocale locale);
 }

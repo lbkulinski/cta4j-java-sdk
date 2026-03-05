@@ -15,20 +15,20 @@ import org.mapstruct.factory.Mappers;
 public interface RoutePatternMapper {
     RoutePatternMapper INSTANCE = Mappers.getMapper(RoutePatternMapper.class);
 
-    @Mapping(source = "pid", target = "id")
-    @Mapping(source = "ln", target = "length")
-    @Mapping(source = "rtdir", target = "direction")
-    @Mapping(source = "pt", target = "points")
-    @Mapping(source = "dtrid", target = "detourId")
-    @Mapping(source = "dtrpt", target = "detourPoints")
+    @Mapping(target = "id", source = "pid")
+    @Mapping(target = "length", source = "ln")
+    @Mapping(target = "direction", source = "rtdir")
+    @Mapping(target = "points", source = "pt")
+    @Mapping(target = "detourId", source = "dtrid")
+    @Mapping(target = "detourPoints", source = "dtrpt")
     RoutePattern toDomain(CtaPattern pattern);
 
-    @Mapping(source = "seq", target = "sequence")
-    @Mapping(source = "typ", target = "type", qualifiedByName = "mapPatternPointType")
-    @Mapping(source = "stpid", target = "stopId")
-    @Mapping(source = "stpnm", target = "stopName")
-    @Mapping(source = "pdist", target = "distanceToPatternPoint")
-    @Mapping(source = "lat", target = "latitude")
-    @Mapping(source = "lon", target = "longitude")
+    @Mapping(target = "sequence", source = "seq")
+    @Mapping(target = "type", source = "typ", qualifiedByName = "mapPatternPointType")
+    @Mapping(target = "stopId", source = "stpid")
+    @Mapping(target = "stopName", source = "stpnm")
+    @Mapping(target = "distanceToPatternPoint", source = "pdist")
+    @Mapping(target = "latitude", source = "lat")
+    @Mapping(target = "longitude", source = "lon")
     PatternPoint toDomain(CtaPoint point);
 }

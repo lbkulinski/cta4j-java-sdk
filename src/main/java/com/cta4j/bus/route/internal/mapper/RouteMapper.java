@@ -12,10 +12,10 @@ import org.mapstruct.factory.Mappers;
 public interface RouteMapper {
     RouteMapper INSTANCE = Mappers.getMapper(RouteMapper.class);
 
-    @Mapping(source = "rt", target = "id")
-    @Mapping(source = "rtnm", target = "name")
-    @Mapping(source = "rtclr", target = "color")
-    @Mapping(source = "rtdd", target = "designator")
-    @Mapping(source = "rtpidatafeed", target = "dataFeed")
+    @Mapping(target = "id", source = "rt")
+    @Mapping(target = "name", source = "rtnm")
+    @Mapping(target = "color", source = "rtclr")
+    @Mapping(target = "designator", source = "rtdd")
+    @Mapping(target = "dataFeed", source = "rtpidatafeed")
     Route toDomain(CtaRoute route);
 }

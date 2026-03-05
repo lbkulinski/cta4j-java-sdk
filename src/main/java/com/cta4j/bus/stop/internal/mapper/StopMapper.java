@@ -12,13 +12,13 @@ import org.mapstruct.factory.Mappers;
 public interface StopMapper {
     StopMapper INSTANCE = Mappers.getMapper(StopMapper.class);
 
-    @Mapping(source = "stpid", target = "id")
-    @Mapping(source = "stpnm", target = "name")
-    @Mapping(source = "lat", target = "latitude")
-    @Mapping(source = "lon", target = "longitude")
-    @Mapping(source = "dtradd", target = "detoursAdded")
-    @Mapping(source = "dtrrem", target = "detoursRemoved")
-    @Mapping(source = "gtfsseq", target = "gtfsSequence")
-    @Mapping(source = "ada", target = "adaAccessible")
+    @Mapping(target = "id", source = "stpid")
+    @Mapping(target = "name", source = "stpnm")
+    @Mapping(target = "latitude", source = "lat")
+    @Mapping(target = "longitude", source = "lon")
+    @Mapping(target = "detoursAdded", source = "dtradd")
+    @Mapping(target = "detoursRemoved", source = "dtrrem")
+    @Mapping(target = "gtfsSequence", source = "gtfsseq")
+    @Mapping(target = "adaAccessible", source = "ada")
     Stop toDomain(CtaStop stop);
 }
