@@ -30,8 +30,6 @@ public record VehiclesPredictionsQuery(
     public VehiclesPredictionsQuery {
         Objects.requireNonNull(vehicleIds);
 
-        vehicleIds.forEach(Objects::requireNonNull);
-
         vehicleIds = List.copyOf(vehicleIds);
 
         if ((maxResults != null) && (maxResults <= 0)) {
@@ -49,7 +47,7 @@ public record VehiclesPredictionsQuery(
     public static Builder builder(List<String> vehicleIds) {
         Objects.requireNonNull(vehicleIds);
 
-        vehicleIds.forEach(Objects::requireNonNull);
+        vehicleIds = List.copyOf(vehicleIds);
 
         return new Builder(vehicleIds);
     }
@@ -77,8 +75,6 @@ public record VehiclesPredictionsQuery(
          */
         public Builder(List<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
-
-            vehicleIds.forEach(Objects::requireNonNull);
 
             this.vehicleIds = List.copyOf(vehicleIds);
         }

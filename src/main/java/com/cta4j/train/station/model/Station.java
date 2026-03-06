@@ -62,8 +62,6 @@ public record Station(
         Objects.requireNonNull(lines);
         Objects.requireNonNull(location);
 
-        lines.forEach(Objects::requireNonNull);
-
         lines = List.copyOf(lines);
     }
 }

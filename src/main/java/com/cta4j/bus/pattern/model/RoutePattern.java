@@ -51,13 +51,9 @@ public record RoutePattern(
         Objects.requireNonNull(direction);
         Objects.requireNonNull(points);
 
-        points.forEach(Objects::requireNonNull);
-
         points = List.copyOf(points);
 
         if (detourPoints != null) {
-            detourPoints.forEach(Objects::requireNonNull);
-
             detourPoints = List.copyOf(detourPoints);
         }
     }

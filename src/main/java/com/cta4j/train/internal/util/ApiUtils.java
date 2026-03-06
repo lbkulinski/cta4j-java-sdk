@@ -19,7 +19,7 @@ public final class ApiUtils {
 //        Objects.requireNonNull(endpoint);
 //        Objects.requireNonNull(errors);
 //
-//        errors.forEach(Objects::requireNonNull);
+//        errors.forEach(can Objects::requireNonNull);
 //
 //        String message = errors.stream()
 //                               .map(CtaError::msg)

@@ -36,13 +36,9 @@ public record StopsPredictionsQuery(
     public StopsPredictionsQuery {
         Objects.requireNonNull(stopIds);
 
-        stopIds.forEach(Objects::requireNonNull);
-
         stopIds = List.copyOf(stopIds);
 
         if (routeIds != null) {
-            routeIds.forEach(Objects::requireNonNull);
-
             routeIds = List.copyOf(routeIds);
         }
 
@@ -60,8 +56,6 @@ public record StopsPredictionsQuery(
      */
     public static Builder builder(List<String> stopIds) {
         Objects.requireNonNull(stopIds);
-
-        stopIds.forEach(Objects::requireNonNull);
 
         stopIds = List.copyOf(stopIds);
 
@@ -98,8 +92,6 @@ public record StopsPredictionsQuery(
         public Builder(List<String> stopIds) {
             Objects.requireNonNull(stopIds);
 
-            stopIds.forEach(Objects::requireNonNull);
-
             this.stopIds = List.copyOf(stopIds);
         }
 
@@ -112,8 +104,6 @@ public record StopsPredictionsQuery(
          */
         public Builder routeIds(List<String> routeIds) {
             Objects.requireNonNull(routeIds);
-
-            routeIds.forEach(Objects::requireNonNull);
 
             this.routeIds = List.copyOf(routeIds);
 

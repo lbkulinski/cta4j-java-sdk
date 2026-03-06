@@ -30,13 +30,9 @@ public record CtaPattern(
         Objects.requireNonNull(rtdir);
         Objects.requireNonNull(pt);
 
-        pt.forEach(Objects::requireNonNull);
-
         pt = List.copyOf(pt);
 
         if (dtrpt != null) {
-            dtrpt.forEach(Objects::requireNonNull);
-
             dtrpt = List.copyOf(dtrpt);
         }
     }

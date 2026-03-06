@@ -37,14 +37,10 @@ public record CtaStop(
         Objects.requireNonNull(stpnm);
 
         if (dtradd != null) {
-            dtradd.forEach(Objects::requireNonNull);
-
             dtradd = List.copyOf(dtradd);
         }
 
         if (dtrrem != null) {
-            dtrrem.forEach(Objects::requireNonNull);
-
             dtrrem = List.copyOf(dtrrem);
         }
     }

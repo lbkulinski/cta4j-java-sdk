@@ -67,14 +67,10 @@ public record Stop(
         Objects.requireNonNull(longitude);
 
         if (detoursAdded != null) {
-            detoursAdded.forEach(Objects::requireNonNull);
-
             detoursAdded = List.copyOf(detoursAdded);
         }
 
         if (detoursRemoved != null) {
-            detoursRemoved.forEach(Objects::requireNonNull);
-
             detoursRemoved = List.copyOf(detoursRemoved);
         }
     }
