@@ -4,7 +4,7 @@ import com.cta4j.internal.json.Cta4jObjectMapper;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.CardinalDirection;
 import com.cta4j.train.station.model.HumanAddress;
-import com.cta4j.train.station.model.TrainLine;
+import com.cta4j.train.common.model.TrainLine;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.mapstruct.Named;

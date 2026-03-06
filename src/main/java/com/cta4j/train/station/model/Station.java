@@ -1,5 +1,6 @@
 package com.cta4j.train.station.model;
 
+import com.cta4j.train.common.model.TrainLine;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
