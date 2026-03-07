@@ -3,6 +3,7 @@ package com.cta4j.train.arrival;
 import com.cta4j.train.arrival.model.Arrival;
 import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * <p>
  * This API allows retrieval of arrival information by map ID or stop ID.
  */
+@NullMarked
 public interface ArrivalsApi {
     /**
      * Retrieves arrival information by map ID.
