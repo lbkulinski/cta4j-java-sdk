@@ -33,7 +33,7 @@ public final class LocalesApiImpl implements LocalesApi {
     }
 
     @Override
-    public List<SupportedLocale> getLocales() {
+    public List<SupportedLocale> list() {
         String uri = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
             .setHost(this.context.host())
@@ -46,7 +46,7 @@ public final class LocalesApiImpl implements LocalesApi {
     }
 
     @Override
-    public List<SupportedLocale> getLocales(Locale displayLocale) {
+    public List<SupportedLocale> list(Locale displayLocale) {
         Objects.requireNonNull(displayLocale);
 
         String languageTag = displayLocale.toLanguageTag();
@@ -64,7 +64,7 @@ public final class LocalesApiImpl implements LocalesApi {
     }
 
     @Override
-    public List<SupportedLocale> getLocalesInNativeLanguage() {
+    public List<SupportedLocale> listInNativeLanguage() {
         String uri = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
             .setHost(this.context.host())
