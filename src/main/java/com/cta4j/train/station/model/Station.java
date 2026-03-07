@@ -51,6 +51,9 @@ public record Station(
      * @param adaAccessible whether the station is ADA accessible
      * @param lines the {@code List} of {@link TrainLine}s that serve the station
      * @param location the {@link Location} of the station
+     * @throws NullPointerException if {@code stopId}, {@code direction}, {@code stopName}, {@code name},
+     * {@code descriptiveName}, {@code mapId}, {@code lines}, or {@code location} is {@code null}, or if any element of
+     * {@code lines} is {@code null}
      */
     public Station {
         Objects.requireNonNull(stopId);
