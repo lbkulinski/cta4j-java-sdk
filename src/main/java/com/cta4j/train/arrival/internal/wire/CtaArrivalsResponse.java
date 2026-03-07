@@ -19,12 +19,22 @@ public record CtaArrivalsResponse(
     @Nullable
     String errNm,
 
+    @Nullable
     List<CtaArrival> eta
 ) {
     public CtaArrivalsResponse {
         Objects.requireNonNull(tmst);
-        Objects.requireNonNull(eta);
 
-        eta = List.copyOf(eta);
+        if ((errCd != 0) && (errNm == null)) {
+            throw new IllegalArgumentException("errNm must be provided when errCd is non-zero");
+        }
+
+        if ((errCd == 0) && (errNm != null)) {
+            throw new IllegalArgumentException("errNm must be null when errCd is zero");
+        }
+
+        if (eta != null) {
+            eta = List.copyOf(eta);
+        }
     }
 }

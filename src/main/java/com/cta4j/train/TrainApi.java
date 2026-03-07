@@ -1,14 +1,35 @@
 package com.cta4j.train;
 
+import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.internal.impl.TrainApiImpl;
 import com.cta4j.train.station.StationsApi;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
+/**
+ * Primary entry point for interacting with the CTA Train Tracker API.
+ * <p>
+ * This interface provides grouped sub-APIs for stations and arrivals.
+ * <p>
+ * Instances of {@code TrainApi} are immutable and thread-safe once built.
+ * Use {@link #builder(String)} to construct a configured instance.
+ */
 @NullMarked
 public interface TrainApi {
+    /**
+     * Provides access to station-related endpoints.
+     *
+     * @return the {@link StationsApi}
+     */
     StationsApi stations();
+
+    /**
+     * Provides access to arrival-related endpoints.
+     *
+     * @return the {@link ArrivalsApi}
+     */
+    ArrivalsApi arrivals();
 
     /**
      * Builder for constructing {@link TrainApi} instances.

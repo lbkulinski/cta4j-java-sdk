@@ -1,6 +1,7 @@
 package com.cta4j.train.internal.mapper;
 
 import com.cta4j.internal.json.Cta4jObjectMapper;
+import com.cta4j.train.arrival.model.TrainDirection;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.CardinalDirection;
 import com.cta4j.train.station.model.HumanAddress;
@@ -101,6 +102,23 @@ public final class Qualifiers {
         return address;
     }
 
+    @Named("mapLine")
+    public static TrainLine mapLine(String line) {
+        Objects.requireNonNull(line);
+
+        return switch (line.toUpperCase()) {
+            case "RED" -> TrainLine.RED;
+            case "BLUE" -> TrainLine.BLUE;
+            case "BRN" -> TrainLine.BROWN;
+            case "G" -> TrainLine.GREEN;
+            case "ORG" -> TrainLine.ORANGE;
+            case "P" -> TrainLine.PURPLE;
+            case "PINK" -> TrainLine.PINK;
+            case "Y" -> TrainLine.YELLOW;
+            default -> throw new IllegalArgumentException("Invalid train line: %s".formatted(line));
+        };
+    }
+
     @Named("mapTimestamp")
     public static Instant mapTimestamp(String timestamp) {
         Objects.requireNonNull(timestamp);
@@ -119,6 +137,19 @@ public final class Qualifiers {
             case "1" -> true;
             default -> {
                 String message = String.format("Invalid boolean value: %s. Expected '0' or '1'.", value);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
+    }
+
+    @Named("map15ToTrainDirection")
+    public static TrainDirection map15ToTrainDirection(int direction) {
+        return switch (direction) {
+            case 1 -> TrainDirection.NORTHBOUND;
+            case 5 -> TrainDirection.SOUTHBOUND;
+            default -> {
+                String message = String.format("Invalid train direction value: %s. Expected 1 or 5", direction);
 
                 throw new IllegalArgumentException(message);
             }

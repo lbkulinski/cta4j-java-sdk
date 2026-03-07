@@ -44,11 +44,14 @@ public record CtaArrival(
     @Nullable
     String flags,
 
-    double lat,
+    @Nullable
+    Double lat,
 
-    double lon,
+    @Nullable
+    Double lon,
 
-    int heading
+    @Nullable
+    Integer heading
 ) {
     public CtaArrival {
         Objects.requireNonNull(staNm);

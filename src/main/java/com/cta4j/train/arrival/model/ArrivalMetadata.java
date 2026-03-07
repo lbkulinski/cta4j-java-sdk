@@ -1,7 +1,6 @@
 package com.cta4j.train.arrival.model;
 
 import com.cta4j.internal.geo.GeoConstants;
-import com.cta4j.train.station.model.CardinalDirection;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -22,13 +21,16 @@ import java.util.Objects;
 public record ArrivalMetadata(
     String runNumber,
 
-    CardinalDirection direction,
+    TrainDirection direction,
 
+    @Nullable
     BigDecimal latitude,
 
+    @Nullable
     BigDecimal longitude,
 
-    int heading,
+    @Nullable
+    Integer heading,
 
     @Nullable
     String flags
@@ -50,11 +52,10 @@ public record ArrivalMetadata(
     public ArrivalMetadata {
         Objects.requireNonNull(runNumber);
         Objects.requireNonNull(direction);
-        Objects.requireNonNull(latitude);
-        Objects.requireNonNull(longitude);
 
-        if ((latitude.compareTo(GeoConstants.MIN_LATITUDE) < 0) ||
-            (latitude.compareTo(GeoConstants.MAX_LATITUDE) > 0)) {
+        if ((latitude != null) &&
+            ((latitude.compareTo(GeoConstants.MIN_LATITUDE) < 0) ||
+                (latitude.compareTo(GeoConstants.MAX_LATITUDE) > 0))) {
             String message = String.format(
                 "latitude must be between %s and %s (inclusive)",
                 GeoConstants.MIN_LATITUDE,
@@ -64,8 +65,9 @@ public record ArrivalMetadata(
             throw new IllegalArgumentException(message);
         }
 
-        if ((longitude.compareTo(GeoConstants.MIN_LONGITUDE) < 0) ||
-            (longitude.compareTo(GeoConstants.MAX_LONGITUDE) > 0)) {
+        if ((longitude != null) &&
+            ((longitude.compareTo(GeoConstants.MIN_LONGITUDE) < 0) ||
+                (longitude.compareTo(GeoConstants.MAX_LONGITUDE) > 0))) {
             String message = String.format(
                 "longitude must be between %s and %s (inclusive)",
                 GeoConstants.MIN_LONGITUDE,
@@ -75,7 +77,9 @@ public record ArrivalMetadata(
             throw new IllegalArgumentException(message);
         }
 
-        if ((heading < GeoConstants.MIN_HEADING) || (heading > GeoConstants.MAX_HEADING)) {
+        if ((heading != null) &&
+            ((heading < GeoConstants.MIN_HEADING) ||
+                (heading > GeoConstants.MAX_HEADING))) {
             String message = String.format(
                 "heading must be between %d and %d (inclusive)",
                 GeoConstants.MIN_HEADING,

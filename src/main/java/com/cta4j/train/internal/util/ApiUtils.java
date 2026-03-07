@@ -1,7 +1,10 @@
 package com.cta4j.train.internal.util;
 
+import com.cta4j.train.internal.wire.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.Objects;
 
 @NullMarked
 @ApiStatus.Internal
@@ -15,17 +18,10 @@ public final class ApiUtils {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-//    public static String buildErrorMessage(String endpoint, List<CtaError> errors) {
-//        Objects.requireNonNull(endpoint);
-//        Objects.requireNonNull(errors);
-//
-//        errors.forEach(can Objects::requireNonNull);
-//
-//        String message = errors.stream()
-//                               .map(CtaError::msg)
-//                               .reduce("%s; %s"::formatted)
-//                               .orElse("Unknown error");
-//
-//        return String.format("Error response from %s: %s", endpoint, message);
-//    }
+    public static String buildErrorMessage(String endpoint, CtaError error) {
+        Objects.requireNonNull(endpoint);
+        Objects.requireNonNull(error);
+
+        return String.format("Error response from %s: [%d] %s", endpoint, error.code(), error.message());
+    }
 }

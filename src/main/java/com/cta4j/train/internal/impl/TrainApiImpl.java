@@ -2,6 +2,8 @@ package com.cta4j.train.internal.impl;
 
 import com.cta4j.internal.json.Cta4jObjectMapper;
 import com.cta4j.train.TrainApi;
+import com.cta4j.train.arrival.ArrivalsApi;
+import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
 import com.cta4j.train.internal.context.TrainApiContext;
 import com.cta4j.train.internal.util.ApiUtils;
 import com.cta4j.train.station.StationsApi;
@@ -16,8 +18,8 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 public final class TrainApiImpl implements TrainApi {
-    private final TrainApiContext context;
     private final StationsApi stationsApi;
+    private final ArrivalsApi arrivalsApi;
 
     public TrainApiImpl(
         String host,
@@ -29,13 +31,19 @@ public final class TrainApiImpl implements TrainApi {
         Objects.requireNonNull(apiKey);
         Objects.requireNonNull(objectMapper);
 
-        this.context = new TrainApiContext(host, stationsUrl, apiKey, objectMapper);
-        this.stationsApi = new StationsApiImpl(this.context);
+        TrainApiContext context = new TrainApiContext(host, stationsUrl, apiKey, objectMapper);
+        this.stationsApi = new StationsApiImpl(context);
+        this.arrivalsApi = new ArrivalsApiImpl(context);
     }
 
     @Override
     public StationsApi stations() {
         return this.stationsApi;
+    }
+
+    @Override
+    public ArrivalsApi arrivals() {
+        return this.arrivalsApi;
     }
 
     public static final class BuilderImpl implements TrainApi.Builder {
