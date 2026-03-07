@@ -10,6 +10,10 @@ import org.jspecify.annotations.NullMarked;
 import org.mapstruct.Named;
 import tools.jackson.databind.ObjectMapper;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +21,9 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 public final class Qualifiers {
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
+
     private Qualifiers() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
@@ -92,5 +99,29 @@ public final class Qualifiers {
         }
 
         return address;
+    }
+
+    @Named("mapTimestamp")
+    public static Instant mapTimestamp(String timestamp) {
+        Objects.requireNonNull(timestamp);
+
+        return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
+                            .atZone(CHICAGO_ZONE_ID)
+                            .toInstant();
+    }
+
+    @Named("map01ToBoolean")
+    public static boolean map01ToBoolean(String value) {
+        Objects.requireNonNull(value);
+
+        return switch (value) {
+            case "0" -> false;
+            case "1" -> true;
+            default -> {
+                String message = String.format("Invalid boolean value: %s. Expected '0' or '1'.", value);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
     }
 }

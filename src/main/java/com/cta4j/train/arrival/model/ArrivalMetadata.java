@@ -1,5 +1,6 @@
 package com.cta4j.train.arrival.model;
 
+import com.cta4j.internal.geo.GeoConstants;
 import com.cta4j.train.station.model.CardinalDirection;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -43,11 +44,45 @@ public record ArrivalMetadata(
      * @param flags the flags associated with the arrival, if applicable
      * @throws NullPointerException if {@code runNumber}, {@code direction}, {@code latitude}, or {@code longitude} is
      * {@code null}
+     * @throws IllegalArgumentException if {@code latitude} is not between -90 and 90 (inclusive), if {@code longitude}
+     * is not between -180 and 180 (inclusive), or if {@code heading} is not between 0 and 359 (inclusive)
      */
     public ArrivalMetadata {
         Objects.requireNonNull(runNumber);
         Objects.requireNonNull(direction);
         Objects.requireNonNull(latitude);
         Objects.requireNonNull(longitude);
+
+        if ((latitude.compareTo(GeoConstants.MIN_LATITUDE) < 0) ||
+            (latitude.compareTo(GeoConstants.MAX_LATITUDE) > 0)) {
+            String message = String.format(
+                "latitude must be between %s and %s (inclusive)",
+                GeoConstants.MIN_LATITUDE,
+                GeoConstants.MAX_LATITUDE
+            );
+
+            throw new IllegalArgumentException(message);
+        }
+
+        if ((longitude.compareTo(GeoConstants.MIN_LONGITUDE) < 0) ||
+            (longitude.compareTo(GeoConstants.MAX_LONGITUDE) > 0)) {
+            String message = String.format(
+                "longitude must be between %s and %s (inclusive)",
+                GeoConstants.MIN_LONGITUDE,
+                GeoConstants.MAX_LONGITUDE
+            );
+
+            throw new IllegalArgumentException(message);
+        }
+
+        if ((heading < GeoConstants.MIN_HEADING) || (heading > GeoConstants.MAX_HEADING)) {
+            String message = String.format(
+                "heading must be between %d and %d (inclusive)",
+                GeoConstants.MIN_HEADING,
+                GeoConstants.MAX_HEADING
+            );
+
+            throw new IllegalArgumentException(message);
+        }
     }
 }

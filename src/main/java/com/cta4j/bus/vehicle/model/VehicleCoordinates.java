@@ -1,5 +1,6 @@
 package com.cta4j.bus.vehicle.model;
 
+import com.cta4j.internal.geo.GeoConstants;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
@@ -21,30 +22,47 @@ public record VehicleCoordinates(
     int heading
 ) {
     /**
-     * The minimum valid heading.
-     */
-    private static final int MIN_HEADING = 0;
-
-    /**
-     * The maximum valid heading.
-     */
-    private static final int MAX_HEADING = 359;
-
-    /**
      * Constructs a {@code VehicleCoordinates}.
      *
      * @param latitude the latitude of the coordinates
      * @param longitude the longitude of the coordinates
      * @param heading the heading of the coordinates in degrees (0-359)
      * @throws NullPointerException if {@code latitude} or {@code longitude} is {@code null}
-     * @throws IllegalArgumentException if {@code heading} is not between 0 and 359 (inclusive)
+     * @throws IllegalArgumentException if {@code latitude} is not between -90 and 90 (inclusive), if {@code longitude}
+     * is not between -180 and 180 (inclusive), or if {@code heading} is not between 0 and 359 (inclusive)
      */
     public VehicleCoordinates {
         Objects.requireNonNull(latitude);
         Objects.requireNonNull(longitude);
 
-        if ((heading < MIN_HEADING) || (heading > MAX_HEADING)) {
-            String message = String.format("heading must be between %d and %d (inclusive)", MIN_HEADING, MAX_HEADING);
+        if ((latitude.compareTo(GeoConstants.MIN_LATITUDE) < 0) ||
+            (latitude.compareTo(GeoConstants.MAX_LATITUDE) > 0)) {
+            String message = String.format(
+                "latitude must be between %s and %s (inclusive)",
+                GeoConstants.MIN_LATITUDE,
+                GeoConstants.MAX_LATITUDE
+            );
+
+            throw new IllegalArgumentException(message);
+        }
+
+        if ((longitude.compareTo(GeoConstants.MIN_LONGITUDE) < 0) ||
+            (longitude.compareTo(GeoConstants.MAX_LONGITUDE) > 0)) {
+            String message = String.format(
+                "longitude must be between %s and %s (inclusive)",
+                GeoConstants.MIN_LONGITUDE,
+                GeoConstants.MAX_LONGITUDE
+            );
+
+            throw new IllegalArgumentException(message);
+        }
+
+        if ((heading < GeoConstants.MIN_HEADING) || (heading > GeoConstants.MAX_HEADING)) {
+            String message = String.format(
+                "heading must be between %d and %d (inclusive)",
+                GeoConstants.MIN_HEADING,
+                GeoConstants.MAX_HEADING
+            );
 
             throw new IllegalArgumentException(message);
         }
