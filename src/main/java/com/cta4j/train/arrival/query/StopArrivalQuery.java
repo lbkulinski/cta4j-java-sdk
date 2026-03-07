@@ -90,7 +90,7 @@ public record StopArrivalQuery(
          * @throws NullPointerException if {@code line} is {@code null}
          */
         public Builder line(TrainLine line) {
-            this.line = line;
+            this.line = Objects.requireNonNull(line);
 
             return this;
         }

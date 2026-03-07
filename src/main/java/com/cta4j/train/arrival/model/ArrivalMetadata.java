@@ -44,8 +44,7 @@ public record ArrivalMetadata(
      * @param longitude the longitude of the train associated with the arrival
      * @param heading the heading of the train associated with the arrival
      * @param flags the flags associated with the arrival, if applicable
-     * @throws NullPointerException if {@code runNumber}, {@code direction}, {@code latitude}, or {@code longitude} is
-     * {@code null}
+     * @throws NullPointerException if {@code runNumber} or {@code direction} is {@code null}
      * @throws IllegalArgumentException if {@code latitude} is not between -90 and 90 (inclusive), if {@code longitude}
      * is not between -180 and 180 (inclusive), or if {@code heading} is not between 0 and 359 (inclusive)
      */

@@ -73,13 +73,17 @@ public record Arrival(
      * @param delayed whether the train associated with the arrival is currently delayed
      * @param fault whether the train associated with the arrival is currently experiencing a fault
      * @param metadata the metadata associated with the arrival
-     * @throws NullPointerException if {@code stationName}, {@code stopDescription}, {@code line},
-     * {@code destinationName}, {@code predictionTime}, {@code arrivalTime}, or {@code metadata} is {@code null}
+     * @throws NullPointerException if {@code stationId}, {@code stationName}, {@code stopId}, {@code stopDescription},
+     * {@code line}, {@code destinationStationId}, {@code destinationName}, {@code predictionTime},
+     * {@code arrivalTime}, or {@code metadata} is {@code null}
      */
     public Arrival {
+        Objects.requireNonNull(stationId);
         Objects.requireNonNull(stationName);
+        Objects.requireNonNull(stopId);
         Objects.requireNonNull(stopDescription);
         Objects.requireNonNull(line);
+        Objects.requireNonNull(destinationStationId);
         Objects.requireNonNull(destinationName);
         Objects.requireNonNull(predictionTime);
         Objects.requireNonNull(arrivalTime);

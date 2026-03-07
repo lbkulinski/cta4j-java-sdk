@@ -129,14 +129,12 @@ public final class Qualifiers {
     }
 
     @Named("map01ToBoolean")
-    public static boolean map01ToBoolean(String value) {
-        Objects.requireNonNull(value);
-
+    public static boolean map01ToBoolean(int value) {
         return switch (value) {
-            case "0" -> false;
-            case "1" -> true;
+            case 0 -> false;
+            case 1 -> true;
             default -> {
-                String message = String.format("Invalid boolean value: %s. Expected '0' or '1'.", value);
+                String message = String.format("Invalid boolean value: %s. Expected 0 or 1", value);
 
                 throw new IllegalArgumentException(message);
             }

@@ -29,7 +29,7 @@ public record MapArrivalQuery(
      * @param mapId the ID of the map to retrieve arrival information for
      * @param line the optional train line to filter arrival information by
      * @param maxResults the optional maximum number of arrival information to return
-     * @throws NullPointerException if {@code stopId} is {@code null}
+     * @throws NullPointerException if {@code mapId} is {@code null}
      * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
      */
     public MapArrivalQuery {
@@ -76,7 +76,7 @@ public record MapArrivalQuery(
          * Constructs a {@code Builder}.
          *
          * @param mapId the ID of the map to retrieve arrival information for
-         * @throws NullPointerException if {@code stopId} is {@code null}
+         * @throws NullPointerException if {@code mapId} is {@code null}
          */
         public Builder(String mapId) {
             this.mapId = Objects.requireNonNull(mapId);
@@ -90,7 +90,7 @@ public record MapArrivalQuery(
          * @throws NullPointerException if {@code line} is {@code null}
          */
         public Builder line(TrainLine line) {
-            this.line = line;
+            this.line = Objects.requireNonNull(line);
 
             return this;
         }
