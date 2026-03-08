@@ -16,7 +16,7 @@ import java.util.Objects;
  * @param descriptiveName the descriptive name of this station
  * @param mapId the map identifier of this station
  * @param adaAccessible whether this station is ADA accessible
- * @param lines the {@code List} of {@link TrainLine}s that serve this station
+ * @param lines the {@link List} of {@link TrainLine}s that serve this station
  * @param location the {@link Location} of this station
  */
 @NullMarked
@@ -49,7 +49,7 @@ public record Station(
      * @param descriptiveName the descriptive name of the station
      * @param mapId the map identifier of the station
      * @param adaAccessible whether the station is ADA accessible
-     * @param lines the {@code List} of {@link TrainLine}s that serve the station
+     * @param lines the {@link List} of {@link TrainLine}s that serve the station
      * @param location the {@link Location} of the station
      * @throws NullPointerException if {@code stopId}, {@code direction}, {@code stopName}, {@code name},
      * {@code descriptiveName}, {@code mapId}, {@code lines}, or {@code location} is {@code null}, or if any element of

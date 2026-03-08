@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * Represents a query for vehicle arrival predictions.
  *
- * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
+ * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
  * @param maxResults the optional maximum number of predictions to return
  */
 @NullMarked
@@ -22,7 +22,7 @@ public record VehiclesPredictionsQuery(
     /**
      * Constructs a {@code VehiclesPredictionsQuery}.
      *
-     * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
+     * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @param maxResults the optional maximum number of predictions to return
      * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
      * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
@@ -40,7 +40,7 @@ public record VehiclesPredictionsQuery(
     /**
      * Creates a builder for {@code VehiclesPredictionsQuery}.
      *
-     * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
+     * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @return a new {@code Builder} instance
      * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
      */
@@ -57,7 +57,7 @@ public record VehiclesPredictionsQuery(
      */
     public static final class Builder {
         /**
-         * The {@code List} of vehicle IDs to retrieve predictions for.
+         * The {@link List} of vehicle IDs to retrieve predictions for.
          */
         private final List<String> vehicleIds;
 
@@ -70,7 +70,7 @@ public record VehiclesPredictionsQuery(
         /**
          * Constructs a {@code Builder}.
          *
-         * @param vehicleIds the {@code List} of vehicle IDs to retrieve predictions for
+         * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
          * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
          */
         public Builder(List<String> vehicleIds) {

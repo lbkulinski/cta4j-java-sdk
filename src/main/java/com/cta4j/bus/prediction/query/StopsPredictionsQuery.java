@@ -9,8 +9,8 @@ import java.util.Objects;
 /**
  * Represents a query for bus arrival predictions.
  *
- * @param stopIds the {@code List} of stop IDs to retrieve predictions for
- * @param routeIds the optional {@code List} of route IDs to filter predictions by
+ * @param stopIds the {@link List} of stop IDs to retrieve predictions for
+ * @param routeIds the optional {@link List} of route IDs to filter predictions by
  * @param maxResults the optional maximum number of predictions to return
  */
 @NullMarked
@@ -26,8 +26,8 @@ public record StopsPredictionsQuery(
     /**
      * Constructs a {@code StopsPredictionsQuery}.
      *
-     * @param stopIds the {@code List} of stop IDs to retrieve predictions for
-     * @param routeIds the optional {@code List} of route IDs to filter predictions by
+     * @param stopIds the {@link List} of stop IDs to retrieve predictions for
+     * @param routeIds the optional {@link List} of route IDs to filter predictions by
      * @param maxResults the optional maximum number of predictions to return
      * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}, or if any element of
      * {@code routeIds} is {@code null}
@@ -50,7 +50,7 @@ public record StopsPredictionsQuery(
     /**
      * Creates a builder for {@code StopsPredictionsQuery}.
      *
-     * @param stopIds the {@code List} of stop IDs to retrieve predictions for
+     * @param stopIds the {@link List} of stop IDs to retrieve predictions for
      * @return a new {@code Builder} instance
      * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
      */
@@ -67,12 +67,12 @@ public record StopsPredictionsQuery(
      */
     public static final class Builder {
         /**
-         * The {@code List} of stop IDs to retrieve predictions for.
+         * The {@link List} of stop IDs to retrieve predictions for.
          */
         private final List<String> stopIds;
 
         /**
-         * The optional {@code List} of route IDs to filter predictions by.
+         * The optional {@link List} of route IDs to filter predictions by.
          */
         @Nullable
         private List<String> routeIds;
@@ -86,7 +86,7 @@ public record StopsPredictionsQuery(
         /**
          * Constructs a {@code Builder}.
          *
-         * @param stopIds the {@code List} of stop IDs to retrieve predictions for
+         * @param stopIds the {@link List} of stop IDs to retrieve predictions for
          * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
          */
         public Builder(List<String> stopIds) {
@@ -96,9 +96,9 @@ public record StopsPredictionsQuery(
         }
 
         /**
-         * Sets the {@code List} of route IDs to filter predictions by.
+         * Sets the {@link List} of route IDs to filter predictions by.
          *
-         * @param routeIds the {@code List} of route IDs
+         * @param routeIds the {@link List} of route IDs
          * @return this {@code Builder} instance
          * @throws NullPointerException if {@code routeIds} or any of its elements are {@code null}
          */
