@@ -1,6 +1,6 @@
 package com.cta4j.bus.locale.internal.mapper;
 
-import com.cta4j.bus.internal.mapper.Qualifiers;
+import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.bus.locale.internal.wire.CtaLocale;
 import com.cta4j.bus.locale.model.SupportedLocale;
 import org.jetbrains.annotations.ApiStatus;

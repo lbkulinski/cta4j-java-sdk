@@ -1,4 +1,4 @@
-package com.cta4j.bus.internal.mapper;
+package com.cta4j.bus.common.internal.mapper;
 
 import com.cta4j.bus.prediction.model.DynamicAction;
 import com.cta4j.bus.prediction.model.FlagStop;

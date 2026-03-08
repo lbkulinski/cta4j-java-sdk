@@ -1,7 +1,7 @@
 package com.cta4j.bus.prediction.internal.mapper;
 
 import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
-import com.cta4j.bus.internal.mapper.Qualifiers;
+import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.bus.prediction.model.Prediction;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;

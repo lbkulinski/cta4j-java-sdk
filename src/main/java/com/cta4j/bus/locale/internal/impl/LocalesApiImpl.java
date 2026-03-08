@@ -1,10 +1,10 @@
 package com.cta4j.bus.locale.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.locale.LocalesApi;
 import com.cta4j.bus.locale.internal.wire.CtaLocale;
 import com.cta4j.bus.locale.internal.mapper.SupportedLocaleMapper;

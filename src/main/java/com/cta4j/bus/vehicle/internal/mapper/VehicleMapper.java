@@ -1,7 +1,7 @@
 package com.cta4j.bus.vehicle.internal.mapper;
 
 import com.cta4j.bus.vehicle.internal.wire.CtaVehicle;
-import com.cta4j.bus.internal.mapper.Qualifiers;
+import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.bus.vehicle.model.Vehicle;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;

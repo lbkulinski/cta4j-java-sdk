@@ -1,4 +1,4 @@
-package com.cta4j.bus.internal.wire;
+package com.cta4j.bus.common.internal.wire;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

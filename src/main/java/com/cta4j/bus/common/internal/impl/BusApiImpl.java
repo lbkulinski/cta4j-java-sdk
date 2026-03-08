@@ -1,7 +1,7 @@
-package com.cta4j.bus.internal.impl;
+package com.cta4j.bus.common.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.BusApi;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.detour.internal.impl.DetoursApiImpl;
@@ -19,10 +19,10 @@ import com.cta4j.bus.route.internal.impl.RoutesApiImpl;
 import com.cta4j.bus.stop.internal.impl.StopsApiImpl;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.impl.VehiclesApiImpl;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
-import com.cta4j.bus.internal.mapper.Qualifiers;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.common.internal.json.Cta4jObjectMapper;

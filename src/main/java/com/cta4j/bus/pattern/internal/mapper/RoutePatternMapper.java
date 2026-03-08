@@ -2,7 +2,7 @@ package com.cta4j.bus.pattern.internal.mapper;
 
 import com.cta4j.bus.pattern.internal.wire.CtaPattern;
 import com.cta4j.bus.pattern.internal.wire.CtaPoint;
-import com.cta4j.bus.internal.mapper.Qualifiers;
+import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.bus.pattern.model.PatternPoint;
 import com.cta4j.bus.pattern.model.RoutePattern;
 import org.jetbrains.annotations.ApiStatus;
