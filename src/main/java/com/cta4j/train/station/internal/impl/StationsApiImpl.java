@@ -9,6 +9,7 @@ import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.Station;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public final class StationsApiImpl implements StationsApi {
         try {
             stations = this.context.objectMapper()
                                    .readValue(response, typeReference);
-        } catch (Exception e) {
+        } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", this.context.stationsUrl());
 
             throw new Cta4jException(message, e);
