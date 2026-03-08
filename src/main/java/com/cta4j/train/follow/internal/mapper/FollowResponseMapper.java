@@ -3,7 +3,7 @@ package com.cta4j.train.follow.internal.mapper;
 import com.cta4j.train.common.internal.mapper.ArrivalMapper;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
-import com.cta4j.train.follow.model.FollowResponse;
+import com.cta4j.train.follow.model.Train;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,5 +16,5 @@ public interface FollowResponseMapper {
 
     @Mapping(target = "coordinates", source = "position", qualifiedByName = "mapCoordinates")
     @Mapping(target = "arrivals", source = "eta")
-    FollowResponse toDomain(CtaFollowResponse response);
+    Train toDomain(CtaFollowResponse response);
 }

@@ -15,7 +15,7 @@ import java.util.Objects;
  * @param arrivals the {@link List} of {@link Arrival}s for the train being followed
  */
 @NullMarked
-public record FollowResponse(
+public record Train(
     @Nullable
     Coordinates coordinates,
 
@@ -28,7 +28,7 @@ public record FollowResponse(
     * @param arrivals the {@link List} of {@link Arrival}s for the train being followed
     * @throws NullPointerException if {@code arrivals} is {@code null}
     */
-    public FollowResponse {
+    public Train {
         Objects.requireNonNull(arrivals);
 
         arrivals = List.copyOf(arrivals);
