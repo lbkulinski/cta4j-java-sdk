@@ -1,4 +1,4 @@
-package com.cta4j.train.arrival.internal.wire;
+package com.cta4j.train.follow.internal.wire;
 
 import com.cta4j.train.internal.wire.CtaArrival;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -12,7 +12,7 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CtaArrivalsResponse(
+public record CtaFollowResponse(
     String tmst,
 
     int errCd,
@@ -21,17 +21,14 @@ public record CtaArrivalsResponse(
     String errNm,
 
     @Nullable
+    CtaPosition position,
+
     List<CtaArrival> eta
 ) {
-    public CtaArrivalsResponse {
+    public CtaFollowResponse {
         Objects.requireNonNull(tmst);
+        Objects.requireNonNull(eta);
 
-        if ((errCd != 0) && (errNm == null)) {
-            throw new IllegalArgumentException("errNm must be provided when errCd is non-zero");
-        }
-
-        if (eta != null) {
-            eta = List.copyOf(eta);
-        }
+        eta = List.copyOf(eta);
     }
 }

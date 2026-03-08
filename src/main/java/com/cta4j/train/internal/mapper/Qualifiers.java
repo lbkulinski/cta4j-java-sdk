@@ -1,7 +1,7 @@
 package com.cta4j.train.internal.mapper;
 
 import com.cta4j.internal.json.Cta4jObjectMapper;
-import com.cta4j.train.arrival.model.TrainDirection;
+import com.cta4j.train.common.model.TrainDirection;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.CardinalDirection;
 import com.cta4j.train.station.model.HumanAddress;

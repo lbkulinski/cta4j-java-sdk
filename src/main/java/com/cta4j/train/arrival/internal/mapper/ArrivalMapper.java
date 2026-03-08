@@ -1,8 +1,8 @@
 package com.cta4j.train.arrival.internal.mapper;
 
-import com.cta4j.train.arrival.internal.wire.CtaArrival;
-import com.cta4j.train.arrival.model.Arrival;
+import com.cta4j.train.common.model.Arrival;
 import com.cta4j.train.internal.mapper.Qualifiers;
+import com.cta4j.train.internal.wire.CtaArrival;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -28,9 +28,9 @@ public interface ArrivalMapper {
     @Mapping(target = "fault", source = "isFlt", qualifiedByName = "map01ToBoolean")
     @Mapping(target = "metadata.runNumber", source = "rn")
     @Mapping(target = "metadata.direction", source = "trDr", qualifiedByName = "map15ToTrainDirection")
-    @Mapping(target = "metadata.latitude", source = "lat")
-    @Mapping(target = "metadata.longitude", source = "lon")
-    @Mapping(target = "metadata.heading", source = "heading")
+    @Mapping(target = "metadata.coordinates.latitude", source = "lat")
+    @Mapping(target = "metadata.coordinates.longitude", source = "lon")
+    @Mapping(target = "metadata.coordinates.heading", source = "heading")
     @Mapping(target = "metadata.flags", source = "flags")
     Arrival toDomain(CtaArrival arrival);
 }

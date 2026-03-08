@@ -1,4 +1,4 @@
-package com.cta4j.train.arrival.internal.wire;
+package com.cta4j.train.internal.wire;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jetbrains.annotations.ApiStatus;

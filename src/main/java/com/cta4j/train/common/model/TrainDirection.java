@@ -1,4 +1,4 @@
-package com.cta4j.train.arrival.model;
+package com.cta4j.train.common.model;
 
 /**
  * Represents the operational direction of a train.

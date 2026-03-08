@@ -1,4 +1,4 @@
-package com.cta4j.bus.vehicle.model;
+package com.cta4j.common.geo;
 
 import com.cta4j.internal.geo.GeoConstants;
 import org.jspecify.annotations.NullMarked;
@@ -7,14 +7,14 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * Represents the coordinates of a vehicle.
+ * Represents geographic coordinates.
  *
  * @param latitude the latitude of these coordinates
  * @param longitude the longitude of these coordinates
  * @param heading the heading of these coordinates in degrees (0-359)
  */
 @NullMarked
-public record VehicleCoordinates(
+public record Coordinates(
     BigDecimal latitude,
 
     BigDecimal longitude,
@@ -22,16 +22,16 @@ public record VehicleCoordinates(
     int heading
 ) {
     /**
-     * Constructs a {@code VehicleCoordinates}.
+     * Constructs a {@code Coordinates}.
      *
      * @param latitude the latitude of the coordinates
      * @param longitude the longitude of the coordinates
      * @param heading the heading of the coordinates in degrees (0-359)
      * @throws NullPointerException if {@code latitude} or {@code longitude} is {@code null}
-     * @throws IllegalArgumentException if {@code latitude} is not between -90 and 90 (inclusive), if {@code longitude}
-     * is not between -180 and 180 (inclusive), or if {@code heading} is not between 0 and 359 (inclusive)
+     * @throws IllegalArgumentException if {@code latitude} is not between -90 and 90 (inclusive), {@code longitude}
+     * is not between -180 and 180 (inclusive), or {@code heading} is not between 0 and 359 (inclusive)
      */
-    public VehicleCoordinates {
+    public Coordinates {
         Objects.requireNonNull(latitude);
         Objects.requireNonNull(longitude);
 

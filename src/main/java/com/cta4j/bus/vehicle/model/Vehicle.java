@@ -1,5 +1,6 @@
 package com.cta4j.bus.vehicle.model;
 
+import com.cta4j.common.geo.Coordinates;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
@@ -22,7 +23,7 @@ public record Vehicle(
 
     String destination,
 
-    VehicleCoordinates coordinates,
+    Coordinates coordinates,
 
     boolean delayed,
 
