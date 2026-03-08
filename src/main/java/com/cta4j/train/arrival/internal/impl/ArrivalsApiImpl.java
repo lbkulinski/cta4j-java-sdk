@@ -3,7 +3,7 @@ package com.cta4j.train.arrival.internal.impl;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.train.arrival.ArrivalsApi;
-import com.cta4j.train.arrival.internal.mapper.ArrivalMapper;
+import com.cta4j.train.common.internal.mapper.ArrivalMapper;
 import com.cta4j.train.arrival.internal.wire.CtaArrivalsResponse;
 import com.cta4j.train.common.model.Arrival;
 import com.cta4j.train.arrival.query.MapArrivalQuery;

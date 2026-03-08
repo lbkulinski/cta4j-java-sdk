@@ -1,7 +1,6 @@
-package com.cta4j.train.arrival.internal.mapper;
+package com.cta4j.train.common.internal.mapper;
 
 import com.cta4j.train.common.model.Arrival;
-import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;

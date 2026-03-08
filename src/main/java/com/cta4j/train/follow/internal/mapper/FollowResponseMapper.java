@@ -1,6 +1,6 @@
 package com.cta4j.train.follow.internal.mapper;
 
-import com.cta4j.train.arrival.internal.mapper.ArrivalMapper;
+import com.cta4j.train.common.internal.mapper.ArrivalMapper;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
 import com.cta4j.train.follow.model.FollowResponse;
