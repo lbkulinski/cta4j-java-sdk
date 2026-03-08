@@ -1,6 +1,6 @@
 package com.cta4j.train.station.internal.mapper;
 
-import com.cta4j.train.internal.mapper.Qualifiers;
+import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.Station;
 import org.jetbrains.annotations.ApiStatus;

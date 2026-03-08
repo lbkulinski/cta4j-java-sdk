@@ -10,7 +10,7 @@ import com.cta4j.bus.detour.internal.wire.CtaDetour;
 import com.cta4j.bus.detour.internal.mapper.DetourMapper;
 import com.cta4j.bus.detour.model.Detour;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.internal.http.HttpClient;
+import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

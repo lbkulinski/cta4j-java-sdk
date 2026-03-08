@@ -1,7 +1,8 @@
 package com.cta4j.train;
 
 import com.cta4j.train.arrival.ArrivalsApi;
-import com.cta4j.train.internal.impl.TrainApiImpl;
+import com.cta4j.train.follow.FollowApi;
+import com.cta4j.train.common.internal.impl.TrainApiImpl;
 import com.cta4j.train.station.StationsApi;
 import org.jspecify.annotations.NullMarked;
 
@@ -30,6 +31,13 @@ public interface TrainApi {
      * @return the {@link ArrivalsApi}
      */
     ArrivalsApi arrivals();
+
+    /**
+     * Provides access to train follow-related endpoints.
+     *
+     * @return the {@link FollowApi}
+     */
+    FollowApi follow();
 
     /**
      * Builder for constructing {@link TrainApi} instances.

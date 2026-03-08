@@ -1,6 +1,6 @@
-package com.cta4j.train.internal.util;
+package com.cta4j.train.common.internal.util;
 
-import com.cta4j.train.internal.wire.CtaError;
+import com.cta4j.train.common.internal.wire.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

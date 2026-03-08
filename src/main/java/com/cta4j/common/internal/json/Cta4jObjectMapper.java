@@ -1,4 +1,4 @@
-package com.cta4j.internal.json;
+package com.cta4j.common.internal.json;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

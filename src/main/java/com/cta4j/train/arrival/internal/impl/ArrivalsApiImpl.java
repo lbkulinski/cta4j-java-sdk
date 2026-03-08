@@ -1,7 +1,7 @@
 package com.cta4j.train.arrival.internal.impl;
 
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.internal.http.HttpClient;
+import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.arrival.internal.mapper.ArrivalMapper;
 import com.cta4j.train.arrival.internal.wire.CtaArrivalsResponse;
@@ -9,11 +9,11 @@ import com.cta4j.train.common.model.Arrival;
 import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
 import com.cta4j.train.common.model.TrainLine;
-import com.cta4j.train.internal.context.TrainApiContext;
-import com.cta4j.train.internal.util.ApiUtils;
-import com.cta4j.train.internal.wire.CtaArrival;
-import com.cta4j.train.internal.wire.CtaError;
-import com.cta4j.train.internal.wire.CtaResponse;
+import com.cta4j.train.common.internal.context.TrainApiContext;
+import com.cta4j.train.common.internal.util.ApiUtils;
+import com.cta4j.train.common.internal.wire.CtaArrival;
+import com.cta4j.train.common.internal.wire.CtaError;
+import com.cta4j.train.common.internal.wire.CtaResponse;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

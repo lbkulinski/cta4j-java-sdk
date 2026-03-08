@@ -1,4 +1,4 @@
-package com.cta4j.internal.geo;
+package com.cta4j.common.internal.geo;
 
 import org.jetbrains.annotations.ApiStatus;
 

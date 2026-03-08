@@ -1,6 +1,6 @@
 package com.cta4j.common.geo;
 
-import com.cta4j.internal.geo.GeoConstants;
+import com.cta4j.common.internal.geo.GeoConstants;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;

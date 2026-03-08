@@ -1,8 +1,8 @@
 package com.cta4j.train.station.internal.impl;
 
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.internal.http.HttpClient;
-import com.cta4j.train.internal.context.TrainApiContext;
+import com.cta4j.common.internal.http.HttpClient;
+import com.cta4j.train.common.internal.context.TrainApiContext;
 import com.cta4j.train.station.StationsApi;
 import com.cta4j.train.station.internal.mapper.StationMapper;
 import com.cta4j.train.station.internal.wire.CtaStation;

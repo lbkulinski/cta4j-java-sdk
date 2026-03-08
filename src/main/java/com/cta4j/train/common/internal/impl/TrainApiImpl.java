@@ -1,11 +1,13 @@
-package com.cta4j.train.internal.impl;
+package com.cta4j.train.common.internal.impl;
 
-import com.cta4j.internal.json.Cta4jObjectMapper;
+import com.cta4j.common.internal.json.Cta4jObjectMapper;
 import com.cta4j.train.TrainApi;
 import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
-import com.cta4j.train.internal.context.TrainApiContext;
-import com.cta4j.train.internal.util.ApiUtils;
+import com.cta4j.train.follow.FollowApi;
+import com.cta4j.train.follow.internal.impl.FollowApiImpl;
+import com.cta4j.train.common.internal.context.TrainApiContext;
+import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.station.StationsApi;
 import com.cta4j.train.station.internal.impl.StationsApiImpl;
 import org.jetbrains.annotations.ApiStatus;
@@ -20,6 +22,7 @@ import java.util.Objects;
 public final class TrainApiImpl implements TrainApi {
     private final StationsApi stationsApi;
     private final ArrivalsApi arrivalsApi;
+    private final FollowApi followApi;
 
     public TrainApiImpl(
         String host,
@@ -34,6 +37,7 @@ public final class TrainApiImpl implements TrainApi {
         TrainApiContext context = new TrainApiContext(host, stationsUrl, apiKey, objectMapper);
         this.stationsApi = new StationsApiImpl(context);
         this.arrivalsApi = new ArrivalsApiImpl(context);
+        this.followApi = new FollowApiImpl(context);
     }
 
     @Override
@@ -44,6 +48,11 @@ public final class TrainApiImpl implements TrainApi {
     @Override
     public ArrivalsApi arrivals() {
         return this.arrivalsApi;
+    }
+
+    @Override
+    public FollowApi follow() {
+        return this.followApi;
     }
 
     public static final class BuilderImpl implements TrainApi.Builder {

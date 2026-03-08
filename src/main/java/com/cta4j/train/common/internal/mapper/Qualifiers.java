@@ -1,16 +1,21 @@
-package com.cta4j.train.internal.mapper;
+package com.cta4j.train.common.internal.mapper;
 
-import com.cta4j.internal.json.Cta4jObjectMapper;
+import com.cta4j.common.geo.Coordinates;
+import com.cta4j.common.internal.json.Cta4jObjectMapper;
+import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
+import com.cta4j.train.follow.internal.wire.CtaPosition;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.CardinalDirection;
 import com.cta4j.train.station.model.HumanAddress;
 import com.cta4j.train.common.model.TrainLine;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
 import tools.jackson.databind.ObjectMapper;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -107,14 +112,14 @@ public final class Qualifiers {
         Objects.requireNonNull(line);
 
         return switch (line.toUpperCase()) {
-            case "RED" -> TrainLine.RED;
-            case "BLUE" -> TrainLine.BLUE;
-            case "BRN" -> TrainLine.BROWN;
-            case "G" -> TrainLine.GREEN;
-            case "ORG" -> TrainLine.ORANGE;
-            case "P" -> TrainLine.PURPLE;
-            case "PINK" -> TrainLine.PINK;
-            case "Y" -> TrainLine.YELLOW;
+            case "RED", "RED LINE" -> TrainLine.RED;
+            case "BLUE", "BLUE LINE" -> TrainLine.BLUE;
+            case "BRN", "BROWN LINE" -> TrainLine.BROWN;
+            case "G", "GREEN LINE" -> TrainLine.GREEN;
+            case "ORG", "ORANGE LINE" -> TrainLine.ORANGE;
+            case "P", "PURPLE LINE" -> TrainLine.PURPLE;
+            case "PINK", "PINK LINE" -> TrainLine.PINK;
+            case "Y", "YELLOW LINE" -> TrainLine.YELLOW;
             default -> throw new IllegalArgumentException("Invalid train line: %s".formatted(line));
         };
     }
@@ -152,5 +157,38 @@ public final class Qualifiers {
                 throw new IllegalArgumentException(message);
             }
         };
+    }
+
+    @Named("mapArrivalCoordinates")
+    public static @Nullable Coordinates mapArrivalCoordinates(CtaArrival arrival) {
+        Objects.requireNonNull(arrival);
+
+        return mapCoordinates(arrival.lat(), arrival.lon(), arrival.heading());
+    }
+
+    @Named("mapCoordinates")
+    public static @Nullable Coordinates mapCoordinates(CtaPosition position) {
+        Objects.requireNonNull(position);
+
+        return mapCoordinates(position.lat(), position.lon(), position.heading());
+    }
+
+    private static @Nullable Coordinates mapCoordinates(
+        @Nullable Double lat,
+        @Nullable Double lon,
+        @Nullable Integer heading
+    ) {
+        if (lat == null) {
+            return null;
+        } else if (lon == null) {
+            return null;
+        } else if (heading == null) {
+            return null;
+        }
+
+        BigDecimal latitude = BigDecimal.valueOf(lat);
+        BigDecimal longitude = BigDecimal.valueOf(lon);
+
+        return new Coordinates(latitude, longitude, heading);
     }
 }

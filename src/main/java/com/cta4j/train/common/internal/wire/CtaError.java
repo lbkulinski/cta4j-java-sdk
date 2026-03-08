@@ -1,4 +1,4 @@
-package com.cta4j.train.internal.wire;
+package com.cta4j.train.common.internal.wire;
 
 public record CtaError(int code, String message) {
     public CtaError {

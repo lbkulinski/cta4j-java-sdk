@@ -1,4 +1,4 @@
-package com.cta4j.internal.http;
+package com.cta4j.common.internal.http;
 
 import com.cta4j.exception.Cta4jException;
 import org.apache.hc.client5.http.HttpResponseException;
