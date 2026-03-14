@@ -8,6 +8,8 @@ import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.follow.internal.impl.FollowApiImpl;
 import com.cta4j.train.common.internal.context.TrainApiContext;
 import com.cta4j.train.common.internal.util.ApiUtils;
+import com.cta4j.train.location.LocationsApi;
+import com.cta4j.train.location.internal.impl.LocationsApiImpl;
 import com.cta4j.train.station.StationsApi;
 import com.cta4j.train.station.internal.impl.StationsApiImpl;
 import org.jetbrains.annotations.ApiStatus;
@@ -23,6 +25,7 @@ public final class TrainApiImpl implements TrainApi {
     private final StationsApi stationsApi;
     private final ArrivalsApi arrivalsApi;
     private final FollowApi followApi;
+    private final LocationsApi locationsApi;
 
     public TrainApiImpl(
         String host,
@@ -38,6 +41,7 @@ public final class TrainApiImpl implements TrainApi {
         this.stationsApi = new StationsApiImpl(context);
         this.arrivalsApi = new ArrivalsApiImpl(context);
         this.followApi = new FollowApiImpl(context);
+        this.locationsApi = new LocationsApiImpl(context);
     }
 
     @Override
@@ -53,6 +57,11 @@ public final class TrainApiImpl implements TrainApi {
     @Override
     public FollowApi follow() {
         return this.followApi;
+    }
+
+    @Override
+    public LocationsApi locations() {
+        return this.locationsApi;
     }
 
     public static final class BuilderImpl implements TrainApi.Builder {
