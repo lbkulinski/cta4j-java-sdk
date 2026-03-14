@@ -52,9 +52,10 @@ implementation("com.cta4j:cta4j-java-sdk:4.0.0")
 
 ```java
 import com.cta4j.train.TrainApi;
+import java.time.Duration;
 
 public final class Application {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         TrainApi trainApi = TrainApi.builder("TRAIN_API_KEY")
                                     .build();
 
@@ -84,9 +85,10 @@ public final class Application {
 
 ```java
 import com.cta4j.bus.BusApi;
+import java.time.Duration;
 
 public final class Application {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         BusApi busApi = BusApi.builder("BUS_API_KEY")
                               .build();
 

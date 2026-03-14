@@ -28,12 +28,14 @@ public final class LocationsApiImpl implements LocationsApi {
     private final TrainApiContext context;
 
     public LocationsApiImpl(TrainApiContext context) {
-        this.context = context;
+        this.context = Objects.requireNonNull(context);
     }
 
     @Override
     public List<TrainLocations> findByLines(List<TrainLine> lines) {
         Objects.requireNonNull(lines);
+
+        lines.forEach(Objects::requireNonNull);
 
         List<String> lineCodes = lines.stream()
                                       .map(TrainLine::getCode)

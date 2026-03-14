@@ -70,11 +70,12 @@ public record LocationTrain(
      * @param delayed whether the train is currently delayed
      * @param flags the flags associated with the train, if applicable
      * @param coordinates the current coordinates of the train
-     * @throws NullPointerException if {@code destinationStationId}, {@code destinationName}, {@code direction},
-     * {@code nextStationId}, {@code nextStopId}, {@code nextStationName}, {@code predictionTime},
-     * {@code arrivalTime}, or {@code coordinates} is {@code null}
+     * @throws NullPointerException if {@code run}, {@code destinationStationId}, {@code destinationName},
+     * {@code direction}, {@code nextStationId}, {@code nextStopId}, {@code nextStationName}, {@code predictionTime},
+     * {@code arrivalTime}, or {@code coordinates} are {@code null}
      */
     public LocationTrain {
+        Objects.requireNonNull(run);
         Objects.requireNonNull(destinationStationId);
         Objects.requireNonNull(destinationName);
         Objects.requireNonNull(direction);

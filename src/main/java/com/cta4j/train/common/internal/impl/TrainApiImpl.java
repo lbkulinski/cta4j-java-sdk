@@ -34,6 +34,7 @@ public final class TrainApiImpl implements TrainApi {
         ObjectMapper objectMapper
     ) {
         Objects.requireNonNull(host);
+        Objects.requireNonNull(stationsUrl);
         Objects.requireNonNull(apiKey);
         Objects.requireNonNull(objectMapper);
 

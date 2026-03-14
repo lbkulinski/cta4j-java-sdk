@@ -34,8 +34,6 @@ public record ArrivalMetadata(
      * @param coordinates the coordinates of the train associated with the arrival, if applicable
      * @param flags the flags associated with the arrival, if applicable
      * @throws NullPointerException if {@code runNumber} or {@code direction} is {@code null}
-     * @throws IllegalArgumentException if {@code latitude} is not between -90 and 90 (inclusive), if {@code longitude}
-     * is not between -180 and 180 (inclusive), or if {@code heading} is not between 0 and 359 (inclusive)
      */
     public ArrivalMetadata {
         Objects.requireNonNull(runNumber);

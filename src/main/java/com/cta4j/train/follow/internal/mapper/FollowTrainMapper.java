@@ -7,9 +7,10 @@ import com.cta4j.train.follow.model.FollowTrain;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
-@Mapper(uses = {Qualifiers.class, ArrivalMapper.class})
+@Mapper(uses = {Qualifiers.class, ArrivalMapper.class}, nullValueIterableMappingStrategy = NullValueMappingStrategy.RETURN_DEFAULT)
 @ApiStatus.Internal
 public interface FollowTrainMapper {
     FollowTrainMapper INSTANCE = Mappers.getMapper(FollowTrainMapper.class);
