@@ -74,7 +74,7 @@ public record VehiclesPredictionsQuery(
         public Builder(List<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
 
-            this.vehicleIds = vehicleIds;
+            this.vehicleIds = List.copyOf(vehicleIds);
         }
 
         /**

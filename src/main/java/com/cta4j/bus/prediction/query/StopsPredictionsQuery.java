@@ -90,7 +90,7 @@ public record StopsPredictionsQuery(
         public Builder(List<String> stopIds) {
             Objects.requireNonNull(stopIds);
 
-            this.stopIds = stopIds;
+            this.stopIds = List.copyOf(stopIds);
         }
 
         /**
@@ -103,7 +103,7 @@ public record StopsPredictionsQuery(
         public Builder routeIds(List<String> routeIds) {
             Objects.requireNonNull(routeIds);
 
-            this.routeIds = routeIds;
+            this.routeIds = List.copyOf(routeIds);
 
             return this;
         }

@@ -21,7 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Clear separation between public domain models, internal wire models, and implementation details, enabling safer
     evolution of the SDK.
 - A new composed Train API surface (`TrainApi`) that similarly organizes train-related functionality into
-domain-specific sub-APIs.
+  domain-specific sub-APIs.
   - Dedicated API interfaces for each Train domain (e.g. `StationsApi`, `ArrivalsApi`, `FollowApi`, etc.), improving
     discoverability and separation of concerns.
   - Clear separation between public domain models, internal wire models, and implementation details, enabling safer
