@@ -47,8 +47,6 @@ public record VehiclesPredictionsQuery(
     public static Builder builder(List<String> vehicleIds) {
         Objects.requireNonNull(vehicleIds);
 
-        vehicleIds = List.copyOf(vehicleIds);
-
         return new Builder(vehicleIds);
     }
 
@@ -76,7 +74,7 @@ public record VehiclesPredictionsQuery(
         public Builder(List<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
 
-            this.vehicleIds = List.copyOf(vehicleIds);
+            this.vehicleIds = vehicleIds;
         }
 
         /**

@@ -178,7 +178,7 @@ domain-specific sub-APIs.
 - `fromExternal` method from `StationArrival` enum.
 - `fromExternal` method from `TrainCoordinates` class.
 - `fromExternal` method from `UpcomingTrainArrival` enum.
-- `com.cta4j.common.internal.http` export from `module-info.java`.
+- `com.cta4j.util` export from `module-info.java`.
 
 ## 1.0.0 - 2025-10-10
 

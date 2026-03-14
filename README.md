@@ -86,6 +86,7 @@ public final class Application {
 ```java
 import com.cta4j.bus.BusApi;
 import java.time.Duration;
+import java.time.Instant;
 
 public final class Application {
     public static void main(String[] args) {
@@ -95,7 +96,7 @@ public final class Application {
         busApi.predictions()
               .findByRouteIdAndStopId("22", "1828")
               .forEach(prediction -> System.out.printf(
-                  "%s-bound bus is arriving at %s in %d minutes",
+                  "%s-bound bus is arriving at %s in %d minutes%n",
                   prediction.destination(),
                   prediction.stopName(),
                   Duration.between(Instant.now(), prediction.arrivalTime())
