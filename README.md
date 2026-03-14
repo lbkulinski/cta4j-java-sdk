@@ -35,13 +35,13 @@ After applying, you'll receive an API key by email. Keep it safe — you'll use 
 <dependency>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>3.0.4</version>
+    <version>4.0.0</version>
 </dependency>
 ```
 
 ### Gradle (Kotlin DSL)
 ```kotlin
-implementation("com.cta4j:cta4j-java-sdk:3.0.4")
+implementation("com.cta4j:cta4j-java-sdk:4.0.0")
 ```
 
 ---
@@ -51,30 +51,31 @@ implementation("com.cta4j:cta4j-java-sdk:3.0.4")
 ### Fetch upcoming train arrivals for a station
 
 ```java
-import com.cta4j.train.client.TrainClient;
+import com.cta4j.train.TrainApi;
 
 public final class Application {
-    public static void main(String[] args) {
-        TrainClient trainClient = TrainClient.builder()
-                                             .apiKey("TRAIN_API_KEY")
-                                             .build();
+    static void main(String[] args) {
+        TrainApi trainApi = TrainApi.builder("TRAIN_API_KEY")
+                                    .build();
 
-        trainClient.getStationArrivals("41320")
-                   .stream()
-                   .map(arrival -> String.format(
-                       "%s-bound %s Line train is arriving at %s in %d minutes",
-                       arrival.destinationName(),
-                       arrival.route(),
-                       arrival.stationName(),
-                       arrival.etaMinutes()
-                   ))
-                   .forEach(System.out::println);
+        trainApi.arrivals()
+                .findByMapId("41320")
+                .forEach(arrival -> System.out.printf(
+                    "%s-bound %s Line train is arriving at %s in %d minutes%n",
+                    arrival.destinationName(),
+                    arrival.line(),
+                    arrival.stationName(),
+                    Duration.between(arrival.predictionTime(), arrival.arrivalTime())
+                            .toMinutes()
+                ));
 
         // Example output:
-        // Howard-bound RED Line train is arriving at Belmont in 1 minutes
-        // 95th/Dan Ryan-bound RED Line train is arriving at Belmont in 2 minutes
-        // Kimball-bound BROWN Line train is arriving at Belmont in 4 minutes
-        // Loop-bound BROWN Line train is arriving at Belmont in 5 minutes
+        // Loop-bound BROWN Line train is arriving at Belmont in 2 minutes
+        // Howard-bound RED Line train is arriving at Belmont in 2 minutes
+        // Howard-bound RED Line train is arriving at Belmont in 4 minutes
+        // Kimball-bound BROWN Line train is arriving at Belmont in 9 minutes
+        // 95th/Dan Ryan-bound RED Line train is arriving at Belmont in 10 minutes
+        // ...
     }
 }
 ```
@@ -82,23 +83,22 @@ public final class Application {
 ### Fetch upcoming bus arrivals for a stop
 
 ```java
-import com.cta4j.bus.client.BusClient;
+import com.cta4j.bus.BusApi;
 
 public final class Application {
-    public static void main(String[] args) {
-        BusClient busClient = BusClient.builder()
-                                       .apiKey("BUS_API_KEY")
-                                       .build();
+    static void main(String[] args) {
+        BusApi busApi = BusApi.builder("BUS_API_KEY")
+                              .build();
 
-        busClient.getStopArrivals("22", "1828")
-                 .stream()
-                 .map(arrival -> String.format(
-                     "%s-bound bus is arriving at %s in %d minutes",
-                     arrival.destination(),
-                     arrival.stopName(),
-                     arrival.etaMinutes()
-                 ))
-                 .forEach(System.out::println);
+        busApi.predictions()
+              .findByRouteIdAndStopId("22", "1828")
+              .forEach(prediction -> System.out.printf(
+                  "%s-bound bus is arriving at %s in %d minutes",
+                  prediction.destination(),
+                  prediction.stopName(),
+                  Duration.between(Instant.now(), prediction.arrivalTime())
+                          .toMinutes()
+              ));
 
         // Example output:
         // Harrison-bound bus is arriving at Clark & Belmont in 1 minutes
@@ -120,7 +120,6 @@ public final class Application {
 ## 🛠️ Planned Improvements
 
 - Add test coverage
-- Improve error handling and logging
 - Add support for more API endpoints, like service alerts
 - Implement caching for frequently requested data
 - Add asynchronous request support
@@ -132,7 +131,7 @@ Have ideas? Feel free to open an issue or submit a PR!
 ## 🧾 License
 
 This project is licensed under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).  
-Copyright © 2025 Logan Bailey Kulinski.
+Copyright © 2026 Logan Bailey Kulinski.
 
 ---
 
