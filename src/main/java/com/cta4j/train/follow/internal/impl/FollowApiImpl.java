@@ -3,9 +3,9 @@ package com.cta4j.train.follow.internal.impl;
 import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.train.follow.FollowApi;
-import com.cta4j.train.follow.internal.mapper.TrainMapper;
+import com.cta4j.train.follow.internal.mapper.FollowTrainMapper;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
-import com.cta4j.train.follow.model.Train;
+import com.cta4j.train.follow.model.FollowTrain;
 import com.cta4j.train.common.internal.context.TrainApiContext;
 import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.wire.CtaError;
@@ -32,7 +32,7 @@ public final class FollowApiImpl implements FollowApi {
     }
 
     @Override
-    public Optional<Train> findByRun(String run) {
+    public Optional<FollowTrain> findByRun(String run) {
         Objects.requireNonNull(run);
 
         String url = new URIBuilder()
@@ -47,7 +47,7 @@ public final class FollowApiImpl implements FollowApi {
         return this.makeRequest(url);
     }
 
-    private Optional<Train> makeRequest(String url) {
+    private Optional<FollowTrain> makeRequest(String url) {
         String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<CtaFollowResponse>> typeReference = new TypeReference<>() {};
@@ -76,8 +76,8 @@ public final class FollowApiImpl implements FollowApi {
             throw new Cta4jException(message);
         }
 
-        Train train = TrainMapper.INSTANCE.toDomain(followResponse);
+        FollowTrain followTrain = FollowTrainMapper.INSTANCE.toDomain(followResponse);
 
-        return Optional.of(train);
+        return Optional.of(followTrain);
     }
 }
