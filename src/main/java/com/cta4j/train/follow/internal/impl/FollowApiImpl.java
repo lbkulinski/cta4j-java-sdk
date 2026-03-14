@@ -3,6 +3,7 @@ package com.cta4j.train.follow.internal.impl;
 import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.train.follow.FollowApi;
+import com.cta4j.train.follow.internal.mapper.TrainMapper;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
 import com.cta4j.train.follow.model.Train;
 import com.cta4j.train.common.internal.context.TrainApiContext;
@@ -22,6 +23,7 @@ import java.util.Optional;
 @ApiStatus.Internal
 public final class FollowApiImpl implements FollowApi {
     private static final String FOLLOW_ENDPOINT = String.format("%s/ttfollow.aspx", ApiUtils.API_PREFIX);
+    private static final int NOT_FOUND_ERROR_CODE = 501;
 
     private final TrainApiContext context;
 
@@ -62,6 +64,10 @@ public final class FollowApiImpl implements FollowApi {
 
         CtaFollowResponse followResponse = ctaResponse.ctatt();
 
+        if (followResponse.errCd() == NOT_FOUND_ERROR_CODE) {
+            return Optional.empty();
+        }
+
         if (followResponse.errCd() != 0) {
             CtaError error = new CtaError(followResponse.errCd(), followResponse.errNm());
 
@@ -70,8 +76,8 @@ public final class FollowApiImpl implements FollowApi {
             throw new Cta4jException(message);
         }
 
-        //return FollowResponseMapper.INSTANCE.toDomain(followResponse);
+        Train train = TrainMapper.INSTANCE.toDomain(followResponse);
 
-        return Optional.empty();
+        return Optional.of(train);
     }
 }

@@ -44,7 +44,9 @@ public interface VehiclesApi {
 
         if (vehicles.isEmpty()) {
             return Optional.empty();
-        } else if (vehicles.size() > 1) {
+        }
+
+        if (vehicles.size() > 1) {
             String message = String.format(
                 "Expected at most one vehicle for ID: %s, but found %d",
                 id,

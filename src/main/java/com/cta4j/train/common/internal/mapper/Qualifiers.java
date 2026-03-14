@@ -180,9 +180,13 @@ public final class Qualifiers {
     ) {
         if (lat == null) {
             return null;
-        } else if (lon == null) {
+        }
+
+        if (lon == null) {
             return null;
-        } else if (heading == null) {
+        }
+
+        if (heading == null) {
             return null;
         }
 

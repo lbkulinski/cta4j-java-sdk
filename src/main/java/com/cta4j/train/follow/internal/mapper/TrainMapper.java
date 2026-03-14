@@ -11,8 +11,8 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = {Qualifiers.class, ArrivalMapper.class})
 @ApiStatus.Internal
-public interface FollowResponseMapper {
-    FollowResponseMapper INSTANCE = Mappers.getMapper(FollowResponseMapper.class);
+public interface TrainMapper {
+    TrainMapper INSTANCE = Mappers.getMapper(TrainMapper.class);
 
     @Mapping(target = "coordinates", source = "position", qualifiedByName = "mapCoordinates")
     @Mapping(target = "arrivals", source = "eta")
