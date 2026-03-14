@@ -29,4 +29,9 @@ public record CtaBustimeResponse<T>(
     })
     T data
 ) {
+    public CtaBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
+    }
 }
