@@ -26,10 +26,6 @@ public record CtaArrivalsResponse(
     public CtaArrivalsResponse {
         Objects.requireNonNull(tmst);
 
-        if ((errCd != 0) && (errNm == null)) {
-            throw new IllegalArgumentException("errNm must be provided when errCd is non-zero");
-        }
-
         if (eta != null) {
             eta = List.copyOf(eta);
         }
