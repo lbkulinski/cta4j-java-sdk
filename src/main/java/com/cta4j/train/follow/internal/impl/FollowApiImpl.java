@@ -69,7 +69,9 @@ public final class FollowApiImpl implements FollowApi {
         }
 
         if (followResponse.errCd() != 0) {
-            CtaError error = new CtaError(followResponse.errCd(), followResponse.errNm());
+            String errorMessage = Objects.requireNonNullElse(followResponse.errNm(), "Unknown error");
+
+            CtaError error = new CtaError(followResponse.errCd(), errorMessage);
 
             String message = ApiUtils.buildErrorMessage(FOLLOW_ENDPOINT, error);
 
