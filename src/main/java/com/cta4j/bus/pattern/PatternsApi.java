@@ -43,7 +43,9 @@ public interface PatternsApi {
 
         if (patterns.isEmpty()) {
             return Optional.empty();
-        } else if (patterns.size() > 1) {
+        }
+
+        if (patterns.size() > 1) {
             String message = String.format("Multiple route patterns found for ID: %s", patternId);
 
             throw new Cta4jException(message);

@@ -19,8 +19,8 @@ import java.util.Objects;
  * @param name the display name of this stop (e.g. "Madison and Clark")
  * @param latitude the latitude coordinate of this stop
  * @param longitude the longitude coordinate of this stop
- * @param detoursAdded the {@code List} of detour IDs which temporarily add service to this stop
- * @param detoursRemoved the {@code List} of detour IDs which temporarily remove service from this stop
+ * @param detoursAdded the {@link List} of detour IDs which temporarily add service to this stop
+ * @param detoursRemoved the {@link List} of detour IDs which temporarily remove service from this stop
  * @param gtfsSequence the GTFS sequence number of this stop, if applicable
  * @param adaAccessible whether this stop is ADA accessible, if known
  */
@@ -53,8 +53,8 @@ public record Stop(
      * @param name the display name of the stop (e.g. "Madison and Clark")
      * @param latitude the latitude coordinate of the stop
      * @param longitude the longitude coordinate of the stop
-     * @param detoursAdded the {@code List} of detour IDs which temporarily add service to the stop
-     * @param detoursRemoved the {@code List} of detour IDs which temporarily remove service from the stop
+     * @param detoursAdded the {@link List} of detour IDs which temporarily add service to the stop
+     * @param detoursRemoved the {@link List} of detour IDs which temporarily remove service from the stop
      * @param gtfsSequence the GTFS sequence number of the stop, if applicable
      * @param adaAccessible whether the stop is ADA accessible, if known
      * @throws NullPointerException if {@code id}, {@code name}, {@code latitude}, or {@code longitude} is
@@ -67,14 +67,10 @@ public record Stop(
         Objects.requireNonNull(longitude);
 
         if (detoursAdded != null) {
-            detoursAdded.forEach(Objects::requireNonNull);
-
             detoursAdded = List.copyOf(detoursAdded);
         }
 
         if (detoursRemoved != null) {
-            detoursRemoved.forEach(Objects::requireNonNull);
-
             detoursRemoved = List.copyOf(detoursRemoved);
         }
     }

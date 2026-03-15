@@ -1,16 +1,16 @@
 package com.cta4j.bus.vehicle.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.wire.CtaVehicle;
 import com.cta4j.bus.vehicle.internal.mapper.VehicleMapper;
 import com.cta4j.bus.vehicle.model.Vehicle;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -83,7 +83,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     private List<Vehicle> makeRequest(String url) {
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaVehicle>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaVehicle>> vehicleResponse;

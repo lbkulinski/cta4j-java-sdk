@@ -19,7 +19,7 @@ public interface LocalesApi {
      * @return a {@link List} of {@link SupportedLocale}s, or an empty {@link List} if no supported locales are
      * available
      */
-    List<SupportedLocale> getLocales();
+    List<SupportedLocale> list();
 
     /**
      * Retrieves the supported locales, with names displayed in the specified locale.
@@ -28,7 +28,7 @@ public interface LocalesApi {
      * @return a {@link List} of {@link SupportedLocale}s with names in the specified locale, or an empty {@link List}
      * if no supported locales are available
      */
-    List<SupportedLocale> getLocales(Locale displayLocale);
+    List<SupportedLocale> list(Locale displayLocale);
 
     /**
      * Retrieves the supported locales, with names displayed in their native languages.
@@ -36,5 +36,5 @@ public interface LocalesApi {
      * @return a {@link List} of {@link SupportedLocale}s with names in their native languages, or an empty
      * {@link List} if no supported locales are available
      */
-    List<SupportedLocale> getLocalesInNativeLanguage();
+    List<SupportedLocale> listInNativeLanguage();
 }

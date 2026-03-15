@@ -2,7 +2,7 @@ package com.cta4j.bus.detour.internal.mapper;
 
 import com.cta4j.bus.detour.internal.wire.CtaDetour;
 import com.cta4j.bus.detour.internal.wire.CtaDetoursRouteDirection;
-import com.cta4j.bus.internal.mapper.Qualifiers;
+import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.bus.detour.model.Detour;
 import com.cta4j.bus.detour.model.DetourRouteDirection;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,16 +15,16 @@ import org.mapstruct.factory.Mappers;
 public interface DetourMapper {
     DetourMapper INSTANCE = Mappers.getMapper(DetourMapper.class);
 
-    @Mapping(source = "ver", target = "version")
-    @Mapping(source = "st", target = "active", qualifiedByName = "mapActive")
-    @Mapping(source = "desc", target = "description")
-    @Mapping(source = "rtdirs", target = "routeDirections")
-    @Mapping(source = "startdt", target = "startTime", qualifiedByName = "mapTimestamp")
-    @Mapping(source = "enddt", target = "endTime", qualifiedByName = "mapTimestamp")
-    @Mapping(source = "rtpidatafeed", target = "dataFeed")
+    @Mapping(target = "version", source = "ver")
+    @Mapping(target = "active", source = "st", qualifiedByName = "mapActive")
+    @Mapping(target = "description", source = "desc")
+    @Mapping(target = "routeDirections", source = "rtdirs")
+    @Mapping(target = "startTime", source = "startdt", qualifiedByName = "mapTimestamp")
+    @Mapping(target = "endTime", source = "enddt", qualifiedByName = "mapTimestamp")
+    @Mapping(target = "dataFeed", source = "rtpidatafeed")
     Detour toDomain(CtaDetour dto);
 
-    @Mapping(source = "rt", target = "routeId")
-    @Mapping(source = "dir", target = "direction")
+    @Mapping(target = "routeId", source = "rt")
+    @Mapping(target = "direction", source = "dir")
     DetourRouteDirection toDomain(CtaDetoursRouteDirection dto);
 }

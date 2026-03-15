@@ -65,8 +65,6 @@ public record Detour(
         Objects.requireNonNull(startTime);
         Objects.requireNonNull(endTime);
 
-        routeDirections.forEach(Objects::requireNonNull);
-
         routeDirections = List.copyOf(routeDirections);
     }
 }

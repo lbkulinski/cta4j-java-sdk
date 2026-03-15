@@ -1,16 +1,16 @@
 package com.cta4j.bus.detour.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.detour.internal.wire.CtaDetour;
 import com.cta4j.bus.detour.internal.mapper.DetourMapper;
 import com.cta4j.bus.detour.model.Detour;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -79,7 +79,7 @@ public final class DetoursApiImpl implements DetoursApi {
     }
 
     private List<Detour> makeRequest(String url) {
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaDetour>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaDetour>> detoursResponse;

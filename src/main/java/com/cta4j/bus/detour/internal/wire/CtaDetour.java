@@ -36,8 +36,6 @@ public record CtaDetour(
         Objects.requireNonNull(startdt);
         Objects.requireNonNull(enddt);
 
-        rtdirs.forEach(Objects::requireNonNull);
-
         rtdirs = List.copyOf(rtdirs);
     }
 }

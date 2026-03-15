@@ -1,16 +1,16 @@
 package com.cta4j.bus.locale.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.locale.LocalesApi;
 import com.cta4j.bus.locale.internal.wire.CtaLocale;
 import com.cta4j.bus.locale.internal.mapper.SupportedLocaleMapper;
 import com.cta4j.bus.locale.model.SupportedLocale;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -33,7 +33,7 @@ public final class LocalesApiImpl implements LocalesApi {
     }
 
     @Override
-    public List<SupportedLocale> getLocales() {
+    public List<SupportedLocale> list() {
         String uri = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
             .setHost(this.context.host())
@@ -46,7 +46,7 @@ public final class LocalesApiImpl implements LocalesApi {
     }
 
     @Override
-    public List<SupportedLocale> getLocales(Locale displayLocale) {
+    public List<SupportedLocale> list(Locale displayLocale) {
         Objects.requireNonNull(displayLocale);
 
         String languageTag = displayLocale.toLanguageTag();
@@ -64,7 +64,7 @@ public final class LocalesApiImpl implements LocalesApi {
     }
 
     @Override
-    public List<SupportedLocale> getLocalesInNativeLanguage() {
+    public List<SupportedLocale> listInNativeLanguage() {
         String uri = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
             .setHost(this.context.host())
@@ -78,7 +78,7 @@ public final class LocalesApiImpl implements LocalesApi {
     }
 
     private List<SupportedLocale> makeRequest(String url) {
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaLocale>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaLocale>> localeResponse;

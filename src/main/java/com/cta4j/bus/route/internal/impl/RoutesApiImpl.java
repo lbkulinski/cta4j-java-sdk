@@ -1,16 +1,16 @@
 package com.cta4j.bus.route.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.route.RoutesApi;
 import com.cta4j.bus.route.internal.wire.CtaRoute;
 import com.cta4j.bus.route.internal.mapper.RouteMapper;
 import com.cta4j.bus.route.model.Route;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -45,7 +45,7 @@ public final class RoutesApiImpl implements RoutesApi {
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaRoute>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaRoute>> routesResponse;

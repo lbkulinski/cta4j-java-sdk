@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [4.0.0] – 2026-01-31
+## [4.0.0] – 2026-03-15
 
 ### Added
 
@@ -16,30 +16,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `org.jspecify:jspecify:1.0.0` dependency to provide these annotations.
 - A new composed Bus API surface (`BusApi`) that exposes domain-specific sub-APIs (e.g. routes, stops, vehicles,
   predictions, detours) instead of a flat client.
-- Dedicated API interfaces for each Bus domain (e.g. `RoutesApi`, `StopsApi`, `VehiclesApi`, `PredictionsApi`,
-  `DetoursApi`, etc.), improving discoverability and separation of concerns.
-- Clear separation between public domain models, internal wire models, and implementation details, enabling safer
-  evolution of the SDK.
+  - Dedicated API interfaces for each Bus domain (e.g. `RoutesApi`, `StopsApi`, `VehiclesApi`, `PredictionsApi`,
+    `DetoursApi`, etc.), improving discoverability and separation of concerns.
+  - Clear separation between public domain models, internal wire models, and implementation details, enabling safer
+    evolution of the SDK.
+- A new composed Train API surface (`TrainApi`) that similarly organizes train-related functionality into
+  domain-specific sub-APIs.
+  - Dedicated API interfaces for each Train domain (e.g. `StationsApi`, `ArrivalsApi`, `FollowApi`, etc.), improving
+    discoverability and separation of concerns.
+  - Clear separation between public domain models, internal wire models, and implementation details, enabling safer
+    evolution of the SDK.
 
 ### Changed
 
-- Major refactor of the Bus API architecture, replacing the previous flat `BusClient`-style interface with a
-  hierarchical, capability-based API.
-- Method names across the Bus API were aligned to more consistent, domain-driven naming conventions.
-- Error-handling behavior for some Bus endpoints was standardized to better reflect CTA API semantics.
+- Major refactor of the Bus/Train API architecture, replacing the previous flat `Bus/TrainClient`-style interface with
+  a hierarchical, capability-based API.
+- Method names across the Bus/Train API were aligned to more consistent, domain-driven naming conventions.
+- Error-handling behavior for some Bus/Train endpoints was standardized to better reflect CTA API semantics.
 - Package structure was reorganized to clearly distinguish public APIs, internal implementations, and wire / CTA
   response models.
 - Public APIs are now explicitly null-annotated, tightening contracts and surfacing potential misuse at compile time.
+- Bumped `tools.jackson.core:jackson-databind` from **3.0.4** → **3.1.0**
+- Bumped `org.jetbrains:annotations` from **26.0.2-1** → **26.1.0**
 
 ### Removed
 
-- Deprecated or legacy Bus client entry points that no longer fit the new API model.
+- Deprecated or legacy Bus/Train client entry points that no longer fit the new API model.
 
 ### Breaking Changes ⚠️
 
 - This release is not source-compatible with earlier versions.
-- Consumers must migrate from the previous Bus client interfaces to the new `BusApi` and its sub-APIs.
-- Method signatures, return types, and package names for Bus-related APIs have changed as part of the refactor.
+- Consumers must migrate from the previous Bus/Train client interfaces to the new `BusApi`/`TrainApi` and its sub-APIs.
+- Method signatures, return types, and package names for Bus/Train-related APIs have changed as part of the refactor.
 
 ## [3.0.4] - 2025-12-30
 

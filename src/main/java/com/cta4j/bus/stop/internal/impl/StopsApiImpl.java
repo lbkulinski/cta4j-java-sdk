@@ -1,16 +1,16 @@
 package com.cta4j.bus.stop.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.stop.StopsApi;
 import com.cta4j.bus.stop.internal.wire.CtaStop;
 import com.cta4j.bus.stop.internal.mapper.StopMapper;
 import com.cta4j.bus.stop.model.Stop;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -86,7 +86,7 @@ public final class StopsApiImpl implements StopsApi {
     }
 
     private List<Stop> makeRequest(String url) {
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaStop>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaStop>> stopsResponse;

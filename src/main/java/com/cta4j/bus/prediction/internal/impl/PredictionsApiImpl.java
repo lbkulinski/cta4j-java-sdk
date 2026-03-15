@@ -1,18 +1,18 @@
 package com.cta4j.bus.prediction.internal.impl;
 
-import com.cta4j.bus.internal.context.BusApiContext;
-import com.cta4j.bus.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.prediction.PredictionsApi;
 import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
 import com.cta4j.bus.prediction.internal.mapper.PredictionMapper;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.bus.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.internal.wire.CtaError;
-import com.cta4j.bus.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.util.HttpUtils;
+import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -43,7 +43,9 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
         if (stopIds.isEmpty())  {
             return List.of();
-        } else if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
+        }
+
+        if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
             String message = String.format(
                 "A maximum of %d stop IDs can be requested at once, but %d were provided",
                 MAX_STOP_IDS_PER_REQUEST,
@@ -89,7 +91,9 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
         if (vehicleIds.isEmpty()) {
             return List.of();
-        } else if (vehicleIds.size() > MAX_VEHICLE_IDS_PER_REQUEST) {
+        }
+
+        if (vehicleIds.size() > MAX_VEHICLE_IDS_PER_REQUEST) {
             String message = String.format(
                 "A maximum of %d vehicle IDs can be requested at once, but %d were provided",
                 MAX_VEHICLE_IDS_PER_REQUEST,
@@ -122,7 +126,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
     }
 
     private List<Prediction> makeRequest(String url) {
-        String response = HttpUtils.get(url);
+        String response = HttpClient.get(url);
 
         TypeReference<CtaResponse<List<CtaPrediction>>> typeReference = new TypeReference<>() {};
         CtaResponse<List<CtaPrediction>> predictionsResponse;
