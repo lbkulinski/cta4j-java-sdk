@@ -35,13 +35,13 @@ After applying, you'll receive an API key by email. Keep it safe — you'll use 
 <dependency>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>4.0.0</version>
+    <version>4.0.1</version>
 </dependency>
 ```
 
 ### Gradle (Kotlin DSL)
 ```kotlin
-implementation("com.cta4j:cta4j-java-sdk:4.0.0")
+implementation("com.cta4j:cta4j-java-sdk:4.0.1")
 ```
 
 ---
@@ -143,7 +143,7 @@ Copyright © 2026 Logan Bailey Kulinski.
 - [Train Tracker API key request](https://www.transitchicago.com/developers/traintrackerapply/)
 - [Bus Tracker API key request](https://www.transitchicago.com/developers/bustracker/)
 - [CTA Developer Resources](https://www.transitchicago.com/developers/)
-- [Project Website](https://cta4j.app)
+- [Project Website](https://cta4j.com)
 
 ---
 
