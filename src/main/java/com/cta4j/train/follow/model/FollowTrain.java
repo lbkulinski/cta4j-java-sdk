@@ -28,7 +28,7 @@ public record FollowTrain(
      * @param arrivals the {@link List} of {@link Arrival}s for the train being followed
      * @throws NullPointerException if {@code arrivals} is {@code null}, or if {@code arrivals} contains {@code null}
      * elements
-     * */
+     */
     public FollowTrain {
         Objects.requireNonNull(arrivals);
 

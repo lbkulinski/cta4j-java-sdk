@@ -1,5 +1,7 @@
 package com.cta4j.train.common.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the operational direction of a train.
  *
@@ -8,6 +10,7 @@ package com.cta4j.train.common.model;
  * train at its current location. It loosely translates to a northbound or southbound direction, though this may not be
  * intuitive for all lines.
  */
+@NullMarked
 public enum TrainDirection {
     /**
      * Indicates a northbound operational direction (CTA direction code 1).

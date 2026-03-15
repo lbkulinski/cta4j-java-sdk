@@ -12,7 +12,8 @@ import java.util.Objects;
 /**
  * Primary entry point for interacting with the CTA Train Tracker API.
  * <p>
- * This interface provides grouped sub-APIs for stations and arrivals.
+ * This interface provides grouped sub-APIs for different aspects of the Train Tracker API, such as stations, arrivals,
+ * train following, and locations.
  * <p>
  * Instances of {@code TrainApi} are immutable and thread-safe once built.
  * Use {@link #builder(String)} to construct a configured instance.
