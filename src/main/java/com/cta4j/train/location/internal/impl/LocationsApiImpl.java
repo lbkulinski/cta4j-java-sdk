@@ -77,9 +77,7 @@ public final class LocationsApiImpl implements LocationsApi {
         CtaLocationResponse locationResponse = ctaResponse.ctatt();
 
         if (locationResponse.errCd() != 0) {
-            String errorMessage = Objects.requireNonNullElse(locationResponse.errNm(), "Unknown error");
-
-            CtaError error = new CtaError(locationResponse.errCd(), errorMessage);
+            CtaError error = new CtaError(locationResponse.errCd(), locationResponse.errNm());
 
             String message = ApiUtils.buildErrorMessage(POSITIONS_ENDPOINT, error);
 

@@ -93,9 +93,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         CtaArrivalsResponse arrivalsResponse = ctaResponse.ctatt();
 
         if (arrivalsResponse.errCd() != 0) {
-            String errorMessage = Objects.requireNonNullElse(arrivalsResponse.errNm(), "Unknown error");
-
-            CtaError error = new CtaError(arrivalsResponse.errCd(), errorMessage);
+            CtaError error = new CtaError(arrivalsResponse.errCd(), arrivalsResponse.errNm());
 
             String message = ApiUtils.buildErrorMessage(ARRIVALS_ENDPOINT, error);
 
