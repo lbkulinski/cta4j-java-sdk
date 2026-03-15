@@ -13,7 +13,7 @@
     </properties>
     <name>CTA Java SDK</name>
     <description>Java SDK for the CTA API</description>
-    <url>https://cta4j.app</url>
+    <url>https://cta4j.com</url>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>
