@@ -6,10 +6,13 @@ import com.cta4j.train.location.model.LocationTrain;
 import org.jetbrains.annotations.ApiStatus;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
 @Mapper(uses = Qualifiers.class)
 @ApiStatus.Internal
 public interface LocationTrainMapper {
+    LocationTrainMapper INSTANCE = Mappers.getMapper(LocationTrainMapper.class);
+
     @Mapping(target = "run", source = "rn")
     @Mapping(target = "destinationStationId", source = "destSt")
     @Mapping(target = "destinationName", source = "destNm")
