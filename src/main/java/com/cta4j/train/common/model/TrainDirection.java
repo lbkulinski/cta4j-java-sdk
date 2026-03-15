@@ -49,4 +49,20 @@ public enum TrainDirection {
     public int getCode() {
         return this.code;
     }
+
+    /**
+     * Returns the {@code TrainDirection} corresponding to the given code.
+     *
+     * @param code the CTA direction code (1 for northbound, 5 for southbound)
+     * @return the corresponding {@code TrainDirection}
+     * @throws IllegalArgumentException if the code does not correspond to any known train direction
+     */
+    public static TrainDirection fromCode(int code) {
+        return switch (code) {
+            case 1 -> NORTHBOUND;
+            case 5 -> SOUTHBOUND;
+            default -> throw new IllegalArgumentException("""
+            CTA direction code must be either 1 (northbound) or 5 (southbound)""");
+        };
+    }
 }

@@ -39,13 +39,7 @@ public final class Qualifiers {
     public static CardinalDirection mapDirection(String direction) {
         Objects.requireNonNull(direction);
 
-        return switch (direction.toUpperCase()) {
-            case "N", "NORTH" -> CardinalDirection.NORTH;
-            case "E", "EAST" -> CardinalDirection.EAST;
-            case "S", "SOUTH" -> CardinalDirection.SOUTH;
-            case "W", "WEST" -> CardinalDirection.WEST;
-            default -> throw new IllegalArgumentException("Invalid cardinal direction: %s".formatted(direction));
-        };
+        return CardinalDirection.fromCode(direction);
     }
 
     @Named("mapTrainLines")
@@ -114,17 +108,7 @@ public final class Qualifiers {
     public static TrainLine mapLine(String line) {
         Objects.requireNonNull(line);
 
-        return switch (line.toUpperCase()) {
-            case "RED", "RED LINE" -> TrainLine.RED;
-            case "BLUE", "BLUE LINE" -> TrainLine.BLUE;
-            case "BRN", "BROWN LINE" -> TrainLine.BROWN;
-            case "G", "GREEN LINE" -> TrainLine.GREEN;
-            case "ORG", "ORANGE LINE" -> TrainLine.ORANGE;
-            case "P", "PURPLE LINE" -> TrainLine.PURPLE;
-            case "PINK", "PINK LINE" -> TrainLine.PINK;
-            case "Y", "YELLOW LINE" -> TrainLine.YELLOW;
-            default -> throw new IllegalArgumentException("Invalid train line: %s".formatted(line));
-        };
+        return TrainLine.fromCode(line);
     }
 
     @Named("mapTimestamp")
@@ -151,15 +135,7 @@ public final class Qualifiers {
 
     @Named("map15ToTrainDirection")
     public static TrainDirection map15ToTrainDirection(int direction) {
-        return switch (direction) {
-            case 1 -> TrainDirection.NORTHBOUND;
-            case 5 -> TrainDirection.SOUTHBOUND;
-            default -> {
-                String message = String.format("Invalid train direction value: %s. Expected 1 or 5", direction);
-
-                throw new IllegalArgumentException(message);
-            }
-        };
+        return TrainDirection.fromCode(direction);
     }
 
     @Named("mapArrivalCoordinates")

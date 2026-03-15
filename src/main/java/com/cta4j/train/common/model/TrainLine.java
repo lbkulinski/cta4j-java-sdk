@@ -88,4 +88,27 @@ public enum TrainLine {
     public String getColorHex() {
         return this.colorHex;
     }
+
+    /**
+     * Returns the {@code TrainLine} corresponding to the given code.
+     *
+     * @param code the CTA code of the train line (case-insensitive, may include "LINE" suffix)
+     * @return the corresponding {@code TrainLine}
+     * @throws IllegalArgumentException if the code does not correspond to any known train line
+     */
+    public static TrainLine fromCode(String code) {
+        Objects.requireNonNull(code);
+
+        return switch (code.toUpperCase()) {
+            case "RED", "RED LINE" -> TrainLine.RED;
+            case "BLUE", "BLUE LINE" -> TrainLine.BLUE;
+            case "BRN", "BROWN LINE" -> TrainLine.BROWN;
+            case "G", "GREEN LINE" -> TrainLine.GREEN;
+            case "ORG", "ORANGE LINE" -> TrainLine.ORANGE;
+            case "P", "PURPLE LINE" -> TrainLine.PURPLE;
+            case "PINK", "PINK LINE" -> TrainLine.PINK;
+            case "Y", "YELLOW LINE" -> TrainLine.YELLOW;
+            default -> throw new IllegalArgumentException("Invalid train line: %s".formatted(code));
+        };
+    }
 }

@@ -1,12 +1,10 @@
-package com.cta4j.common.internal.geo;
+package com.cta4j.common.geo;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.math.BigDecimal;
 
 @NullMarked
-@ApiStatus.Internal
 public final class GeoConstants {
     public static final int MIN_HEADING = 0;
 
