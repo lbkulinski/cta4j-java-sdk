@@ -24,11 +24,15 @@ public record CtaPoint(
     @Nullable
     Float pdist,
 
-    double lat,
+    @Nullable
+    Double lat,
 
-    double lon
+    @Nullable
+    Double lon
 ) {
     public CtaPoint {
         Objects.requireNonNull(typ);
+        Objects.requireNonNull(lat);
+        Objects.requireNonNull(lon);
     }
 }

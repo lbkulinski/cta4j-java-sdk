@@ -36,16 +36,22 @@ public record CtaLocationTrain(
     @Nullable
     String flags,
 
-    double lat,
+    @Nullable
+    Double lat,
 
-    double lon,
+    @Nullable
+    Double lon,
 
-    int heading
+    @Nullable
+    Integer heading
 ) {
     public CtaLocationTrain {
         Objects.requireNonNull(destNm);
         Objects.requireNonNull(nextStaNm);
         Objects.requireNonNull(prdt);
         Objects.requireNonNull(arrT);
+        Objects.requireNonNull(lat);
+        Objects.requireNonNull(lon);
+        Objects.requireNonNull(heading);
     }
 }

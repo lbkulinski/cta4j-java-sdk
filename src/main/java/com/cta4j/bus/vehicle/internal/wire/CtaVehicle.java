@@ -19,11 +19,14 @@ public record CtaVehicle(
     @Nullable
     String tmpstmp,
 
-    double lat,
+    @Nullable
+    Double lat,
 
-    double lon,
+    @Nullable
+    Double lon,
 
-    int hdg,
+    @Nullable
+    Integer hdg,
 
     int pid,
 
@@ -79,6 +82,9 @@ public record CtaVehicle(
 ) {
     public CtaVehicle {
         Objects.requireNonNull(vid);
+        Objects.requireNonNull(lat);
+        Objects.requireNonNull(lon);
+        Objects.requireNonNull(hdg);
         Objects.requireNonNull(rt);
         Objects.requireNonNull(des);
         Objects.requireNonNull(tablockid);

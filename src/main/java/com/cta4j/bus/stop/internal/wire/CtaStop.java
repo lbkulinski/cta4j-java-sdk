@@ -16,9 +16,11 @@ public record CtaStop(
 
     String stpnm,
 
-    double lat,
+    @Nullable
+    Double lat,
 
-    double lon,
+    @Nullable
+    Double lon,
 
     @Nullable
     List<Integer> dtradd,
@@ -35,6 +37,8 @@ public record CtaStop(
     public CtaStop {
         Objects.requireNonNull(stpid);
         Objects.requireNonNull(stpnm);
+        Objects.requireNonNull(lat);
+        Objects.requireNonNull(lon);
 
         if (dtradd != null) {
             dtradd = List.copyOf(dtradd);
