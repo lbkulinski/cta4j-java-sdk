@@ -13,6 +13,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
@@ -89,8 +90,10 @@ public final class Qualifiers {
     }
 
     @Named("mapHumanAddress")
-    public static HumanAddress mapHumanAddress(String humanAddress) {
-        Objects.requireNonNull(humanAddress);
+    public static @Nullable HumanAddress mapHumanAddress(@Nullable String humanAddress) {
+        if (humanAddress == null) {
+            return null;
+        }
 
         ObjectMapper objectMapper = Cta4jObjectMapper.instance();
 
@@ -98,7 +101,7 @@ public final class Qualifiers {
 
         try {
             address = objectMapper.readValue(humanAddress, HumanAddress.class);
-        } catch (Exception e) {
+        } catch (JacksonException e) {
             String message = String.format("Failed to parse human address: %s", humanAddress);
 
             throw new IllegalArgumentException(message, e);
