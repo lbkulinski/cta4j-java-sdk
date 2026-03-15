@@ -16,7 +16,7 @@ public record CtaError(int code, String message) {
         }
 
         if (message.isBlank()) {
-            throw new IllegalArgumentException("message must not be null or blank");
+            throw new IllegalArgumentException("message must not be blank");
         }
     }
 }
