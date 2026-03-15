@@ -1,6 +1,7 @@
 # cta4j Java SDK
 
 A lightweight Java SDK for interacting with the [Chicago Transit Authority (CTA)](https://www.transitchicago.com/) APIs — both Train Tracker and Bus Tracker.  
+
 Built for simplicity, reliability, and minimal external dependencies.
 
 ---
@@ -144,6 +145,7 @@ Copyright © 2026 Logan Bailey Kulinski.
 - [Bus Tracker API key request](https://www.transitchicago.com/developers/bustracker/)
 - [CTA Developer Resources](https://www.transitchicago.com/developers/)
 - [Project Website](https://cta4j.com)
+- [Javadoc](https://javadoc.io/doc/com.cta4j/cta4j-java-sdk/latest/index.html)
 
 ---
 
