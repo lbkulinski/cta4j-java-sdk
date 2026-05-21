@@ -36,6 +36,25 @@ public interface PredictionsApi {
     List<Prediction> findByVehicleIds(VehiclesPredictionsQuery query);
 
     /**
+     * Retrieves predictions by stop ID.
+     *
+     * @param stopId the stop ID
+     * @return a {@link List} of {@link Prediction}s corresponding to the provided stop ID, or an empty {@link List} if
+     * no predictions are found
+     * @throws NullPointerException if {@code stopId} is {@code null}
+     */
+    default List<Prediction> findByStopId(String stopId) {
+        Objects.requireNonNull(stopId);
+
+        List<String> stopIds = List.of(stopId);
+
+        StopsPredictionsQuery query = StopsPredictionsQuery.builder(stopIds)
+                                                           .build();
+
+        return this.findByStopIds(query);
+    }
+
+    /**
      * Retrieves predictions by route ID and stop ID.
      *
      * @param routeId the route ID
