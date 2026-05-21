@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 2026-05-21
+
+### Added
+
+- `PredictionsApi.findByStopId(String stopId)` — a convenience default method that retrieves predictions for a single
+  stop ID without requiring a full `StopsPredictionsQuery` to be constructed.
+
+### Changed
+
+- Bumped `tools.jackson.core:jackson-databind` from **3.1.2** → **3.1.3**
+- Bumped `org.apache.httpcomponents.client5:httpclient5-fluent` from **5.6** → **5.6.1**
+- Bumped `org.slf4j:slf4j-api` from **2.0.17** → **2.0.18**
+
 ## [4.0.3] - 2026-04-14
 
 ### Changed
@@ -208,7 +221,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.3...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.1.0...HEAD
+[4.1.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.3...v4.1.0
 [4.0.3]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.1...v4.0.2
 [4.0.1]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.0...v4.0.1
