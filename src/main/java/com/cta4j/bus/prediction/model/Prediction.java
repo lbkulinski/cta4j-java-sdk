@@ -17,7 +17,7 @@ import java.util.Objects;
  * @param vehicleId the unique identifier of the vehicle for which this prediction was generated
  * @param distanceToStop the feet left to be traveled by the vehicle before it reaches the stop associated with this
  *                       prediction
- * @param route the alphanumeric designator of the route (e.g. "20" or "X20") for which this prediction was generated
+ * @param routeId the alphanumeric designator of the route (e.g. "20" or "X20") for which this prediction was generated
  * @param routeDesignator the language-specific route designator of this prediction, intended for display
  * @param routeDirection the direction of travel of the route associated with this prediction (e.g. "Eastbound")
  * @param destination the final destination of the vehicle associated with this prediction
@@ -38,7 +38,7 @@ public record Prediction(
 
     BigInteger distanceToStop,
 
-    String route,
+    String routeId,
 
     String routeDesignator,
 
@@ -62,8 +62,8 @@ public record Prediction(
      * @param vehicleId the unique identifier of the vehicle for which the prediction was generated
      * @param distanceToStop the feet left to be traveled by the vehicle before it reaches the stop associated with the
      *                       prediction
-     * @param route the alphanumeric designator of the route (e.g. "20" or "X20") for which the prediction was
-     *              generated
+     * @param routeId the alphanumeric designator of the route (e.g. "20" or "X20") for which the prediction was
+     *                generated
      * @param routeDesignator the language-specific route designator of the prediction, intended for display
      * @param routeDirection the direction of travel of the route associated with the prediction (e.g. "Eastbound")
      * @param destination the final destination of the vehicle associated with the prediction
@@ -72,7 +72,7 @@ public record Prediction(
      * @param delayed whether the vehicle associated with the prediction is currently delayed
      * @param metadata the metadata associated with the prediction
      * @throws NullPointerException if {@code predictionType}, {@code stopId}, {@code stopName}, {@code vehicleId},
-     * {@code distanceToStop}, {@code route}, {@code routeDesignator}, {@code routeDirection}, {@code destination},
+     * {@code distanceToStop}, {@code routeId}, {@code routeDesignator}, {@code routeDirection}, {@code destination},
      * {@code arrivalTime}, or {@code metadata} is {@code null}
      */
     public Prediction {
@@ -81,7 +81,7 @@ public record Prediction(
         Objects.requireNonNull(stopName);
         Objects.requireNonNull(vehicleId);
         Objects.requireNonNull(distanceToStop);
-        Objects.requireNonNull(route);
+        Objects.requireNonNull(routeId);
         Objects.requireNonNull(routeDesignator);
         Objects.requireNonNull(routeDirection);
         Objects.requireNonNull(destination);

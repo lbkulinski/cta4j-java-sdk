@@ -20,7 +20,7 @@ public interface VehicleMapper {
     @Mapping(target = "coordinates.longitude", source = "lon")
     @Mapping(target = "coordinates.heading", source = "hdg")
     @Mapping(target = "metadata.patternId", source = "pid")
-    @Mapping(target = "route", source = "rt")
+    @Mapping(target = "routeId", source = "rt")
     @Mapping(target = "destination", source = "des")
     @Mapping(target = "metadata.distanceToPatternPoint", source = "pdist")
     @Mapping(target = "metadata.stopStatus", source = "stopstatus")

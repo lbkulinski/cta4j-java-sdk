@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-05-22
+
+### Changed
+
+- Renamed `route` field to `routeId` on `Vehicle` and `Prediction` records for consistency with the rest of the API.
+
+### Breaking Changes ⚠️
+
+- `Vehicle.route()` has been renamed to `Vehicle.routeId()`.
+- `Prediction.route()` has been renamed to `Prediction.routeId()`.
+
 ## [4.1.0] - 2026-05-21
 
 ### Added
@@ -221,7 +232,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.1.0...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v5.0.0...HEAD
+[5.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.1.0...v5.0.0
 [4.1.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.3...v4.1.0
 [4.0.3]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.2...v4.0.3
 [4.0.2]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.1...v4.0.2
