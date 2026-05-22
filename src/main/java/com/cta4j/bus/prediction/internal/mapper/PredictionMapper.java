@@ -18,7 +18,7 @@ public interface PredictionMapper {
     @Mapping(target = "stopName", source = "stpnm")
     @Mapping(target = "vehicleId", source = "vid")
     @Mapping(target = "distanceToStop", source = "dstp")
-    @Mapping(target = "route", source = "rt")
+    @Mapping(target = "routeId", source = "rt")
     @Mapping(target = "routeDesignator", source = "rtdd")
     @Mapping(target = "routeDirection", source = "rtdir")
     @Mapping(target = "destination", source = "des")
