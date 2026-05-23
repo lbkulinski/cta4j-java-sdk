@@ -18,7 +18,7 @@ public final class ApiUtils {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static String buildErrorMessage(String endpoint, List<CtaError> errors) {
+    public static String buildErrorMessage(String endpoint, List<? extends CtaError> errors) {
         Objects.requireNonNull(endpoint);
         Objects.requireNonNull(errors);
 

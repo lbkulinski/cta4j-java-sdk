@@ -6,7 +6,6 @@ import com.cta4j.bus.direction.DirectionsApi;
 import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
 import com.cta4j.bus.direction.internal.wire.CtaDirection;
 import com.cta4j.bus.common.internal.wire.CtaError;
-import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;

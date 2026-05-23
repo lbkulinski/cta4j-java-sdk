@@ -12,7 +12,7 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record CtaResponse<T>(
     @JsonProperty("bustime-response")
-    CtaBustimeResponse<T> bustimeResponse
+    T bustimeResponse
 ) {
     public CtaResponse {
         Objects.requireNonNull(bustimeResponse);

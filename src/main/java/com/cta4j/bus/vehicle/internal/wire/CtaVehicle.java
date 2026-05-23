@@ -7,9 +7,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@NullMarked
 public record CtaVehicle(
     String vid,
 

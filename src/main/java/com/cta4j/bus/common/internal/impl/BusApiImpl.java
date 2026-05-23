@@ -21,7 +21,6 @@ import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.impl.VehiclesApiImpl;
 import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
 import com.cta4j.bus.common.internal.wire.CtaError;
-import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;

@@ -2,18 +2,20 @@ package com.cta4j.bus.vehicle.internal.impl;
 
 import com.cta4j.bus.common.internal.context.BusApiContext;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.wire.CtaVehicle;
 import com.cta4j.bus.vehicle.internal.mapper.VehicleMapper;
+import com.cta4j.bus.vehicle.internal.wire.CtaVehicleBustimeResponse;
+import com.cta4j.bus.vehicle.internal.wire.CtaVehicleError;
 import com.cta4j.bus.vehicle.model.Vehicle;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
-import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 
@@ -24,6 +26,8 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 public final class VehiclesApiImpl implements VehiclesApi {
+    private static final Logger log = LoggerFactory.getLogger(VehiclesApiImpl.class);
+
     private static final String VEHICLES_ENDPOINT = String.format("%s/getvehicles", ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
@@ -85,8 +89,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
     private List<Vehicle> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<List<CtaVehicle>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaVehicle>> vehicleResponse;
+        TypeReference<CtaResponse<CtaVehicleBustimeResponse>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaVehicleBustimeResponse> vehicleResponse;
 
         try {
             vehicleResponse = this.context.objectMapper()
@@ -97,23 +101,37 @@ public final class VehiclesApiImpl implements VehiclesApi {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<List<CtaVehicle>> bustimeResponse = vehicleResponse.bustimeResponse();
+        CtaVehicleBustimeResponse bustimeResponse = vehicleResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaVehicle> vehicles = bustimeResponse.data();
+        List<CtaVehicleError> errors = bustimeResponse.error();
+        List<CtaVehicle> vehicles = bustimeResponse.vehicle();
 
-        if ((errors != null) && !errors.isEmpty()) {
+        if (vehicles != null && !vehicles.isEmpty()) {
+            if (errors != null && !errors.isEmpty()) {
+                errors.stream()
+                      .forEach(error -> {
+                          //TODO log errors
+                      });
+            }
+
+            return vehicles.stream()
+                           .map(VehicleMapper.INSTANCE::toDomain)
+                           .toList();
+        }
+
+        if (errors != null && !errors.isEmpty()) {
+            boolean notFound = errors.stream()
+                                     .allMatch(error -> error.vid() != null || error.rt() != null);
+
+            if (notFound) {
+                return List.of();
+            }
+
             String message = ApiUtils.buildErrorMessage(VEHICLES_ENDPOINT, errors);
 
             throw new Cta4jException(message);
         }
 
-        if ((vehicles == null) || vehicles.isEmpty()) {
-            return List.of();
-        }
-
-        return vehicles.stream()
-                       .map(VehicleMapper.INSTANCE::toDomain)
-                       .toList();
+        return List.of();
     }
 }
