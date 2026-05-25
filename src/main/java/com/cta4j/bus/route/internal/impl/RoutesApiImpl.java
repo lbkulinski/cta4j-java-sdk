@@ -2,12 +2,13 @@ package com.cta4j.bus.route.internal.impl;
 
 import com.cta4j.bus.common.internal.context.BusApiContext;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.route.RoutesApi;
 import com.cta4j.bus.route.internal.wire.CtaRoute;
 import com.cta4j.bus.route.internal.mapper.RouteMapper;
+import com.cta4j.bus.route.internal.wire.CtaRouteBustimeResponse;
+import com.cta4j.bus.route.internal.wire.CtaRouteError;
 import com.cta4j.bus.route.model.Route;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
@@ -46,8 +47,8 @@ public final class RoutesApiImpl implements RoutesApi {
 
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<List<CtaRoute>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaRoute>> routesResponse;
+        TypeReference<CtaResponse<CtaRouteBustimeResponse>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaRouteBustimeResponse> routesResponse;
 
         try {
             routesResponse = this.context.objectMapper()
@@ -58,29 +59,25 @@ public final class RoutesApiImpl implements RoutesApi {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<List<CtaRoute>> bustimeResponse = routesResponse.bustimeResponse();
+        CtaRouteBustimeResponse bustimeResponse = routesResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaRoute> routes = bustimeResponse.data();
+        List<CtaRouteError> errors = bustimeResponse.error();
+        List<CtaRoute> routes = bustimeResponse.route();
 
-        if ((errors == null) && (routes == null)) {
-            log.debug("Routes bustime response missing both error and data from {}", ROUTES_ENDPOINT);
-
-            return List.of();
+        if (routes != null && !routes.isEmpty()) {
+            return routes.stream()
+                         .map(RouteMapper.INSTANCE::toDomain)
+                         .toList();
         }
 
-        if ((errors != null) && !errors.isEmpty()) {
+        if (errors != null && !errors.isEmpty()) {
             String message = ApiUtils.buildErrorMessage(ROUTES_ENDPOINT, errors);
 
             throw new Cta4jException(message);
         }
 
-        if ((routes == null) || routes.isEmpty()) {
-            return List.of();
-        }
+        log.warn("Received empty response from {}", ROUTES_ENDPOINT);
 
-        return routes.stream()
-                     .map(RouteMapper.INSTANCE::toDomain)
-                     .toList();
+        return List.of();
     }
 }

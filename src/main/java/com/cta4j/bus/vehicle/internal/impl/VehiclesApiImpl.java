@@ -107,31 +107,26 @@ public final class VehiclesApiImpl implements VehiclesApi {
         List<CtaVehicle> vehicles = bustimeResponse.vehicle();
 
         if (vehicles != null && !vehicles.isEmpty()) {
-            if (errors != null && !errors.isEmpty()) {
-                errors.stream()
-                      .forEach(error -> {
-                          //TODO log errors
-                      });
-            }
-
             return vehicles.stream()
                            .map(VehicleMapper.INSTANCE::toDomain)
                            .toList();
         }
 
-        if (errors != null && !errors.isEmpty()) {
-            boolean notFound = errors.stream()
-                                     .allMatch(error -> error.vid() != null || error.rt() != null);
+        if (errors == null || errors.isEmpty()) {
+            log.warn("Received empty response from {}", VEHICLES_ENDPOINT);
 
-            if (notFound) {
-                return List.of();
-            }
-
-            String message = ApiUtils.buildErrorMessage(VEHICLES_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
+            return List.of();
         }
 
-        return List.of();
+        boolean notFound = errors.stream()
+                                 .allMatch(error -> error.vid() != null || error.rt() != null);
+
+        if (notFound) {
+            return List.of();
+        }
+
+        String message = ApiUtils.buildErrorMessage(VEHICLES_ENDPOINT, errors);
+
+        throw new Cta4jException(message);
     }
 }
