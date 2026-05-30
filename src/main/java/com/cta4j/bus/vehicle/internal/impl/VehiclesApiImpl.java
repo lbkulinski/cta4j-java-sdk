@@ -103,8 +103,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
         CtaVehicleBustimeResponse bustimeResponse = vehicleResponse.bustimeResponse();
 
-        List<CtaVehicleError> errors = bustimeResponse.error();
         List<CtaVehicle> vehicles = bustimeResponse.vehicle();
+        List<CtaVehicleError> errors = bustimeResponse.error();
 
         if (vehicles != null && !vehicles.isEmpty()) {
             return vehicles.stream()

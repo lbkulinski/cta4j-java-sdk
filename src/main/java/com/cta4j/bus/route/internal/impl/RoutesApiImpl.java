@@ -61,8 +61,8 @@ public final class RoutesApiImpl implements RoutesApi {
 
         CtaRouteBustimeResponse bustimeResponse = routesResponse.bustimeResponse();
 
-        List<CtaRouteError> errors = bustimeResponse.error();
         List<CtaRoute> routes = bustimeResponse.route();
+        List<CtaRouteError> errors = bustimeResponse.error();
 
         if (routes != null && !routes.isEmpty()) {
             return routes.stream()

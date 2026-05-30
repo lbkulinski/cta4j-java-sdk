@@ -1,4 +1,4 @@
-package com.cta4j.bus.vehicle.internal.wire;
+package com.cta4j.bus.detour.internal.wire;
 
 import com.cta4j.bus.common.internal.wire.CtaError;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,13 +11,13 @@ import java.util.Objects;
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NullMarked
-public record CtaVehicleError(
+public record CtaDetourError(
     String msg,
-    @Nullable String vid,
     @Nullable String rt,
+    @Nullable String rtdir,
     @Nullable String rtpidatafeed
 ) implements CtaError {
-    public CtaVehicleError {
+    public CtaDetourError {
         Objects.requireNonNull(msg);
     }
 }

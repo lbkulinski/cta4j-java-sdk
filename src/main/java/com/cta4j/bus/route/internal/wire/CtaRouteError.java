@@ -12,8 +12,8 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NullMarked
 public record CtaRouteError(
-    @Nullable String rtpidatafeed,
-    String msg
+    String msg,
+    @Nullable String rtpidatafeed
 ) implements CtaError {
     public CtaRouteError {
         Objects.requireNonNull(msg);
