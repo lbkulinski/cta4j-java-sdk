@@ -20,7 +20,7 @@ public record CtaDetour(
 
     String desc,
 
-    List<CtaDetoursRouteDirection> rtdirs,
+    List<CtaDetourRouteDirection> rtdirs,
 
     String startdt,
 

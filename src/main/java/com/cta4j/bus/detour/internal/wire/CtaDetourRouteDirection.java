@@ -9,12 +9,12 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record CtaDetoursRouteDirection(
+public record CtaDetourRouteDirection(
     String rt,
 
     String dir
 ) {
-    public CtaDetoursRouteDirection {
+    public CtaDetourRouteDirection {
         Objects.requireNonNull(rt);
         Objects.requireNonNull(dir);
     }
