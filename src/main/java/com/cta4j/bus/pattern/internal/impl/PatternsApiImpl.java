@@ -2,17 +2,20 @@ package com.cta4j.bus.pattern.internal.impl;
 
 import com.cta4j.bus.common.internal.context.BusApiContext;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.pattern.PatternsApi;
 import com.cta4j.bus.pattern.internal.wire.CtaPattern;
 import com.cta4j.bus.pattern.internal.mapper.RoutePatternMapper;
+import com.cta4j.bus.pattern.internal.wire.CtaPatternBustimeResponse;
+import com.cta4j.bus.pattern.internal.wire.CtaPatternError;
 import com.cta4j.bus.pattern.model.RoutePattern;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 
@@ -23,6 +26,8 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 public final class PatternsApiImpl implements PatternsApi {
+    private static final Logger log = LoggerFactory.getLogger(PatternsApiImpl.class);
+
     private static final String PATTERNS_ENDPOINT = String.format("%s/getpatterns", ApiUtils.API_PREFIX);
     private static final int MAX_PATTERN_IDS_PER_REQUEST = 10;
 
@@ -85,8 +90,8 @@ public final class PatternsApiImpl implements PatternsApi {
     private List<RoutePattern> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<List<CtaPattern>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaPattern>> patternsResponse;
+        TypeReference<CtaResponse<CtaPatternBustimeResponse>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaPatternBustimeResponse> patternsResponse;
 
         try {
             patternsResponse = this.context.objectMapper()
@@ -97,23 +102,32 @@ public final class PatternsApiImpl implements PatternsApi {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<List<CtaPattern>> bustimeResponse = patternsResponse.bustimeResponse();
+        CtaPatternBustimeResponse bustimeResponse = patternsResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaPattern> patterns = bustimeResponse.data();
+        List<CtaPattern> patterns = bustimeResponse.ptr();
+        List<CtaPatternError> errors = bustimeResponse.error();
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(PATTERNS_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
+        if (patterns != null && !patterns.isEmpty()) {
+            return patterns.stream()
+                           .map(RoutePatternMapper.INSTANCE::toDomain)
+                           .toList();
         }
 
-        if ((patterns == null) || patterns.isEmpty()) {
+        if (errors == null || errors.isEmpty()) {
+            log.warn("Received empty response from {}", PATTERNS_ENDPOINT);
+
             return List.of();
         }
 
-        return patterns.stream()
-                       .map(RoutePatternMapper.INSTANCE::toDomain)
-                       .toList();
+        boolean notFound = errors.stream()
+                                 .allMatch(error -> error.pid() != null || error.rt() != null);
+
+        if (notFound) {
+            return List.of();
+        }
+
+        String message = ApiUtils.buildErrorMessage(PATTERNS_ENDPOINT, errors);
+
+        throw new Cta4jException(message);
     }
 }
