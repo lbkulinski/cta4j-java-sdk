@@ -3,18 +3,17 @@ package com.cta4j.bus.locale.internal.wire;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
+import java.util.List;
 
 @ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
 @NullMarked
-public record CtaLocale(
-    String localestring,
-    String displayname
-) {
-    public CtaLocale {
-        Objects.requireNonNull(localestring);
-        Objects.requireNonNull(displayname);
-    }
-}
+public record CtaLocaleBustimeResponse(
+    @Nullable
+    List<CtaLocaleError> error,
+
+    @Nullable
+    List<CtaLocale> locale
+) {}
