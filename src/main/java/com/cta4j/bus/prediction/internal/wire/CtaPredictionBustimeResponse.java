@@ -13,4 +13,14 @@ import java.util.List;
 public record CtaPredictionBustimeResponse(
     @Nullable List<CtaPredictionError> error,
     @Nullable List<CtaPrediction> prd
-) {}
+) {
+    public CtaPredictionBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
+
+        if (prd != null) {
+            prd = List.copyOf(prd);
+        }
+    }
+}

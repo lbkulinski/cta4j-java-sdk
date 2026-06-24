@@ -11,9 +11,16 @@ import java.util.List;
 @ApiStatus.Internal
 @NullMarked
 public record CtaPatternBustimeResponse(
-    @Nullable
-    List<CtaPatternError> error,
+    @Nullable List<CtaPatternError> error,
+    @Nullable List<CtaPattern> ptr
+) {
+    public CtaPatternBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
 
-    @Nullable
-    List<CtaPattern> ptr
-) {}
+        if (ptr != null) {
+            ptr = List.copyOf(ptr);
+        }
+    }
+}

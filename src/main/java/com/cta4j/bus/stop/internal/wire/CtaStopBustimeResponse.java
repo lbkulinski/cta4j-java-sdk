@@ -13,4 +13,14 @@ import java.util.List;
 public record CtaStopBustimeResponse(
     @Nullable List<CtaStopError> error,
     @Nullable List<CtaStop> stop
-) {}
+) {
+    public CtaStopBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
+
+        if (stop != null) {
+            stop = List.copyOf(stop);
+        }
+    }
+}

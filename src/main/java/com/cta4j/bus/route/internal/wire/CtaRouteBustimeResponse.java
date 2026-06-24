@@ -13,4 +13,14 @@ import java.util.List;
 public record CtaRouteBustimeResponse(
     @Nullable List<CtaRouteError> error,
     @Nullable List<CtaRoute> route
-) {}
+) {
+    public CtaRouteBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
+
+        if (route != null) {
+            route = List.copyOf(route);
+        }
+    }
+}

@@ -13,4 +13,14 @@ import java.util.List;
 public record CtaVehicleBustimeResponse(
     @Nullable List<CtaVehicleError> error,
     @Nullable List<CtaVehicle> vehicle
-) {}
+) {
+    public CtaVehicleBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
+
+        if (vehicle != null) {
+            vehicle = List.copyOf(vehicle);
+        }
+    }
+}

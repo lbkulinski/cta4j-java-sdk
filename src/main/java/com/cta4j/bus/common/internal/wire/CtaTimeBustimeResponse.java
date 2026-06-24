@@ -13,4 +13,10 @@ import java.util.List;
 public record CtaTimeBustimeResponse(
     @Nullable List<CtaTimeError> error,
     @Nullable String tm
-) {}
+) {
+    public CtaTimeBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
+    }
+}

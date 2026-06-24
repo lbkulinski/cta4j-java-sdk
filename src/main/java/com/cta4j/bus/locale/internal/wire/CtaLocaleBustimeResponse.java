@@ -13,4 +13,14 @@ import java.util.List;
 public record CtaLocaleBustimeResponse(
     @Nullable List<CtaLocaleError> error,
     @Nullable List<CtaLocale> locale
-) {}
+) {
+    public CtaLocaleBustimeResponse {
+        if (error != null) {
+            error = List.copyOf(error);
+        }
+
+        if (locale != null) {
+            locale = List.copyOf(locale);
+        }
+    }
+}

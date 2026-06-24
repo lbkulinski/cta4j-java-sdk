@@ -115,7 +115,7 @@ public final class DetoursApiImpl implements DetoursApi {
         }
 
         boolean notFound = errors.stream()
-                                 .allMatch(error -> error.rt() != null || error.rtdir() != null);
+                                 .allMatch(error -> error.rt() != null);
 
         if (notFound) {
             return List.of();
