@@ -14,7 +14,6 @@ import java.util.Objects;
 @NullMarked
 public record SupportedLocale(
     Locale locale,
-
     String displayName
 ) {
     /**

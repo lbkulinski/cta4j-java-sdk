@@ -13,7 +13,6 @@ import java.util.Objects;
 @NullMarked
 public record DetourRouteDirection(
     String routeId,
-
     String direction
 ) {
     /**

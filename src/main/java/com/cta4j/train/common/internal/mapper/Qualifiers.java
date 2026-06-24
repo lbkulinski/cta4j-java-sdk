@@ -1,7 +1,7 @@
 package com.cta4j.train.common.internal.mapper;
 
 import com.cta4j.common.geo.Coordinates;
-import com.cta4j.common.internal.json.Cta4jObjectMapper;
+import com.cta4j.common.internal.json.Cta4jJsonMapper;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
 import com.cta4j.train.follow.internal.wire.CtaPosition;
@@ -89,7 +89,7 @@ public final class Qualifiers {
             return null;
         }
 
-        ObjectMapper objectMapper = Cta4jObjectMapper.instance();
+        ObjectMapper objectMapper = Cta4jJsonMapper.instance();
 
         HumanAddress address;
 

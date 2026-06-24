@@ -18,8 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class Qualifiers {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm[:ss]");
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");

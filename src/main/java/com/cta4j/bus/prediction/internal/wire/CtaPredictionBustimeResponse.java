@@ -7,8 +7,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
 @NullMarked
 public record CtaPredictionBustimeResponse(
     @Nullable List<CtaPredictionError> error,

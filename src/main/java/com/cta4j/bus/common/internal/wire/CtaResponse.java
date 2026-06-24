@@ -7,12 +7,11 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaResponse<T>(
-    @JsonProperty("bustime-response")
-    T bustimeResponse
+    @JsonProperty("bustime-response") T bustimeResponse
 ) {
     public CtaResponse {
         Objects.requireNonNull(bustimeResponse);

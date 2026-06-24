@@ -23,12 +23,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class PatternsApiImpl implements PatternsApi {
     private static final Logger log = LoggerFactory.getLogger(PatternsApiImpl.class);
 
-    private static final String PATTERNS_ENDPOINT = String.format("%s/getpatterns", ApiUtils.API_PREFIX);
+    private static final String PATTERNS_ENDPOINT = "%s/getpatterns".formatted(ApiUtils.API_PREFIX);
     private static final int MAX_PATTERN_IDS_PER_REQUEST = 10;
 
     private final BusApiContext context;
@@ -48,8 +48,7 @@ public final class PatternsApiImpl implements PatternsApi {
         patternIds.forEach(Objects::requireNonNull);
 
         if (patternIds.size() > MAX_PATTERN_IDS_PER_REQUEST) {
-            String message = String.format(
-                "A maximum of %d pattern IDs can be requested at once, but %d were provided",
+            String message = "A maximum of %d pattern IDs can be requested at once, but %d were provided".formatted(
                 MAX_PATTERN_IDS_PER_REQUEST,
                 patternIds.size()
             );
@@ -94,10 +93,10 @@ public final class PatternsApiImpl implements PatternsApi {
         CtaResponse<CtaPatternBustimeResponse> patternsResponse;
 
         try {
-            patternsResponse = this.context.objectMapper()
+            patternsResponse = this.context.jsonMapper()
                                            .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", PATTERNS_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(PATTERNS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

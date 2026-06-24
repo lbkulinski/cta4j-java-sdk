@@ -7,14 +7,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
 @NullMarked
 public record CtaDetourBustimeResponse(
-    @Nullable
-    List<CtaDetourError> error,
-
-    @Nullable
-    List<CtaDetour> dtr
-) {
-}
+    @Nullable List<CtaDetourError> error,
+    @Nullable List<CtaDetour> dtr
+) {}

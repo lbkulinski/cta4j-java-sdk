@@ -27,21 +27,13 @@ import java.util.Objects;
 @NullMarked
 public record Detour(
     String id,
-
     String version,
-
     boolean active,
-
     String description,
-
     List<DetourRouteDirection> routeDirections,
-
     Instant startTime,
-
     Instant endTime,
-
-    @Nullable
-    String dataFeed
+    @Nullable String dataFeed
 ) {
     /**
      * Constructs a {@code Detour}.
@@ -61,7 +53,6 @@ public record Detour(
         Objects.requireNonNull(id);
         Objects.requireNonNull(version);
         Objects.requireNonNull(description);
-        Objects.requireNonNull(routeDirections);
         Objects.requireNonNull(startTime);
         Objects.requireNonNull(endTime);
 

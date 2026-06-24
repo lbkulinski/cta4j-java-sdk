@@ -6,7 +6,6 @@ import com.cta4j.bus.stop.StopsApi;
 import com.cta4j.bus.stop.internal.wire.CtaStop;
 import com.cta4j.bus.stop.internal.mapper.StopMapper;
 import com.cta4j.bus.stop.model.Stop;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
 import com.cta4j.bus.common.internal.wire.CtaError;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
@@ -91,7 +90,7 @@ public final class StopsApiImpl implements StopsApi {
         CtaResponse<List<CtaStop>> stopsResponse;
 
         try {
-            stopsResponse = this.context.objectMapper()
+            stopsResponse = this.context.jsonMapper()
                                         .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", STOPS_ENDPOINT);

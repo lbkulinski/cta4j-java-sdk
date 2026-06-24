@@ -1,8 +1,11 @@
 package com.cta4j.bus.prediction.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the passenger load information for a prediction.
  */
+@NullMarked
 public enum PassengerLoad {
     /**
      * Indicates that the bus is full.

@@ -1,8 +1,11 @@
 package com.cta4j.bus.prediction.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the flag-stop information for a prediction.
  */
+@NullMarked
 public enum FlagStop {
     /**
      * Indicates that no flag-stop information is available.

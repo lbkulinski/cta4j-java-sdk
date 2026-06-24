@@ -33,34 +33,17 @@ import java.util.Objects;
 @NullMarked
 public record PredictionMetadata(
     Instant timestamp,
-
     DynamicAction dynamicAction,
-
     String blockId,
-
     String tripId,
-
     String originalTripNumber,
-
-    @Nullable
-    String countdownLabel,
-
+    @Nullable String countdownLabel,
     String zone,
-
     PassengerLoad passengerLoad,
-
-    @Nullable
-    Integer gtfsSequence,
-
-    @Nullable
-    String nextBus,
-
-    @Nullable
-    Integer scheduledStartSeconds,
-
-    @Nullable
-    LocalDate scheduledStartDate,
-
+    @Nullable Integer gtfsSequence,
+    @Nullable String nextBus,
+    @Nullable Integer scheduledStartSeconds,
+    @Nullable LocalDate scheduledStartDate,
     FlagStop flagStop
 ) {
     /**

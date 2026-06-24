@@ -24,14 +24,12 @@ import tools.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class PredictionsApiImpl implements PredictionsApi {
     private static final Logger log = LoggerFactory.getLogger(PredictionsApiImpl.class);
 
-    private static final String PREDICTIONS_ENDPOINT = String.format("%s/getpredictions", ApiUtils.API_PREFIX);
-    private static final int MAX_STOP_IDS_PER_REQUEST = 10;
-    private static final int MAX_VEHICLE_IDS_PER_REQUEST = 10;
+    private static final String PREDICTIONS_ENDPOINT = "%s/getpredictions".formatted(ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
 
@@ -47,16 +45,6 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
         if (stopIds.isEmpty())  {
             return List.of();
-        }
-
-        if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
-            String message = String.format(
-                "A maximum of %d stop IDs can be requested at once, but %d were provided",
-                MAX_STOP_IDS_PER_REQUEST,
-                stopIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
         }
 
         String stopIdsString = String.join(",", stopIds);
@@ -97,16 +85,6 @@ public final class PredictionsApiImpl implements PredictionsApi {
             return List.of();
         }
 
-        if (vehicleIds.size() > MAX_VEHICLE_IDS_PER_REQUEST) {
-            String message = String.format(
-                "A maximum of %d vehicle IDs can be requested at once, but %d were provided",
-                MAX_VEHICLE_IDS_PER_REQUEST,
-                vehicleIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
-
         String vehicleIdsString = String.join(",", vehicleIds);
 
         URIBuilder builder = new URIBuilder()
@@ -136,10 +114,10 @@ public final class PredictionsApiImpl implements PredictionsApi {
         CtaResponse<CtaPredictionBustimeResponse> predictionsResponse;
 
         try {
-            predictionsResponse = this.context.objectMapper()
+            predictionsResponse = this.context.jsonMapper()
                                               .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", PREDICTIONS_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

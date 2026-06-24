@@ -6,12 +6,11 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaDirection(
     String id,
-
     String name
 ) {
     public CtaDirection {

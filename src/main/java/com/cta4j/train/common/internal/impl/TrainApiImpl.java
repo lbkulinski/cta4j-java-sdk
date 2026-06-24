@@ -1,6 +1,6 @@
 package com.cta4j.train.common.internal.impl;
 
-import com.cta4j.common.internal.json.Cta4jObjectMapper;
+import com.cta4j.common.internal.json.Cta4jJsonMapper;
 import com.cta4j.train.TrainApi;
 import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
@@ -98,7 +98,7 @@ public final class TrainApiImpl implements TrainApi {
         public TrainApi build() {
             String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
             String finalStationsUrl = Objects.requireNonNullElse(this.stationsUrl, ApiUtils.DEFAULT_STATIONS_URL);
-            ObjectMapper objectMapper = Cta4jObjectMapper.instance();
+            ObjectMapper objectMapper = Cta4jJsonMapper.instance();
 
             return new TrainApiImpl(finalHost, finalStationsUrl, this.apiKey, objectMapper);
         }

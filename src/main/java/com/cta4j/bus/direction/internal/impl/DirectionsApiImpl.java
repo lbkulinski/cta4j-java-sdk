@@ -20,12 +20,12 @@ import tools.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class DirectionsApiImpl implements DirectionsApi {
     private static final Logger log = LoggerFactory.getLogger(DirectionsApiImpl.class);
 
-    private static final String DIRECTIONS_ENDPOINT = String.format("%s/getdirections", ApiUtils.API_PREFIX);
+    private static final String DIRECTIONS_ENDPOINT = "%s/getdirections".formatted(ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
 
@@ -52,10 +52,10 @@ public final class DirectionsApiImpl implements DirectionsApi {
         CtaResponse<CtaDirectionBustimeResponse> directionsResponse;
 
         try {
-            directionsResponse = this.context.objectMapper()
+            directionsResponse = this.context.jsonMapper()
                                              .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", DIRECTIONS_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

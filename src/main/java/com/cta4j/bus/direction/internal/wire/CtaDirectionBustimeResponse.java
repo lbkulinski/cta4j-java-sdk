@@ -7,14 +7,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
 @NullMarked
 public record CtaDirectionBustimeResponse(
-    @Nullable
-    List<CtaDirectionError> error,
-
-    @Nullable
-    List<CtaDirection> dir
-) {
-}
+    @Nullable List<CtaDirectionError> error,
+    @Nullable List<CtaDirection> dir
+) {}

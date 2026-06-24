@@ -7,8 +7,8 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class ApiUtils {
     public static final String SCHEME = "https";
     public static final String DEFAULT_HOST = "ctabustracker.com";

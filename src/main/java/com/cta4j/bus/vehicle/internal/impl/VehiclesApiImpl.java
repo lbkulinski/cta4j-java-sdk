@@ -93,7 +93,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
         CtaResponse<CtaVehicleBustimeResponse> vehicleResponse;
 
         try {
-            vehicleResponse = this.context.objectMapper()
+            vehicleResponse = this.context.jsonMapper()
                                           .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", VEHICLES_ENDPOINT);

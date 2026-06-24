@@ -4,7 +4,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a query for vehicle arrival predictions.
@@ -15,10 +14,10 @@ import java.util.Objects;
 @NullMarked
 public record VehiclesPredictionsQuery(
     List<String> vehicleIds,
-
-    @Nullable
-    Integer maxResults
+    @Nullable Integer maxResults
 ) {
+    private static final int MAX_VEHICLE_IDS = 10;
+
     /**
      * Constructs a {@code VehiclesPredictionsQuery}.
      *
@@ -28,11 +27,18 @@ public record VehiclesPredictionsQuery(
      * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
      */
     public VehiclesPredictionsQuery {
-        Objects.requireNonNull(vehicleIds);
-
         vehicleIds = List.copyOf(vehicleIds);
 
-        if ((maxResults != null) && (maxResults <= 0)) {
+        if (vehicleIds.size() > MAX_VEHICLE_IDS) {
+            String message = "A maximum of %d vehicle IDs can be requested at once, but %d were provided".formatted(
+                MAX_VEHICLE_IDS,
+                vehicleIds.size()
+            );
+
+            throw new IllegalArgumentException(message);
+        }
+
+        if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("maxResults must be positive");
         }
     }
@@ -45,8 +51,6 @@ public record VehiclesPredictionsQuery(
      * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
      */
     public static Builder builder(List<String> vehicleIds) {
-        Objects.requireNonNull(vehicleIds);
-
         return new Builder(vehicleIds);
     }
 
@@ -72,8 +76,6 @@ public record VehiclesPredictionsQuery(
          * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
          */
         public Builder(List<String> vehicleIds) {
-            Objects.requireNonNull(vehicleIds);
-
             this.vehicleIds = List.copyOf(vehicleIds);
         }
 
@@ -82,12 +84,9 @@ public record VehiclesPredictionsQuery(
          *
          * @param maxResults the maximum number of predictions to return
          * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code maxResults} is {@code null}
          * @throws IllegalArgumentException if {@code maxResults} is not positive
          */
-        public Builder maxResults(Integer maxResults) {
-            Objects.requireNonNull(maxResults);
-
+        public Builder maxResults(int maxResults) {
             if (maxResults <= 0) {
                 throw new IllegalArgumentException("maxResults must be positive");
             }

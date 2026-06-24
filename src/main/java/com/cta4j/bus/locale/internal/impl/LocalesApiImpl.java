@@ -23,12 +23,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class LocalesApiImpl implements LocalesApi {
     private static final Logger log = LoggerFactory.getLogger(LocalesApiImpl.class);
 
-    private static final String LOCALES_ENDPOINT = String.format("%s/getlocalelist", ApiUtils.API_PREFIX);
+    private static final String LOCALES_ENDPOINT = "%s/getlocalelist".formatted(ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
 
@@ -88,10 +88,10 @@ public final class LocalesApiImpl implements LocalesApi {
         CtaResponse<CtaLocaleBustimeResponse> localeResponse;
 
         try {
-            localeResponse = this.context.objectMapper()
+            localeResponse = this.context.jsonMapper()
                                          .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", LOCALES_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(LOCALES_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

@@ -29,28 +29,16 @@ import java.util.Objects;
 @NullMarked
 public record Prediction(
     PredictionType predictionType,
-
     String stopId,
-
     String stopName,
-
     String vehicleId,
-
     BigInteger distanceToStop,
-
     String routeId,
-
     String routeDesignator,
-
     String routeDirection,
-
     String destination,
-
     Instant arrivalTime,
-
-    @Nullable
-    Boolean delayed,
-
+    @Nullable Boolean delayed,
     PredictionMetadata metadata
 ) {
     /**

@@ -4,7 +4,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a query for bus arrival predictions.
@@ -16,13 +15,11 @@ import java.util.Objects;
 @NullMarked
 public record StopsPredictionsQuery(
     List<String> stopIds,
-
-    @Nullable
-    List<String> routeIds,
-
-    @Nullable
-    Integer maxResults
+    @Nullable List<String> routeIds,
+    @Nullable Integer maxResults
 ) {
+    private static final int MAX_STOP_IDS = 10;
+
     /**
      * Constructs a {@code StopsPredictionsQuery}.
      *
@@ -34,15 +31,22 @@ public record StopsPredictionsQuery(
      * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
      */
     public StopsPredictionsQuery {
-        Objects.requireNonNull(stopIds);
-
         stopIds = List.copyOf(stopIds);
+
+        if (stopIds.size() > MAX_STOP_IDS) {
+            String message = "A maximum of %d stop IDs can be requested at once, but %d were provided".formatted(
+                MAX_STOP_IDS,
+                stopIds.size()
+            );
+
+            throw new IllegalArgumentException(message);
+        }
 
         if (routeIds != null) {
             routeIds = List.copyOf(routeIds);
         }
 
-        if ((maxResults != null) && (maxResults <= 0)) {
+        if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("maxResults must be positive");
         }
     }
@@ -55,8 +59,6 @@ public record StopsPredictionsQuery(
      * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
      */
     public static Builder builder(List<String> stopIds) {
-        Objects.requireNonNull(stopIds);
-
         return new Builder(stopIds);
     }
 
@@ -88,8 +90,6 @@ public record StopsPredictionsQuery(
          * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
          */
         public Builder(List<String> stopIds) {
-            Objects.requireNonNull(stopIds);
-
             this.stopIds = List.copyOf(stopIds);
         }
 
@@ -101,8 +101,6 @@ public record StopsPredictionsQuery(
          * @throws NullPointerException if {@code routeIds} or any of its elements are {@code null}
          */
         public Builder routeIds(List<String> routeIds) {
-            Objects.requireNonNull(routeIds);
-
             this.routeIds = List.copyOf(routeIds);
 
             return this;
@@ -113,12 +111,9 @@ public record StopsPredictionsQuery(
          *
          * @param maxResults the maximum number of predictions
          * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code maxResults} is {@code null}
          * @throws IllegalArgumentException if {@code maxResults} is not positive
          */
-        public Builder maxResults(Integer maxResults) {
-            Objects.requireNonNull(maxResults);
-
+        public Builder maxResults(int maxResults) {
             if (maxResults <= 0) {
                 throw new IllegalArgumentException("maxResults must be positive");
             }

@@ -22,12 +22,12 @@ import tools.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class DetoursApiImpl implements DetoursApi {
     private static final Logger log = LoggerFactory.getLogger(DetoursApiImpl.class);
 
-    private static final String DETOURS_ENDPOINT = String.format("%s/getdetours", ApiUtils.API_PREFIX);
+    private static final String DETOURS_ENDPOINT = "%s/getdetours".formatted(ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
 
@@ -89,10 +89,10 @@ public final class DetoursApiImpl implements DetoursApi {
         CtaResponse<CtaDetourBustimeResponse> detoursResponse;
 
         try {
-            detoursResponse = this.context.objectMapper()
+            detoursResponse = this.context.jsonMapper()
                                           .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", DETOURS_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

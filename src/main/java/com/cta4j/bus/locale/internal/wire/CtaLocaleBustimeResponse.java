@@ -7,13 +7,10 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
 @NullMarked
 public record CtaLocaleBustimeResponse(
-    @Nullable
-    List<CtaLocaleError> error,
-
-    @Nullable
-    List<CtaLocale> locale
+    @Nullable List<CtaLocaleError> error,
+    @Nullable List<CtaLocale> locale
 ) {}

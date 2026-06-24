@@ -6,8 +6,8 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
 @NullMarked
 public record CtaLocale(
     String localestring,

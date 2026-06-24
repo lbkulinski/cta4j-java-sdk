@@ -7,8 +7,8 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
 @NullMarked
 public record CtaLocaleError(String msg) implements CtaError {
     public CtaLocaleError {

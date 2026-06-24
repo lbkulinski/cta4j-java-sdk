@@ -19,19 +19,17 @@ import com.cta4j.bus.route.internal.impl.RoutesApiImpl;
 import com.cta4j.bus.stop.internal.impl.StopsApiImpl;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.impl.VehiclesApiImpl;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
 import com.cta4j.bus.common.internal.wire.CtaError;
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.common.internal.json.Cta4jObjectMapper;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Instant;
 import java.util.List;
@@ -54,14 +52,12 @@ public final class BusApiImpl implements BusApi {
 
     public BusApiImpl(
         String host,
-        String apiKey,
-        ObjectMapper objectMapper
+        String apiKey
     ) {
         Objects.requireNonNull(host);
         Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(objectMapper);
 
-        this.context = new BusApiContext(host, apiKey, objectMapper);
+        this.context = new BusApiContext(host, apiKey, JsonMapper.shared());
         this.vehiclesApi = new VehiclesApiImpl(this.context);
         this.routesApi = new RoutesApiImpl(this.context);
         this.directionsApi = new DirectionsApiImpl(this.context);
@@ -88,7 +84,7 @@ public final class BusApiImpl implements BusApi {
         CtaResponse<String> timeResponse;
 
         try {
-            timeResponse = this.context.objectMapper()
+            timeResponse = this.context.jsonMapper()
                                        .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = String.format("Failed to parse response from %s", SYSTEM_TIME_ENDPOINT);
@@ -198,9 +194,8 @@ public final class BusApiImpl implements BusApi {
         @Override
         public BusApi build() {
             String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
-            ObjectMapper objectMapper = Cta4jObjectMapper.instance();
 
-            return new BusApiImpl(finalHost, this.apiKey, objectMapper);
+            return new BusApiImpl(finalHost, this.apiKey);
         }
     }
 }

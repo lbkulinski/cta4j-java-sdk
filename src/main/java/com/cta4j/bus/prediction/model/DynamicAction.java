@@ -1,8 +1,11 @@
 package com.cta4j.bus.prediction.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the various dynamic actions that can be applied to a bus trip.
  */
+@NullMarked
 public enum DynamicAction {
     /**
      * Indicates that no dynamic action has been applied.
