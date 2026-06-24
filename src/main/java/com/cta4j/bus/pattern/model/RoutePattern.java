@@ -49,7 +49,6 @@ public record RoutePattern(
     public RoutePattern {
         Objects.requireNonNull(id);
         Objects.requireNonNull(direction);
-        Objects.requireNonNull(points);
 
         points = List.copyOf(points);
 

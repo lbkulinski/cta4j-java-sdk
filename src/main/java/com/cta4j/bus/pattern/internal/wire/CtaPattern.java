@@ -28,7 +28,6 @@ public record CtaPattern(
 ) {
     public CtaPattern {
         Objects.requireNonNull(rtdir);
-        Objects.requireNonNull(pt);
 
         pt = List.copyOf(pt);
 
