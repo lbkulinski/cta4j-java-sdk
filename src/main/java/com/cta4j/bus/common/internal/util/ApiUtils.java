@@ -20,15 +20,14 @@ public final class ApiUtils {
 
     public static String buildErrorMessage(String endpoint, List<? extends CtaError> errors) {
         Objects.requireNonNull(endpoint);
-        Objects.requireNonNull(errors);
 
-        errors.forEach(Objects::requireNonNull);
+        errors = List.copyOf(errors);
 
         String message = errors.stream()
                                .map(CtaError::msg)
                                .reduce("%s; %s"::formatted)
                                .orElse("Unknown error");
 
-        return String.format("Error response from %s: %s", endpoint, message);
+        return "Error response from %s: %s".formatted(endpoint, message);
     }
 }

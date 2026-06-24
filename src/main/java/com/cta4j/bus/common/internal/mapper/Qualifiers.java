@@ -36,7 +36,7 @@ public final class Qualifiers {
             case "A" -> PredictionType.ARRIVAL;
             case "D" -> PredictionType.DEPARTURE;
             default -> {
-                String message = String.format("Unknown prediction type: %s", typ);
+                String message = "Unknown prediction type: %s".formatted(typ);
 
                 throw new IllegalArgumentException(message);
             }
@@ -69,7 +69,7 @@ public final class Qualifiers {
             case "EMPTY" -> PassengerLoad.EMPTY;
             case "N/A", "" -> PassengerLoad.UNKNOWN;
             default -> {
-                String message = String.format("Unknown passenger load: %s", psgld);
+                String message = "Unknown passenger load: %s".formatted(psgld);
 
                 throw new IllegalArgumentException(message);
             }
@@ -99,7 +99,7 @@ public final class Qualifiers {
             case "S" -> PatternPointType.STOP;
             case "W" -> PatternPointType.WAYPOINT;
             default -> {
-                String message = String.format("Unknown pattern point type: %s", type);
+                String message = "Unknown pattern point type: %s".formatted(type);
 
                 throw new IllegalArgumentException(message);
             }

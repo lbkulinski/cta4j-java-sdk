@@ -3,6 +3,9 @@ package com.cta4j.bus.common.internal.impl;
 import com.cta4j.bus.common.internal.context.BusApiContext;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.BusApi;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
+import com.cta4j.bus.common.internal.wire.CtaTimeBustimeResponse;
+import com.cta4j.bus.common.internal.wire.CtaTimeError;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.detour.internal.impl.DetoursApiImpl;
 import com.cta4j.bus.direction.DirectionsApi;
@@ -19,7 +22,6 @@ import com.cta4j.bus.route.internal.impl.RoutesApiImpl;
 import com.cta4j.bus.stop.internal.impl.StopsApiImpl;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.impl.VehiclesApiImpl;
-import com.cta4j.bus.common.internal.wire.CtaError;
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
@@ -35,10 +37,10 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class BusApiImpl implements BusApi {
-    private static final String SYSTEM_TIME_ENDPOINT = String.format("%s/gettime", ApiUtils.API_PREFIX);
+    private static final String SYSTEM_TIME_ENDPOINT = "%s/gettime".formatted(ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
     private final VehiclesApi vehiclesApi;
@@ -80,57 +82,47 @@ public final class BusApiImpl implements BusApi {
 
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<String>> typeReference = new TypeReference<>() {};
-        CtaResponse<String> timeResponse;
+        TypeReference<CtaResponse<CtaTimeBustimeResponse>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaTimeBustimeResponse> timeResponse;
 
         try {
             timeResponse = this.context.jsonMapper()
                                        .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", SYSTEM_TIME_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(SYSTEM_TIME_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<String> bustimeResponse = timeResponse.bustimeResponse();
+        CtaTimeBustimeResponse bustimeResponse = timeResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        String systemTime = bustimeResponse.data();
+        String systemTime = bustimeResponse.tm();
+        List<CtaTimeError> errors = bustimeResponse.error();
 
-        if ((errors == null) && (systemTime == null)) {
-            String message = String.format(
-                "System time bustime response missing both error and data from %s",
-                SYSTEM_TIME_ENDPOINT
-            );
+        if (systemTime != null) {
+            Instant systemInstant = Qualifiers.mapTimestamp(systemTime);
+
+            if (systemInstant == null) {
+                String message = "Failed to map system time '%s' to Instant from %s".formatted(
+                    systemTime,
+                    SYSTEM_TIME_ENDPOINT
+                );
+
+                throw new Cta4jException(message);
+            }
+
+            return systemInstant;
+        }
+
+        if (errors == null || errors.isEmpty()) {
+            String message = "No system time data returned from %s".formatted(SYSTEM_TIME_ENDPOINT);
 
             throw new Cta4jException(message);
         }
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(SYSTEM_TIME_ENDPOINT, errors);
+        String message = ApiUtils.buildErrorMessage(SYSTEM_TIME_ENDPOINT, errors);
 
-            throw new Cta4jException(message);
-        }
-
-        if (systemTime == null) {
-            String message = String.format("No system time data returned from %s", SYSTEM_TIME_ENDPOINT);
-
-            throw new Cta4jException(message);
-        }
-
-        Instant systemInstant = Qualifiers.mapTimestamp(systemTime);
-
-        if (systemInstant == null) {
-            String message = String.format(
-                "Failed to map system time '%s' to Instant from %s",
-                systemTime,
-                SYSTEM_TIME_ENDPOINT
-            );
-
-            throw new Cta4jException(message);
-        }
-
-        return systemInstant;
+        throw new Cta4jException(message);
     }
 
     @Override
