@@ -22,12 +22,12 @@ import tools.jackson.core.type.TypeReference;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class RoutesApiImpl implements RoutesApi {
     private static final Logger log = LoggerFactory.getLogger(RoutesApiImpl.class);
 
-    private static final String ROUTES_ENDPOINT = String.format("%s/getroutes", ApiUtils.API_PREFIX);
+    private static final String ROUTES_ENDPOINT = "%s/getroutes".formatted(ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
 
@@ -54,7 +54,7 @@ public final class RoutesApiImpl implements RoutesApi {
             routesResponse = this.context.jsonMapper()
                                          .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", ROUTES_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(ROUTES_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

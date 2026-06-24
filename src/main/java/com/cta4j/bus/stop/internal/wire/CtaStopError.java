@@ -1,4 +1,4 @@
-package com.cta4j.bus.route.internal.wire;
+package com.cta4j.bus.stop.internal.wire;
 
 import com.cta4j.bus.common.internal.wire.CtaError;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,11 +11,14 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiStatus.Internal
 @NullMarked
-public record CtaRouteError(
+public record CtaStopError(
     String msg,
+    @Nullable String rt,
+    @Nullable String dir,
+    @Nullable String stpid,
     @Nullable String rtpidatafeed
 ) implements CtaError {
-    public CtaRouteError {
+    public CtaStopError {
         Objects.requireNonNull(msg);
     }
 }

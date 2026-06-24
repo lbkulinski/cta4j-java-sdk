@@ -1,4 +1,4 @@
-package com.cta4j.bus.route.internal.wire;
+package com.cta4j.bus.stop.internal.wire;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.jetbrains.annotations.ApiStatus;
@@ -10,7 +10,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiStatus.Internal
 @NullMarked
-public record CtaRouteBustimeResponse(
-    @Nullable List<CtaRouteError> error,
-    @Nullable List<CtaRoute> route
+public record CtaStopBustimeResponse(
+    @Nullable List<CtaStopError> error,
+    @Nullable List<CtaStop> stop
 ) {}
