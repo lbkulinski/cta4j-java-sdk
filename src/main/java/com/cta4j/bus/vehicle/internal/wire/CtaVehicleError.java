@@ -8,8 +8,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
 @NullMarked
 public record CtaVehicleError(
     String msg,

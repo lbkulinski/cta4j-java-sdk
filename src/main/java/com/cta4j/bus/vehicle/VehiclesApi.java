@@ -47,8 +47,7 @@ public interface VehiclesApi {
         }
 
         if (vehicles.size() > 1) {
-            String message = String.format(
-                "Expected at most one vehicle for ID: %s, but found %d",
+            String message = "Expected at most one vehicle for ID: %s, but found %d".formatted(
                 id,
                 vehicles.size()
             );

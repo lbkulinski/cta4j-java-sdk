@@ -1,8 +1,11 @@
 package com.cta4j.bus.vehicle.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the mode of transit for a vehicle.
  */
+@NullMarked
 public enum TransitMode {
     /**
      * Indicates no specific transit mode.

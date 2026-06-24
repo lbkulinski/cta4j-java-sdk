@@ -23,12 +23,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class VehiclesApiImpl implements VehiclesApi {
     private static final Logger log = LoggerFactory.getLogger(VehiclesApiImpl.class);
 
-    private static final String VEHICLES_ENDPOINT = String.format("%s/getvehicles", ApiUtils.API_PREFIX);
+    private static final String VEHICLES_ENDPOINT = "%s/getvehicles".formatted(ApiUtils.API_PREFIX);
 
     private final BusApiContext context;
 
@@ -38,13 +38,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
     @Override
     public List<Vehicle> findByIds(Collection<String> ids) {
-        Objects.requireNonNull(ids);
+        ids = List.copyOf(ids);
 
         if (ids.isEmpty()) {
             return List.of();
         }
-
-        ids.forEach(Objects::requireNonNull);
 
         String idsString = String.join(",", ids);
 
@@ -63,13 +61,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
     @Override
     public List<Vehicle> findByRouteIds(Collection<String> routeIds) {
-        Objects.requireNonNull(routeIds);
+        routeIds = List.copyOf(routeIds);
 
         if (routeIds.isEmpty()) {
             return List.of();
         }
-
-        routeIds.forEach(Objects::requireNonNull);
 
         String routeIdsString = String.join(",", routeIds);
 
@@ -96,7 +92,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             vehicleResponse = this.context.jsonMapper()
                                           .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", VEHICLES_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }
