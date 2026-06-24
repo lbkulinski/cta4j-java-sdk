@@ -70,14 +70,14 @@ public final class RoutesApiImpl implements RoutesApi {
                          .toList();
         }
 
-        if (errors != null && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(ROUTES_ENDPOINT, errors);
+        if (errors == null || errors.isEmpty()) {
+            log.warn("Received empty response from {}", ROUTES_ENDPOINT);
 
-            throw new Cta4jException(message);
+            return List.of();
         }
 
-        log.warn("Received empty response from {}", ROUTES_ENDPOINT);
+        String message = ApiUtils.buildErrorMessage(ROUTES_ENDPOINT, errors);
 
-        return List.of();
+        throw new Cta4jException(message);
     }
 }

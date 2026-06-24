@@ -39,13 +39,11 @@ public final class PatternsApiImpl implements PatternsApi {
 
     @Override
     public List<RoutePattern> findByIds(Collection<String> patternIds) {
-        Objects.requireNonNull(patternIds);
+        patternIds = List.copyOf(patternIds);
 
         if (patternIds.isEmpty()) {
             return List.of();
         }
-
-        patternIds.forEach(Objects::requireNonNull);
 
         if (patternIds.size() > MAX_PATTERN_IDS_PER_REQUEST) {
             String message = "A maximum of %d pattern IDs can be requested at once, but %d were provided".formatted(
