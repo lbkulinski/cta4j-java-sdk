@@ -2,19 +2,22 @@ package com.cta4j.bus.prediction.internal.impl;
 
 import com.cta4j.bus.common.internal.context.BusApiContext;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
 import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
 import com.cta4j.bus.prediction.internal.mapper.PredictionMapper;
+import com.cta4j.bus.prediction.internal.wire.CtaPredictionBustimeResponse;
+import com.cta4j.bus.prediction.internal.wire.CtaPredictionError;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 
@@ -24,6 +27,8 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 public final class PredictionsApiImpl implements PredictionsApi {
+    private static final Logger log = LoggerFactory.getLogger(PredictionsApiImpl.class);
+
     private static final String PREDICTIONS_ENDPOINT = String.format("%s/getpredictions", ApiUtils.API_PREFIX);
     private static final int MAX_STOP_IDS_PER_REQUEST = 10;
     private static final int MAX_VEHICLE_IDS_PER_REQUEST = 10;
@@ -127,8 +132,8 @@ public final class PredictionsApiImpl implements PredictionsApi {
     private List<Prediction> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<List<CtaPrediction>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaPrediction>> predictionsResponse;
+        TypeReference<CtaResponse<CtaPredictionBustimeResponse>> typeReference = new TypeReference<>() {};
+        CtaResponse<CtaPredictionBustimeResponse> predictionsResponse;
 
         try {
             predictionsResponse = this.context.objectMapper()
@@ -139,23 +144,32 @@ public final class PredictionsApiImpl implements PredictionsApi {
             throw new Cta4jException(message, e);
         }
 
-        CtaBustimeResponse<List<CtaPrediction>> bustimeResponse = predictionsResponse.bustimeResponse();
+        CtaPredictionBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaPrediction> predictions = bustimeResponse.data();
+        List<CtaPrediction> predictions = bustimeResponse.prd();
+        List<CtaPredictionError> errors = bustimeResponse.error();
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(PREDICTIONS_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
+        if (predictions != null && !predictions.isEmpty()) {
+            return predictions.stream()
+                              .map(PredictionMapper.INSTANCE::toDomain)
+                              .toList();
         }
 
-        if ((predictions == null) || predictions.isEmpty()) {
+        if (errors == null || errors.isEmpty()) {
+            log.warn("Received empty response from {}", PREDICTIONS_ENDPOINT);
+
             return List.of();
         }
 
-        return predictions.stream()
-                          .map(PredictionMapper.INSTANCE::toDomain)
-                          .toList();
+        boolean notFound = errors.stream()
+                                 .allMatch(error -> error.stpid() != null || error.vid() != null);
+
+        if (notFound) {
+            return List.of();
+        }
+
+        String message = ApiUtils.buildErrorMessage(PREDICTIONS_ENDPOINT, errors);
+
+        throw new Cta4jException(message);
     }
 }
