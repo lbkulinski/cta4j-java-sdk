@@ -56,7 +56,7 @@ public enum FlagStop {
             case 1 -> PICKUP_AND_DISCHARGE;
             case 2 -> ONLY_DISCHARGE;
             default -> {
-                String message = String.format("Unknown flag stop code: %d", code);
+                String message = "Unknown flag stop code: %d".formatted(code);
 
                 throw new IllegalArgumentException(message);
             }

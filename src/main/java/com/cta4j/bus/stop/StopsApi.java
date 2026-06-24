@@ -58,7 +58,7 @@ public interface StopsApi {
         }
 
         if (stops.size() > 1) {
-            String message = String.format("Multiple stops found for ID: %s", stopId);
+            String message = "Multiple stops found for ID: %s".formatted(stopId);
 
             throw new Cta4jException(message);
         }
