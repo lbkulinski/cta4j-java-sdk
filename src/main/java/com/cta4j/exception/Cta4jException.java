@@ -1,9 +1,12 @@
 package com.cta4j.exception;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * A custom exception class for handling cta4j-specific errors.
  */
-public class Cta4jException extends RuntimeException {
+@NullMarked
+public final class Cta4jException extends RuntimeException {
     /**
      * Constructs a {@code Cta4jException}.
      *

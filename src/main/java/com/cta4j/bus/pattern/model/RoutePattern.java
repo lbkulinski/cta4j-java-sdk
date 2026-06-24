@@ -20,18 +20,11 @@ import java.util.Objects;
 @NullMarked
 public record RoutePattern(
     String id,
-
     int length,
-
     String direction,
-
     List<PatternPoint> points,
-
-    @Nullable
-    String detourId,
-
-    @Nullable
-    List<PatternPoint> detourPoints
+    @Nullable String detourId,
+    @Nullable List<PatternPoint> detourPoints
 ) {
     /**
      * Constructs a {@code RoutePattern}.

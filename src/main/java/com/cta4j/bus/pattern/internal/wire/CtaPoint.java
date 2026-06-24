@@ -7,25 +7,16 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaPoint(
     int seq,
-
     String typ,
-
-    @Nullable
-    String stpid,
-
-    @Nullable
-    String stpnm,
-
-    @Nullable
-    Float pdist,
-
+    @Nullable String stpid,
+    @Nullable String stpnm,
+    @Nullable Float pdist,
     double lat,
-
     double lon
 ) {
     public CtaPoint {

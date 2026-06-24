@@ -38,13 +38,13 @@ public final class HttpClient {
             String path = uri.getPath();
             int statusCode = e.getStatusCode();
 
-            String message = String.format("Request to %s failed with status code %d", path, statusCode);
+            String message = "Request to %s failed with status code %d".formatted(path, statusCode);
 
             throw new Cta4jException(message, e);
         } catch (IOException e) {
             String path = uri.getPath();
 
-            String message = String.format("Request to %s failed due to an I/O error", path);
+            String message = "Request to %s failed due to an I/O error".formatted(path);
 
             throw new Cta4jException(message, e);
         }

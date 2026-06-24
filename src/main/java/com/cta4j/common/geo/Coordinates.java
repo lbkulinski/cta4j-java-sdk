@@ -15,9 +15,7 @@ import java.util.Objects;
 @NullMarked
 public record Coordinates(
     BigDecimal latitude,
-
     BigDecimal longitude,
-
     int heading
 ) {
     /**
@@ -36,8 +34,7 @@ public record Coordinates(
 
         if ((latitude.compareTo(GeoConstants.MIN_LATITUDE) < 0) ||
             (latitude.compareTo(GeoConstants.MAX_LATITUDE) > 0)) {
-            String message = String.format(
-                "latitude must be between %s and %s (inclusive)",
+            String message = "latitude must be between %s and %s (inclusive)".formatted(
                 GeoConstants.MIN_LATITUDE,
                 GeoConstants.MAX_LATITUDE
             );
@@ -47,8 +44,7 @@ public record Coordinates(
 
         if ((longitude.compareTo(GeoConstants.MIN_LONGITUDE) < 0) ||
             (longitude.compareTo(GeoConstants.MAX_LONGITUDE) > 0)) {
-            String message = String.format(
-                "longitude must be between %s and %s (inclusive)",
+            String message = "longitude must be between %s and %s (inclusive)".formatted(
                 GeoConstants.MIN_LONGITUDE,
                 GeoConstants.MAX_LONGITUDE
             );
@@ -57,8 +53,7 @@ public record Coordinates(
         }
 
         if ((heading < GeoConstants.MIN_HEADING) || (heading > GeoConstants.MAX_HEADING)) {
-            String message = String.format(
-                "heading must be between %d and %d (inclusive)",
+            String message = "heading must be between %d and %d (inclusive)".formatted(
                 GeoConstants.MIN_HEADING,
                 GeoConstants.MAX_HEADING
             );

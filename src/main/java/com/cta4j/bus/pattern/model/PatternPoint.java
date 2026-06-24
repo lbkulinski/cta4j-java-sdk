@@ -20,20 +20,11 @@ import java.util.Objects;
 @NullMarked
 public record PatternPoint(
     int sequence,
-
     PatternPointType type,
-
-    @Nullable
-    String stopId,
-
-    @Nullable
-    String stopName,
-
-    @Nullable
-    BigDecimal distanceToPatternPoint,
-
+    @Nullable String stopId,
+    @Nullable String stopName,
+    @Nullable BigDecimal distanceToPatternPoint,
     BigDecimal latitude,
-
     BigDecimal longitude
 ) {
     /**
