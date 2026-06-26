@@ -94,5 +94,5 @@ MapStruct mappers live in `internal/mapper/`. They are interfaces annotated with
 - `final` on all classes not designed for extension.
 - Always reference instance fields and methods with `this.`.
 - No comments unless the why is non-obvious.
-- No `Optional` — return empty collections or use `@Nullable`.
+- No `Optional` for fields or parameters. Use method overloading or `@Nullable` fields instead.
 - Prefer `List.of()` for empty returns; use `List.copyOf()` for defensive copies.
