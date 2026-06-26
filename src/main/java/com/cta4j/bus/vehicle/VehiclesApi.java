@@ -23,6 +23,7 @@ public interface VehiclesApi {
      * @return a {@link List} of {@link Vehicle}s corresponding to the provided IDs, or an empty {@link List} if no
      * vehicles are found
      * @throws NullPointerException if {@code ids} is {@code null} or contains {@code null} elements
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<Vehicle> findByIds(Collection<String> ids);
 
@@ -31,9 +32,10 @@ public interface VehiclesApi {
      *
      * @param id the vehicle ID
      * @return an {@link Optional} containing the {@link Vehicle} if found, or an empty {@link Optional} if no vehicle
-     * exists with the given ID
+     * is found for the given ID
      * @throws NullPointerException if {@code id} is {@code null}
-     * @throws Cta4jException if multiple vehicles are found for the given ID
+     * @throws Cta4jException if multiple vehicles are found for the given ID, or if the API returns an error
+     * response or the response cannot be parsed
      */
     default Optional<Vehicle> findById(String id) {
         Objects.requireNonNull(id);
@@ -65,8 +67,9 @@ public interface VehiclesApi {
      *
      * @param routeIds a {@link Collection} of route IDs
      * @return a {@link List} of {@link Vehicle}s associated with the route IDs, or an empty {@link List} if no
-     * vehicles exist for the route IDs
+     * vehicles are found for the route IDs
      * @throws NullPointerException if {@code routeIds} is {@code null} or contains {@code null} elements
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<Vehicle> findByRouteIds(Collection<String> routeIds);
 
@@ -75,8 +78,9 @@ public interface VehiclesApi {
      *
      * @param routeId the route ID
      * @return a {@link List} of {@link Vehicle}s associated with the route ID, or an empty {@link List} if no vehicles
-     * exist for the route ID
+     * are found for the route ID
      * @throws NullPointerException if {@code routeId} is {@code null}
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     default List<Vehicle> findByRouteId(String routeId) {
         Objects.requireNonNull(routeId);

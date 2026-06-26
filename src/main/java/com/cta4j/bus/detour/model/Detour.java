@@ -47,7 +47,8 @@ public record Detour(
      * @param endTime the time at which the detour ends
      * @param dataFeed the identifier for the data feed that supplied the detour, or {@code null} if not available
      * @throws NullPointerException if {@code id}, {@code version}, {@code description}, {@code routeDirections},
-     * {@code startTime}, or {@code endTime} is {@code null}
+     * {@code startTime}, or {@code endTime} is {@code null}, or if any element of {@code routeDirections} is
+     * {@code null}
      */
     public Detour {
         Objects.requireNonNull(id);

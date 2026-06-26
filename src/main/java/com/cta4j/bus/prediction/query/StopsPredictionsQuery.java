@@ -28,7 +28,8 @@ public record StopsPredictionsQuery(
      * @param maxResults the optional maximum number of predictions to return
      * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}, or if any element of
      * {@code routeIds} is {@code null}
-     * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
+     * @throws IllegalArgumentException if more than 10 stop IDs are provided, or if {@code maxResults} is
+     * non-{@code null} and not positive
      */
     public StopsPredictionsQuery {
         stopIds = List.copyOf(stopIds);
@@ -127,6 +128,7 @@ public record StopsPredictionsQuery(
          * Builds the {@code StopsPredictionsQuery}.
          *
          * @return a new {@code StopsPredictionsQuery} instance
+         * @throws IllegalArgumentException if more than 10 stop IDs are provided
          */
         public StopsPredictionsQuery build() {
             return new StopsPredictionsQuery(

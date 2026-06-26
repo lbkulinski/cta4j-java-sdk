@@ -9,8 +9,8 @@ import org.jspecify.annotations.NullMarked;
 import java.io.IOException;
 import java.net.URI;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class HttpClient {
     private HttpClient() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");

@@ -1,6 +1,7 @@
 package com.cta4j.bus.locale;
 
 import com.cta4j.bus.locale.model.SupportedLocale;
+import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -17,7 +18,8 @@ public interface LocalesApi {
      * Retrieves the supported locales.
      *
      * @return a {@link List} of {@link SupportedLocale}s, or an empty {@link List} if no supported locales are
-     * available
+     * found
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<SupportedLocale> list();
 
@@ -26,7 +28,9 @@ public interface LocalesApi {
      *
      * @param displayLocale the locale in which to display the names of the supported locales
      * @return a {@link List} of {@link SupportedLocale}s with names in the specified locale, or an empty {@link List}
-     * if no supported locales are available
+     * if no supported locales are found
+     * @throws NullPointerException if {@code displayLocale} is {@code null}
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<SupportedLocale> list(Locale displayLocale);
 
@@ -34,7 +38,8 @@ public interface LocalesApi {
      * Retrieves the supported locales, with names displayed in their native languages.
      *
      * @return a {@link List} of {@link SupportedLocale}s with names in their native languages, or an empty
-     * {@link List} if no supported locales are available
+     * {@link List} if no supported locales are found
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<SupportedLocale> listInNativeLanguage();
 }

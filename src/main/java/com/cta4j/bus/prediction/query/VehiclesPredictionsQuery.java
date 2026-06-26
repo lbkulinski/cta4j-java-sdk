@@ -24,7 +24,8 @@ public record VehiclesPredictionsQuery(
      * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @param maxResults the optional maximum number of predictions to return
      * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
-     * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
+     * @throws IllegalArgumentException if more than 10 vehicle IDs are provided, or if {@code maxResults} is
+     * non-{@code null} and not positive
      */
     public VehiclesPredictionsQuery {
         vehicleIds = List.copyOf(vehicleIds);
@@ -100,6 +101,7 @@ public record VehiclesPredictionsQuery(
          * Builds the {@code VehiclesPredictionsQuery}.
          *
          * @return the constructed {@code VehiclesPredictionsQuery}
+         * @throws IllegalArgumentException if more than 10 vehicle IDs are provided
          */
         public VehiclesPredictionsQuery build() {
             return new VehiclesPredictionsQuery(

@@ -23,6 +23,8 @@ public interface PatternsApi {
      * @return a {@link List} of {@link RoutePattern}s corresponding to the provided IDs, or an empty {@link List} if
      * no patterns are found
      * @throws NullPointerException if {@code patternIds} is {@code null} or contains {@code null} elements
+     * @throws IllegalArgumentException if more than 10 pattern IDs are provided
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<RoutePattern> findByIds(Collection<String> patternIds);
 
@@ -31,8 +33,10 @@ public interface PatternsApi {
      *
      * @param patternId the route pattern ID
      * @return an {@link Optional} containing the {@link RoutePattern} if found, or an empty {@link Optional} if no
-     * pattern exists with the given ID
+     * pattern is found for the given ID
      * @throws NullPointerException if {@code patternId} is {@code null}
+     * @throws Cta4jException if multiple route patterns are found for the given ID, or if the API returns an error
+     * response or the response cannot be parsed
      */
     default Optional<RoutePattern> findById(String patternId) {
         Objects.requireNonNull(patternId);
@@ -61,8 +65,9 @@ public interface PatternsApi {
      *
      * @param routeId the route ID
      * @return a {@link List} of {@link RoutePattern}s associated with the route ID, or an empty {@link List} if no
-     * patterns exist for the route ID
+     * patterns are found for the route ID
      * @throws NullPointerException if {@code routeId} is {@code null}
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<RoutePattern> findByRouteId(String routeId);
 }

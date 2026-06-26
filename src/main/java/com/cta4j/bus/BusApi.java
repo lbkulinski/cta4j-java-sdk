@@ -9,6 +9,7 @@ import com.cta4j.bus.prediction.PredictionsApi;
 import com.cta4j.bus.route.RoutesApi;
 import com.cta4j.bus.stop.StopsApi;
 import com.cta4j.bus.vehicle.VehiclesApi;
+import com.cta4j.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Instant;
@@ -30,6 +31,7 @@ public interface BusApi {
      * Returns the current system time reported by the Bus Tracker API.
      *
      * @return the API system time as an {@link Instant}
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     Instant systemTime();
 
@@ -100,6 +102,7 @@ public interface BusApi {
          *
          * @param host the API host
          * @return this builder instance
+         * @throws NullPointerException if {@code host} is {@code null}
          */
         Builder host(String host);
 
