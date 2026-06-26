@@ -27,7 +27,7 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 public final class ArrivalsApiImpl implements ArrivalsApi {
-    private static final String ARRIVALS_ENDPOINT = String.format("%s/ttarrivals.aspx", ApiUtils.API_PREFIX);
+    private static final String ARRIVALS_ENDPOINT = "%s/ttarrivals.aspx".formatted(ApiUtils.API_PREFIX);
 
     private final TrainApiContext context;
 
@@ -85,7 +85,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
             ctaResponse = this.context.objectMapper()
                                       .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", ARRIVALS_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(ARRIVALS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

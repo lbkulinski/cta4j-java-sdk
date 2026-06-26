@@ -96,7 +96,7 @@ public final class Qualifiers {
         try {
             address = objectMapper.readValue(humanAddress, HumanAddress.class);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse human address: %s", humanAddress);
+            String message = "Failed to parse human address: %s".formatted(humanAddress);
 
             throw new IllegalArgumentException(message, e);
         }
@@ -126,7 +126,7 @@ public final class Qualifiers {
             case 0 -> false;
             case 1 -> true;
             default -> {
-                String message = String.format("Invalid boolean value: %s. Expected 0 or 1", value);
+                String message = "Invalid boolean value: %s. Expected 0 or 1".formatted(value);
 
                 throw new IllegalArgumentException(message);
             }

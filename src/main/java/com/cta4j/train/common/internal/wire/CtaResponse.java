@@ -6,9 +6,9 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaResponse<T>(T ctatt) {
     public CtaResponse {
         Objects.requireNonNull(ctatt);

@@ -35,7 +35,7 @@ public final class StationsApiImpl implements StationsApi {
             stations = this.context.objectMapper()
                                    .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", this.context.stationsUrl());
+            String message = "Failed to parse response from %s".formatted(this.context.stationsUrl());
 
             throw new Cta4jException(message, e);
         }

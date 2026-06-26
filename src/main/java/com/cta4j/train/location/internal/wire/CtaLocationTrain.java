@@ -7,9 +7,9 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaLocationTrain(
     int rn,
 

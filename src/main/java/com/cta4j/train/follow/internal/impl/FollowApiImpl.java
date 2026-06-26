@@ -22,7 +22,7 @@ import java.util.Optional;
 @NullMarked
 @ApiStatus.Internal
 public final class FollowApiImpl implements FollowApi {
-    private static final String FOLLOW_ENDPOINT = String.format("%s/ttfollow.aspx", ApiUtils.API_PREFIX);
+    private static final String FOLLOW_ENDPOINT = "%s/ttfollow.aspx".formatted(ApiUtils.API_PREFIX);
     private static final int NOT_FOUND_ERROR_CODE = 501;
 
     private final TrainApiContext context;
@@ -57,7 +57,7 @@ public final class FollowApiImpl implements FollowApi {
             ctaResponse = this.context.objectMapper()
                                       .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", FOLLOW_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(FOLLOW_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

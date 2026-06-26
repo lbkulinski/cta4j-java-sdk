@@ -23,7 +23,7 @@ import java.util.Objects;
 @NullMarked
 @ApiStatus.Internal
 public final class LocationsApiImpl implements LocationsApi {
-    private static final String POSITIONS_ENDPOINT = String.format("%s/ttpositions.aspx", ApiUtils.API_PREFIX);
+    private static final String POSITIONS_ENDPOINT = "%s/ttpositions.aspx".formatted(ApiUtils.API_PREFIX);
 
     private final TrainApiContext context;
 
@@ -69,7 +69,7 @@ public final class LocationsApiImpl implements LocationsApi {
             ctaResponse = this.context.objectMapper()
                                       .readValue(response, typeReference);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", POSITIONS_ENDPOINT);
+            String message = "Failed to parse response from %s".formatted(POSITIONS_ENDPOINT);
 
             throw new Cta4jException(message, e);
         }

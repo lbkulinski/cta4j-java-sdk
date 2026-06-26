@@ -22,6 +22,6 @@ public final class ApiUtils {
         Objects.requireNonNull(endpoint);
         Objects.requireNonNull(error);
 
-        return String.format("Error response from %s: [%d] %s", endpoint, error.code(), error.message());
+        return "Error response from %s: [%d] %s".formatted(endpoint, error.code(), error.message());
     }
 }
