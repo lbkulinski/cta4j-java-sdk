@@ -13,11 +13,8 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public record CtaRoute(
-    @JsonProperty("@name")
-    String name,
-
-    @Nullable
-    List<CtaLocationTrain> train
+    @JsonProperty("@name") String name,
+    @Nullable List<CtaLocationTrain> train
 ) {
     public CtaRoute {
         Objects.requireNonNull(name);

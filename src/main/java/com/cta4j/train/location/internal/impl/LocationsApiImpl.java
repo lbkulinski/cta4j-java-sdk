@@ -2,7 +2,7 @@ package com.cta4j.train.location.internal.impl;
 
 import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.exception.Cta4jException;
-import com.cta4j.train.common.internal.context.TrainApiContext;
+import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.wire.CtaError;
 import com.cta4j.train.common.internal.wire.CtaResponse;
@@ -16,6 +16,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -25,10 +26,10 @@ import java.util.Objects;
 public final class LocationsApiImpl implements LocationsApi {
     private static final String POSITIONS_ENDPOINT = "%s/ttpositions.aspx".formatted(ApiUtils.API_PREFIX);
 
-    private final TrainApiContext context;
+    private final TrainApiConfig config;
 
-    public LocationsApiImpl(TrainApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public LocationsApiImpl(TrainApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -49,10 +50,10 @@ public final class LocationsApiImpl implements LocationsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(POSITIONS_ENDPOINT)
             .addParameter("rt", linesString)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON")
             .toString();
 
@@ -66,8 +67,8 @@ public final class LocationsApiImpl implements LocationsApi {
         CtaResponse<CtaLocationResponse> ctaResponse;
 
         try {
-            ctaResponse = this.context.objectMapper()
-                                      .readValue(response, typeReference);
+            ctaResponse = JsonMapper.shared()
+                                    .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(POSITIONS_ENDPOINT);
 

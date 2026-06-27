@@ -1,21 +1,18 @@
-package com.cta4j.bus.common.internal.context;
+package com.cta4j.bus.common.internal.config;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Objects;
 
 @ApiStatus.Internal
 @NullMarked
-public record BusApiContext(
+public record BusApiConfig(
     String host,
-    String apiKey,
-    JsonMapper jsonMapper
+    String apiKey
 ) {
-    public BusApiContext {
+    public BusApiConfig {
         Objects.requireNonNull(host);
         Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(jsonMapper);
     }
 }

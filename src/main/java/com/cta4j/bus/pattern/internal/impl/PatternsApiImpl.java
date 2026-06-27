@@ -1,6 +1,6 @@
 package com.cta4j.bus.pattern.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.pattern.PatternsApi;
@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,10 +32,10 @@ public final class PatternsApiImpl implements PatternsApi {
     private static final String PATTERNS_ENDPOINT = "%s/getpatterns".formatted(ApiUtils.API_PREFIX);
     private static final int MAX_PATTERN_IDS_PER_REQUEST = 10;
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public PatternsApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public PatternsApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -58,10 +59,10 @@ public final class PatternsApiImpl implements PatternsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(PATTERNS_ENDPOINT)
             .addParameter("pid", patternIdsString)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -74,10 +75,10 @@ public final class PatternsApiImpl implements PatternsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(PATTERNS_ENDPOINT)
             .addParameter("rt", routeId)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -91,8 +92,8 @@ public final class PatternsApiImpl implements PatternsApi {
         CtaResponse<CtaPatternBustimeResponse> patternsResponse;
 
         try {
-            patternsResponse = this.context.jsonMapper()
-                                           .readValue(response, typeReference);
+            patternsResponse = JsonMapper.shared()
+                                         .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(PATTERNS_ENDPOINT);
 

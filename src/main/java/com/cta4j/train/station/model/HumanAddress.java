@@ -15,11 +15,8 @@ import java.util.Objects;
 @NullMarked
 public record HumanAddress(
     String address,
-
     String city,
-
     String state,
-
     String zip
 ) {
     /**

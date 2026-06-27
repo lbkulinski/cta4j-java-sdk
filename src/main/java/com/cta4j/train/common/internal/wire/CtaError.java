@@ -4,8 +4,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public record CtaError(int code, String message) {
     public CtaError(int code, @Nullable String message) {
         if (code < 0) {

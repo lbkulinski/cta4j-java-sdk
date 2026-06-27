@@ -1,6 +1,6 @@
 package com.cta4j.bus.stop.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.stop.StopsApi;
@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Collection;
 import java.util.List;
@@ -31,10 +32,10 @@ public final class StopsApiImpl implements StopsApi {
     private static final String STOPS_ENDPOINT = "%s/getstops".formatted(ApiUtils.API_PREFIX);
     private static final int MAX_STOP_IDS_PER_REQUEST = 10;
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public StopsApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public StopsApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -44,11 +45,11 @@ public final class StopsApiImpl implements StopsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(STOPS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("dir", direction)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -76,10 +77,10 @@ public final class StopsApiImpl implements StopsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(STOPS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -93,8 +94,8 @@ public final class StopsApiImpl implements StopsApi {
         CtaResponse<CtaStopBustimeResponse> stopsResponse;
 
         try {
-            stopsResponse = this.context.jsonMapper()
-                                        .readValue(response, typeReference);
+            stopsResponse = JsonMapper.shared()
+                                      .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(STOPS_ENDPOINT);
 

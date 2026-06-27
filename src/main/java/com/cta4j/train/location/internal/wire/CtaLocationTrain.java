@@ -12,34 +12,19 @@ import java.util.Objects;
 @NullMarked
 public record CtaLocationTrain(
     int rn,
-
     int destSt,
-
     String destNm,
-
     int trDr,
-
     int nextStaId,
-
     int nextStpId,
-
     String nextStaNm,
-
     String prdt,
-
     String arrT,
-
     int isApp,
-
     int isDly,
-
-    @Nullable
-    String flags,
-
+    @Nullable String flags,
     double lat,
-
     double lon,
-
     int heading
 ) {
     public CtaLocationTrain {

@@ -6,7 +6,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Represents a response from the "follow" endpoint of the CTA Train Tracker API.
@@ -16,9 +15,7 @@ import java.util.Objects;
  */
 @NullMarked
 public record FollowTrain(
-    @Nullable
-    Coordinates coordinates,
-
+    @Nullable Coordinates coordinates,
     List<Arrival> arrivals
 ) {
     /**
@@ -30,8 +27,6 @@ public record FollowTrain(
      * elements
      */
     public FollowTrain {
-        Objects.requireNonNull(arrivals);
-
         arrivals = List.copyOf(arrivals);
     }
 }

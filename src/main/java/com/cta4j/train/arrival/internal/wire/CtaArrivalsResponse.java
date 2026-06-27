@@ -14,14 +14,9 @@ import java.util.Objects;
 @NullMarked
 public record CtaArrivalsResponse(
     String tmst,
-
     int errCd,
-
-    @Nullable
-    String errNm,
-
-    @Nullable
-    List<CtaArrival> eta
+    @Nullable String errNm,
+    @Nullable List<CtaArrival> eta
 ) {
     public CtaArrivalsResponse {
         Objects.requireNonNull(tmst);

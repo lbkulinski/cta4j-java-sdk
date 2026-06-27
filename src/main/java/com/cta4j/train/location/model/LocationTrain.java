@@ -28,30 +28,17 @@ import java.util.Objects;
 @NullMarked
 public record LocationTrain(
     String run,
-
     String destinationStationId,
-
     String destinationName,
-
     TrainDirection direction,
-
     String nextStationId,
-
     String nextStopId,
-
     String nextStationName,
-
     Instant predictionTime,
-
     Instant arrivalTime,
-
     boolean approaching,
-
     boolean delayed,
-
-    @Nullable
-    String flags,
-
+    @Nullable String flags,
     Coordinates coordinates
 ) {
     /**

@@ -6,7 +6,7 @@ import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.follow.internal.mapper.FollowTrainMapper;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
 import com.cta4j.train.follow.model.FollowTrain;
-import com.cta4j.train.common.internal.context.TrainApiContext;
+import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.wire.CtaError;
 import com.cta4j.train.common.internal.wire.CtaResponse;
@@ -15,20 +15,21 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Objects;
 import java.util.Optional;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class FollowApiImpl implements FollowApi {
     private static final String FOLLOW_ENDPOINT = "%s/ttfollow.aspx".formatted(ApiUtils.API_PREFIX);
     private static final int NOT_FOUND_ERROR_CODE = 501;
 
-    private final TrainApiContext context;
+    private final TrainApiConfig config;
 
-    public FollowApiImpl(TrainApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public FollowApiImpl(TrainApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -37,10 +38,10 @@ public final class FollowApiImpl implements FollowApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(FOLLOW_ENDPOINT)
             .addParameter("runnumber", run)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON")
             .toString();
 
@@ -54,8 +55,8 @@ public final class FollowApiImpl implements FollowApi {
         CtaResponse<CtaFollowResponse> ctaResponse;
 
         try {
-            ctaResponse = this.context.objectMapper()
-                                      .readValue(response, typeReference);
+            ctaResponse = JsonMapper.shared()
+                                    .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(FOLLOW_ENDPOINT);
 

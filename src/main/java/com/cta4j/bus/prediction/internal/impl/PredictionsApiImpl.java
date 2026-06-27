@@ -1,6 +1,6 @@
 package com.cta4j.bus.prediction.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,10 +32,10 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
     private static final String PREDICTIONS_ENDPOINT = "%s/getpredictions".formatted(ApiUtils.API_PREFIX);
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public PredictionsApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public PredictionsApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -51,11 +52,11 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
         URIBuilder builder = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json");
 
         if (query.routeIds() != null) {
@@ -89,11 +90,11 @@ public final class PredictionsApiImpl implements PredictionsApi {
 
         URIBuilder builder = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("vid", vehicleIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json");
 
         if (query.maxResults() != null) {
@@ -114,8 +115,8 @@ public final class PredictionsApiImpl implements PredictionsApi {
         CtaResponse<CtaPredictionBustimeResponse> predictionsResponse;
 
         try {
-            predictionsResponse = this.context.jsonMapper()
-                                              .readValue(response, typeReference);
+            predictionsResponse = JsonMapper.shared()
+                                            .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
 

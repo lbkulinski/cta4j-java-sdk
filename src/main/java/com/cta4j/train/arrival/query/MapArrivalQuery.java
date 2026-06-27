@@ -16,12 +16,8 @@ import java.util.Objects;
 @NullMarked
 public record MapArrivalQuery(
     String mapId,
-
-    @Nullable
-    TrainLine line,
-
-    @Nullable
-    Integer maxResults
+    @Nullable TrainLine line,
+    @Nullable Integer maxResults
 ) {
     /**
      * Constructs a {@code MapArrivalQuery}.

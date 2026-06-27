@@ -1,6 +1,6 @@
 package com.cta4j.bus.vehicle.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.vehicle.VehiclesApi;
@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.Collection;
 import java.util.List;
@@ -30,10 +31,10 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
     private static final String VEHICLES_ENDPOINT = "%s/getvehicles".formatted(ApiUtils.API_PREFIX);
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public VehiclesApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public VehiclesApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -48,11 +49,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(VEHICLES_ENDPOINT)
             .addParameter("vid", idsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -71,11 +72,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(VEHICLES_ENDPOINT)
             .addParameter("rt", routeIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -89,8 +90,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
         CtaResponse<CtaVehicleBustimeResponse> vehicleResponse;
 
         try {
-            vehicleResponse = this.context.jsonMapper()
-                                          .readValue(response, typeReference);
+            vehicleResponse = JsonMapper.shared()
+                                        .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
 

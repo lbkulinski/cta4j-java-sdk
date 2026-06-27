@@ -1,6 +1,6 @@
 package com.cta4j.bus.direction.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.direction.DirectionsApi;
@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -27,10 +28,10 @@ public final class DirectionsApiImpl implements DirectionsApi {
 
     private static final String DIRECTIONS_ENDPOINT = "%s/getdirections".formatted(ApiUtils.API_PREFIX);
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public DirectionsApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public DirectionsApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -39,10 +40,10 @@ public final class DirectionsApiImpl implements DirectionsApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(DIRECTIONS_ENDPOINT)
             .addParameter("rt", routeId)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -52,8 +53,8 @@ public final class DirectionsApiImpl implements DirectionsApi {
         CtaResponse<CtaDirectionBustimeResponse> directionsResponse;
 
         try {
-            directionsResponse = this.context.jsonMapper()
-                                             .readValue(response, typeReference);
+            directionsResponse = JsonMapper.shared()
+                                           .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
 

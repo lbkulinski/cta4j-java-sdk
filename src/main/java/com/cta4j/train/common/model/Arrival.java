@@ -27,31 +27,18 @@ import java.util.Objects;
 @NullMarked
 public record Arrival(
     String stationId,
-
     String stationName,
-
     String stopId,
-
     String stopDescription,
-
     TrainLine line,
-
     String destinationStationId,
-
     String destinationName,
-
     Instant predictionTime,
-
     Instant arrivalTime,
-
     boolean approaching,
-
     boolean scheduled,
-
     boolean delayed,
-
     boolean fault,
-
     ArrivalMetadata metadata
 ) {
     /**

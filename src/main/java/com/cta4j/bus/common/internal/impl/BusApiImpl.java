@@ -1,6 +1,6 @@
 package com.cta4j.bus.common.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.BusApi;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
@@ -42,7 +42,7 @@ import java.util.Objects;
 public final class BusApiImpl implements BusApi {
     private static final String SYSTEM_TIME_ENDPOINT = "%s/gettime".formatted(ApiUtils.API_PREFIX);
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
     private final VehiclesApi vehiclesApi;
     private final RoutesApi routesApi;
     private final DirectionsApi directionsApi;
@@ -59,24 +59,24 @@ public final class BusApiImpl implements BusApi {
         Objects.requireNonNull(host);
         Objects.requireNonNull(apiKey);
 
-        this.context = new BusApiContext(host, apiKey, JsonMapper.shared());
-        this.vehiclesApi = new VehiclesApiImpl(this.context);
-        this.routesApi = new RoutesApiImpl(this.context);
-        this.directionsApi = new DirectionsApiImpl(this.context);
-        this.stopsApi = new StopsApiImpl(this.context);
-        this.patternsApi = new PatternsApiImpl(this.context);
-        this.predictionsApi = new PredictionsApiImpl(this.context);
-        this.localesApi = new LocalesApiImpl(this.context);
-        this.detoursApi = new DetoursApiImpl(this.context);
+        this.config = new BusApiConfig(host, apiKey);
+        this.vehiclesApi = new VehiclesApiImpl(this.config);
+        this.routesApi = new RoutesApiImpl(this.config);
+        this.directionsApi = new DirectionsApiImpl(this.config);
+        this.stopsApi = new StopsApiImpl(this.config);
+        this.patternsApi = new PatternsApiImpl(this.config);
+        this.predictionsApi = new PredictionsApiImpl(this.config);
+        this.localesApi = new LocalesApiImpl(this.config);
+        this.detoursApi = new DetoursApiImpl(this.config);
     }
 
     @Override
     public Instant systemTime() {
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(SYSTEM_TIME_ENDPOINT)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -86,8 +86,8 @@ public final class BusApiImpl implements BusApi {
         CtaResponse<CtaTimeBustimeResponse> timeResponse;
 
         try {
-            timeResponse = this.context.jsonMapper()
-                                       .readValue(response, typeReference);
+            timeResponse = JsonMapper.shared()
+                                     .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(SYSTEM_TIME_ENDPOINT);
 

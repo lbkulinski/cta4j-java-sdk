@@ -1,7 +1,6 @@
 package com.cta4j.train.common.internal.mapper;
 
 import com.cta4j.common.geo.Coordinates;
-import com.cta4j.common.internal.json.Cta4jJsonMapper;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
 import com.cta4j.train.follow.internal.wire.CtaPosition;
@@ -14,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
 import tools.jackson.core.JacksonException;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -25,8 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class Qualifiers {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
@@ -89,12 +88,11 @@ public final class Qualifiers {
             return null;
         }
 
-        ObjectMapper objectMapper = Cta4jJsonMapper.instance();
-
         HumanAddress address;
 
         try {
-            address = objectMapper.readValue(humanAddress, HumanAddress.class);
+            address = JsonMapper.shared()
+                                .readValue(humanAddress, HumanAddress.class);
         } catch (JacksonException e) {
             String message = "Failed to parse human address: %s".formatted(humanAddress);
 

@@ -1,26 +1,20 @@
-package com.cta4j.train.common.internal.context;
+package com.cta4j.train.common.internal.config;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
-public record TrainApiContext(
+@NullMarked
+public record TrainApiConfig(
     String host,
-
     String stationsUrl,
-
-    String apiKey,
-
-    ObjectMapper objectMapper
+    String apiKey
 ) {
-    public TrainApiContext {
+    public TrainApiConfig {
         Objects.requireNonNull(host);
         Objects.requireNonNull(stationsUrl);
         Objects.requireNonNull(apiKey);
-        Objects.requireNonNull(objectMapper);
     }
 }

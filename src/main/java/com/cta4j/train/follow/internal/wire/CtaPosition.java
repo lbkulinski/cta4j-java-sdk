@@ -9,13 +9,7 @@ import org.jspecify.annotations.Nullable;
 @ApiStatus.Internal
 @NullMarked
 public record CtaPosition(
-    @Nullable
-    Double lat,
-
-    @Nullable
-    Double lon,
-
-    @Nullable
-    Integer heading
-) {
-}
+    @Nullable Double lat,
+    @Nullable Double lon,
+    @Nullable Integer heading
+) {}

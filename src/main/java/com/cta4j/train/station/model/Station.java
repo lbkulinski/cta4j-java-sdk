@@ -22,21 +22,13 @@ import java.util.Objects;
 @NullMarked
 public record Station(
     String stopId,
-
     CardinalDirection direction,
-
     String stopName,
-
     String name,
-
     String descriptiveName,
-
     String mapId,
-
     boolean adaAccessible,
-
     List<TrainLine> lines,
-
     Location location
 ) {
     /**
@@ -62,7 +54,6 @@ public record Station(
         Objects.requireNonNull(name);
         Objects.requireNonNull(descriptiveName);
         Objects.requireNonNull(mapId);
-        Objects.requireNonNull(lines);
         Objects.requireNonNull(location);
 
         lines = List.copyOf(lines);

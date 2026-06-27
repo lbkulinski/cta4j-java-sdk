@@ -15,7 +15,6 @@ import java.util.Objects;
 @NullMarked
 public record TrainLocations(
     TrainLine line,
-
     List<LocationTrain> trains
 ) {
     /**
@@ -28,7 +27,6 @@ public record TrainLocations(
      */
     public TrainLocations {
         Objects.requireNonNull(line);
-        Objects.requireNonNull(trains);
 
         trains = List.copyOf(trains);
     }

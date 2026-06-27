@@ -9,7 +9,7 @@ import com.cta4j.train.common.model.Arrival;
 import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
 import com.cta4j.train.common.model.TrainLine;
-import com.cta4j.train.common.internal.context.TrainApiContext;
+import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.internal.wire.CtaError;
@@ -20,19 +20,20 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class ArrivalsApiImpl implements ArrivalsApi {
     private static final String ARRIVALS_ENDPOINT = "%s/ttarrivals.aspx".formatted(ApiUtils.API_PREFIX);
 
-    private final TrainApiContext context;
+    private final TrainApiConfig config;
 
-    public ArrivalsApiImpl(TrainApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public ArrivalsApiImpl(TrainApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -41,10 +42,10 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
 
         URIBuilder builder = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(ARRIVALS_ENDPOINT)
             .addParameter("mapid", query.mapId())
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON");
 
         return this.makeRequest(builder, query.line(), query.maxResults());
@@ -56,16 +57,20 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
 
         URIBuilder builder = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(ARRIVALS_ENDPOINT)
             .addParameter("stpid", query.stopId())
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON");
 
         return this.makeRequest(builder, query.line(), query.maxResults());
     }
 
-    private List<Arrival> makeRequest(URIBuilder builder, @Nullable TrainLine line, @Nullable Integer maxResults) {
+    private List<Arrival> makeRequest(
+        URIBuilder builder,
+        @Nullable TrainLine line,
+        @Nullable Integer maxResults
+    ) {
         if (line != null) {
             builder.addParameter("rt", line.getCode());
         }
@@ -82,8 +87,8 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         CtaResponse<CtaArrivalsResponse> ctaResponse;
 
         try {
-            ctaResponse = this.context.objectMapper()
-                                      .readValue(response, typeReference);
+            ctaResponse = JsonMapper.shared()
+                                    .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(ARRIVALS_ENDPOINT);
 

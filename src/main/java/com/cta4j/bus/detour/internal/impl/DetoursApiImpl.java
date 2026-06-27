@@ -1,6 +1,6 @@
 package com.cta4j.bus.detour.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.detour.DetoursApi;
@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,19 +30,19 @@ public final class DetoursApiImpl implements DetoursApi {
 
     private static final String DETOURS_ENDPOINT = "%s/getdetours".formatted(ApiUtils.API_PREFIX);
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public DetoursApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public DetoursApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
     public List<Detour> list() {
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(DETOURS_ENDPOINT)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -54,10 +55,10 @@ public final class DetoursApiImpl implements DetoursApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -71,11 +72,11 @@ public final class DetoursApiImpl implements DetoursApi {
 
         String url = new URIBuilder()
             .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
+            .setHost(this.config.host())
             .setPath(DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("rtdir", direction)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -89,8 +90,8 @@ public final class DetoursApiImpl implements DetoursApi {
         CtaResponse<CtaDetourBustimeResponse> detoursResponse;
 
         try {
-            detoursResponse = this.context.jsonMapper()
-                                          .readValue(response, typeReference);
+            detoursResponse = JsonMapper.shared()
+                                        .readValue(response, typeReference);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
 

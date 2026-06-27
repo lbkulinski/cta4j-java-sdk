@@ -12,46 +12,24 @@ import java.util.Objects;
 @NullMarked
 public record CtaArrival(
     int staId,
-
     int stpId,
-
     String staNm,
-
     String stpDe,
-
     int rn,
-
     String rt,
-
     int destSt,
-
     String destNm,
-
     int trDr,
-
     String prdt,
-
     String arrT,
-
     int isApp,
-
     int isSch,
-
     int isDly,
-
     int isFlt,
-
-    @Nullable
-    String flags,
-
-    @Nullable
-    Double lat,
-
-    @Nullable
-    Double lon,
-
-    @Nullable
-    Integer heading
+    @Nullable String flags,
+    @Nullable Double lat,
+    @Nullable Double lon,
+    @Nullable Integer heading
 ) {
     public CtaArrival {
         Objects.requireNonNull(staNm);
