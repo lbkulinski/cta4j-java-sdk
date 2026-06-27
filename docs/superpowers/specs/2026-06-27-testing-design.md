@@ -19,12 +19,12 @@
 
 Add to `pom.xml` under `<dependencies>`:
 
-| Artifact | Purpose |
-|---|---|
-| `org.junit.jupiter:junit-jupiter:5.x` | JUnit 5 test framework |
-| `org.wiremock:wiremock:3.x` | Embedded HTTP server for `*ApiImpl` tests |
-| `org.assertj:assertj-core:3.x` | Fluent assertions |
-| `ch.qos.logback:logback-classic:1.x` | Logging backend (suppress SLF4J no-binding warning) |
+| Artifact                              | Purpose                                             |
+|---------------------------------------|-----------------------------------------------------|
+| `org.junit.jupiter:junit-jupiter:5.x` | JUnit 5 test framework                              |
+| `org.wiremock:wiremock:3.x`           | Embedded HTTP server for `*ApiImpl` tests           |
+| `org.assertj:assertj-core:3.x`        | Fluent assertions                                   |
+| `ch.qos.logback:logback-classic:1.x`  | Logging backend (suppress SLF4J no-binding warning) |
 
 Also add `maven-surefire-plugin` 3.x to `<build><plugins>` to enable JUnit 5 test discovery.
 
@@ -124,13 +124,13 @@ WireMock stubs match by path only (`urlPathEqualTo(...)`) for all tests except U
 
 ### Bus impls (all 8 follow the same contract)
 
-| Test | WireMock stub | Expected result |
-|---|---|---|
-| `*_success` | JSON with data list populated | Returns mapped domain objects; assert count and field values |
-| `*_empty_noErrors` | JSON with both lists null/absent | Returns `List.of()` |
-| `*_notFound` | JSON with errors where all have resource-typed fields (e.g. `vid`, `rt`, `stpid`) | Returns `List.of()` |
-| `*_fatalError` | JSON with errors where none have resource-typed fields | Throws `Cta4jException` |
-| `*_invalidJson` | Raw string `"not-json"` | Throws `Cta4jException` |
+| Test               | WireMock stub                                                                     | Expected result                                              |
+|--------------------|-----------------------------------------------------------------------------------|--------------------------------------------------------------|
+| `*_success`        | JSON with data list populated                                                     | Returns mapped domain objects; assert count and field values |
+| `*_empty_noErrors` | JSON with both lists null/absent                                                  | Returns `List.of()`                                          |
+| `*_notFound`       | JSON with errors where all have resource-typed fields (e.g. `vid`, `rt`, `stpid`) | Returns `List.of()`                                          |
+| `*_fatalError`     | JSON with errors where none have resource-typed fields                            | Throws `Cta4jException`                                      |
+| `*_invalidJson`    | Raw string `"not-json"`                                                           | Throws `Cta4jException`                                      |
 
 For methods with multiple overloads (`VehiclesApiImpl.findByIds` / `findByRouteIds`, `PredictionsApiImpl` stop vs vehicle):
 - Additional test per overload verifying correct query param sent (e.g. `vid=` vs `rt=`).
@@ -140,29 +140,29 @@ For methods with multiple overloads (`VehiclesApiImpl.findByIds` / `findByRouteI
 
 **`ArrivalsApiImpl` / `LocationsApiImpl`** — error signaled by `errCd != 0`:
 
-| Test | Stub / input | Expected result |
-|---|---|---|
-| `*_success` | `errCd: 0`, eta/route list populated | Returns mapped domain objects |
-| `*_empty` | `errCd: 0`, eta/route list null or empty | Returns `List.of()` |
-| `*_error` | `errCd: 1`, `errNm: "..."` | Throws `Cta4jException` |
-| `*_invalidJson` | Raw `"not-json"` | Throws `Cta4jException` |
+| Test            | Stub / input                             | Expected result               |
+|-----------------|------------------------------------------|-------------------------------|
+| `*_success`     | `errCd: 0`, eta/route list populated     | Returns mapped domain objects |
+| `*_empty`       | `errCd: 0`, eta/route list null or empty | Returns `List.of()`           |
+| `*_error`       | `errCd: 1`, `errNm: "..."`               | Throws `Cta4jException`       |
+| `*_invalidJson` | Raw `"not-json"`                         | Throws `Cta4jException`       |
 
 **`FollowApiImpl`** — `errCd=501` is not-found:
 
-| Test | Stub | Expected result |
-|---|---|---|
-| `findByRun_found` | `errCd: 0`, position + eta populated | Returns `Optional.of(...)` |
-| `findByRun_notFound` | `errCd: 501` | Returns `Optional.empty()` |
-| `findByRun_error` | `errCd: 1` | Throws `Cta4jException` |
-| `findByRun_invalidJson` | Raw `"not-json"` | Throws `Cta4jException` |
+| Test                    | Stub                                 | Expected result            |
+|-------------------------|--------------------------------------|----------------------------|
+| `findByRun_found`       | `errCd: 0`, position + eta populated | Returns `Optional.of(...)` |
+| `findByRun_notFound`    | `errCd: 501`                         | Returns `Optional.empty()` |
+| `findByRun_error`       | `errCd: 1`                           | Throws `Cta4jException`    |
+| `findByRun_invalidJson` | Raw `"not-json"`                     | Throws `Cta4jException`    |
 
 **`StationsApiImpl`** — no error envelope, pure JSON array:
 
-| Test | Stub | Expected result |
-|---|---|---|
-| `list_success` | JSON array with station objects | Returns mapped domain objects |
-| `list_empty` | `[]` | Returns `List.of()` |
-| `list_invalidJson` | Raw `"not-json"` | Throws `Cta4jException` |
+| Test               | Stub                            | Expected result               |
+|--------------------|---------------------------------|-------------------------------|
+| `list_success`     | JSON array with station objects | Returns mapped domain objects |
+| `list_empty`       | `[]`                            | Returns `List.of()`           |
+| `list_invalidJson` | Raw `"not-json"`                | Throws `Cta4jException`       |
 
 ---
 
