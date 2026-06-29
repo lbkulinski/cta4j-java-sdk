@@ -1,0 +1,27 @@
+{
+  "bustime-response": {
+    "prd": [
+      {
+        "tmstmp": "20200308 10:28:00",
+        "typ": "A",
+        "stpid": "456",
+        "stpnm": "Ashland & Division",
+        "vid": 509,
+        "dstp": 1234,
+        "rt": "8",
+        "rtdd": "8",
+        "rtdir": "Northbound",
+        "des": "Waveland/Broadway",
+        "prdtm": "20200308 10:35:00",
+        "dly": false,
+        "dyn": 0,
+        "tablockid": "2 -701",
+        "tatripid": "108",
+        "origtatripno": "ME_ME403_V1_AA",
+        "zone": "",
+        "psgld": "EMPTY",
+        "flagstop": 0
+      }
+    ]
+  }
+}

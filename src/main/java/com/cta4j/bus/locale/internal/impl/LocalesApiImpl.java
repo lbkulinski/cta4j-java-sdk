@@ -40,8 +40,9 @@ public final class LocalesApiImpl implements LocalesApi {
     @Override
     public List<SupportedLocale> list() {
         String uri = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(LOCALES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
@@ -57,8 +58,9 @@ public final class LocalesApiImpl implements LocalesApi {
         String languageTag = displayLocale.toLanguageTag();
 
         String uri = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(LOCALES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
@@ -71,8 +73,9 @@ public final class LocalesApiImpl implements LocalesApi {
     @Override
     public List<SupportedLocale> listInNativeLanguage() {
         String uri = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(LOCALES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")

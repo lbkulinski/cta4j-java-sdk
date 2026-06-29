@@ -14,12 +14,13 @@ import java.util.Objects;
 @NullMarked
 public record CtaArrivalsResponse(
     String tmst,
-    int errCd,
+    String errCd,
     @Nullable String errNm,
     @Nullable List<CtaArrival> eta
 ) {
     public CtaArrivalsResponse {
         Objects.requireNonNull(tmst);
+        Objects.requireNonNull(errCd);
 
         if (eta != null) {
             eta = List.copyOf(eta);

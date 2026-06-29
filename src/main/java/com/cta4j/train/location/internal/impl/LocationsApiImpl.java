@@ -49,8 +49,9 @@ public final class LocationsApiImpl implements LocationsApi {
         String linesString = String.join(",", lineCodes);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(POSITIONS_ENDPOINT)
             .addParameter("rt", linesString)
             .addParameter("key", this.config.apiKey())
@@ -77,8 +78,18 @@ public final class LocationsApiImpl implements LocationsApi {
 
         CtaLocationResponse locationResponse = ctaResponse.ctatt();
 
-        if (locationResponse.errCd() != 0) {
-            CtaError error = new CtaError(locationResponse.errCd(), locationResponse.errNm());
+        int errCd;
+
+        try {
+            errCd = Integer.parseInt(locationResponse.errCd());
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse error code from %s".formatted(POSITIONS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        if (errCd != 0) {
+            CtaError error = new CtaError(errCd, locationResponse.errNm());
 
             String message = ApiUtils.buildErrorMessage(POSITIONS_ENDPOINT, error);
 

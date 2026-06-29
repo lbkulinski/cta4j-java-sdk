@@ -39,8 +39,9 @@ public final class DirectionsApiImpl implements DirectionsApi {
         Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(DIRECTIONS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("key", this.config.apiKey())
@@ -63,7 +64,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
 
         CtaDirectionBustimeResponse bustimeResponse = directionsResponse.bustimeResponse();
 
-        List<CtaDirection> directions = bustimeResponse.dir();
+        List<CtaDirection> directions = bustimeResponse.directions();
         List<CtaDirectionError> errors = bustimeResponse.error();
 
         if (directions != null && !directions.isEmpty()) {

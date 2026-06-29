@@ -12,15 +12,15 @@ import java.util.List;
 @NullMarked
 public record CtaDetourBustimeResponse(
     @Nullable List<CtaDetourError> error,
-    @Nullable List<CtaDetour> dtr
+    @Nullable List<CtaDetour> dtrs
 ) {
     public CtaDetourBustimeResponse {
         if (error != null) {
             error = List.copyOf(error);
         }
 
-        if (dtr != null) {
-            dtr = List.copyOf(dtr);
+        if (dtrs != null) {
+            dtrs = List.copyOf(dtrs);
         }
     }
 }

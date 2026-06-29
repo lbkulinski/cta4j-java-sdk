@@ -41,8 +41,9 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         Objects.requireNonNull(query);
 
         URIBuilder builder = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(ARRIVALS_ENDPOINT)
             .addParameter("mapid", query.mapId())
             .addParameter("key", this.config.apiKey())
@@ -56,8 +57,9 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         Objects.requireNonNull(query);
 
         URIBuilder builder = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(ARRIVALS_ENDPOINT)
             .addParameter("stpid", query.stopId())
             .addParameter("key", this.config.apiKey())
@@ -97,8 +99,18 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
 
         CtaArrivalsResponse arrivalsResponse = ctaResponse.ctatt();
 
-        if (arrivalsResponse.errCd() != 0) {
-            CtaError error = new CtaError(arrivalsResponse.errCd(), arrivalsResponse.errNm());
+        int errCd;
+
+        try {
+            errCd = Integer.parseInt(arrivalsResponse.errCd());
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse error code from %s".formatted(ARRIVALS_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        if (errCd != 0) {
+            CtaError error = new CtaError(errCd, arrivalsResponse.errNm());
 
             String message = ApiUtils.buildErrorMessage(ARRIVALS_ENDPOINT, error);
 

@@ -1,0 +1,124 @@
+package com.cta4j.bus.pattern;
+
+import com.cta4j.TestFixtures;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
+import com.cta4j.bus.pattern.internal.impl.PatternsApiImpl;
+import com.cta4j.bus.pattern.model.RoutePattern;
+import com.cta4j.exception.Cta4jException;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
+import static org.assertj.core.api.Assertions.*;
+
+class PatternsApiImplTest {
+    private WireMockServer server;
+    private PatternsApiImpl api;
+
+    @BeforeEach
+    void setUp() {
+        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server.start();
+        BusApiConfig config = new BusApiConfig("http", "localhost", this.server.port(), "testkey");
+        this.api = new PatternsApiImpl(config);
+    }
+
+    @AfterEach
+    void tearDown() {
+        this.server.stop();
+    }
+
+    @Test
+    void findByIds_returnsPatterns_whenResponseContainsPatterns() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/success.json"))));
+
+        List<RoutePattern> patterns = this.api.findByIds(List.of("3630"));
+
+        assertThat(patterns).hasSize(1);
+        RoutePattern pattern = patterns.getFirst();
+        assertThat(pattern.id()).isEqualTo("3630");
+        assertThat(pattern.direction()).isEqualTo("Northbound");
+        assertThat(pattern.points()).hasSize(1);
+    }
+
+    @Test
+    void findByIds_returnsEmpty_whenInputIsEmpty() {
+        List<RoutePattern> patterns = this.api.findByIds(List.of());
+
+        assertThat(patterns).isEmpty();
+        this.server.verify(0, anyRequestedFor(anyUrl()));
+    }
+
+    @Test
+    void findByIds_returnsEmpty_whenResponseHasNoDataAndNoErrors() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/empty.json"))));
+
+        List<RoutePattern> patterns = this.api.findByIds(List.of("3630"));
+
+        assertThat(patterns).isEmpty();
+    }
+
+    @Test
+    void findByIds_returnsEmpty_whenAllErrorsAreResourceSpecific() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/not_found.json"))));
+
+        List<RoutePattern> patterns = this.api.findByIds(List.of("9999"));
+
+        assertThat(patterns).isEmpty();
+    }
+
+    @Test
+    void findByIds_throwsCta4jException_whenResponseContainsFatalErrors() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/error.json"))));
+
+        assertThatThrownBy(() -> this.api.findByIds(List.of("3630")))
+            .isInstanceOf(Cta4jException.class);
+    }
+
+    @Test
+    void findByIds_throwsCta4jException_whenResponseIsNotJson() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("not-json")));
+
+        assertThatThrownBy(() -> this.api.findByIds(List.of("3630")))
+            .isInstanceOf(Cta4jException.class);
+    }
+
+    @Test
+    void findByRouteId_sendsRtParameter() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .withQueryParam("rt", equalTo("8"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/success.json"))));
+
+        List<RoutePattern> patterns = this.api.findByRouteId("8");
+
+        assertThat(patterns).hasSize(1);
+    }
+}

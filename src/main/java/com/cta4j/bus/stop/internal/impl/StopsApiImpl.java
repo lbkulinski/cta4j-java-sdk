@@ -44,8 +44,9 @@ public final class StopsApiImpl implements StopsApi {
         Objects.requireNonNull(direction);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(STOPS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("dir", direction)
@@ -76,8 +77,9 @@ public final class StopsApiImpl implements StopsApi {
         String stopIdsString = String.join(",", stopIds);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(STOPS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
             .addParameter("key", this.config.apiKey())
@@ -104,7 +106,7 @@ public final class StopsApiImpl implements StopsApi {
 
         CtaStopBustimeResponse bustimeResponse = stopsResponse.bustimeResponse();
 
-        List<CtaStop> stops = bustimeResponse.stop();
+        List<CtaStop> stops = bustimeResponse.stops();
         List<CtaStopError> errors = bustimeResponse.error();
 
         if (stops != null && !stops.isEmpty()) {

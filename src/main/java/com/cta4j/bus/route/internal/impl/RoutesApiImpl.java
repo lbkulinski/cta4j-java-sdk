@@ -39,8 +39,9 @@ public final class RoutesApiImpl implements RoutesApi {
     @Override
     public List<Route> list() {
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(ROUTES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
@@ -62,7 +63,7 @@ public final class RoutesApiImpl implements RoutesApi {
 
         CtaRouteBustimeResponse bustimeResponse = routesResponse.bustimeResponse();
 
-        List<CtaRoute> routes = bustimeResponse.route();
+        List<CtaRoute> routes = bustimeResponse.routes();
         List<CtaRouteError> errors = bustimeResponse.error();
 
         if (routes != null && !routes.isEmpty()) {

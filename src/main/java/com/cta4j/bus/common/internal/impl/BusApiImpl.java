@@ -3,9 +3,6 @@ package com.cta4j.bus.common.internal.impl;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.BusApi;
-import com.cta4j.bus.common.internal.wire.CtaResponse;
-import com.cta4j.bus.common.internal.wire.CtaTimeBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaTimeError;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.detour.internal.impl.DetoursApiImpl;
 import com.cta4j.bus.direction.DirectionsApi;
@@ -22,27 +19,17 @@ import com.cta4j.bus.route.internal.impl.RoutesApiImpl;
 import com.cta4j.bus.stop.internal.impl.StopsApiImpl;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.impl.VehiclesApiImpl;
-import com.cta4j.bus.common.internal.mapper.Qualifiers;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.common.internal.http.HttpClient;
-import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import tools.jackson.core.JacksonException;
-import tools.jackson.core.type.TypeReference;
-import tools.jackson.databind.json.JsonMapper;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
 
 @ApiStatus.Internal
 @NullMarked
 public final class BusApiImpl implements BusApi {
-    private static final String SYSTEM_TIME_ENDPOINT = "%s/gettime".formatted(ApiUtils.API_PREFIX);
-
-    private final BusApiConfig config;
+    private final SystemTimeApiImpl systemTimeApi;
     private final VehiclesApi vehiclesApi;
     private final RoutesApi routesApi;
     private final DirectionsApi directionsApi;
@@ -52,77 +39,23 @@ public final class BusApiImpl implements BusApi {
     private final LocalesApi localesApi;
     private final DetoursApi detoursApi;
 
-    public BusApiImpl(
-        String host,
-        String apiKey
-    ) {
-        Objects.requireNonNull(host);
-        Objects.requireNonNull(apiKey);
+    public BusApiImpl(BusApiConfig config) {
+        Objects.requireNonNull(config);
 
-        this.config = new BusApiConfig(host, apiKey);
-        this.vehiclesApi = new VehiclesApiImpl(this.config);
-        this.routesApi = new RoutesApiImpl(this.config);
-        this.directionsApi = new DirectionsApiImpl(this.config);
-        this.stopsApi = new StopsApiImpl(this.config);
-        this.patternsApi = new PatternsApiImpl(this.config);
-        this.predictionsApi = new PredictionsApiImpl(this.config);
-        this.localesApi = new LocalesApiImpl(this.config);
-        this.detoursApi = new DetoursApiImpl(this.config);
+        this.systemTimeApi = new SystemTimeApiImpl(config);
+        this.vehiclesApi = new VehiclesApiImpl(config);
+        this.routesApi = new RoutesApiImpl(config);
+        this.directionsApi = new DirectionsApiImpl(config);
+        this.stopsApi = new StopsApiImpl(config);
+        this.patternsApi = new PatternsApiImpl(config);
+        this.predictionsApi = new PredictionsApiImpl(config);
+        this.localesApi = new LocalesApiImpl(config);
+        this.detoursApi = new DetoursApiImpl(config);
     }
 
     @Override
     public Instant systemTime() {
-        String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.config.host())
-            .setPath(SYSTEM_TIME_ENDPOINT)
-            .addParameter("key", this.config.apiKey())
-            .addParameter("format", "json")
-            .toString();
-
-        String response = HttpClient.get(url);
-
-        TypeReference<CtaResponse<CtaTimeBustimeResponse>> typeReference = new TypeReference<>() {};
-        CtaResponse<CtaTimeBustimeResponse> timeResponse;
-
-        try {
-            timeResponse = JsonMapper.shared()
-                                     .readValue(response, typeReference);
-        } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(SYSTEM_TIME_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
-
-        CtaTimeBustimeResponse bustimeResponse = timeResponse.bustimeResponse();
-
-        String systemTime = bustimeResponse.tm();
-        List<CtaTimeError> errors = bustimeResponse.error();
-
-        if (systemTime != null) {
-            Instant systemInstant = Qualifiers.mapTimestamp(systemTime);
-
-            if (systemInstant == null) {
-                String message = "Failed to map system time '%s' to Instant from %s".formatted(
-                    systemTime,
-                    SYSTEM_TIME_ENDPOINT
-                );
-
-                throw new Cta4jException(message);
-            }
-
-            return systemInstant;
-        }
-
-        if (errors == null || errors.isEmpty()) {
-            String message = "No system time data returned from %s".formatted(SYSTEM_TIME_ENDPOINT);
-
-            throw new Cta4jException(message);
-        }
-
-        String message = ApiUtils.buildErrorMessage(SYSTEM_TIME_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        return this.systemTimeApi.systemTime();
     }
 
     @Override
@@ -187,7 +120,9 @@ public final class BusApiImpl implements BusApi {
         public BusApi build() {
             String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
 
-            return new BusApiImpl(finalHost, this.apiKey);
+            BusApiConfig config = new BusApiConfig(ApiUtils.SCHEME, finalHost, this.apiKey);
+
+            return new BusApiImpl(config);
         }
     }
 }

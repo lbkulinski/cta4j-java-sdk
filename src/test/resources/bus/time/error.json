@@ -1,0 +1,9 @@
+{
+  "bustime-response": {
+    "error": [
+      {
+        "msg": "Invalid API key"
+      }
+    ]
+  }
+}

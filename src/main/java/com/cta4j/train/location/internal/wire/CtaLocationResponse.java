@@ -13,12 +13,13 @@ import java.util.Objects;
 @NullMarked
 public record CtaLocationResponse(
     String tmst,
-    int errCd,
+    String errCd,
     @Nullable String errNm,
     @Nullable List<CtaRoute> route
 ) {
     public CtaLocationResponse {
         Objects.requireNonNull(tmst);
+        Objects.requireNonNull(errCd);
 
         if (route != null) {
             route = List.copyOf(route);

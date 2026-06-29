@@ -119,10 +119,12 @@ public final class Qualifiers {
     }
 
     @Named("map01ToBoolean")
-    public static boolean map01ToBoolean(int value) {
+    public static boolean map01ToBoolean(String value) {
+        Objects.requireNonNull(value);
+
         return switch (value) {
-            case 0 -> false;
-            case 1 -> true;
+            case "0" -> false;
+            case "1" -> true;
             default -> {
                 String message = "Invalid boolean value: %s. Expected 0 or 1".formatted(value);
 
@@ -132,8 +134,24 @@ public final class Qualifiers {
     }
 
     @Named("map15ToTrainDirection")
-    public static TrainDirection map15ToTrainDirection(int direction) {
-        return TrainDirection.fromCode(direction);
+    public static TrainDirection map15ToTrainDirection(String direction) {
+        Objects.requireNonNull(direction);
+
+        return TrainDirection.fromCode(Integer.parseInt(direction));
+    }
+
+    @Named("parseCoordinate")
+    public static BigDecimal parseCoordinate(String value) {
+        Objects.requireNonNull(value);
+
+        return new BigDecimal(value);
+    }
+
+    @Named("parseHeading")
+    public static int parseHeading(String value) {
+        Objects.requireNonNull(value);
+
+        return Integer.parseInt(value);
     }
 
     @Named("mapArrivalCoordinates")
@@ -151,9 +169,9 @@ public final class Qualifiers {
     }
 
     private static @Nullable Coordinates mapCoordinates(
-        @Nullable Double lat,
-        @Nullable Double lon,
-        @Nullable Integer heading
+        @Nullable String lat,
+        @Nullable String lon,
+        @Nullable String heading
     ) {
         if (lat == null) {
             return null;
@@ -167,9 +185,9 @@ public final class Qualifiers {
             return null;
         }
 
-        BigDecimal latitude = BigDecimal.valueOf(lat);
-        BigDecimal longitude = BigDecimal.valueOf(lon);
+        BigDecimal latitude = new BigDecimal(lat);
+        BigDecimal longitude = new BigDecimal(lon);
 
-        return new Coordinates(latitude, longitude, heading);
+        return new Coordinates(latitude, longitude, Integer.parseInt(heading));
     }
 }

@@ -58,8 +58,9 @@ public final class PatternsApiImpl implements PatternsApi {
         String patternIdsString = String.join(",", patternIds);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(PATTERNS_ENDPOINT)
             .addParameter("pid", patternIdsString)
             .addParameter("key", this.config.apiKey())
@@ -74,8 +75,9 @@ public final class PatternsApiImpl implements PatternsApi {
         Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(PATTERNS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("key", this.config.apiKey())

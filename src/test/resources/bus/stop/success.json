@@ -1,0 +1,12 @@
+{
+  "bustime-response": {
+    "stops": [
+      {
+        "stpid": "456",
+        "stpnm": "Ashland & Division",
+        "lat": 41.9028,
+        "lon": -87.6655
+      }
+    ]
+  }
+}

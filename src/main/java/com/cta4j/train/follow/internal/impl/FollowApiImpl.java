@@ -37,8 +37,9 @@ public final class FollowApiImpl implements FollowApi {
         Objects.requireNonNull(run);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(FOLLOW_ENDPOINT)
             .addParameter("runnumber", run)
             .addParameter("key", this.config.apiKey())
@@ -65,12 +66,22 @@ public final class FollowApiImpl implements FollowApi {
 
         CtaFollowResponse followResponse = ctaResponse.ctatt();
 
-        if (followResponse.errCd() == NOT_FOUND_ERROR_CODE) {
+        int errCd;
+
+        try {
+            errCd = Integer.parseInt(followResponse.errCd());
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse error code from %s".formatted(FOLLOW_ENDPOINT);
+
+            throw new Cta4jException(message, e);
+        }
+
+        if (errCd == NOT_FOUND_ERROR_CODE) {
             return Optional.empty();
         }
 
-        if (followResponse.errCd() != 0) {
-            CtaError error = new CtaError(followResponse.errCd(), followResponse.errNm());
+        if (errCd != 0) {
+            CtaError error = new CtaError(errCd, followResponse.errNm());
 
             String message = ApiUtils.buildErrorMessage(FOLLOW_ENDPOINT, error);
 

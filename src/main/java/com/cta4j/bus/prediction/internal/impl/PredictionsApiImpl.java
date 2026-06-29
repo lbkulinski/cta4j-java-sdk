@@ -51,8 +51,9 @@ public final class PredictionsApiImpl implements PredictionsApi {
         String stopIdsString = String.join(",", stopIds);
 
         URIBuilder builder = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
             .addParameter("tmres", "s")
@@ -89,8 +90,9 @@ public final class PredictionsApiImpl implements PredictionsApi {
         String vehicleIdsString = String.join(",", vehicleIds);
 
         URIBuilder builder = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(PREDICTIONS_ENDPOINT)
             .addParameter("vid", vehicleIdsString)
             .addParameter("tmres", "s")

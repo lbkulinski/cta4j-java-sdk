@@ -12,15 +12,15 @@ import java.util.List;
 @NullMarked
 public record CtaDirectionBustimeResponse(
     @Nullable List<CtaDirectionError> error,
-    @Nullable List<CtaDirection> dir
+    @Nullable List<CtaDirection> directions
 ) {
     public CtaDirectionBustimeResponse {
         if (error != null) {
             error = List.copyOf(error);
         }
 
-        if (dir != null) {
-            dir = List.copyOf(dir);
+        if (directions != null) {
+            directions = List.copyOf(directions);
         }
     }
 }

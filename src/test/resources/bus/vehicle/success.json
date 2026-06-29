@@ -1,0 +1,24 @@
+{
+  "bustime-response": {
+    "vehicle": [
+      {
+        "vid": "509",
+        "tmpstmp": "20200308 10:28:00",
+        "lat": 41.921,
+        "lon": -87.648,
+        "hdg": 180,
+        "pid": 3630,
+        "rt": "8",
+        "des": "Waveland/Broadway",
+        "pdist": 5678,
+        "dly": false,
+        "tablockid": "2 -701",
+        "tatripid": "108",
+        "origtatripno": "ME_ME403_V1_AA",
+        "zone": "",
+        "mode": 1,
+        "psgld": "EMPTY"
+      }
+    ]
+  }
+}

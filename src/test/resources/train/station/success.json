@@ -1,0 +1,23 @@
+[
+  {
+    "stop_id": "30070",
+    "direction_id": "N",
+    "stop_name": "Howard (NB/SB)",
+    "station_name": "Howard",
+    "station_descriptive_name": "Howard (Red/Yellow/Purple Lines)",
+    "map_id": "40900",
+    "ada": true,
+    "red": true,
+    "blue": false,
+    "g": false,
+    "brn": false,
+    "p": true,
+    "y": true,
+    "pnk": false,
+    "o": false,
+    "location": {
+      "latitude": "42.019063",
+      "longitude": "-87.672892"
+    }
+  }
+]

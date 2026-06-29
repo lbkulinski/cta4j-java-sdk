@@ -48,8 +48,9 @@ public final class VehiclesApiImpl implements VehiclesApi {
         String idsString = String.join(",", ids);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(VEHICLES_ENDPOINT)
             .addParameter("vid", idsString)
             .addParameter("tmres", "s")
@@ -71,8 +72,9 @@ public final class VehiclesApiImpl implements VehiclesApi {
         String routeIdsString = String.join(",", routeIds);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(VEHICLES_ENDPOINT)
             .addParameter("rt", routeIdsString)
             .addParameter("tmres", "s")

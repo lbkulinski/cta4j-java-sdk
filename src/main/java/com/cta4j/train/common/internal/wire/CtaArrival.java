@@ -11,32 +11,41 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public record CtaArrival(
-    int staId,
-    int stpId,
+    String staId,
+    String stpId,
     String staNm,
     String stpDe,
-    int rn,
+    String rn,
     String rt,
-    int destSt,
+    String destSt,
     String destNm,
-    int trDr,
+    String trDr,
     String prdt,
     String arrT,
-    int isApp,
-    int isSch,
-    int isDly,
-    int isFlt,
+    String isApp,
+    String isSch,
+    String isDly,
+    String isFlt,
     @Nullable String flags,
-    @Nullable Double lat,
-    @Nullable Double lon,
-    @Nullable Integer heading
+    @Nullable String lat,
+    @Nullable String lon,
+    @Nullable String heading
 ) {
     public CtaArrival {
+        Objects.requireNonNull(staId);
+        Objects.requireNonNull(stpId);
         Objects.requireNonNull(staNm);
         Objects.requireNonNull(stpDe);
+        Objects.requireNonNull(rn);
         Objects.requireNonNull(rt);
+        Objects.requireNonNull(destSt);
         Objects.requireNonNull(destNm);
+        Objects.requireNonNull(trDr);
         Objects.requireNonNull(prdt);
         Objects.requireNonNull(arrT);
+        Objects.requireNonNull(isApp);
+        Objects.requireNonNull(isSch);
+        Objects.requireNonNull(isDly);
+        Objects.requireNonNull(isFlt);
     }
 }

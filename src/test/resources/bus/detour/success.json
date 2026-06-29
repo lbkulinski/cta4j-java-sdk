@@ -1,0 +1,20 @@
+{
+  "bustime-response": {
+    "dtrs": [
+      {
+        "id": "1001",
+        "ver": 2,
+        "st": 1,
+        "desc": "Route 8 detour due to construction",
+        "rtdirs": [
+          {
+            "rt": "8",
+            "dir": "Northbound"
+          }
+        ],
+        "startdt": "20200308 08:00:00",
+        "enddt": "20200308 20:00:00"
+      }
+    ]
+  }
+}

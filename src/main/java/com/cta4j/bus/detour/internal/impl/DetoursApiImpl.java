@@ -39,8 +39,9 @@ public final class DetoursApiImpl implements DetoursApi {
     @Override
     public List<Detour> list() {
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(DETOURS_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
@@ -54,8 +55,9 @@ public final class DetoursApiImpl implements DetoursApi {
         Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("key", this.config.apiKey())
@@ -71,8 +73,9 @@ public final class DetoursApiImpl implements DetoursApi {
         Objects.requireNonNull(direction);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
+            .setScheme(this.config.scheme())
             .setHost(this.config.host())
+            .setPort(this.config.port())
             .setPath(DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("rtdir", direction)
@@ -100,7 +103,7 @@ public final class DetoursApiImpl implements DetoursApi {
 
         CtaDetourBustimeResponse bustimeResponse = detoursResponse.bustimeResponse();
 
-        List<CtaDetour> detours = bustimeResponse.dtr();
+        List<CtaDetour> detours = bustimeResponse.dtrs();
         List<CtaDetourError> errors = bustimeResponse.error();
 
         if (detours != null && !detours.isEmpty()) {

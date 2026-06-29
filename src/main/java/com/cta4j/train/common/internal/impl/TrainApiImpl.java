@@ -25,16 +25,9 @@ public final class TrainApiImpl implements TrainApi {
     private final FollowApi followApi;
     private final LocationsApi locationsApi;
 
-    public TrainApiImpl(
-        String host,
-        String stationsUrl,
-        String apiKey
-    ) {
-        Objects.requireNonNull(host);
-        Objects.requireNonNull(stationsUrl);
-        Objects.requireNonNull(apiKey);
+    public TrainApiImpl(TrainApiConfig config) {
+        Objects.requireNonNull(config);
 
-        TrainApiConfig config = new TrainApiConfig(host, stationsUrl, apiKey);
         this.stationsApi = new StationsApiImpl(config);
         this.arrivalsApi = new ArrivalsApiImpl(config);
         this.followApi = new FollowApiImpl(config);
@@ -95,7 +88,9 @@ public final class TrainApiImpl implements TrainApi {
             String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
             String finalStationsUrl = Objects.requireNonNullElse(this.stationsUrl, ApiUtils.DEFAULT_STATIONS_URL);
 
-            return new TrainApiImpl(finalHost, finalStationsUrl, this.apiKey);
+            TrainApiConfig config = new TrainApiConfig(ApiUtils.SCHEME, finalHost, finalStationsUrl, this.apiKey);
+
+            return new TrainApiImpl(config);
         }
     }
 }
