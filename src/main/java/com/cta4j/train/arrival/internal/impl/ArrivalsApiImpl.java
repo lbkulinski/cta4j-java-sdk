@@ -29,6 +29,7 @@ import java.util.Objects;
 @NullMarked
 public final class ArrivalsApiImpl implements ArrivalsApi {
     private static final String ARRIVALS_ENDPOINT = "%s/ttarrivals.aspx".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaArrivalsResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final TrainApiConfig config;
 
@@ -85,12 +86,11 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
 
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaArrivalsResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaArrivalsResponse> ctaResponse;
 
         try {
             ctaResponse = JsonMapper.shared()
-                                    .readValue(response, typeReference);
+                                    .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(ARRIVALS_ENDPOINT);
 
@@ -99,15 +99,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
 
         CtaArrivalsResponse arrivalsResponse = ctaResponse.ctatt();
 
-        int errCd;
-
-        try {
-            errCd = Integer.parseInt(arrivalsResponse.errCd());
-        } catch (NumberFormatException e) {
-            String message = "Failed to parse error code from %s".formatted(ARRIVALS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
+        int errCd = ApiUtils.parseErrCd(arrivalsResponse.errCd(), ARRIVALS_ENDPOINT);
 
         if (errCd != 0) {
             CtaError error = new CtaError(errCd, arrivalsResponse.errNm());

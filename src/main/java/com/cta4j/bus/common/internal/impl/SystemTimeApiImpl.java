@@ -23,6 +23,7 @@ import java.util.Objects;
 @NullMarked
 final class SystemTimeApiImpl {
     private static final String SYSTEM_TIME_ENDPOINT = "%s/gettime".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaTimeBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -42,12 +43,11 @@ final class SystemTimeApiImpl {
 
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaTimeBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaTimeBustimeResponse> timeResponse;
 
         try {
             timeResponse = JsonMapper.shared()
-                                     .readValue(response, typeReference);
+                                     .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(SYSTEM_TIME_ENDPOINT);
 

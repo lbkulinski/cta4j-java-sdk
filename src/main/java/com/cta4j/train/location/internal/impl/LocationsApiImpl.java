@@ -21,10 +21,11 @@ import tools.jackson.databind.json.JsonMapper;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class LocationsApiImpl implements LocationsApi {
     private static final String POSITIONS_ENDPOINT = "%s/ttpositions.aspx".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaLocationResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final TrainApiConfig config;
 
@@ -64,12 +65,11 @@ public final class LocationsApiImpl implements LocationsApi {
     private List<TrainLocations> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaLocationResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaLocationResponse> ctaResponse;
 
         try {
             ctaResponse = JsonMapper.shared()
-                                    .readValue(response, typeReference);
+                                    .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(POSITIONS_ENDPOINT);
 
@@ -78,15 +78,7 @@ public final class LocationsApiImpl implements LocationsApi {
 
         CtaLocationResponse locationResponse = ctaResponse.ctatt();
 
-        int errCd;
-
-        try {
-            errCd = Integer.parseInt(locationResponse.errCd());
-        } catch (NumberFormatException e) {
-            String message = "Failed to parse error code from %s".formatted(POSITIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
+        int errCd = ApiUtils.parseErrCd(locationResponse.errCd(), POSITIONS_ENDPOINT);
 
         if (errCd != 0) {
             CtaError error = new CtaError(errCd, locationResponse.errNm());

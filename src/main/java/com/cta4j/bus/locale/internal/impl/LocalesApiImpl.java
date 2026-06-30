@@ -30,6 +30,7 @@ public final class LocalesApiImpl implements LocalesApi {
     private static final Logger log = LoggerFactory.getLogger(LocalesApiImpl.class);
 
     private static final String LOCALES_ENDPOINT = "%s/getlocalelist".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaLocaleBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -88,12 +89,11 @@ public final class LocalesApiImpl implements LocalesApi {
     private List<SupportedLocale> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaLocaleBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaLocaleBustimeResponse> localeResponse;
 
         try {
             localeResponse = JsonMapper.shared()
-                                       .readValue(response, typeReference);
+                                       .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(LOCALES_ENDPOINT);
 

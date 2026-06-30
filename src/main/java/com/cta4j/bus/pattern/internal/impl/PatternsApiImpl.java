@@ -31,6 +31,7 @@ public final class PatternsApiImpl implements PatternsApi {
 
     private static final String PATTERNS_ENDPOINT = "%s/getpatterns".formatted(ApiUtils.API_PREFIX);
     private static final int MAX_PATTERN_IDS_PER_REQUEST = 10;
+    private static final TypeReference<CtaResponse<CtaPatternBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -40,8 +41,6 @@ public final class PatternsApiImpl implements PatternsApi {
 
     @Override
     public List<RoutePattern> findByIds(Collection<String> patternIds) {
-        patternIds = List.copyOf(patternIds);
-
         if (patternIds.isEmpty()) {
             return List.of();
         }
@@ -54,6 +53,8 @@ public final class PatternsApiImpl implements PatternsApi {
 
             throw new IllegalArgumentException(message);
         }
+
+        patternIds = List.copyOf(patternIds);
 
         String patternIdsString = String.join(",", patternIds);
 
@@ -90,12 +91,11 @@ public final class PatternsApiImpl implements PatternsApi {
     private List<RoutePattern> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaPatternBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaPatternBustimeResponse> patternsResponse;
 
         try {
             patternsResponse = JsonMapper.shared()
-                                         .readValue(response, typeReference);
+                                         .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(PATTERNS_ENDPOINT);
 

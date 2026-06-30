@@ -29,6 +29,7 @@ public final class RoutesApiImpl implements RoutesApi {
     private static final Logger log = LoggerFactory.getLogger(RoutesApiImpl.class);
 
     private static final String ROUTES_ENDPOINT = "%s/getroutes".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaRouteBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -49,12 +50,11 @@ public final class RoutesApiImpl implements RoutesApi {
 
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaRouteBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaRouteBustimeResponse> routesResponse;
 
         try {
             routesResponse = JsonMapper.shared()
-                                       .readValue(response, typeReference);
+                                       .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(ROUTES_ENDPOINT);
 

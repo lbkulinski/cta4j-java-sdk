@@ -32,8 +32,6 @@ public record StopsPredictionsQuery(
      * non-{@code null} and not positive
      */
     public StopsPredictionsQuery {
-        stopIds = List.copyOf(stopIds);
-
         if (stopIds.size() > MAX_STOP_IDS) {
             String message = "A maximum of %d stop IDs can be requested at once, but %d were provided".formatted(
                 MAX_STOP_IDS,
@@ -42,6 +40,8 @@ public record StopsPredictionsQuery(
 
             throw new IllegalArgumentException(message);
         }
+
+        stopIds = List.copyOf(stopIds);
 
         if (routeIds != null) {
             routeIds = List.copyOf(routeIds);

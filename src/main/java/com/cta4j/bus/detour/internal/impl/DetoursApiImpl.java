@@ -29,6 +29,7 @@ public final class DetoursApiImpl implements DetoursApi {
     private static final Logger log = LoggerFactory.getLogger(DetoursApiImpl.class);
 
     private static final String DETOURS_ENDPOINT = "%s/getdetours".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaDetourBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -89,12 +90,11 @@ public final class DetoursApiImpl implements DetoursApi {
     private List<Detour> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaDetourBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaDetourBustimeResponse> detoursResponse;
 
         try {
             detoursResponse = JsonMapper.shared()
-                                        .readValue(response, typeReference);
+                                        .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
 

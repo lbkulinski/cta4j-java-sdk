@@ -31,6 +31,7 @@ public final class StopsApiImpl implements StopsApi {
 
     private static final String STOPS_ENDPOINT = "%s/getstops".formatted(ApiUtils.API_PREFIX);
     private static final int MAX_STOP_IDS_PER_REQUEST = 10;
+    private static final TypeReference<CtaResponse<CtaStopBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -59,8 +60,6 @@ public final class StopsApiImpl implements StopsApi {
 
     @Override
     public List<Stop> findByIds(Collection<String> stopIds) {
-        stopIds = List.copyOf(stopIds);
-
         if (stopIds.isEmpty()) {
             return List.of();
         }
@@ -73,6 +72,8 @@ public final class StopsApiImpl implements StopsApi {
 
             throw new IllegalArgumentException(message);
         }
+
+        stopIds = List.copyOf(stopIds);
 
         String stopIdsString = String.join(",", stopIds);
 
@@ -92,12 +93,11 @@ public final class StopsApiImpl implements StopsApi {
     private List<Stop> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaStopBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaStopBustimeResponse> stopsResponse;
 
         try {
             stopsResponse = JsonMapper.shared()
-                                      .readValue(response, typeReference);
+                                      .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(STOPS_ENDPOINT);
 

@@ -30,6 +30,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
     private static final Logger log = LoggerFactory.getLogger(VehiclesApiImpl.class);
 
     private static final String VEHICLES_ENDPOINT = "%s/getvehicles".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaVehicleBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -88,12 +89,11 @@ public final class VehiclesApiImpl implements VehiclesApi {
     private List<Vehicle> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaVehicleBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaVehicleBustimeResponse> vehicleResponse;
 
         try {
             vehicleResponse = JsonMapper.shared()
-                                        .readValue(response, typeReference);
+                                        .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
 

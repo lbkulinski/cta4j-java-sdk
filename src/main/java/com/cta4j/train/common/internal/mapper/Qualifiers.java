@@ -12,6 +12,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
+import com.cta4j.exception.Cta4jException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -20,6 +21,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -113,9 +115,15 @@ public final class Qualifiers {
     public static Instant mapTimestamp(String timestamp) {
         Objects.requireNonNull(timestamp);
 
-        return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
-                            .atZone(CHICAGO_ZONE_ID)
-                            .toInstant();
+        try {
+            return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
+                                .atZone(CHICAGO_ZONE_ID)
+                                .toInstant();
+        } catch (DateTimeParseException e) {
+            String message = "Failed to parse timestamp: %s".formatted(timestamp);
+
+            throw new Cta4jException(message, e);
+        }
     }
 
     @Named("map01ToBoolean")
@@ -128,7 +136,7 @@ public final class Qualifiers {
             default -> {
                 String message = "Invalid boolean value: %s. Expected 0 or 1".formatted(value);
 
-                throw new IllegalArgumentException(message);
+                throw new Cta4jException(message);
             }
         };
     }
@@ -137,21 +145,43 @@ public final class Qualifiers {
     public static TrainDirection map15ToTrainDirection(String direction) {
         Objects.requireNonNull(direction);
 
-        return TrainDirection.fromCode(Integer.parseInt(direction));
+        int code;
+
+        try {
+            code = Integer.parseInt(direction);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse train direction: %s".formatted(direction);
+
+            throw new Cta4jException(message, e);
+        }
+
+        return TrainDirection.fromCode(code);
     }
 
     @Named("parseCoordinate")
     public static BigDecimal parseCoordinate(String value) {
         Objects.requireNonNull(value);
 
-        return new BigDecimal(value);
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse coordinate: %s".formatted(value);
+
+            throw new Cta4jException(message, e);
+        }
     }
 
     @Named("parseHeading")
     public static int parseHeading(String value) {
         Objects.requireNonNull(value);
 
-        return Integer.parseInt(value);
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse heading: %s".formatted(value);
+
+            throw new Cta4jException(message, e);
+        }
     }
 
     @Named("mapArrivalCoordinates")
@@ -185,9 +215,20 @@ public final class Qualifiers {
             return null;
         }
 
-        BigDecimal latitude = new BigDecimal(lat);
-        BigDecimal longitude = new BigDecimal(lon);
+        BigDecimal latitude;
+        BigDecimal longitude;
+        int headingValue;
 
-        return new Coordinates(latitude, longitude, Integer.parseInt(heading));
+        try {
+            latitude = new BigDecimal(lat);
+            longitude = new BigDecimal(lon);
+            headingValue = Integer.parseInt(heading);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse coordinates: lat=%s, lon=%s, heading=%s".formatted(lat, lon, heading);
+
+            throw new Cta4jException(message, e);
+        }
+
+        return new Coordinates(latitude, longitude, headingValue);
     }
 }

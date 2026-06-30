@@ -27,6 +27,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
     private static final Logger log = LoggerFactory.getLogger(DirectionsApiImpl.class);
 
     private static final String DIRECTIONS_ENDPOINT = "%s/getdirections".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaDirectionBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -50,12 +51,11 @@ public final class DirectionsApiImpl implements DirectionsApi {
 
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaDirectionBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaDirectionBustimeResponse> directionsResponse;
 
         try {
             directionsResponse = JsonMapper.shared()
-                                           .readValue(response, typeReference);
+                                           .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
 

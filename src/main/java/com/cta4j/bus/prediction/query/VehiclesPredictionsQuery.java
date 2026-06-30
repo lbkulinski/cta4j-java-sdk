@@ -28,8 +28,6 @@ public record VehiclesPredictionsQuery(
      * non-{@code null} and not positive
      */
     public VehiclesPredictionsQuery {
-        vehicleIds = List.copyOf(vehicleIds);
-
         if (vehicleIds.size() > MAX_VEHICLE_IDS) {
             String message = "A maximum of %d vehicle IDs can be requested at once, but %d were provided".formatted(
                 MAX_VEHICLE_IDS,
@@ -38,6 +36,8 @@ public record VehiclesPredictionsQuery(
 
             throw new IllegalArgumentException(message);
         }
+
+        vehicleIds = List.copyOf(vehicleIds);
 
         if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("maxResults must be positive");

@@ -25,6 +25,7 @@ import java.util.Optional;
 public final class FollowApiImpl implements FollowApi {
     private static final String FOLLOW_ENDPOINT = "%s/ttfollow.aspx".formatted(ApiUtils.API_PREFIX);
     private static final int NOT_FOUND_ERROR_CODE = 501;
+    private static final TypeReference<CtaResponse<CtaFollowResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final TrainApiConfig config;
 
@@ -52,12 +53,11 @@ public final class FollowApiImpl implements FollowApi {
     private Optional<FollowTrain> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaFollowResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaFollowResponse> ctaResponse;
 
         try {
             ctaResponse = JsonMapper.shared()
-                                    .readValue(response, typeReference);
+                                    .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(FOLLOW_ENDPOINT);
 
@@ -66,15 +66,7 @@ public final class FollowApiImpl implements FollowApi {
 
         CtaFollowResponse followResponse = ctaResponse.ctatt();
 
-        int errCd;
-
-        try {
-            errCd = Integer.parseInt(followResponse.errCd());
-        } catch (NumberFormatException e) {
-            String message = "Failed to parse error code from %s".formatted(FOLLOW_ENDPOINT);
-
-            throw new Cta4jException(message, e);
-        }
+        int errCd = ApiUtils.parseErrCd(followResponse.errCd(), FOLLOW_ENDPOINT);
 
         if (errCd == NOT_FOUND_ERROR_CODE) {
             return Optional.empty();

@@ -19,6 +19,8 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class StationsApiImpl implements StationsApi {
+    private static final TypeReference<List<CtaStation>> TYPE_REFERENCE = new TypeReference<>() {};
+
     private final TrainApiConfig config;
 
     public StationsApiImpl(TrainApiConfig config) {
@@ -29,12 +31,11 @@ public final class StationsApiImpl implements StationsApi {
     public List<Station> list() {
         String response = HttpClient.get(this.config.stationsUrl());
 
-        TypeReference<List<CtaStation>> typeReference = new TypeReference<>() {};
         List<CtaStation> stations;
 
         try {
             stations = JsonMapper.shared()
-                                 .readValue(response, typeReference);
+                                 .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(this.config.stationsUrl());
 

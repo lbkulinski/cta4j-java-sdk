@@ -31,6 +31,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
     private static final Logger log = LoggerFactory.getLogger(PredictionsApiImpl.class);
 
     private static final String PREDICTIONS_ENDPOINT = "%s/getpredictions".formatted(ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaPredictionBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
 
@@ -113,12 +114,11 @@ public final class PredictionsApiImpl implements PredictionsApi {
     private List<Prediction> makeRequest(String url) {
         String response = HttpClient.get(url);
 
-        TypeReference<CtaResponse<CtaPredictionBustimeResponse>> typeReference = new TypeReference<>() {};
         CtaResponse<CtaPredictionBustimeResponse> predictionsResponse;
 
         try {
             predictionsResponse = JsonMapper.shared()
-                                            .readValue(response, typeReference);
+                                            .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
             String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
 

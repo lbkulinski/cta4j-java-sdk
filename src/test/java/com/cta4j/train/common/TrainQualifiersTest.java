@@ -1,6 +1,7 @@
 package com.cta4j.train.common;
 
 import com.cta4j.common.geo.Coordinates;
+import com.cta4j.exception.Cta4jException;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainLine;
@@ -38,8 +39,8 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void map01ToBoolean_throwsIllegalArgumentException_whenValueIsInvalid() {
-        assertThatIllegalArgumentException().isThrownBy(() ->
+    void map01ToBoolean_throwsCta4jException_whenValueIsInvalid() {
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
             Qualifiers.map01ToBoolean("2"));
     }
 
