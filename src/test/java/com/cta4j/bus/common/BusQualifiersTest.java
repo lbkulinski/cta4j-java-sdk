@@ -3,6 +3,7 @@ package com.cta4j.bus.common;
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.bus.pattern.model.PatternPointType;
 import com.cta4j.bus.prediction.model.PassengerLoad;
+import com.cta4j.bus.prediction.model.PredictionType;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -41,5 +42,15 @@ class BusQualifiersTest {
     @Test
     void mapActive_returnsFalse_whenStIsZero() {
         assertThat(Qualifiers.mapActive(0)).isFalse();
+    }
+
+    @Test
+    void mapPredictionType_returnsDeparture_whenValueIsD() {
+        assertThat(Qualifiers.mapPredictionType("D")).isEqualTo(PredictionType.DEPARTURE);
+    }
+
+    @Test
+    void mapPassengerLoad_returnsUnknown_whenValueIsNA() {
+        assertThat(Qualifiers.mapPassengerLoad("N/A")).isEqualTo(PassengerLoad.UNKNOWN);
     }
 }

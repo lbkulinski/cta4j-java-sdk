@@ -3,9 +3,14 @@ package com.cta4j.train.common;
 import com.cta4j.common.geo.Coordinates;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.common.internal.wire.CtaArrival;
+import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.follow.internal.wire.CtaPosition;
+import com.cta4j.train.station.internal.wire.CtaLocation;
+import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.HumanAddress;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -60,5 +65,52 @@ class TrainQualifiersTest {
         Coordinates result = Qualifiers.mapCoordinates(position);
 
         assertThat(result).isNull();
+    }
+
+    @Test
+    void mapArrivalCoordinates_returnsNull_whenLonIsNull() {
+        CtaArrival arrival = new CtaArrival(
+            "40100", "30070", "Howard", "Howard (NB)",
+            "123", "Red", "30077", "O'Hare", "1",
+            "2015-04-30T20:23:53", "2015-04-30T20:25:00",
+            "0", "0", "0", "0",
+            null, "42.019063", null, null
+        );
+
+        Coordinates result = Qualifiers.mapArrivalCoordinates(arrival);
+
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void mapArrivalCoordinates_returnsNull_whenHeadingIsNull() {
+        CtaArrival arrival = new CtaArrival(
+            "40100", "30070", "Howard", "Howard (NB)",
+            "123", "Red", "30077", "O'Hare", "1",
+            "2015-04-30T20:23:53", "2015-04-30T20:25:00",
+            "0", "0", "0", "0",
+            null, "42.019063", "-87.672892", null
+        );
+
+        Coordinates result = Qualifiers.mapArrivalCoordinates(arrival);
+
+        assertThat(result).isNull();
+    }
+
+    @Test
+    void mapTrainLines_includesAllLines_whenStationHasComplementaryLines() {
+        CtaLocation location = new CtaLocation("42.019063", "-87.672892", null);
+        CtaStation station = new CtaStation(
+            "30070", "N", "Test (NB)", "Test", "Test", "40900", false,
+            false, true, true, true, false, false, true, true,
+            location
+        );
+
+        List<TrainLine> lines = Qualifiers.mapTrainLines(station);
+
+        assertThat(lines).containsExactlyInAnyOrder(
+            TrainLine.BLUE, TrainLine.GREEN, TrainLine.BROWN, TrainLine.ORANGE, TrainLine.PINK
+        );
+        assertThat(lines).doesNotContain(TrainLine.RED, TrainLine.PURPLE, TrainLine.YELLOW);
     }
 }

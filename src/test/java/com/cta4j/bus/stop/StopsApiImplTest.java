@@ -120,4 +120,11 @@ class StopsApiImplTest {
 
         assertThat(stops).hasSize(1);
     }
+
+    @Test
+    void findByIds_throwsIllegalArgumentException_whenTooManyStopIds() {
+        List<String> tooMany = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
+
+        assertThatIllegalArgumentException().isThrownBy(() -> this.api.findByIds(tooMany));
+    }
 }

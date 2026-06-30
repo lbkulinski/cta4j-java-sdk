@@ -141,4 +141,55 @@ class PredictionsApiImplTest {
 
         assertThat(predictions).hasSize(1);
     }
+
+    @Test
+    void findByStopIds_sendsRtParameter_whenRouteIdsProvided() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("rt", equalTo("8"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456"))
+            .routeIds(List.of("8"))
+            .build();
+        List<Prediction> predictions = this.api.findByStopIds(query);
+
+        assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByStopIds_sendsTopParameter_whenMaxResultsProvided() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("top", equalTo("5"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456"))
+            .maxResults(5)
+            .build();
+        List<Prediction> predictions = this.api.findByStopIds(query);
+
+        assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByVehicleIds_sendsTopParameter_whenMaxResultsProvided() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("top", equalTo("3"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        VehiclesPredictionsQuery query = VehiclesPredictionsQuery.builder(List.of("509"))
+            .maxResults(3)
+            .build();
+        List<Prediction> predictions = this.api.findByVehicleIds(query);
+
+        assertThat(predictions).hasSize(1);
+    }
 }
