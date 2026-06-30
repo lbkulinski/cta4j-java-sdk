@@ -41,11 +41,10 @@ public final class LocationsApiImpl implements LocationsApi {
             return List.of();
         }
 
-        lines.forEach(Objects::requireNonNull);
-
-        List<String> lineCodes = lines.stream()
-                                      .map(TrainLine::getCode)
-                                      .toList();
+        List<String> lineCodes = List.copyOf(lines)
+                                     .stream()
+                                     .map(TrainLine::getCode)
+                                     .toList();
 
         String linesString = String.join(",", lineCodes);
 
