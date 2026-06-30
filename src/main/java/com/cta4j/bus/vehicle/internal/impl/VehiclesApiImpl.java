@@ -41,6 +41,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
     @Override
     public List<Vehicle> findByIds(Collection<String> ids) {
+        Objects.requireNonNull(ids);
+
         ids = List.copyOf(ids);
 
         if (ids.isEmpty()) {
@@ -65,6 +67,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
 
     @Override
     public List<Vehicle> findByRouteIds(Collection<String> routeIds) {
+        Objects.requireNonNull(routeIds);
+
         routeIds = List.copyOf(routeIds);
 
         if (routeIds.isEmpty()) {

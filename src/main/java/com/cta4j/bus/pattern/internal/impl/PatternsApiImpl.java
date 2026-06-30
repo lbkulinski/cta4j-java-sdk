@@ -42,6 +42,8 @@ public final class PatternsApiImpl implements PatternsApi {
 
     @Override
     public List<RoutePattern> findByIds(Collection<String> patternIds) {
+        Objects.requireNonNull(patternIds);
+
         if (patternIds.isEmpty()) {
             return List.of();
         }

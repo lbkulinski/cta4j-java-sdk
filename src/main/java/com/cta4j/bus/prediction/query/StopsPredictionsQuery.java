@@ -4,6 +4,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a query for bus arrival predictions.
@@ -32,6 +33,8 @@ public record StopsPredictionsQuery(
      * non-{@code null} and not positive
      */
     public StopsPredictionsQuery {
+        Objects.requireNonNull(stopIds);
+
         if (stopIds.size() > MAX_STOP_IDS) {
             String message = "A maximum of %d stop IDs can be requested at once, but %d were provided".formatted(
                 MAX_STOP_IDS,
@@ -91,6 +94,8 @@ public record StopsPredictionsQuery(
          * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
          */
         public Builder(List<String> stopIds) {
+            Objects.requireNonNull(stopIds);
+
             this.stopIds = List.copyOf(stopIds);
         }
 
@@ -102,6 +107,8 @@ public record StopsPredictionsQuery(
          * @throws NullPointerException if {@code routeIds} or any of its elements are {@code null}
          */
         public Builder routeIds(List<String> routeIds) {
+            Objects.requireNonNull(routeIds);
+
             this.routeIds = List.copyOf(routeIds);
 
             return this;

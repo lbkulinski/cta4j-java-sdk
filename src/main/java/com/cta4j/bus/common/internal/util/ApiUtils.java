@@ -20,6 +20,7 @@ public final class ApiUtils {
 
     public static String buildErrorMessage(String endpoint, List<? extends CtaError> errors) {
         Objects.requireNonNull(endpoint);
+        Objects.requireNonNull(errors);
 
         errors = List.copyOf(errors);
 

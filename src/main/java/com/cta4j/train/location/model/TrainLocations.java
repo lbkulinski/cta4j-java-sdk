@@ -27,6 +27,7 @@ public record TrainLocations(
      */
     public TrainLocations {
         Objects.requireNonNull(line);
+        Objects.requireNonNull(trains);
 
         trains = List.copyOf(trains);
     }

@@ -54,6 +54,7 @@ public record Detour(
         Objects.requireNonNull(id);
         Objects.requireNonNull(version);
         Objects.requireNonNull(description);
+        Objects.requireNonNull(routeDirections);
         Objects.requireNonNull(startTime);
         Objects.requireNonNull(endTime);
 

@@ -24,6 +24,7 @@ public record CtaDetour(
     public CtaDetour {
         Objects.requireNonNull(id);
         Objects.requireNonNull(desc);
+        Objects.requireNonNull(rtdirs);
         Objects.requireNonNull(startdt);
         Objects.requireNonNull(enddt);
 

@@ -60,6 +60,8 @@ public final class StopsApiImpl implements StopsApi {
 
     @Override
     public List<Stop> findByIds(Collection<String> stopIds) {
+        Objects.requireNonNull(stopIds);
+
         if (stopIds.isEmpty()) {
             return List.of();
         }

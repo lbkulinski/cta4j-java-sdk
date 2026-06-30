@@ -4,6 +4,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a query for vehicle arrival predictions.
@@ -28,6 +29,8 @@ public record VehiclesPredictionsQuery(
      * non-{@code null} and not positive
      */
     public VehiclesPredictionsQuery {
+        Objects.requireNonNull(vehicleIds);
+
         if (vehicleIds.size() > MAX_VEHICLE_IDS) {
             String message = "A maximum of %d vehicle IDs can be requested at once, but %d were provided".formatted(
                 MAX_VEHICLE_IDS,
@@ -77,6 +80,8 @@ public record VehiclesPredictionsQuery(
          * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
          */
         public Builder(List<String> vehicleIds) {
+            Objects.requireNonNull(vehicleIds);
+
             this.vehicleIds = List.copyOf(vehicleIds);
         }
 

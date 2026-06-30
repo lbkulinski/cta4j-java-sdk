@@ -54,6 +54,7 @@ public record Station(
         Objects.requireNonNull(name);
         Objects.requireNonNull(descriptiveName);
         Objects.requireNonNull(mapId);
+        Objects.requireNonNull(lines);
         Objects.requireNonNull(location);
 
         lines = List.copyOf(lines);
