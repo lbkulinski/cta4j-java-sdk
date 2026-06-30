@@ -30,7 +30,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
     private static final Logger log = LoggerFactory.getLogger(VehiclesApiImpl.class);
 
     private static final String VEHICLES_ENDPOINT = "%s/getvehicles".formatted(ApiUtils.API_PREFIX);
-    private static final TypeReference<CtaResponse<CtaVehicleBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<CtaResponse<CtaVehicleBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
     private final BusApiConfig config;
 

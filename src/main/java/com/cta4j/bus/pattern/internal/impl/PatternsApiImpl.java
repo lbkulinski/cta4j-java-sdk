@@ -31,7 +31,8 @@ public final class PatternsApiImpl implements PatternsApi {
 
     private static final String PATTERNS_ENDPOINT = "%s/getpatterns".formatted(ApiUtils.API_PREFIX);
     private static final int MAX_PATTERN_IDS_PER_REQUEST = 10;
-    private static final TypeReference<CtaResponse<CtaPatternBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<CtaResponse<CtaPatternBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
     private final BusApiConfig config;
 

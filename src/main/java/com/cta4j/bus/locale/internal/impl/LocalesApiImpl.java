@@ -30,7 +30,8 @@ public final class LocalesApiImpl implements LocalesApi {
     private static final Logger log = LoggerFactory.getLogger(LocalesApiImpl.class);
 
     private static final String LOCALES_ENDPOINT = "%s/getlocalelist".formatted(ApiUtils.API_PREFIX);
-    private static final TypeReference<CtaResponse<CtaLocaleBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<CtaResponse<CtaLocaleBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
     private final BusApiConfig config;
 

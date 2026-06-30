@@ -31,7 +31,8 @@ public final class PredictionsApiImpl implements PredictionsApi {
     private static final Logger log = LoggerFactory.getLogger(PredictionsApiImpl.class);
 
     private static final String PREDICTIONS_ENDPOINT = "%s/getpredictions".formatted(ApiUtils.API_PREFIX);
-    private static final TypeReference<CtaResponse<CtaPredictionBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<CtaResponse<CtaPredictionBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
     private final BusApiConfig config;
 

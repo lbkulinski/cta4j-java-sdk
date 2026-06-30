@@ -23,7 +23,8 @@ import java.util.Objects;
 @NullMarked
 final class SystemTimeApiImpl {
     private static final String SYSTEM_TIME_ENDPOINT = "%s/gettime".formatted(ApiUtils.API_PREFIX);
-    private static final TypeReference<CtaResponse<CtaTimeBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<CtaResponse<CtaTimeBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
     private final BusApiConfig config;
 

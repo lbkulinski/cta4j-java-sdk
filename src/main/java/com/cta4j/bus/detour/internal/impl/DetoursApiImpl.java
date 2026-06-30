@@ -29,7 +29,8 @@ public final class DetoursApiImpl implements DetoursApi {
     private static final Logger log = LoggerFactory.getLogger(DetoursApiImpl.class);
 
     private static final String DETOURS_ENDPOINT = "%s/getdetours".formatted(ApiUtils.API_PREFIX);
-    private static final TypeReference<CtaResponse<CtaDetourBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<CtaResponse<CtaDetourBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
     private final BusApiConfig config;
 

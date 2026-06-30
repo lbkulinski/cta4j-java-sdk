@@ -27,7 +27,8 @@ public final class DirectionsApiImpl implements DirectionsApi {
     private static final Logger log = LoggerFactory.getLogger(DirectionsApiImpl.class);
 
     private static final String DIRECTIONS_ENDPOINT = "%s/getdirections".formatted(ApiUtils.API_PREFIX);
-    private static final TypeReference<CtaResponse<CtaDirectionBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
+    private static final TypeReference<CtaResponse<CtaDirectionBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
     private final BusApiConfig config;
 
