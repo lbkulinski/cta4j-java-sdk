@@ -23,13 +23,23 @@ public final class ApiUtils {
         Objects.requireNonNull(errCd);
         Objects.requireNonNull(endpoint);
 
+        int code;
+
         try {
-            return Integer.parseInt(errCd);
+            code = Integer.parseInt(errCd);
         } catch (NumberFormatException e) {
             String message = "Failed to parse error code from %s".formatted(endpoint);
 
             throw new Cta4jException(message, e);
         }
+
+        if (code < 0) {
+            String message = "Unknown error code %d from %s".formatted(code, endpoint);
+
+            throw new Cta4jException(message);
+        }
+
+        return code;
     }
 
     public static String buildErrorMessage(String endpoint, CtaError error) {

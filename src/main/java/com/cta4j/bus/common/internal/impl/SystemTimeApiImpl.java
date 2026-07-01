@@ -61,18 +61,9 @@ final class SystemTimeApiImpl {
         List<CtaTimeError> errors = bustimeResponse.error();
 
         if (systemTime != null) {
-            Instant systemInstant = Qualifiers.mapTimestamp(systemTime);
+            Instant timestamp = Qualifiers.mapTimestamp(systemTime);
 
-            if (systemInstant == null) {
-                String message = "Failed to map system time '%s' to Instant from %s".formatted(
-                    systemTime,
-                    SYSTEM_TIME_ENDPOINT
-                );
-
-                throw new Cta4jException(message);
-            }
-
-            return systemInstant;
+            return Objects.requireNonNull(timestamp);
         }
 
         if (errors == null || errors.isEmpty()) {
