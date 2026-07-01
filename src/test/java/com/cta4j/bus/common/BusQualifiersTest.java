@@ -2,9 +2,16 @@ package com.cta4j.bus.common;
 
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
 import com.cta4j.bus.pattern.model.PatternPointType;
+import com.cta4j.bus.prediction.model.DynamicAction;
+import com.cta4j.bus.prediction.model.FlagStop;
 import com.cta4j.bus.prediction.model.PassengerLoad;
 import com.cta4j.bus.prediction.model.PredictionType;
+import com.cta4j.bus.vehicle.model.TransitMode;
+import com.cta4j.exception.Cta4jException;
 import org.junit.jupiter.api.Test;
+
+import java.time.Instant;
+import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -50,7 +57,50 @@ class BusQualifiersTest {
     }
 
     @Test
+    void mapPredictionType_throwsIllegalArgumentException_whenValueIsUnknown() {
+        assertThatIllegalArgumentException().isThrownBy(() -> Qualifiers.mapPredictionType("X"));
+    }
+
+    @Test
     void mapPassengerLoad_returnsUnknown_whenValueIsNA() {
         assertThat(Qualifiers.mapPassengerLoad("N/A")).isEqualTo(PassengerLoad.UNKNOWN);
+    }
+
+    @Test
+    void mapDynamicAction_returnsNone_whenDynIsZero() {
+        assertThat(Qualifiers.mapDynamicAction(0)).isEqualTo(DynamicAction.NONE);
+    }
+
+    @Test
+    void mapFlagStop_returnsNormal_whenFlagstopIsZero() {
+        assertThat(Qualifiers.mapFlagStop(0)).isEqualTo(FlagStop.NORMAL);
+    }
+
+    @Test
+    void mapTransitMode_returnsBus_whenModeIsOne() {
+        assertThat(Qualifiers.mapTransitMode(1)).isEqualTo(TransitMode.BUS);
+    }
+
+    @Test
+    void mapLocale_returnsLocale_whenLocaleIsEn() {
+        assertThat(Qualifiers.mapLocale("en")).isEqualTo(Locale.of("en"));
+    }
+
+    @Test
+    void mapActive_returnsTrue_whenStIsOne() {
+        assertThat(Qualifiers.mapActive(1)).isTrue();
+    }
+
+    @Test
+    void mapTimestamp_returnsInstant_whenTimestampIsValid() {
+        Instant instant = Qualifiers.mapTimestamp("20250101 10:00:00");
+
+        assertThat(instant).isNotNull();
+    }
+
+    @Test
+    void mapTimestamp_throwsCta4jException_whenTimestampIsInvalid() {
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+            Qualifiers.mapTimestamp("not-a-timestamp"));
     }
 }

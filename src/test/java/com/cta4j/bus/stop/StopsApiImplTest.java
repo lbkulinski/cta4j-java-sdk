@@ -76,6 +76,45 @@ class StopsApiImplTest {
     }
 
     @Test
+    void findByRouteIdAndDirection_returnsEmpty_whenErrorIsRouteAndDirectionSpecific() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/stop/not_found_route.json"))));
+
+        List<Stop> stops = this.api.findByRouteIdAndDirection("999", "Northbound");
+
+        assertThat(stops).isEmpty();
+    }
+
+    @Test
+    void findByRouteIdAndDirection_returnsEmpty_whenStopsIsEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"bustime-response\":{\"stops\":[]}}")));
+
+        List<Stop> stops = this.api.findByRouteIdAndDirection("8", "Northbound");
+
+        assertThat(stops).isEmpty();
+    }
+
+    @Test
+    void findByRouteIdAndDirection_returnsEmpty_whenErrorsIsEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"bustime-response\":{\"error\":[]}}")));
+
+        List<Stop> stops = this.api.findByRouteIdAndDirection("8", "Northbound");
+
+        assertThat(stops).isEmpty();
+    }
+
+    @Test
     void findByRouteIdAndDirection_throwsCta4jException_whenResponseContainsFatalErrors() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
             .willReturn(aResponse()

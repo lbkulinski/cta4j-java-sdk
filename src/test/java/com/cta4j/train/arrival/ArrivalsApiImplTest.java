@@ -7,6 +7,7 @@ import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.Arrival;
+import com.cta4j.train.common.model.TrainLine;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -68,6 +69,20 @@ class ArrivalsApiImplTest {
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/empty.json"))));
+
+        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        List<Arrival> arrivals = this.api.findByMapId(query);
+
+        assertThat(arrivals).isEmpty();
+    }
+
+    @Test
+    void findByMapId_returnsEmpty_whenEtaIsEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"0\",\"errNm\":null,\"eta\":[]}}")));
 
         MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
         List<Arrival> arrivals = this.api.findByMapId(query);
@@ -144,6 +159,47 @@ class ArrivalsApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByStopId(query))
             .isInstanceOf(Cta4jException.class);
+    }
+
+    @Test
+    void findByMapId_sendsLineAndMaxResultsQueryParams_whenSet() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .withQueryParam("rt", equalTo("Red"))
+            .withQueryParam("max", equalTo("5"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/arrival/success.json"))));
+
+        MapArrivalQuery query = MapArrivalQuery.builder("40900")
+            .line(TrainLine.RED)
+            .maxResults(5)
+            .build();
+
+        List<Arrival> arrivals = this.api.findByMapId(query);
+
+        assertThat(arrivals).hasSize(1);
+    }
+
+    @Test
+    void findByStopId_sendsLineAndMaxResultsQueryParams_whenSet() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .withQueryParam("stpid", equalTo("30070"))
+            .withQueryParam("rt", equalTo("Red"))
+            .withQueryParam("max", equalTo("5"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/arrival/success.json"))));
+
+        StopArrivalQuery query = StopArrivalQuery.builder("30070")
+            .line(TrainLine.RED)
+            .maxResults(5)
+            .build();
+
+        List<Arrival> arrivals = this.api.findByStopId(query);
+
+        assertThat(arrivals).hasSize(1);
     }
 
     @Test

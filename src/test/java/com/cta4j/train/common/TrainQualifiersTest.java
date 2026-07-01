@@ -4,13 +4,17 @@ import com.cta4j.common.geo.Coordinates;
 import com.cta4j.exception.Cta4jException;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.common.internal.wire.CtaArrival;
+import com.cta4j.train.common.model.TrainDirection;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.follow.internal.wire.CtaPosition;
 import com.cta4j.train.station.internal.wire.CtaLocation;
 import com.cta4j.train.station.internal.wire.CtaStation;
+import com.cta4j.train.station.model.CardinalDirection;
 import com.cta4j.train.station.model.HumanAddress;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -113,5 +117,106 @@ class TrainQualifiersTest {
             TrainLine.BLUE, TrainLine.GREEN, TrainLine.BROWN, TrainLine.ORANGE, TrainLine.PINK
         );
         assertThat(lines).doesNotContain(TrainLine.RED, TrainLine.PURPLE, TrainLine.YELLOW);
+    }
+
+    @Test
+    void mapDirection_returnsNorth_whenDirectionIsN() {
+        assertThat(Qualifiers.mapDirection("N")).isEqualTo(CardinalDirection.NORTH);
+    }
+
+    @Test
+    void mapLine_returnsRed_whenLineIsRed() {
+        assertThat(Qualifiers.mapLine("RED")).isEqualTo(TrainLine.RED);
+    }
+
+    @Test
+    void mapTimestamp_returnsInstant_whenTimestampIsValid() {
+        Instant instant = Qualifiers.mapTimestamp("2015-04-30T20:23:53");
+
+        assertThat(instant).isNotNull();
+    }
+
+    @Test
+    void mapTimestamp_throwsCta4jException_whenTimestampIsInvalid() {
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+            Qualifiers.mapTimestamp("not-a-timestamp"));
+    }
+
+    @Test
+    void map01ToBoolean_returnsFalse_whenValueIsZero() {
+        assertThat(Qualifiers.map01ToBoolean("0")).isFalse();
+    }
+
+    @Test
+    void map01ToBoolean_returnsTrue_whenValueIsOne() {
+        assertThat(Qualifiers.map01ToBoolean("1")).isTrue();
+    }
+
+    @Test
+    void map15ToTrainDirection_returnsNorthbound_whenDirectionIsOne() {
+        assertThat(Qualifiers.map15ToTrainDirection("1")).isEqualTo(TrainDirection.NORTHBOUND);
+    }
+
+    @Test
+    void map15ToTrainDirection_throwsCta4jException_whenDirectionIsNotNumeric() {
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+            Qualifiers.map15ToTrainDirection("not-a-number"));
+    }
+
+    @Test
+    void parseCoordinate_returnsBigDecimal_whenValueIsValid() {
+        assertThat(Qualifiers.parseCoordinate("42.019063")).isEqualByComparingTo(new BigDecimal("42.019063"));
+    }
+
+    @Test
+    void parseCoordinate_throwsCta4jException_whenValueIsNotNumeric() {
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+            Qualifiers.parseCoordinate("not-a-number"));
+    }
+
+    @Test
+    void parseHeading_returnsInt_whenValueIsValid() {
+        assertThat(Qualifiers.parseHeading("180")).isEqualTo(180);
+    }
+
+    @Test
+    void parseHeading_throwsCta4jException_whenValueIsNotNumeric() {
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+            Qualifiers.parseHeading("not-a-number"));
+    }
+
+    @Test
+    void mapCoordinates_returnsCoordinates_whenPositionFieldsAreValid() {
+        CtaPosition position = new CtaPosition("42.019063", "-87.672892", "180");
+
+        Coordinates result = Qualifiers.mapCoordinates(position);
+
+        assertThat(result).isNotNull();
+        assertThat(result.latitude()).isEqualByComparingTo(new BigDecimal("42.019063"));
+        assertThat(result.longitude()).isEqualByComparingTo(new BigDecimal("-87.672892"));
+        assertThat(result.heading()).isEqualTo(180);
+    }
+
+    @Test
+    void mapCoordinates_throwsCta4jException_whenLatIsNotNumeric() {
+        CtaPosition position = new CtaPosition("not-a-number", "-87.672892", "180");
+
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() -> Qualifiers.mapCoordinates(position));
+    }
+
+    @Test
+    void mapArrivalCoordinates_returnsCoordinates_whenAllFieldsPresent() {
+        CtaArrival arrival = new CtaArrival(
+            "40100", "30070", "Howard", "Howard (NB)",
+            "123", "Red", "30077", "O'Hare", "1",
+            "2015-04-30T20:23:53", "2015-04-30T20:25:00",
+            "0", "0", "0", "0",
+            null, "42.019063", "-87.672892", "180"
+        );
+
+        Coordinates result = Qualifiers.mapArrivalCoordinates(arrival);
+
+        assertThat(result).isNotNull();
+        assertThat(result.heading()).isEqualTo(180);
     }
 }
