@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0] - 2026-06-30
+
+### Added
+
+- Comprehensive test suite covering `*ApiImpl` classes (WireMock integration tests), MapStruct mappers, domain
+  models, enums, query objects, qualifiers, and `HttpClient` (unit tests).
+- JaCoCo code coverage reporting integrated into the Maven build.
+- `@throws Cta4jException` documented on all public API methods that may throw on error or parse failure.
+- `ApiUtils.parseErrCd` (train) — parses the raw `errCd` string from train API responses into an `int`, throwing
+  `Cta4jException` on non-numeric or negative values.
+
+### Changed
+
+- `StopsPredictionsQuery` and `VehiclesPredictionsQuery` now enforce the CTA API's 10-ID-per-request limit at
+  construction time, throwing `IllegalArgumentException` instead of deferring the error to the API.
+- `StopsPredictionsQuery.Builder.maxResults` and `VehiclesPredictionsQuery.Builder.maxResults` parameter type
+  changed from `Integer` to `int`.
+- Internal wire layer refactored: the generic `CtaBustimeResponse<T>` envelope replaced with feature-specific typed
+  response records per endpoint, improving type safety and removing cross-feature coupling.
+- `BusApiContext`/`TrainApiContext` replaced with `BusApiConfig`/`TrainApiConfig`, adding `scheme` and `port`
+  fields to support configurable HTTP schemes.
+- `CtaError` (bus) refactored from a concrete record to an interface, allowing each feature to define its own typed
+  error record with resource-specific fields for accurate not-found classification.
+
 ## [5.0.0] - 2026-05-22
 
 ### Changed
@@ -232,7 +256,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v5.0.0...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v6.0.0...HEAD
+[6.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.1.0...v5.0.0
 [4.1.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.3...v4.1.0
 [4.0.3]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.2...v4.0.3
