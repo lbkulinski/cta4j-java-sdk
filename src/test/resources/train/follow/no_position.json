@@ -1,0 +1,26 @@
+{
+  "ctatt": {
+    "tmst": "2015-04-30T20:23:53",
+    "errCd": "0",
+    "errNm": null,
+    "eta": [
+      {
+        "staId": "40100",
+        "stpId": "30070",
+        "staNm": "Howard",
+        "stpDe": "Service toward O'Hare",
+        "rn": "123",
+        "rt": "Red",
+        "destSt": "30077",
+        "destNm": "O'Hare",
+        "trDr": "1",
+        "prdt": "2015-04-30T20:23:53",
+        "arrT": "2015-04-30T20:25:00",
+        "isApp": "0",
+        "isSch": "0",
+        "isDly": "0",
+        "isFlt": "0"
+      }
+    ]
+  }
+}
