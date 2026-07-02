@@ -6,7 +6,7 @@ import com.cta4j.bus.prediction.model.PassengerLoad;
 import com.cta4j.bus.pattern.model.PatternPointType;
 import com.cta4j.bus.prediction.model.PredictionType;
 import com.cta4j.bus.vehicle.model.TransitMode;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

@@ -1,6 +1,6 @@
 package com.cta4j.train.common.internal.util;
 
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.wire.CtaError;
 import org.junit.jupiter.api.Test;
 

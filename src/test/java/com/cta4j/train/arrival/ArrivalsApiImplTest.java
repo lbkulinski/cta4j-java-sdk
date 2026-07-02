@@ -1,7 +1,9 @@
 package com.cta4j.train.arrival;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
+import com.cta4j.train.arrival.exception.ArrivalsErrorCode;
+import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
 import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
@@ -91,7 +93,7 @@ class ArrivalsApiImplTest {
     }
 
     @Test
-    void findByMapId_throwsCta4jException_whenResponseContainsError() {
+    void findByMapId_throwsCta4jArrivalsException_whenResponseContainsError() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -101,7 +103,10 @@ class ArrivalsApiImplTest {
         MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jArrivalsException.class)
+            .hasMessage("Invalid API key")
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
+                .isEqualTo(ArrivalsErrorCode.UNKNOWN));
     }
 
     @Test
@@ -119,7 +124,7 @@ class ArrivalsApiImplTest {
     }
 
     @Test
-    void findByMapId_throwsCta4jException_whenResponseIsNotJson() {
+    void findByMapId_throwsCta4jArrivalsException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -129,7 +134,8 @@ class ArrivalsApiImplTest {
         MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jArrivalsException.class)
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode()).isNull());
     }
 
     @Test
@@ -162,7 +168,7 @@ class ArrivalsApiImplTest {
     }
 
     @Test
-    void findByStopId_throwsCta4jException_whenResponseContainsError() {
+    void findByStopId_throwsCta4jArrivalsException_whenResponseContainsError() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -172,7 +178,10 @@ class ArrivalsApiImplTest {
         StopArrivalQuery query = StopArrivalQuery.builder("30070").build();
 
         assertThatThrownBy(() -> this.api.findByStopId(query))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jArrivalsException.class)
+            .hasMessage("Invalid API key")
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
+                .isEqualTo(ArrivalsErrorCode.UNKNOWN));
     }
 
     @Test

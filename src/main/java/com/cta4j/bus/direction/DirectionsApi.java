@@ -1,6 +1,6 @@
 package com.cta4j.bus.direction;
 
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;

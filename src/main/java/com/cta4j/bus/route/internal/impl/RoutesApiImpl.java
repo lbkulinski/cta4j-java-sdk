@@ -9,7 +9,7 @@ import com.cta4j.bus.route.internal.mapper.RouteMapper;
 import com.cta4j.bus.route.internal.wire.CtaRouteBustimeResponse;
 import com.cta4j.bus.route.internal.wire.CtaRouteError;
 import com.cta4j.bus.route.model.Route;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;

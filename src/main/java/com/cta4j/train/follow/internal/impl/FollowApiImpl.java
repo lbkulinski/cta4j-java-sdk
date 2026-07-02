@@ -1,14 +1,15 @@
 package com.cta4j.train.follow.internal.impl;
 
 import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.train.common.TrainApiConstants;
 import com.cta4j.train.follow.FollowApi;
+import com.cta4j.train.follow.exception.Cta4jFollowException;
+import com.cta4j.train.follow.exception.FollowErrorCode;
 import com.cta4j.train.follow.internal.mapper.FollowTrainMapper;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
 import com.cta4j.train.follow.model.FollowTrain;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
-import com.cta4j.train.common.internal.wire.CtaError;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -23,8 +24,6 @@ import java.util.Optional;
 @ApiStatus.Internal
 @NullMarked
 public final class FollowApiImpl implements FollowApi {
-    private static final String FOLLOW_ENDPOINT = "%s/ttfollow.aspx".formatted(ApiUtils.API_PREFIX);
-    private static final int NOT_FOUND_ERROR_CODE = 501;
     private static final TypeReference<CtaResponse<CtaFollowResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final TrainApiConfig config;
@@ -41,7 +40,7 @@ public final class FollowApiImpl implements FollowApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(FOLLOW_ENDPOINT)
+            .setPath(TrainApiConstants.FOLLOW_ENDPOINT)
             .addParameter("runnumber", run)
             .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON")
@@ -59,25 +58,23 @@ public final class FollowApiImpl implements FollowApi {
             ctaResponse = JsonMapper.shared()
                                     .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(FOLLOW_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jFollowException("Failed to parse response", e);
         }
 
         CtaFollowResponse followResponse = ctaResponse.ctatt();
 
-        int errCd = ApiUtils.parseErrCd(followResponse.errCd(), FOLLOW_ENDPOINT);
+        int errCd = ApiUtils.parseErrCd(followResponse.errCd(), TrainApiConstants.FOLLOW_ENDPOINT);
 
-        if (errCd == NOT_FOUND_ERROR_CODE) {
+        FollowErrorCode errorCode = FollowErrorCode.fromCode(errCd);
+
+        if (errorCode == FollowErrorCode.RUN_NOT_FOUND) {
             return Optional.empty();
         }
 
-        if (errCd != 0) {
-            CtaError error = new CtaError(errCd, followResponse.errNm());
+        if (errorCode != FollowErrorCode.OK) {
+            String message = Objects.requireNonNullElse(followResponse.errNm(), "An unknown error occurred.");
 
-            String message = ApiUtils.buildErrorMessage(FOLLOW_ENDPOINT, error);
-
-            throw new Cta4jException(message);
+            throw new Cta4jFollowException(message, errCd);
         }
 
         FollowTrain followTrain = FollowTrainMapper.INSTANCE.toDomain(followResponse);

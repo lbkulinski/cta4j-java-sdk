@@ -1,7 +1,7 @@
 package com.cta4j.train.station;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.station.internal.impl.StationsApiImpl;

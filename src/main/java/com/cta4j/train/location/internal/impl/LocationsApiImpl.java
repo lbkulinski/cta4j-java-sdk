@@ -1,13 +1,14 @@
 package com.cta4j.train.location.internal.impl;
 
 import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.train.common.TrainApiConstants;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
-import com.cta4j.train.common.internal.wire.CtaError;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.location.LocationsApi;
+import com.cta4j.train.location.exception.Cta4jLocationsException;
+import com.cta4j.train.location.exception.LocationsErrorCode;
 import com.cta4j.train.location.internal.mapper.TrainLocationsMapper;
 import com.cta4j.train.location.internal.wire.CtaLocationResponse;
 import com.cta4j.train.location.model.TrainLocations;
@@ -24,7 +25,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class LocationsApiImpl implements LocationsApi {
-    private static final String POSITIONS_ENDPOINT = "%s/ttpositions.aspx".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaLocationResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final TrainApiConfig config;
@@ -52,7 +52,7 @@ public final class LocationsApiImpl implements LocationsApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(POSITIONS_ENDPOINT)
+            .setPath(TrainApiConstants.POSITIONS_ENDPOINT)
             .addParameter("rt", linesString)
             .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON")
@@ -70,21 +70,19 @@ public final class LocationsApiImpl implements LocationsApi {
             ctaResponse = JsonMapper.shared()
                                     .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(POSITIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jLocationsException("Failed to parse response", e);
         }
 
         CtaLocationResponse locationResponse = ctaResponse.ctatt();
 
-        int errCd = ApiUtils.parseErrCd(locationResponse.errCd(), POSITIONS_ENDPOINT);
+        int errCd = ApiUtils.parseErrCd(locationResponse.errCd(), TrainApiConstants.POSITIONS_ENDPOINT);
 
-        if (errCd != 0) {
-            CtaError error = new CtaError(errCd, locationResponse.errNm());
+        LocationsErrorCode errorCode = LocationsErrorCode.fromCode(errCd);
 
-            String message = ApiUtils.buildErrorMessage(POSITIONS_ENDPOINT, error);
+        if (errorCode != LocationsErrorCode.OK) {
+            String message = Objects.requireNonNullElse(locationResponse.errNm(), "An unknown error occurred.");
 
-            throw new Cta4jException(message);
+            throw new Cta4jLocationsException(message, errCd);
         }
 
         if (locationResponse.route() == null) {

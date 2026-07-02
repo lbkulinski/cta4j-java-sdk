@@ -7,7 +7,7 @@ import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.common.internal.wire.CtaTimeBustimeResponse;
 import com.cta4j.bus.common.internal.wire.CtaTimeError;
 import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

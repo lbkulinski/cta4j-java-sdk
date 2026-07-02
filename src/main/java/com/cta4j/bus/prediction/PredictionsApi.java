@@ -3,7 +3,7 @@ package com.cta4j.bus.prediction;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;

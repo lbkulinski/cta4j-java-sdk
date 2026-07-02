@@ -1,8 +1,10 @@
 package com.cta4j.train.arrival.internal.impl;
 
-import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.train.arrival.ArrivalsApi;
+import com.cta4j.train.arrival.exception.ArrivalsErrorCode;
+import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
+import com.cta4j.train.common.TrainApiConstants;
 import com.cta4j.train.common.internal.mapper.ArrivalMapper;
 import com.cta4j.train.arrival.internal.wire.CtaArrivalsResponse;
 import com.cta4j.train.common.model.Arrival;
@@ -12,7 +14,6 @@ import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.wire.CtaArrival;
-import com.cta4j.train.common.internal.wire.CtaError;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -28,9 +29,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class ArrivalsApiImpl implements ArrivalsApi {
-    private static final String ARRIVALS_ENDPOINT = "%s/ttarrivals.aspx".formatted(ApiUtils.API_PREFIX);
-    private static final int INVALID_MAPID_ERROR_CODE = 103;
-    private static final int INVALID_STPID_ERROR_CODE = 108;
     private static final TypeReference<CtaResponse<CtaArrivalsResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final TrainApiConfig config;
@@ -47,7 +45,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(ARRIVALS_ENDPOINT)
+            .setPath(TrainApiConstants.ARRIVALS_ENDPOINT)
             .addParameter("mapid", query.mapId())
             .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON");
@@ -63,7 +61,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(ARRIVALS_ENDPOINT)
+            .setPath(TrainApiConstants.ARRIVALS_ENDPOINT)
             .addParameter("stpid", query.stopId())
             .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON");
@@ -94,30 +92,28 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
             ctaResponse = JsonMapper.shared()
                                     .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(ARRIVALS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jArrivalsException("Failed to parse response", e);
         }
 
         CtaArrivalsResponse arrivalsResponse = ctaResponse.ctatt();
 
-        int errCd = ApiUtils.parseErrCd(arrivalsResponse.errCd(), ARRIVALS_ENDPOINT);
+        int errCd = ApiUtils.parseErrCd(arrivalsResponse.errCd(), TrainApiConstants.ARRIVALS_ENDPOINT);
 
-        if ((errCd == INVALID_MAPID_ERROR_CODE) || (errCd == INVALID_STPID_ERROR_CODE)) {
+        ArrivalsErrorCode errorCode = ArrivalsErrorCode.fromCode(errCd);
+
+        if (errorCode == ArrivalsErrorCode.INVALID_MAPID || errorCode == ArrivalsErrorCode.INVALID_STPID) {
             return List.of();
         }
 
-        if (errCd != 0) {
-            CtaError error = new CtaError(errCd, arrivalsResponse.errNm());
+        if (errorCode != ArrivalsErrorCode.OK) {
+            String message = Objects.requireNonNullElse(arrivalsResponse.errNm(), "An unknown error occurred.");
 
-            String message = ApiUtils.buildErrorMessage(ARRIVALS_ENDPOINT, error);
-
-            throw new Cta4jException(message);
+            throw new Cta4jArrivalsException(message, errCd);
         }
 
         List<CtaArrival> eta = arrivalsResponse.eta();
 
-        if ((eta == null) || eta.isEmpty()) {
+        if (eta == null || eta.isEmpty()) {
             return List.of();
         }
 

@@ -11,7 +11,7 @@ import com.cta4j.bus.prediction.internal.wire.CtaPredictionError;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;

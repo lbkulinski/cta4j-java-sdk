@@ -4,7 +4,7 @@ import com.cta4j.TestFixtures;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.vehicle.internal.impl.VehiclesApiImpl;
 import com.cta4j.bus.vehicle.model.Vehicle;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,7 +1,7 @@
 package com.cta4j.train.common;
 
 import com.cta4j.common.geo.Coordinates;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;

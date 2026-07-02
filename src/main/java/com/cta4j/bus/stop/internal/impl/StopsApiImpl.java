@@ -9,7 +9,7 @@ import com.cta4j.bus.stop.internal.mapper.StopMapper;
 import com.cta4j.bus.stop.internal.wire.CtaStopBustimeResponse;
 import com.cta4j.bus.stop.internal.wire.CtaStopError;
 import com.cta4j.bus.stop.model.Stop;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;

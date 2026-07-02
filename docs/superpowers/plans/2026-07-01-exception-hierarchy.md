@@ -437,6 +437,7 @@ This task alone will break the build (every existing call site uses the old cons
 ```java
 package com.cta4j.exception;
 
+import com.cta4j.common.exception.Cta4jException;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -620,7 +621,7 @@ Expected: FAIL to compile — `Cta4jBusException` does not exist.
 package com.cta4j.bus.exception;
 
 import com.cta4j.bus.common.internal.wire.CtaError;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -742,7 +743,7 @@ Expected: FAIL to compile — `Cta4jTrainException` does not exist.
 ```java
 package com.cta4j.train.exception;
 
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 /**
@@ -1780,18 +1781,33 @@ Each: replace `import com.cta4j.exception.Cta4jException;` with `import com.cta4
 
 ```java
 // before
-import com.cta4j.exception.Cta4jException;
+
+import com.cta4j.common.exception.Cta4jException;
 // ...
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     *@throws Cta4jException if
+the API
+returns an
+error response
+or the
+response cannot
+be parsed
      */
-    Instant systemTime();
+
+Instant systemTime();
 
 // after
 import com.cta4j.bus.exception.Cta4jBusException;
 // ...
-     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
+     *@throws Cta4jBusException if
+the API
+returns an
+error response
+or the
+response cannot
+be parsed
      */
-    Instant systemTime();
+
+Instant systemTime();
 ```
 
 - [ ] **Step 7: Run the full bus test suite to verify everything still compiles and passes**
@@ -1908,7 +1924,7 @@ git commit -m "feat: retarget bus Qualifiers to Cta4jBusException"
 // before
 package com.cta4j.train.common.internal.util;
 
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.wire.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

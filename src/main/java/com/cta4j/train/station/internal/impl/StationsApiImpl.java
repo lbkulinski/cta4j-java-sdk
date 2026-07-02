@@ -1,7 +1,7 @@
 package com.cta4j.train.station.internal.impl;
 
-import com.cta4j.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
+import com.cta4j.train.common.exception.Cta4jTrainException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.station.StationsApi;
 import com.cta4j.train.station.internal.mapper.StationMapper;
@@ -37,9 +37,7 @@ public final class StationsApiImpl implements StationsApi {
             stations = JsonMapper.shared()
                                  .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(this.config.stationsUrl());
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jTrainException("Failed to parse response", this.config.stationsUrl(), e);
         }
 
         return stations.stream()

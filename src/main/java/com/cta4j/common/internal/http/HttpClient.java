@@ -1,6 +1,6 @@
 package com.cta4j.common.internal.http;
 
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.apache.hc.client5.http.HttpResponseException;
 import org.apache.hc.client5.http.fluent.Request;
 import org.jetbrains.annotations.ApiStatus;

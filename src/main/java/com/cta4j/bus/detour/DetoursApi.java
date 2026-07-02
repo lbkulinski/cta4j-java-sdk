@@ -1,7 +1,7 @@
 package com.cta4j.bus.detour;
 
 import com.cta4j.bus.detour.model.Detour;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;

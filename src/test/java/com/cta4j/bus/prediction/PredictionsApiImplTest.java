@@ -6,7 +6,7 @@ import com.cta4j.bus.prediction.internal.impl.PredictionsApiImpl;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.exception.Cta4jException;
+import com.cta4j.common.exception.Cta4jException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
