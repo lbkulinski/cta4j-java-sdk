@@ -105,6 +105,20 @@ class ArrivalsApiImplTest {
     }
 
     @Test
+    void findByMapId_returnsEmpty_whenResponseContainsInvalidMapIdError() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/arrival/not_found_mapid.json"))));
+
+        MapArrivalQuery query = MapArrivalQuery.builder("99999").build();
+        List<Arrival> arrivals = this.api.findByMapId(query);
+
+        assertThat(arrivals).isEmpty();
+    }
+
+    @Test
     void findByMapId_throwsCta4jException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .willReturn(aResponse()
@@ -159,6 +173,20 @@ class ArrivalsApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByStopId(query))
             .isInstanceOf(Cta4jException.class);
+    }
+
+    @Test
+    void findByStopId_returnsEmpty_whenResponseContainsInvalidStopIdError() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/arrival/not_found_stpid.json"))));
+
+        StopArrivalQuery query = StopArrivalQuery.builder("99999").build();
+        List<Arrival> arrivals = this.api.findByStopId(query);
+
+        assertThat(arrivals).isEmpty();
     }
 
     @Test

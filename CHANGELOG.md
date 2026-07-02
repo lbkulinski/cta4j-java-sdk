@@ -30,6 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   fields to support configurable HTTP schemes.
 - `CtaError` (bus) refactored from a concrete record to an interface, allowing each feature to define its own typed
   error record with resource-specific fields for accurate not-found classification.
+- `Cta4jException` is now `final` and can no longer be subclassed.
 
 ## [5.0.0] - 2026-05-22
 

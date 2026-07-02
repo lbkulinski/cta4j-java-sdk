@@ -1,5 +1,6 @@
 package com.cta4j.bus.prediction.query;
 
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -17,8 +18,6 @@ public record VehiclesPredictionsQuery(
     List<String> vehicleIds,
     @Nullable Integer maxResults
 ) {
-    private static final int MAX_VEHICLE_IDS = 10;
-
     /**
      * Constructs a {@code VehiclesPredictionsQuery}.
      *
@@ -31,14 +30,7 @@ public record VehiclesPredictionsQuery(
     public VehiclesPredictionsQuery {
         Objects.requireNonNull(vehicleIds);
 
-        if (vehicleIds.size() > MAX_VEHICLE_IDS) {
-            String message = "A maximum of %d vehicle IDs can be requested at once, but %d were provided".formatted(
-                MAX_VEHICLE_IDS,
-                vehicleIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
+        ApiUtils.requireMaxIds(vehicleIds, "vehicle");
 
         vehicleIds = List.copyOf(vehicleIds);
 

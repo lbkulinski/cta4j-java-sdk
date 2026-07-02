@@ -1,5 +1,6 @@
 package com.cta4j.bus.prediction.query;
 
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -19,8 +20,6 @@ public record StopsPredictionsQuery(
     @Nullable List<String> routeIds,
     @Nullable Integer maxResults
 ) {
-    private static final int MAX_STOP_IDS = 10;
-
     /**
      * Constructs a {@code StopsPredictionsQuery}.
      *
@@ -35,14 +34,7 @@ public record StopsPredictionsQuery(
     public StopsPredictionsQuery {
         Objects.requireNonNull(stopIds);
 
-        if (stopIds.size() > MAX_STOP_IDS) {
-            String message = "A maximum of %d stop IDs can be requested at once, but %d were provided".formatted(
-                MAX_STOP_IDS,
-                stopIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
+        ApiUtils.requireMaxIds(stopIds, "stop");
 
         stopIds = List.copyOf(stopIds);
 

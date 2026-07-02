@@ -56,6 +56,22 @@ class FollowApiImplTest {
     }
 
     @Test
+    void findByRun_returnsFollowTrainWithNullCoordinates_whenResponseHasNoPosition() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/follow/no_position.json"))));
+
+        Optional<FollowTrain> result = this.api.findByRun("123");
+
+        assertThat(result).isPresent();
+        FollowTrain followTrain = result.get();
+        assertThat(followTrain.arrivals()).hasSize(1);
+        assertThat(followTrain.coordinates()).isNull();
+    }
+
+    @Test
     void findByRun_returnsEmpty_whenResponseIsNotFound() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
             .willReturn(aResponse()

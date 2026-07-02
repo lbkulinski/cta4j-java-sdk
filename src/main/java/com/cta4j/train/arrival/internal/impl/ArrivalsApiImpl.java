@@ -29,6 +29,8 @@ import java.util.Objects;
 @NullMarked
 public final class ArrivalsApiImpl implements ArrivalsApi {
     private static final String ARRIVALS_ENDPOINT = "%s/ttarrivals.aspx".formatted(ApiUtils.API_PREFIX);
+    private static final int INVALID_MAPID_ERROR_CODE = 103;
+    private static final int INVALID_STPID_ERROR_CODE = 108;
     private static final TypeReference<CtaResponse<CtaArrivalsResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final TrainApiConfig config;
@@ -100,6 +102,10 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         CtaArrivalsResponse arrivalsResponse = ctaResponse.ctatt();
 
         int errCd = ApiUtils.parseErrCd(arrivalsResponse.errCd(), ARRIVALS_ENDPOINT);
+
+        if ((errCd == INVALID_MAPID_ERROR_CODE) || (errCd == INVALID_STPID_ERROR_CODE)) {
+            return List.of();
+        }
 
         if (errCd != 0) {
             CtaError error = new CtaError(errCd, arrivalsResponse.errNm());

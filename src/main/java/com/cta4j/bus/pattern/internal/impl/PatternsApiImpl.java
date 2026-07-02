@@ -30,7 +30,6 @@ public final class PatternsApiImpl implements PatternsApi {
     private static final Logger log = LoggerFactory.getLogger(PatternsApiImpl.class);
 
     private static final String PATTERNS_ENDPOINT = "%s/getpatterns".formatted(ApiUtils.API_PREFIX);
-    private static final int MAX_PATTERN_IDS_PER_REQUEST = 10;
     private static final TypeReference<CtaResponse<CtaPatternBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -48,14 +47,7 @@ public final class PatternsApiImpl implements PatternsApi {
             return List.of();
         }
 
-        if (patternIds.size() > MAX_PATTERN_IDS_PER_REQUEST) {
-            String message = "A maximum of %d pattern IDs can be requested at once, but %d were provided".formatted(
-                MAX_PATTERN_IDS_PER_REQUEST,
-                patternIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
+        ApiUtils.requireMaxIds(patternIds, "pattern");
 
         patternIds = List.copyOf(patternIds);
 

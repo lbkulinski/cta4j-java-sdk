@@ -30,7 +30,6 @@ public final class StopsApiImpl implements StopsApi {
     private static final Logger log = LoggerFactory.getLogger(StopsApiImpl.class);
 
     private static final String STOPS_ENDPOINT = "%s/getstops".formatted(ApiUtils.API_PREFIX);
-    private static final int MAX_STOP_IDS_PER_REQUEST = 10;
     private static final TypeReference<CtaResponse<CtaStopBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
@@ -66,14 +65,7 @@ public final class StopsApiImpl implements StopsApi {
             return List.of();
         }
 
-        if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
-            String message = "A maximum of %d stop IDs can be requested at once, but %d were provided".formatted(
-                MAX_STOP_IDS_PER_REQUEST,
-                stopIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
+        ApiUtils.requireMaxIds(stopIds, "stop");
 
         stopIds = List.copyOf(stopIds);
 

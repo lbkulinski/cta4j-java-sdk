@@ -130,4 +130,18 @@ class VehiclesApiImplTest {
 
         assertThat(vehicles).hasSize(1);
     }
+
+    @Test
+    void findByIds_throwsIllegalArgumentException_whenTooManyVehicleIds() {
+        List<String> tooMany = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
+
+        assertThatIllegalArgumentException().isThrownBy(() -> this.api.findByIds(tooMany));
+    }
+
+    @Test
+    void findByRouteIds_throwsIllegalArgumentException_whenTooManyRouteIds() {
+        List<String> tooMany = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
+
+        assertThatIllegalArgumentException().isThrownBy(() -> this.api.findByRouteIds(tooMany));
+    }
 }

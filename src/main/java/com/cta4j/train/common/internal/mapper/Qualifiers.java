@@ -155,7 +155,13 @@ public final class Qualifiers {
             throw new Cta4jException(message, e);
         }
 
-        return TrainDirection.fromCode(code);
+        try {
+            return TrainDirection.fromCode(code);
+        } catch (IllegalArgumentException e) {
+            String message = "Failed to parse train direction: %s".formatted(direction);
+
+            throw new Cta4jException(message, e);
+        }
     }
 
     @Named("parseCoordinate")
@@ -192,8 +198,10 @@ public final class Qualifiers {
     }
 
     @Named("mapCoordinates")
-    public static @Nullable Coordinates mapCoordinates(CtaPosition position) {
-        Objects.requireNonNull(position);
+    public static @Nullable Coordinates mapCoordinates(@Nullable CtaPosition position) {
+        if (position == null) {
+            return null;
+        }
 
         return mapCoordinates(position.lat(), position.lon(), position.heading());
     }

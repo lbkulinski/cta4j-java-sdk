@@ -23,6 +23,7 @@ public interface VehiclesApi {
      * @return a {@link List} of {@link Vehicle}s corresponding to the provided IDs, or an empty {@link List} if no
      * vehicles are found
      * @throws NullPointerException if {@code ids} is {@code null} or contains {@code null} elements
+     * @throws IllegalArgumentException if more than 10 vehicle IDs are provided
      * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<Vehicle> findByIds(Collection<String> ids);
@@ -69,6 +70,7 @@ public interface VehiclesApi {
      * @return a {@link List} of {@link Vehicle}s associated with the route IDs, or an empty {@link List} if no
      * vehicles are found for the route IDs
      * @throws NullPointerException if {@code routeIds} is {@code null} or contains {@code null} elements
+     * @throws IllegalArgumentException if more than 10 route IDs are provided
      * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     List<Vehicle> findByRouteIds(Collection<String> routeIds);

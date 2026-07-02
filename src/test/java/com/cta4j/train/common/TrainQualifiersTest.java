@@ -73,6 +73,13 @@ class TrainQualifiersTest {
     }
 
     @Test
+    void mapCoordinates_returnsNull_whenPositionIsNull() {
+        Coordinates result = Qualifiers.mapCoordinates(null);
+
+        assertThat(result).isNull();
+    }
+
+    @Test
     void mapArrivalCoordinates_returnsNull_whenLonIsNull() {
         CtaArrival arrival = new CtaArrival(
             "40100", "30070", "Howard", "Howard (NB)",
@@ -161,6 +168,12 @@ class TrainQualifiersTest {
     void map15ToTrainDirection_throwsCta4jException_whenDirectionIsNotNumeric() {
         assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
             Qualifiers.map15ToTrainDirection("not-a-number"));
+    }
+
+    @Test
+    void map15ToTrainDirection_throwsCta4jException_whenDirectionCodeIsUnrecognized() {
+        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+            Qualifiers.map15ToTrainDirection("3"));
     }
 
     @Test

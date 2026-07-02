@@ -49,6 +49,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
             return List.of();
         }
 
+        ApiUtils.requireMaxIds(ids, "vehicle");
+
         String idsString = String.join(",", ids);
 
         String url = new URIBuilder()
@@ -74,6 +76,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
         if (routeIds.isEmpty()) {
             return List.of();
         }
+
+        ApiUtils.requireMaxIds(routeIds, "route");
 
         String routeIdsString = String.join(",", routeIds);
 
