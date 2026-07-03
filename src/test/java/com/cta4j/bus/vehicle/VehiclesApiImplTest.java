@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
@@ -150,5 +151,62 @@ class VehiclesApiImplTest {
         List<String> tooMany = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
 
         assertThatIllegalArgumentException().isThrownBy(() -> this.api.findByRouteIds(tooMany));
+    }
+
+    @Test
+    void findById_returnsEmpty_whenNoVehicleFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getvehicles"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/vehicle/not_found.json"))));
+
+        Optional<Vehicle> vehicle = this.api.findById("9999");
+
+        assertThat(vehicle).isEmpty();
+    }
+
+    @Test
+    void findById_returnsVehicle_whenOneVehicleFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getvehicles"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/vehicle/success.json"))));
+
+        Optional<Vehicle> vehicle = this.api.findById("509");
+
+        assertThat(vehicle).isPresent();
+        assertThat(vehicle.get().id()).isEqualTo("509");
+    }
+
+    @Test
+    void findById_throwsCta4jBusException_whenMultipleVehiclesFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getvehicles"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/vehicle/multiple.json"))));
+
+        assertThatThrownBy(() -> this.api.findById("509"))
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Expected at most one vehicle for ID: 509, but found 2")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.VEHICLES_ENDPOINT));
+    }
+
+    @Test
+    void findByRouteId_delegatesToFindByRouteIds() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getvehicles"))
+            .withQueryParam("rt", equalTo("8"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/vehicle/success.json"))));
+
+        List<Vehicle> vehicles = this.api.findByRouteId("8");
+
+        assertThat(vehicles).hasSize(1);
+        assertThat(vehicles.getFirst().id()).isEqualTo("509");
     }
 }

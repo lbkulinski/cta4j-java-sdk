@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
@@ -134,5 +135,47 @@ class PatternsApiImplTest {
         List<String> tooMany = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
 
         assertThatIllegalArgumentException().isThrownBy(() -> this.api.findByIds(tooMany));
+    }
+
+    @Test
+    void findById_returnsEmpty_whenNoPatternFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/not_found.json"))));
+
+        Optional<RoutePattern> pattern = this.api.findById("9999");
+
+        assertThat(pattern).isEmpty();
+    }
+
+    @Test
+    void findById_returnsPattern_whenOnePatternFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/success.json"))));
+
+        Optional<RoutePattern> pattern = this.api.findById("3630");
+
+        assertThat(pattern).isPresent();
+        assertThat(pattern.get().id()).isEqualTo("3630");
+    }
+
+    @Test
+    void findById_throwsCta4jBusException_whenMultiplePatternsFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/multiple.json"))));
+
+        assertThatThrownBy(() -> this.api.findById("3630"))
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Multiple route patterns found for ID: 3630")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.PATTERNS_ENDPOINT));
     }
 }

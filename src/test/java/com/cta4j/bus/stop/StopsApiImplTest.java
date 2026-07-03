@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
@@ -172,5 +173,47 @@ class StopsApiImplTest {
         List<String> tooMany = List.of("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11");
 
         assertThatIllegalArgumentException().isThrownBy(() -> this.api.findByIds(tooMany));
+    }
+
+    @Test
+    void findById_returnsEmpty_whenNoStopFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/stop/not_found.json"))));
+
+        Optional<Stop> stop = this.api.findById("9999");
+
+        assertThat(stop).isEmpty();
+    }
+
+    @Test
+    void findById_returnsStop_whenOneStopFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/stop/success.json"))));
+
+        Optional<Stop> stop = this.api.findById("456");
+
+        assertThat(stop).isPresent();
+        assertThat(stop.get().id()).isEqualTo("456");
+    }
+
+    @Test
+    void findById_throwsCta4jBusException_whenMultipleStopsFound() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/stop/multiple.json"))));
+
+        assertThatThrownBy(() -> this.api.findById("456"))
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Multiple stops found for ID: 456")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.STOPS_ENDPOINT));
     }
 }

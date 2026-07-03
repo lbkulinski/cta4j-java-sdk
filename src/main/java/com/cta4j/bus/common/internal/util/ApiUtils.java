@@ -1,11 +1,9 @@
 package com.cta4j.bus.common.internal.util;
 
-import com.cta4j.bus.common.internal.wire.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @ApiStatus.Internal
@@ -15,20 +13,6 @@ public final class ApiUtils {
 
     private ApiUtils() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
-    }
-
-    public static String buildErrorMessage(String endpoint, List<? extends CtaError> errors) {
-        Objects.requireNonNull(endpoint);
-        Objects.requireNonNull(errors);
-
-        errors = List.copyOf(errors);
-
-        String message = errors.stream()
-                               .map(CtaError::msg)
-                               .reduce("%s; %s"::formatted)
-                               .orElse("Unknown error");
-
-        return "Error response from %s: %s".formatted(endpoint, message);
     }
 
     public static void requireMaxIds(Collection<String> ids, String label) {

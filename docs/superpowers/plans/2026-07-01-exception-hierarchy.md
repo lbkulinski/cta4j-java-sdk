@@ -1925,7 +1925,6 @@ git commit -m "feat: retarget bus Qualifiers to Cta4jBusException"
 package com.cta4j.train.common.internal.util;
 
 import com.cta4j.common.exception.Cta4jException;
-import com.cta4j.train.common.internal.wire.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 

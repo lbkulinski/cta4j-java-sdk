@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `@throws Cta4jException` documented on all public API methods that may throw on error or parse failure.
 - `ApiUtils.parseErrCd` (train) — parses the raw `errCd` string from train API responses into an `int`, throwing
   `Cta4jException` on non-numeric or negative values.
+- Structured exception hierarchy: `Cta4jBusException` (bus, shared across every feature) and `Cta4jTrainException`
+  (train, shared across every feature; used directly by `StationsApiImpl` and train `Qualifiers`), plus
+  feature-specific `Cta4jArrivalsException`/`Cta4jFollowException`/`Cta4jLocationsException`, each exposing a
+  `getRawErrorCode()`/`getErrorCode()` pair backed by the new `ArrivalsErrorCode`/`FollowErrorCode`/
+  `LocationsErrorCode` enums (verified against the CTA Train Tracker API's documented error codes).
+- `Cta4jException.getEndpoint()` — a required, always-populated accessor for the endpoint or URL associated with
+  any exception the SDK throws.
+- `BusApiConstants`/`TrainApiConstants` — public constants holders for each transit type's scheme, default host,
+  and per-feature endpoint paths.
 
 ### Changed
 
@@ -30,7 +39,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   fields to support configurable HTTP schemes.
 - `CtaError` (bus) refactored from a concrete record to an interface, allowing each feature to define its own typed
   error record with resource-specific fields for accurate not-found classification.
-- `Cta4jException` is now `final` and can no longer be subclassed.
+- `Cta4jException` reverts to a plain, non-`final` class (see Removed below) so the new exception hierarchy can
+  extend it; `getMessage()` now returns CTA's raw reported text unmodified instead of a
+  `"Error response from %s: ..."` template, since `getEndpoint()` and the error-code accessors now carry that
+  context as structured fields.
+
+### Removed
+
+- `Cta4jException` is no longer `final` and can once again be subclassed — this reverses that change from earlier
+  in this same 6.0.0 cycle; see the new exception hierarchy above.
+- The ad hoc magic-number not-found checks introduced earlier this cycle (`FollowApiImpl.NOT_FOUND_ERROR_CODE`,
+  `ArrivalsApiImpl.INVALID_MAPID_ERROR_CODE`/`INVALID_STPID_ERROR_CODE`), replaced by comparisons against the new
+  error-code enums.
+- `train.common.internal.wire.CtaError` and `ApiUtils.buildErrorMessage` (both bus and train) — message formatting
+  is now owned by the exception classes themselves (`Cta4jBusException` joins bus error messages; train error text
+  is passed through unmodified).
 
 ## [5.0.0] - 2026-05-22
 

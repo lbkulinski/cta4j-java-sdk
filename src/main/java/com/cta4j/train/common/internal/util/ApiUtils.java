@@ -1,7 +1,6 @@
 package com.cta4j.train.common.internal.util;
 
 import com.cta4j.common.exception.Cta4jException;
-import com.cta4j.train.common.internal.wire.CtaError;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
@@ -35,12 +34,5 @@ public final class ApiUtils {
         }
 
         return code;
-    }
-
-    public static String buildErrorMessage(String endpoint, CtaError error) {
-        Objects.requireNonNull(endpoint);
-        Objects.requireNonNull(error);
-
-        return "Error response from %s: [%d] %s".formatted(endpoint, error.code(), error.message());
     }
 }
