@@ -1,7 +1,8 @@
 package com.cta4j.bus.pattern;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.pattern.model.RoutePattern;
-import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
@@ -24,7 +25,7 @@ public interface PatternsApi {
      * no patterns are found
      * @throws NullPointerException if {@code patternIds} is {@code null} or contains {@code null} elements
      * @throws IllegalArgumentException if more than 10 pattern IDs are provided
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
     List<RoutePattern> findByIds(Collection<String> patternIds);
 
@@ -35,7 +36,7 @@ public interface PatternsApi {
      * @return an {@link Optional} containing the {@link RoutePattern} if found, or an empty {@link Optional} if no
      * pattern is found for the given ID
      * @throws NullPointerException if {@code patternId} is {@code null}
-     * @throws Cta4jException if multiple route patterns are found for the given ID, or if the API returns an error
+     * @throws Cta4jBusException if multiple route patterns are found for the given ID, or if the API returns an error
      * response or the response cannot be parsed
      */
     default Optional<RoutePattern> findById(String patternId) {
@@ -52,7 +53,7 @@ public interface PatternsApi {
         if (patterns.size() > 1) {
             String message = "Multiple route patterns found for ID: %s".formatted(patternId);
 
-            throw new Cta4jException(message);
+            throw new Cta4jBusException(message, BusApiConstants.PATTERNS_ENDPOINT);
         }
 
         RoutePattern pattern = patterns.getFirst();
@@ -67,7 +68,7 @@ public interface PatternsApi {
      * @return a {@link List} of {@link RoutePattern}s associated with the route ID, or an empty {@link List} if no
      * patterns are found for the route ID
      * @throws NullPointerException if {@code routeId} is {@code null}
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
     List<RoutePattern> findByRouteId(String routeId);
 }

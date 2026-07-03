@@ -1,13 +1,13 @@
 package com.cta4j.bus.common.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.common.internal.wire.CtaTimeBustimeResponse;
 import com.cta4j.bus.common.internal.wire.CtaTimeError;
 import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.common.exception.Cta4jException;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -22,7 +22,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 final class SystemTimeApiImpl {
-    private static final String SYSTEM_TIME_ENDPOINT = "%s/gettime".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaTimeBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -37,7 +36,7 @@ final class SystemTimeApiImpl {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(SYSTEM_TIME_ENDPOINT)
+            .setPath(BusApiConstants.SYSTEM_TIME_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
@@ -50,9 +49,7 @@ final class SystemTimeApiImpl {
             timeResponse = JsonMapper.shared()
                                      .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(SYSTEM_TIME_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.SYSTEM_TIME_ENDPOINT, e);
         }
 
         CtaTimeBustimeResponse bustimeResponse = timeResponse.bustimeResponse();
@@ -67,13 +64,9 @@ final class SystemTimeApiImpl {
         }
 
         if (errors == null || errors.isEmpty()) {
-            String message = "No system time data returned from %s".formatted(SYSTEM_TIME_ENDPOINT);
-
-            throw new Cta4jException(message);
+            throw new Cta4jBusException("No system time data returned", BusApiConstants.SYSTEM_TIME_ENDPOINT);
         }
 
-        String message = ApiUtils.buildErrorMessage(SYSTEM_TIME_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        throw new Cta4jBusException(errors, BusApiConstants.SYSTEM_TIME_ENDPOINT);
     }
 }

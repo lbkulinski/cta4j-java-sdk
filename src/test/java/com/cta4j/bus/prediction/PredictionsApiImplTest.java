@@ -1,12 +1,13 @@
 package com.cta4j.bus.prediction;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.prediction.internal.impl.PredictionsApiImpl;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.common.exception.Cta4jException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -91,7 +92,7 @@ class PredictionsApiImplTest {
     }
 
     @Test
-    void findByStopIds_throwsCta4jException_whenResponseContainsFatalErrors() {
+    void findByStopIds_throwsCta4jBusException_whenResponseContainsFatalErrors() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -101,11 +102,14 @@ class PredictionsApiImplTest {
         StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
 
         assertThatThrownBy(() -> this.api.findByStopIds(query))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Internal server error")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.PREDICTIONS_ENDPOINT));
     }
 
     @Test
-    void findByStopIds_throwsCta4jException_whenResponseIsNotJson() {
+    void findByStopIds_throwsCta4jBusException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -115,7 +119,10 @@ class PredictionsApiImplTest {
         StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
 
         assertThatThrownBy(() -> this.api.findByStopIds(query))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Failed to parse response")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.PREDICTIONS_ENDPOINT));
     }
 
     @Test

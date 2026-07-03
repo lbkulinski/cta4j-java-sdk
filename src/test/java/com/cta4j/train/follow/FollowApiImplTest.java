@@ -3,6 +3,8 @@ package com.cta4j.train.follow;
 import com.cta4j.TestFixtures;
 import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
+import com.cta4j.train.follow.exception.Cta4jFollowException;
+import com.cta4j.train.follow.exception.FollowErrorCode;
 import com.cta4j.train.follow.internal.impl.FollowApiImpl;
 import com.cta4j.train.follow.model.FollowTrain;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -85,7 +87,7 @@ class FollowApiImplTest {
     }
 
     @Test
-    void findByRun_throwsCta4jException_whenResponseContainsError() {
+    void findByRun_throwsCta4jFollowException_whenResponseContainsError() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -93,11 +95,14 @@ class FollowApiImplTest {
                 .withBody(TestFixtures.read("train/follow/error.json"))));
 
         assertThatThrownBy(() -> this.api.findByRun("123"))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jFollowException.class)
+            .hasMessage("Invalid API key")
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
+                .isEqualTo(FollowErrorCode.UNKNOWN));
     }
 
     @Test
-    void findByRun_throwsCta4jException_whenResponseIsNotJson() {
+    void findByRun_throwsCta4jFollowException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -105,7 +110,8 @@ class FollowApiImplTest {
                 .withBody("not-json")));
 
         assertThatThrownBy(() -> this.api.findByRun("123"))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jFollowException.class)
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode()).isNull());
     }
 
     @Test

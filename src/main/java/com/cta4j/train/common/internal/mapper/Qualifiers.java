@@ -12,7 +12,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
-import com.cta4j.common.exception.Cta4jException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -22,9 +21,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 
 @ApiStatus.Internal
 @NullMarked
@@ -44,10 +43,10 @@ public final class Qualifiers {
     }
 
     @Named("mapTrainLines")
-    public static List<TrainLine> mapTrainLines(CtaStation station) {
+    public static Set<TrainLine> mapTrainLines(CtaStation station) {
         Objects.requireNonNull(station);
 
-        List<TrainLine> lines = new ArrayList<>();
+        EnumSet<TrainLine> lines = EnumSet.noneOf(TrainLine.class);
 
         if (station.red()) {
             lines.add(TrainLine.RED);
@@ -81,7 +80,7 @@ public final class Qualifiers {
             lines.add(TrainLine.YELLOW);
         }
 
-        return List.copyOf(lines);
+        return Set.copyOf(lines);
     }
 
     @Named("mapHumanAddress")
@@ -122,7 +121,7 @@ public final class Qualifiers {
         } catch (DateTimeParseException e) {
             String message = "Failed to parse timestamp: %s".formatted(timestamp);
 
-            throw new Cta4jException(message, e);
+            throw new IllegalArgumentException(message, e);
         }
     }
 
@@ -136,7 +135,7 @@ public final class Qualifiers {
             default -> {
                 String message = "Invalid boolean value: %s. Expected 0 or 1".formatted(value);
 
-                throw new Cta4jException(message);
+                throw new IllegalArgumentException(message);
             }
         };
     }
@@ -152,7 +151,7 @@ public final class Qualifiers {
         } catch (NumberFormatException e) {
             String message = "Failed to parse train direction: %s".formatted(direction);
 
-            throw new Cta4jException(message, e);
+            throw new IllegalArgumentException(message, e);
         }
 
         try {
@@ -160,7 +159,7 @@ public final class Qualifiers {
         } catch (IllegalArgumentException e) {
             String message = "Failed to parse train direction: %s".formatted(direction);
 
-            throw new Cta4jException(message, e);
+            throw new IllegalArgumentException(message, e);
         }
     }
 
@@ -173,7 +172,7 @@ public final class Qualifiers {
         } catch (NumberFormatException e) {
             String message = "Failed to parse coordinate: %s".formatted(value);
 
-            throw new Cta4jException(message, e);
+            throw new IllegalArgumentException(message, e);
         }
     }
 
@@ -186,7 +185,7 @@ public final class Qualifiers {
         } catch (NumberFormatException e) {
             String message = "Failed to parse heading: %s".formatted(value);
 
-            throw new Cta4jException(message, e);
+            throw new IllegalArgumentException(message, e);
         }
     }
 
@@ -234,7 +233,7 @@ public final class Qualifiers {
         } catch (NumberFormatException e) {
             String message = "Failed to parse coordinates: lat=%s, lon=%s, heading=%s".formatted(lat, lon, heading);
 
-            throw new Cta4jException(message, e);
+            throw new IllegalArgumentException(message, e);
         }
 
         return new Coordinates(latitude, longitude, headingValue);

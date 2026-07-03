@@ -4,6 +4,8 @@ import com.cta4j.TestFixtures;
 import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.train.location.exception.Cta4jLocationsException;
+import com.cta4j.train.location.exception.LocationsErrorCode;
 import com.cta4j.train.location.internal.impl.LocationsApiImpl;
 import com.cta4j.train.location.model.TrainLocations;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -78,7 +80,7 @@ class LocationsApiImplTest {
     }
 
     @Test
-    void findByLines_throwsCta4jException_whenResponseContainsError() {
+    void findByLines_throwsCta4jLocationsException_whenResponseContainsError() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -86,11 +88,14 @@ class LocationsApiImplTest {
                 .withBody(TestFixtures.read("train/location/error.json"))));
 
         assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jLocationsException.class)
+            .hasMessage("Invalid API key")
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
+                .isEqualTo(LocationsErrorCode.UNKNOWN));
     }
 
     @Test
-    void findByLines_throwsCta4jException_whenResponseIsNotJson() {
+    void findByLines_throwsCta4jLocationsException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -98,7 +103,8 @@ class LocationsApiImplTest {
                 .withBody("not-json")));
 
         assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jLocationsException.class)
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode()).isNull());
     }
 
     @Test

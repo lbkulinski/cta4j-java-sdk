@@ -1,5 +1,7 @@
 package com.cta4j.bus.vehicle.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
@@ -9,7 +11,6 @@ import com.cta4j.bus.vehicle.internal.mapper.VehicleMapper;
 import com.cta4j.bus.vehicle.internal.wire.CtaVehicleBustimeResponse;
 import com.cta4j.bus.vehicle.internal.wire.CtaVehicleError;
 import com.cta4j.bus.vehicle.model.Vehicle;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -29,7 +30,6 @@ import java.util.Objects;
 public final class VehiclesApiImpl implements VehiclesApi {
     private static final Logger log = LoggerFactory.getLogger(VehiclesApiImpl.class);
 
-    private static final String VEHICLES_ENDPOINT = "%s/getvehicles".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaVehicleBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -57,7 +57,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(VEHICLES_ENDPOINT)
+            .setPath(BusApiConstants.VEHICLES_ENDPOINT)
             .addParameter("vid", idsString)
             .addParameter("tmres", "s")
             .addParameter("key", this.config.apiKey())
@@ -85,7 +85,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(VEHICLES_ENDPOINT)
+            .setPath(BusApiConstants.VEHICLES_ENDPOINT)
             .addParameter("rt", routeIdsString)
             .addParameter("tmres", "s")
             .addParameter("key", this.config.apiKey())
@@ -104,9 +104,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             vehicleResponse = JsonMapper.shared()
                                         .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(VEHICLES_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.VEHICLES_ENDPOINT, e);
         }
 
         CtaVehicleBustimeResponse bustimeResponse = vehicleResponse.bustimeResponse();
@@ -121,7 +119,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
         }
 
         if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", VEHICLES_ENDPOINT);
+            log.warn("Received empty response from {}", BusApiConstants.VEHICLES_ENDPOINT);
 
             return List.of();
         }
@@ -133,8 +131,6 @@ public final class VehiclesApiImpl implements VehiclesApi {
             return List.of();
         }
 
-        String message = ApiUtils.buildErrorMessage(VEHICLES_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        throw new Cta4jBusException(errors, BusApiConstants.VEHICLES_ENDPOINT);
     }
 }

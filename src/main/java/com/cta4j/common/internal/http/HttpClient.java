@@ -22,9 +22,7 @@ public final class HttpClient {
         try {
             uri = URI.create(url);
         } catch (IllegalArgumentException e) {
-            String message = "Invalid URL";
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jException("Invalid URL", url, e);
         }
 
         String response;
@@ -35,18 +33,16 @@ public final class HttpClient {
                               .returnContent()
                               .asString();
         } catch (HttpResponseException e) {
-            String path = uri.getPath();
             int statusCode = e.getStatusCode();
+            String message = "Request failed with status code %d".formatted(statusCode);
 
-            String message = "Request to %s failed with status code %d".formatted(path, statusCode);
+            String path = uri.getPath();
 
-            throw new Cta4jException(message, e);
+            throw new Cta4jException(message, path, e);
         } catch (IOException e) {
             String path = uri.getPath();
 
-            String message = "Request to %s failed due to an I/O error".formatted(path);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jException("Request failed due to an I/O error", path, e);
         }
 
         return response;

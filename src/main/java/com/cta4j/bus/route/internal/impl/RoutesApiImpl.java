@@ -1,7 +1,8 @@
 package com.cta4j.bus.route.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.route.RoutesApi;
 import com.cta4j.bus.route.internal.wire.CtaRoute;
@@ -9,7 +10,6 @@ import com.cta4j.bus.route.internal.mapper.RouteMapper;
 import com.cta4j.bus.route.internal.wire.CtaRouteBustimeResponse;
 import com.cta4j.bus.route.internal.wire.CtaRouteError;
 import com.cta4j.bus.route.model.Route;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -28,7 +28,6 @@ import java.util.Objects;
 public final class RoutesApiImpl implements RoutesApi {
     private static final Logger log = LoggerFactory.getLogger(RoutesApiImpl.class);
 
-    private static final String ROUTES_ENDPOINT = "%s/getroutes".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaRouteBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
@@ -43,7 +42,7 @@ public final class RoutesApiImpl implements RoutesApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(ROUTES_ENDPOINT)
+            .setPath(BusApiConstants.ROUTES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
@@ -56,9 +55,9 @@ public final class RoutesApiImpl implements RoutesApi {
             routesResponse = JsonMapper.shared()
                                        .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(ROUTES_ENDPOINT);
+            String message = "Failed to parse response";
 
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException(message, BusApiConstants.ROUTES_ENDPOINT, e);
         }
 
         CtaRouteBustimeResponse bustimeResponse = routesResponse.bustimeResponse();
@@ -73,13 +72,11 @@ public final class RoutesApiImpl implements RoutesApi {
         }
 
         if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", ROUTES_ENDPOINT);
+            log.warn("Received empty response from {}", BusApiConstants.ROUTES_ENDPOINT);
 
             return List.of();
         }
 
-        String message = ApiUtils.buildErrorMessage(ROUTES_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        throw new Cta4jBusException(errors, BusApiConstants.ROUTES_ENDPOINT);
     }
 }

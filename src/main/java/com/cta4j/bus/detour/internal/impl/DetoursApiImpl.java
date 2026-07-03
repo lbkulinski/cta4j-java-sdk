@@ -1,7 +1,8 @@
 package com.cta4j.bus.detour.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.detour.internal.wire.CtaDetour;
@@ -9,7 +10,6 @@ import com.cta4j.bus.detour.internal.mapper.DetourMapper;
 import com.cta4j.bus.detour.internal.wire.CtaDetourBustimeResponse;
 import com.cta4j.bus.detour.internal.wire.CtaDetourError;
 import com.cta4j.bus.detour.model.Detour;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -28,7 +28,6 @@ import java.util.Objects;
 public final class DetoursApiImpl implements DetoursApi {
     private static final Logger log = LoggerFactory.getLogger(DetoursApiImpl.class);
 
-    private static final String DETOURS_ENDPOINT = "%s/getdetours".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaDetourBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -44,7 +43,7 @@ public final class DetoursApiImpl implements DetoursApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(DETOURS_ENDPOINT)
+            .setPath(BusApiConstants.DETOURS_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
@@ -60,7 +59,7 @@ public final class DetoursApiImpl implements DetoursApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(DETOURS_ENDPOINT)
+            .setPath(BusApiConstants.DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
@@ -78,7 +77,7 @@ public final class DetoursApiImpl implements DetoursApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(DETOURS_ENDPOINT)
+            .setPath(BusApiConstants.DETOURS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("rtdir", direction)
             .addParameter("key", this.config.apiKey())
@@ -97,9 +96,7 @@ public final class DetoursApiImpl implements DetoursApi {
             detoursResponse = JsonMapper.shared()
                                         .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(DETOURS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.DETOURS_ENDPOINT, e);
         }
 
         CtaDetourBustimeResponse bustimeResponse = detoursResponse.bustimeResponse();
@@ -114,7 +111,7 @@ public final class DetoursApiImpl implements DetoursApi {
         }
 
         if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", DETOURS_ENDPOINT);
+            log.warn("Received empty response from {}", BusApiConstants.DETOURS_ENDPOINT);
 
             return List.of();
         }
@@ -126,8 +123,6 @@ public final class DetoursApiImpl implements DetoursApi {
             return List.of();
         }
 
-        String message = ApiUtils.buildErrorMessage(DETOURS_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        throw new Cta4jBusException(errors, BusApiConstants.DETOURS_ENDPOINT);
     }
 }

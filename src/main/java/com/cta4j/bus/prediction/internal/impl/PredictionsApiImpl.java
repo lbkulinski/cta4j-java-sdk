@@ -1,7 +1,8 @@
 package com.cta4j.bus.prediction.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
 import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
@@ -11,7 +12,6 @@ import com.cta4j.bus.prediction.internal.wire.CtaPredictionError;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -30,7 +30,6 @@ import java.util.Objects;
 public final class PredictionsApiImpl implements PredictionsApi {
     private static final Logger log = LoggerFactory.getLogger(PredictionsApiImpl.class);
 
-    private static final String PREDICTIONS_ENDPOINT = "%s/getpredictions".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaPredictionBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -56,7 +55,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(PREDICTIONS_ENDPOINT)
+            .setPath(BusApiConstants.PREDICTIONS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
             .addParameter("tmres", "s")
             .addParameter("key", this.config.apiKey())
@@ -95,7 +94,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(PREDICTIONS_ENDPOINT)
+            .setPath(BusApiConstants.PREDICTIONS_ENDPOINT)
             .addParameter("vid", vehicleIdsString)
             .addParameter("tmres", "s")
             .addParameter("key", this.config.apiKey())
@@ -121,9 +120,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
             predictionsResponse = JsonMapper.shared()
                                             .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(PREDICTIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.PREDICTIONS_ENDPOINT, e);
         }
 
         CtaPredictionBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
@@ -138,7 +135,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
         }
 
         if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", PREDICTIONS_ENDPOINT);
+            log.warn("Received empty response from {}", BusApiConstants.PREDICTIONS_ENDPOINT);
 
             return List.of();
         }
@@ -150,8 +147,6 @@ public final class PredictionsApiImpl implements PredictionsApi {
             return List.of();
         }
 
-        String message = ApiUtils.buildErrorMessage(PREDICTIONS_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        throw new Cta4jBusException(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
     }
 }

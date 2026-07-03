@@ -7,7 +7,6 @@ import com.cta4j.bus.prediction.model.FlagStop;
 import com.cta4j.bus.prediction.model.PassengerLoad;
 import com.cta4j.bus.prediction.model.PredictionType;
 import com.cta4j.bus.vehicle.model.TransitMode;
-import com.cta4j.common.exception.Cta4jException;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
@@ -99,8 +98,8 @@ class BusQualifiersTest {
     }
 
     @Test
-    void mapTimestamp_throwsCta4jException_whenTimestampIsInvalid() {
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+    void mapTimestamp_throwsIllegalArgumentException_whenTimestampIsInvalid() {
+        assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.mapTimestamp("not-a-timestamp"));
     }
 }

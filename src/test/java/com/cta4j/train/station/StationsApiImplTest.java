@@ -1,7 +1,7 @@
 package com.cta4j.train.station;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.common.exception.Cta4jException;
+import com.cta4j.train.common.exception.Cta4jTrainException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.station.internal.impl.StationsApiImpl;
@@ -21,17 +21,18 @@ class StationsApiImplTest {
     private static final String STATIONS_PATH = "/stations";
     private WireMockServer server;
     private StationsApiImpl api;
+    private String stationsUrl;
 
     @BeforeEach
     void setUp() {
         this.server = new WireMockServer(wireMockConfig().dynamicPort());
         this.server.start();
-        String stationsUrl = "http://localhost:" + this.server.port() + STATIONS_PATH;
+        this.stationsUrl = "http://localhost:" + this.server.port() + STATIONS_PATH;
         TrainApiConfig config = new TrainApiConfig(
             "http",
             "localhost",
             this.server.port(),
-            stationsUrl,
+            this.stationsUrl,
             "testkey"
         );
         this.api = new StationsApiImpl(config);
@@ -75,7 +76,7 @@ class StationsApiImplTest {
     }
 
     @Test
-    void list_throwsCta4jException_whenResponseIsNotJson() {
+    void list_throwsCta4jTrainException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo(STATIONS_PATH))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -83,6 +84,9 @@ class StationsApiImplTest {
                 .withBody("not-json")));
 
         assertThatThrownBy(() -> this.api.list())
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jTrainException.class)
+            .hasMessage("Failed to parse response")
+            .satisfies(e -> assertThat(((Cta4jTrainException) e).getEndpoint())
+                .isEqualTo(this.stationsUrl));
     }
 }

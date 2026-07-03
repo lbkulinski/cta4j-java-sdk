@@ -1,13 +1,13 @@
 package com.cta4j.bus.direction.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.direction.DirectionsApi;
 import com.cta4j.bus.direction.internal.wire.CtaDirection;
 import com.cta4j.bus.direction.internal.wire.CtaDirectionBustimeResponse;
 import com.cta4j.bus.direction.internal.wire.CtaDirectionError;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -26,7 +26,6 @@ import java.util.Objects;
 public final class DirectionsApiImpl implements DirectionsApi {
     private static final Logger log = LoggerFactory.getLogger(DirectionsApiImpl.class);
 
-    private static final String DIRECTIONS_ENDPOINT = "%s/getdirections".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaDirectionBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -44,7 +43,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(DIRECTIONS_ENDPOINT)
+            .setPath(BusApiConstants.DIRECTIONS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
@@ -58,9 +57,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
             directionsResponse = JsonMapper.shared()
                                            .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(DIRECTIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.DIRECTIONS_ENDPOINT, e);
         }
 
         CtaDirectionBustimeResponse bustimeResponse = directionsResponse.bustimeResponse();
@@ -75,7 +72,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
         }
 
         if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", DIRECTIONS_ENDPOINT);
+            log.warn("Received empty response from {}", BusApiConstants.DIRECTIONS_ENDPOINT);
 
             return List.of();
         }
@@ -87,8 +84,6 @@ public final class DirectionsApiImpl implements DirectionsApi {
             return List.of();
         }
 
-        String message = ApiUtils.buildErrorMessage(DIRECTIONS_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        throw new Cta4jBusException(errors, BusApiConstants.DIRECTIONS_ENDPOINT);
     }
 }

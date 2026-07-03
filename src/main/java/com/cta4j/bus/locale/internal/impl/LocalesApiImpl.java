@@ -1,7 +1,8 @@
 package com.cta4j.bus.locale.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.locale.LocalesApi;
 import com.cta4j.bus.locale.internal.wire.CtaLocale;
@@ -9,7 +10,6 @@ import com.cta4j.bus.locale.internal.mapper.SupportedLocaleMapper;
 import com.cta4j.bus.locale.internal.wire.CtaLocaleBustimeResponse;
 import com.cta4j.bus.locale.internal.wire.CtaLocaleError;
 import com.cta4j.bus.locale.model.SupportedLocale;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.common.internal.http.HttpClient;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -29,7 +29,6 @@ import java.util.Objects;
 public final class LocalesApiImpl implements LocalesApi {
     private static final Logger log = LoggerFactory.getLogger(LocalesApiImpl.class);
 
-    private static final String LOCALES_ENDPOINT = "%s/getlocalelist".formatted(ApiUtils.API_PREFIX);
     private static final TypeReference<CtaResponse<CtaLocaleBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -45,7 +44,7 @@ public final class LocalesApiImpl implements LocalesApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(LOCALES_ENDPOINT)
+            .setPath(BusApiConstants.LOCALES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
@@ -63,7 +62,7 @@ public final class LocalesApiImpl implements LocalesApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(LOCALES_ENDPOINT)
+            .setPath(BusApiConstants.LOCALES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .addParameter("locale", languageTag)
@@ -78,7 +77,7 @@ public final class LocalesApiImpl implements LocalesApi {
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
-            .setPath(LOCALES_ENDPOINT)
+            .setPath(BusApiConstants.LOCALES_ENDPOINT)
             .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .addParameter("inLocaleLanguage", "true")
@@ -96,9 +95,7 @@ public final class LocalesApiImpl implements LocalesApi {
             localeResponse = JsonMapper.shared()
                                        .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = "Failed to parse response from %s".formatted(LOCALES_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.LOCALES_ENDPOINT, e);
         }
 
         CtaLocaleBustimeResponse bustimeResponse = localeResponse.bustimeResponse();
@@ -113,13 +110,11 @@ public final class LocalesApiImpl implements LocalesApi {
         }
 
         if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", LOCALES_ENDPOINT);
+            log.warn("Received empty response from {}", BusApiConstants.LOCALES_ENDPOINT);
 
             return List.of();
         }
 
-        String message = ApiUtils.buildErrorMessage(LOCALES_ENDPOINT, errors);
-
-        throw new Cta4jException(message);
+        throw new Cta4jBusException(errors, BusApiConstants.LOCALES_ENDPOINT);
     }
 }

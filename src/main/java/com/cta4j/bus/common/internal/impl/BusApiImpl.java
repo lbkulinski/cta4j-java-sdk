@@ -1,7 +1,7 @@
 package com.cta4j.bus.common.internal.impl;
 
+import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.BusApi;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.detour.internal.impl.DetoursApiImpl;
@@ -118,9 +118,9 @@ public final class BusApiImpl implements BusApi {
 
         @Override
         public BusApi build() {
-            String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
+            String finalHost = Objects.requireNonNullElse(this.host, BusApiConstants.DEFAULT_HOST);
 
-            BusApiConfig config = new BusApiConfig(ApiUtils.SCHEME, finalHost, this.apiKey);
+            BusApiConfig config = new BusApiConfig(BusApiConstants.SCHEME, finalHost, this.apiKey);
 
             return new BusApiImpl(config);
         }

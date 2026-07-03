@@ -1,10 +1,11 @@
 package com.cta4j.bus.detour;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.detour.internal.impl.DetoursApiImpl;
 import com.cta4j.bus.detour.model.Detour;
-import com.cta4j.common.exception.Cta4jException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,7 @@ class DetoursApiImplTest {
     }
 
     @Test
-    void list_throwsCta4jException_whenResponseContainsFatalErrors() {
+    void list_throwsCta4jBusException_whenResponseContainsFatalErrors() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getdetours"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -73,11 +74,14 @@ class DetoursApiImplTest {
                 .withBody(TestFixtures.read("bus/detour/error.json"))));
 
         assertThatThrownBy(() -> this.api.list())
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Internal server error")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.DETOURS_ENDPOINT));
     }
 
     @Test
-    void list_throwsCta4jException_whenResponseIsNotJson() {
+    void list_throwsCta4jBusException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getdetours"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -85,7 +89,10 @@ class DetoursApiImplTest {
                 .withBody("not-json")));
 
         assertThatThrownBy(() -> this.api.list())
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Failed to parse response")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.DETOURS_ENDPOINT));
     }
 
     @Test

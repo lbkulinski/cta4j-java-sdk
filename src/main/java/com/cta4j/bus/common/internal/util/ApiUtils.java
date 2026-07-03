@@ -11,9 +11,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class ApiUtils {
-    public static final String SCHEME = "https";
-    public static final String DEFAULT_HOST = "ctabustracker.com";
-    public static final String API_PREFIX = "/bustime/api/v3";
     public static final int MAX_IDS_PER_REQUEST = 10;
 
     private ApiUtils() {

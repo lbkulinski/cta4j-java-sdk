@@ -3,8 +3,8 @@ package com.cta4j.train.station.model;
 import com.cta4j.train.common.model.TrainLine;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Represents a train station.
@@ -16,7 +16,7 @@ import java.util.Objects;
  * @param descriptiveName the descriptive name of this station
  * @param mapId the map identifier of this station
  * @param adaAccessible whether this station is ADA accessible
- * @param lines the {@link List} of {@link TrainLine}s that serve this station
+ * @param lines the {@link Set} of {@link TrainLine}s that serve this station
  * @param location the {@link Location} of this station
  */
 @NullMarked
@@ -28,7 +28,7 @@ public record Station(
     String descriptiveName,
     String mapId,
     boolean adaAccessible,
-    List<TrainLine> lines,
+    Set<TrainLine> lines,
     Location location
 ) {
     /**
@@ -41,7 +41,7 @@ public record Station(
      * @param descriptiveName the descriptive name of the station
      * @param mapId the map identifier of the station
      * @param adaAccessible whether the station is ADA accessible
-     * @param lines the {@link List} of {@link TrainLine}s that serve the station
+     * @param lines the {@link Set} of {@link TrainLine}s that serve the station
      * @param location the {@link Location} of the station
      * @throws NullPointerException if {@code stopId}, {@code direction}, {@code stopName}, {@code name},
      * {@code descriptiveName}, {@code mapId}, {@code lines}, or {@code location} is {@code null}, or if any element of
@@ -57,6 +57,6 @@ public record Station(
         Objects.requireNonNull(lines);
         Objects.requireNonNull(location);
 
-        lines = List.copyOf(lines);
+        lines = Set.copyOf(lines);
     }
 }

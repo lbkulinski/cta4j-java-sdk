@@ -1,10 +1,11 @@
 package com.cta4j.bus.stop;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.bus.common.BusApiConstants;
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.stop.internal.impl.StopsApiImpl;
 import com.cta4j.bus.stop.model.Stop;
-import com.cta4j.common.exception.Cta4jException;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -115,7 +116,7 @@ class StopsApiImplTest {
     }
 
     @Test
-    void findByRouteIdAndDirection_throwsCta4jException_whenResponseContainsFatalErrors() {
+    void findByRouteIdAndDirection_throwsCta4jBusException_whenResponseContainsFatalErrors() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -123,11 +124,14 @@ class StopsApiImplTest {
                 .withBody(TestFixtures.read("bus/stop/error.json"))));
 
         assertThatThrownBy(() -> this.api.findByRouteIdAndDirection("8", "Northbound"))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Internal server error")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.STOPS_ENDPOINT));
     }
 
     @Test
-    void findByRouteIdAndDirection_throwsCta4jException_whenResponseIsNotJson() {
+    void findByRouteIdAndDirection_throwsCta4jBusException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getstops"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -135,7 +139,10 @@ class StopsApiImplTest {
                 .withBody("not-json")));
 
         assertThatThrownBy(() -> this.api.findByRouteIdAndDirection("8", "Northbound"))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("Failed to parse response")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.STOPS_ENDPOINT));
     }
 
     @Test

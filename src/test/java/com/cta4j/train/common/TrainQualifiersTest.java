@@ -1,7 +1,6 @@
 package com.cta4j.train.common;
 
 import com.cta4j.common.geo.Coordinates;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
@@ -15,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -43,8 +42,8 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void map01ToBoolean_throwsCta4jException_whenValueIsInvalid() {
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+    void map01ToBoolean_throwsIllegalArgumentException_whenValueIsInvalid() {
+        assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.map01ToBoolean("2"));
     }
 
@@ -118,7 +117,7 @@ class TrainQualifiersTest {
             location
         );
 
-        List<TrainLine> lines = Qualifiers.mapTrainLines(station);
+        Set<TrainLine> lines = Qualifiers.mapTrainLines(station);
 
         assertThat(lines).containsExactlyInAnyOrder(
             TrainLine.BLUE, TrainLine.GREEN, TrainLine.BROWN, TrainLine.ORANGE, TrainLine.PINK
@@ -144,8 +143,8 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void mapTimestamp_throwsCta4jException_whenTimestampIsInvalid() {
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+    void mapTimestamp_throwsIllegalArgumentException_whenTimestampIsInvalid() {
+        assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.mapTimestamp("not-a-timestamp"));
     }
 
@@ -165,14 +164,14 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void map15ToTrainDirection_throwsCta4jException_whenDirectionIsNotNumeric() {
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+    void map15ToTrainDirection_throwsIllegalArgumentException_whenDirectionIsNotNumeric() {
+        assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.map15ToTrainDirection("not-a-number"));
     }
 
     @Test
-    void map15ToTrainDirection_throwsCta4jException_whenDirectionCodeIsUnrecognized() {
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+    void map15ToTrainDirection_throwsIllegalArgumentException_whenDirectionCodeIsUnrecognized() {
+        assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.map15ToTrainDirection("3"));
     }
 
@@ -182,8 +181,8 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void parseCoordinate_throwsCta4jException_whenValueIsNotNumeric() {
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+    void parseCoordinate_throwsIllegalArgumentException_whenValueIsNotNumeric() {
+        assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.parseCoordinate("not-a-number"));
     }
 
@@ -193,8 +192,8 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void parseHeading_throwsCta4jException_whenValueIsNotNumeric() {
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() ->
+    void parseHeading_throwsIllegalArgumentException_whenValueIsNotNumeric() {
+        assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.parseHeading("not-a-number"));
     }
 
@@ -211,10 +210,10 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void mapCoordinates_throwsCta4jException_whenLatIsNotNumeric() {
+    void mapCoordinates_throwsIllegalArgumentException_whenLatIsNotNumeric() {
         CtaPosition position = new CtaPosition("not-a-number", "-87.672892", "180");
 
-        assertThatExceptionOfType(Cta4jException.class).isThrownBy(() -> Qualifiers.mapCoordinates(position));
+        assertThatIllegalArgumentException().isThrownBy(() -> Qualifiers.mapCoordinates(position));
     }
 
     @Test

@@ -3,10 +3,10 @@ package com.cta4j.train.common.internal.impl;
 import com.cta4j.train.TrainApi;
 import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
+import com.cta4j.train.common.TrainApiConstants;
 import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.follow.internal.impl.FollowApiImpl;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
-import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.location.LocationsApi;
 import com.cta4j.train.location.internal.impl.LocationsApiImpl;
 import com.cta4j.train.station.StationsApi;
@@ -85,10 +85,18 @@ public final class TrainApiImpl implements TrainApi {
 
         @Override
         public TrainApi build() {
-            String finalHost = Objects.requireNonNullElse(this.host, ApiUtils.DEFAULT_HOST);
-            String finalStationsUrl = Objects.requireNonNullElse(this.stationsUrl, ApiUtils.DEFAULT_STATIONS_URL);
+            String finalHost = Objects.requireNonNullElse(this.host, TrainApiConstants.DEFAULT_HOST);
+            String finalStationsUrl = Objects.requireNonNullElse(
+                this.stationsUrl,
+                TrainApiConstants.DEFAULT_STATIONS_URL
+            );
 
-            TrainApiConfig config = new TrainApiConfig(ApiUtils.SCHEME, finalHost, finalStationsUrl, this.apiKey);
+            TrainApiConfig config = new TrainApiConfig(
+                TrainApiConstants.SCHEME,
+                finalHost,
+                finalStationsUrl,
+                this.apiKey
+            );
 
             return new TrainApiImpl(config);
         }
