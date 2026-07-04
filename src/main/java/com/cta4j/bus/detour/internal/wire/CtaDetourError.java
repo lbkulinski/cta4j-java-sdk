@@ -20,4 +20,9 @@ public record CtaDetourError(
     public CtaDetourError {
         Objects.requireNonNull(msg);
     }
+
+    @Override
+    public boolean notFound() {
+        return this.rt != null;
+    }
 }

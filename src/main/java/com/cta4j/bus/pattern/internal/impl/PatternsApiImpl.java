@@ -113,7 +113,7 @@ public final class PatternsApiImpl implements PatternsApi {
         }
 
         boolean notFound = errors.stream()
-                                 .allMatch(error -> error.pid() != null || error.rt() != null);
+                                 .allMatch(CtaPatternError::notFound);
 
         if (notFound) {
             return List.of();

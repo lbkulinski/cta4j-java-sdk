@@ -20,4 +20,9 @@ public record CtaVehicleError(
     public CtaVehicleError {
         Objects.requireNonNull(msg);
     }
+
+    @Override
+    public boolean notFound() {
+        return this.vid != null || this.rt != null;
+    }
 }

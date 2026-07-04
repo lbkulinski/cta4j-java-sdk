@@ -20,4 +20,9 @@ public record CtaPatternError(
     public CtaPatternError {
         Objects.requireNonNull(msg);
     }
+
+    @Override
+    public boolean notFound() {
+        return this.pid != null || this.rt != null;
+    }
 }

@@ -114,8 +114,7 @@ public final class StopsApiImpl implements StopsApi {
         }
 
         boolean notFound = errors.stream()
-                                 .allMatch(error ->
-                                     (error.rt() != null && error.dir() != null) || error.stpid() != null);
+                                 .allMatch(CtaStopError::notFound);
 
         if (notFound) {
             return List.of();

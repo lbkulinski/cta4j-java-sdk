@@ -7,4 +7,8 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface CtaError {
     String msg();
+
+    default boolean notFound() {
+        return false;
+    }
 }

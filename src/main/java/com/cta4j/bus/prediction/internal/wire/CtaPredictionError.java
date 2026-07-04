@@ -20,4 +20,9 @@ public record CtaPredictionError(
     public CtaPredictionError {
         Objects.requireNonNull(msg);
     }
+
+    @Override
+    public boolean notFound() {
+        return this.stpid != null || this.vid != null;
+    }
 }

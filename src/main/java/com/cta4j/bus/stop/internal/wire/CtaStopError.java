@@ -21,4 +21,9 @@ public record CtaStopError(
     public CtaStopError {
         Objects.requireNonNull(msg);
     }
+
+    @Override
+    public boolean notFound() {
+        return (this.rt != null && this.dir != null) || this.stpid != null;
+    }
 }

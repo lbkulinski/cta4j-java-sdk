@@ -125,7 +125,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
         }
 
         boolean notFound = errors.stream()
-                                 .allMatch(error -> error.vid() != null || error.rt() != null);
+                                 .allMatch(CtaVehicleError::notFound);
 
         if (notFound) {
             return List.of();

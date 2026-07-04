@@ -78,7 +78,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
         }
 
         boolean notFound = errors.stream()
-                                 .allMatch(error -> error.rt() != null);
+                                 .allMatch(CtaDirectionError::notFound);
 
         if (notFound) {
             return List.of();

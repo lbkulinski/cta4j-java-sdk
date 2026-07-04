@@ -19,4 +19,9 @@ public record CtaDirectionError(
     public CtaDirectionError {
         Objects.requireNonNull(msg);
     }
+
+    @Override
+    public boolean notFound() {
+        return this.rt != null;
+    }
 }

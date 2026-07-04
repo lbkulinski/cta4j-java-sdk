@@ -117,7 +117,7 @@ public final class DetoursApiImpl implements DetoursApi {
         }
 
         boolean notFound = errors.stream()
-                                 .allMatch(error -> error.rt() != null);
+                                 .allMatch(CtaDetourError::notFound);
 
         if (notFound) {
             return List.of();

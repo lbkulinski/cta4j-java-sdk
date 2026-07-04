@@ -141,7 +141,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
         }
 
         boolean notFound = errors.stream()
-                                 .allMatch(error -> error.stpid() != null || error.vid() != null);
+                                 .allMatch(CtaPredictionError::notFound);
 
         if (notFound) {
             return List.of();
