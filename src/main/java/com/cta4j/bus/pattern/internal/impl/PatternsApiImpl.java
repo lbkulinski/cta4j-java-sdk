@@ -11,7 +11,7 @@ import com.cta4j.bus.pattern.internal.wire.CtaPattern;
 import com.cta4j.bus.pattern.internal.wire.CtaPatternBustimeResponse;
 import com.cta4j.bus.pattern.internal.wire.CtaPatternError;
 import com.cta4j.bus.pattern.model.RoutePattern;
-import com.cta4j.common.internal.http.HttpClient;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -21,6 +21,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -84,7 +85,18 @@ public final class PatternsApiImpl implements PatternsApi {
     }
 
     private List<RoutePattern> makeRequest(String url) {
-        String response = HttpClient.get(url);
+        String response;
+
+        try {
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = e.getMessage();
+
+            throw new Cta4jBusException(message, BusApiConstants.PATTERNS_ENDPOINT, e);
+        }
 
         CtaResponse<CtaPatternBustimeResponse> patternsResponse;
 

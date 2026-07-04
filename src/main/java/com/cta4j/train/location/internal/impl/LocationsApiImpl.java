@@ -1,6 +1,5 @@
 package com.cta4j.train.location.internal.impl;
 
-import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.util.TrainApiConstants;
@@ -12,6 +11,7 @@ import com.cta4j.train.location.exception.LocationsErrorCode;
 import com.cta4j.train.location.internal.mapper.TrainLocationsMapper;
 import com.cta4j.train.location.internal.wire.CtaLocationResponse;
 import com.cta4j.train.location.model.TrainLocations;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -19,6 +19,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +63,18 @@ public final class LocationsApiImpl implements LocationsApi {
     }
 
     private List<TrainLocations> makeRequest(String url) {
-        String response = HttpClient.get(url);
+        String response;
+
+        try {
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = e.getMessage();
+
+            throw new Cta4jLocationsException(message, e);
+        }
 
         CtaResponse<CtaLocationResponse> ctaResponse;
 

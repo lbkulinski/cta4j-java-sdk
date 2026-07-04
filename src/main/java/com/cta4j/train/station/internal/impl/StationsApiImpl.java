@@ -1,18 +1,19 @@
 package com.cta4j.train.station.internal.impl;
 
-import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.train.common.exception.Cta4jTrainException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.station.StationsApi;
 import com.cta4j.train.station.internal.mapper.StationMapper;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.Station;
+import org.apache.hc.client5.http.fluent.Request;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,7 +30,18 @@ public final class StationsApiImpl implements StationsApi {
 
     @Override
     public List<Station> list() {
-        String response = HttpClient.get(this.config.stationsUrl());
+        String response;
+
+        try {
+            response = Request.get(this.config.stationsUrl())
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = e.getMessage();
+
+            throw new Cta4jTrainException(message, this.config.stationsUrl(), e);
+        }
 
         List<CtaStation> stations;
 

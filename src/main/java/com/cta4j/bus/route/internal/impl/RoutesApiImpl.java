@@ -10,7 +10,7 @@ import com.cta4j.bus.route.internal.wire.CtaRoute;
 import com.cta4j.bus.route.internal.wire.CtaRouteBustimeResponse;
 import com.cta4j.bus.route.internal.wire.CtaRouteError;
 import com.cta4j.bus.route.model.Route;
-import com.cta4j.common.internal.http.HttpClient;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -20,6 +20,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,7 +48,18 @@ public final class RoutesApiImpl implements RoutesApi {
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpClient.get(url);
+        String response;
+
+        try {
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = e.getMessage();
+
+            throw new Cta4jBusException(message, BusApiConstants.ROUTES_ENDPOINT, e);
+        }
 
         CtaResponse<CtaRouteBustimeResponse> routesResponse;
 

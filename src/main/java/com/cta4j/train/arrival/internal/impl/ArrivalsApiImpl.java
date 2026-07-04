@@ -1,6 +1,5 @@
 package com.cta4j.train.arrival.internal.impl;
 
-import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.arrival.exception.ArrivalsErrorCode;
 import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
@@ -15,6 +14,7 @@ import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.common.model.Arrival;
 import com.cta4j.train.common.model.TrainLine;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -23,6 +23,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -84,7 +85,18 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
 
         String url = builder.toString();
 
-        String response = HttpClient.get(url);
+        String response;
+
+        try {
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = e.getMessage();
+
+            throw new Cta4jArrivalsException(message, e);
+        }
 
         CtaResponse<CtaArrivalsResponse> ctaResponse;
 

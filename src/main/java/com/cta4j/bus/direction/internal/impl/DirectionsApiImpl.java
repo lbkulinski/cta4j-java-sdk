@@ -8,7 +8,7 @@ import com.cta4j.bus.direction.DirectionsApi;
 import com.cta4j.bus.direction.internal.wire.CtaDirection;
 import com.cta4j.bus.direction.internal.wire.CtaDirectionBustimeResponse;
 import com.cta4j.bus.direction.internal.wire.CtaDirectionError;
-import com.cta4j.common.internal.http.HttpClient;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -18,6 +18,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +50,18 @@ public final class DirectionsApiImpl implements DirectionsApi {
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpClient.get(url);
+        String response;
+
+        try {
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = e.getMessage();
+
+            throw new Cta4jBusException(message, BusApiConstants.DIRECTIONS_ENDPOINT, e);
+        }
 
         CtaResponse<CtaDirectionBustimeResponse> directionsResponse;
 

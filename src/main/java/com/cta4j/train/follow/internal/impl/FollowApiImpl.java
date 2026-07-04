@@ -1,6 +1,5 @@
 package com.cta4j.train.follow.internal.impl;
 
-import com.cta4j.common.internal.http.HttpClient;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.util.TrainApiConstants;
@@ -11,6 +10,7 @@ import com.cta4j.train.follow.exception.FollowErrorCode;
 import com.cta4j.train.follow.internal.mapper.FollowTrainMapper;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
 import com.cta4j.train.follow.model.FollowTrain;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -18,6 +18,7 @@ import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -50,7 +51,18 @@ public final class FollowApiImpl implements FollowApi {
     }
 
     private Optional<FollowTrain> makeRequest(String url) {
-        String response = HttpClient.get(url);
+        String response;
+
+        try {
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = e.getMessage();
+
+            throw new Cta4jFollowException(message, e);
+        }
 
         CtaResponse<CtaFollowResponse> ctaResponse;
 
