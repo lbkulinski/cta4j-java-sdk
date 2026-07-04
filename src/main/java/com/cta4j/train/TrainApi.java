@@ -59,6 +59,7 @@ public interface TrainApi {
          *
          * @param host the API host
          * @return this builder instance
+         * @throws NullPointerException if {@code host} is {@code null}
          */
         Builder host(String host);
 
@@ -69,6 +70,7 @@ public interface TrainApi {
          *
          * @param stationsUrl the URL for station data
          * @return this builder instance
+         * @throws NullPointerException if {@code stationsUrl} is {@code null}
          */
         Builder stationsUrl(String stationsUrl);
 

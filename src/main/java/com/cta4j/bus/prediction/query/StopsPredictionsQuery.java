@@ -26,7 +26,7 @@ public record StopsPredictionsQuery(
      * @param stopIds the {@link List} of stop IDs to retrieve predictions for
      * @param routeIds the optional {@link List} of route IDs to filter predictions by
      * @param maxResults the optional maximum number of predictions to return
-     * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}, or if any element of
+     * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} or
      * {@code routeIds} is {@code null}
      * @throws IllegalArgumentException if more than 10 stop IDs are provided, or if {@code maxResults} is
      * non-{@code null} and not positive
@@ -52,7 +52,8 @@ public record StopsPredictionsQuery(
      *
      * @param stopIds the {@link List} of stop IDs to retrieve predictions for
      * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
+     * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} is
+     * {@code null}
      */
     public static Builder builder(List<String> stopIds) {
         return new Builder(stopIds);
@@ -83,7 +84,8 @@ public record StopsPredictionsQuery(
          * Constructs a {@code Builder}.
          *
          * @param stopIds the {@link List} of stop IDs to retrieve predictions for
-         * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
+         * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} is
+         * {@code null}
          */
         public Builder(List<String> stopIds) {
             Objects.requireNonNull(stopIds);
@@ -96,7 +98,8 @@ public record StopsPredictionsQuery(
          *
          * @param routeIds the {@link List} of route IDs
          * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code routeIds} or any of its elements are {@code null}
+         * @throws NullPointerException if {@code routeIds} is {@code null}, or if any element of {@code routeIds} is
+         * {@code null}
          */
         public Builder routeIds(List<String> routeIds) {
             Objects.requireNonNull(routeIds);

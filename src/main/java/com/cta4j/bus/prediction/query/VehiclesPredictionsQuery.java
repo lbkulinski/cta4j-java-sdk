@@ -23,7 +23,8 @@ public record VehiclesPredictionsQuery(
      *
      * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @param maxResults the optional maximum number of predictions to return
-     * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
+     * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of {@code vehicleIds} is
+     * {@code null}
      * @throws IllegalArgumentException if more than 10 vehicle IDs are provided, or if {@code maxResults} is
      * non-{@code null} and not positive
      */
@@ -44,7 +45,8 @@ public record VehiclesPredictionsQuery(
      *
      * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
+     * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of {@code vehicleIds} is
+     * {@code null}
      */
     public static Builder builder(List<String> vehicleIds) {
         return new Builder(vehicleIds);
@@ -69,7 +71,8 @@ public record VehiclesPredictionsQuery(
          * Constructs a {@code Builder}.
          *
          * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
-         * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
+         * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of
+         * {@code vehicleIds} is {@code null}
          */
         public Builder(List<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);

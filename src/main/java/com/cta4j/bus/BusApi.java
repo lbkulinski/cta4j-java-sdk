@@ -71,7 +71,7 @@ public interface BusApi {
     PatternsApi patterns();
 
     /**
-     * Provides access to prediction and arrival-related endpoints.
+     * Provides access to prediction-related endpoints.
      *
      * @return the {@link PredictionsApi}
      */
