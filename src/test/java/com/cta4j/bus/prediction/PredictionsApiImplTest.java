@@ -1,9 +1,9 @@
 package com.cta4j.bus.prediction;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.prediction.internal.impl.PredictionsApiImpl;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
@@ -179,6 +179,49 @@ class PredictionsApiImplTest {
             .maxResults(5)
             .build();
         List<Prediction> predictions = this.api.findByStopIds(query);
+
+        assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByStopId_stringOverload_returnsPredictions_whenResponseContainsPredictions() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("stpid", equalTo("456"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        List<Prediction> predictions = this.api.findByStopId("456");
+
+        assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByRouteIdAndStopId_sendsRtAndStpidParameters() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("stpid", equalTo("456"))
+            .withQueryParam("rt", equalTo("8"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        List<Prediction> predictions = this.api.findByRouteIdAndStopId("8", "456");
+
+        assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByVehicleId_stringOverload_returnsPredictions_whenResponseContainsPredictions() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("vid", equalTo("509"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        List<Prediction> predictions = this.api.findByVehicleId("509");
 
         assertThat(predictions).hasSize(1);
     }

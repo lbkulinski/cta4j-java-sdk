@@ -1,21 +1,21 @@
 package com.cta4j.bus.common.internal.impl;
 
-import com.cta4j.bus.common.BusApiConstants;
-import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.BusApi;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.detour.internal.impl.DetoursApiImpl;
 import com.cta4j.bus.direction.DirectionsApi;
+import com.cta4j.bus.direction.internal.impl.DirectionsApiImpl;
 import com.cta4j.bus.locale.LocalesApi;
 import com.cta4j.bus.locale.internal.impl.LocalesApiImpl;
 import com.cta4j.bus.pattern.PatternsApi;
-import com.cta4j.bus.prediction.PredictionsApi;
-import com.cta4j.bus.direction.internal.impl.DirectionsApiImpl;
 import com.cta4j.bus.pattern.internal.impl.PatternsApiImpl;
+import com.cta4j.bus.prediction.PredictionsApi;
 import com.cta4j.bus.prediction.internal.impl.PredictionsApiImpl;
 import com.cta4j.bus.route.RoutesApi;
-import com.cta4j.bus.stop.StopsApi;
 import com.cta4j.bus.route.internal.impl.RoutesApiImpl;
+import com.cta4j.bus.stop.StopsApi;
 import com.cta4j.bus.stop.internal.impl.StopsApiImpl;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.impl.VehiclesApiImpl;

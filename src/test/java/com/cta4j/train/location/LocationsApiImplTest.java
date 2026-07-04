@@ -122,6 +122,33 @@ class LocationsApiImplTest {
     }
 
     @Test
+    void findByLine_sendsRtParameter() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
+            .withQueryParam("rt", equalTo("Red"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/location/success.json"))));
+
+        List<TrainLocations> locations = this.api.findByLine(TrainLine.RED);
+
+        assertThat(locations).hasSize(1);
+    }
+
+    @Test
+    void findAll_returnsLocations_whenResponseContainsData() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/location/success.json"))));
+
+        List<TrainLocations> locations = this.api.findAll();
+
+        assertThat(locations).hasSize(1);
+    }
+
+    @Test
     void findByLines_throwsCta4jException_whenErrCdIsNotNumeric() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
             .willReturn(aResponse()

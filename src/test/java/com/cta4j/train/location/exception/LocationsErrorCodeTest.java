@@ -6,11 +6,10 @@ import static org.assertj.core.api.Assertions.*;
 
 class LocationsErrorCodeTest {
     @Test
-    void fromCode_returnsCorrectValues() {
-        assertThat(LocationsErrorCode.fromCode(0)).isEqualTo(LocationsErrorCode.OK);
-        assertThat(LocationsErrorCode.fromCode(101)).isEqualTo(LocationsErrorCode.INVALID_API_KEY);
-        assertThat(LocationsErrorCode.fromCode(106)).isEqualTo(LocationsErrorCode.INVALID_ROUTE);
-        assertThat(LocationsErrorCode.fromCode(107)).isEqualTo(LocationsErrorCode.TOO_MANY_ROUTES);
+    void fromCode_returnsCorrectValue_forEveryDefinedCode() {
+        for (LocationsErrorCode code : LocationsErrorCode.values()) {
+            assertThat(LocationsErrorCode.fromCode(code.getCode())).isEqualTo(code);
+        }
     }
 
     @Test

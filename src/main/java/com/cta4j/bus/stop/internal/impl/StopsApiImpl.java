@@ -1,13 +1,13 @@
 package com.cta4j.bus.stop.internal.impl;
 
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.stop.StopsApi;
-import com.cta4j.bus.stop.internal.wire.CtaStop;
 import com.cta4j.bus.stop.internal.mapper.StopMapper;
+import com.cta4j.bus.stop.internal.wire.CtaStop;
 import com.cta4j.bus.stop.internal.wire.CtaStopBustimeResponse;
 import com.cta4j.bus.stop.internal.wire.CtaStopError;
 import com.cta4j.bus.stop.model.Stop;

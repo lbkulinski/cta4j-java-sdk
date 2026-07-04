@@ -1,16 +1,16 @@
 package com.cta4j.train.follow.internal.impl;
 
 import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.train.common.TrainApiConstants;
+import com.cta4j.train.common.internal.config.TrainApiConfig;
+import com.cta4j.train.common.internal.util.ApiUtils;
+import com.cta4j.train.common.internal.util.TrainApiConstants;
+import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.follow.exception.Cta4jFollowException;
 import com.cta4j.train.follow.exception.FollowErrorCode;
 import com.cta4j.train.follow.internal.mapper.FollowTrainMapper;
 import com.cta4j.train.follow.internal.wire.CtaFollowResponse;
 import com.cta4j.train.follow.model.FollowTrain;
-import com.cta4j.train.common.internal.config.TrainApiConfig;
-import com.cta4j.train.common.internal.util.ApiUtils;
-import com.cta4j.train.common.internal.wire.CtaResponse;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;

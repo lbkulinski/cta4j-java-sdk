@@ -1,6 +1,6 @@
 package com.cta4j.train.follow.exception;
 
-import com.cta4j.train.common.TrainApiConstants;
+import com.cta4j.train.common.internal.util.TrainApiConstants;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;

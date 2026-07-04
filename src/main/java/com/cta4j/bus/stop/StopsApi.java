@@ -1,7 +1,7 @@
 package com.cta4j.bus.stop;
 
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.stop.model.Stop;
 import org.jspecify.annotations.NullMarked;
 

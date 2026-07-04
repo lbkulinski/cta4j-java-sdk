@@ -6,11 +6,10 @@ import static org.assertj.core.api.Assertions.*;
 
 class FollowErrorCodeTest {
     @Test
-    void fromCode_returnsCorrectValues() {
-        assertThat(FollowErrorCode.fromCode(0)).isEqualTo(FollowErrorCode.OK);
-        assertThat(FollowErrorCode.fromCode(101)).isEqualTo(FollowErrorCode.INVALID_API_KEY);
-        assertThat(FollowErrorCode.fromCode(501)).isEqualTo(FollowErrorCode.RUN_NOT_FOUND);
-        assertThat(FollowErrorCode.fromCode(503)).isEqualTo(FollowErrorCode.UNABLE_TO_FIND_PREDICTIONS);
+    void fromCode_returnsCorrectValue_forEveryDefinedCode() {
+        for (FollowErrorCode code : FollowErrorCode.values()) {
+            assertThat(FollowErrorCode.fromCode(code.getCode())).isEqualTo(code);
+        }
     }
 
     @Test

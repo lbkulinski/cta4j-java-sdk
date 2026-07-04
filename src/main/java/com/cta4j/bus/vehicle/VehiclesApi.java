@@ -1,7 +1,7 @@
 package com.cta4j.bus.vehicle;
 
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.vehicle.model.Vehicle;
 import org.jspecify.annotations.NullMarked;
 

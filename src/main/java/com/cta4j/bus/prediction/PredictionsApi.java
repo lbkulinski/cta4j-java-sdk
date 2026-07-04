@@ -1,9 +1,9 @@
 package com.cta4j.bus.prediction;
 
+import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -23,7 +23,7 @@ public interface PredictionsApi {
      * @return a {@link List} of {@link Prediction}s corresponding to the provided stop IDs, or an empty {@link List}
      * if no predictions are found
      * @throws NullPointerException if {@code query} is {@code null}
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
     List<Prediction> findByStopIds(StopsPredictionsQuery query);
 
@@ -34,7 +34,7 @@ public interface PredictionsApi {
      * @return a {@link List} of {@link Prediction}s corresponding to the provided vehicle IDs, or an empty
      * {@link List} if no predictions are found
      * @throws NullPointerException if {@code query} is {@code null}
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
     List<Prediction> findByVehicleIds(VehiclesPredictionsQuery query);
 
@@ -45,7 +45,7 @@ public interface PredictionsApi {
      * @return a {@link List} of {@link Prediction}s corresponding to the provided stop ID, or an empty {@link List} if
      * no predictions are found
      * @throws NullPointerException if {@code stopId} is {@code null}
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
     default List<Prediction> findByStopId(String stopId) {
         Objects.requireNonNull(stopId);
@@ -66,7 +66,7 @@ public interface PredictionsApi {
      * @return a {@link List} of {@link Prediction}s corresponding to the provided route ID and stop ID, or an empty
      * {@link List} if no predictions are found
      * @throws NullPointerException if {@code routeId} or {@code stopId} is {@code null}
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
     default List<Prediction> findByRouteIdAndStopId(String routeId, String stopId) {
         Objects.requireNonNull(routeId);
@@ -89,7 +89,7 @@ public interface PredictionsApi {
      * @return a {@link List} of {@link Prediction}s corresponding to the provided vehicle ID, or an empty {@link List}
      * if no predictions are found
      * @throws NullPointerException if {@code vehicleId} is {@code null}
-     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
     default List<Prediction> findByVehicleId(String vehicleId) {
         Objects.requireNonNull(vehicleId);

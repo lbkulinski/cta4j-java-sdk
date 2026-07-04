@@ -240,6 +240,33 @@ class ArrivalsApiImplTest {
     }
 
     @Test
+    void findByMapId_stringOverload_returnsArrivals_whenResponseContainsArrivals() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/arrival/success.json"))));
+
+        List<Arrival> arrivals = this.api.findByMapId("40900");
+
+        assertThat(arrivals).hasSize(1);
+    }
+
+    @Test
+    void findByStopId_stringOverload_returnsArrivals_whenResponseContainsArrivals() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .withQueryParam("stpid", equalTo("30070"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/arrival/success.json"))));
+
+        List<Arrival> arrivals = this.api.findByStopId("30070");
+
+        assertThat(arrivals).hasSize(1);
+    }
+
+    @Test
     void findByMapId_throwsCta4jException_whenErrCdIsNotNumeric() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .willReturn(aResponse()

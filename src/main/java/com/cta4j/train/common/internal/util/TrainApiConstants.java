@@ -1,7 +1,9 @@
-package com.cta4j.train.common;
+package com.cta4j.train.common.internal.util;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+@ApiStatus.Internal
 @NullMarked
 public final class TrainApiConstants {
     public static final String SCHEME = "https";

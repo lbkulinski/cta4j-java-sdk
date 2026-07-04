@@ -1,7 +1,7 @@
 package com.cta4j.train.follow.exception;
 
-import com.cta4j.train.common.TrainApiConstants;
 import com.cta4j.train.common.exception.Cta4jTrainException;
+import com.cta4j.train.common.internal.util.TrainApiConstants;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 

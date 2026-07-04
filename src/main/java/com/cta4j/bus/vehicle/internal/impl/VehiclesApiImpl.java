@@ -1,13 +1,13 @@
 package com.cta4j.bus.vehicle.internal.impl;
 
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.vehicle.VehiclesApi;
-import com.cta4j.bus.vehicle.internal.wire.CtaVehicle;
 import com.cta4j.bus.vehicle.internal.mapper.VehicleMapper;
+import com.cta4j.bus.vehicle.internal.wire.CtaVehicle;
 import com.cta4j.bus.vehicle.internal.wire.CtaVehicleBustimeResponse;
 import com.cta4j.bus.vehicle.internal.wire.CtaVehicleError;
 import com.cta4j.bus.vehicle.model.Vehicle;

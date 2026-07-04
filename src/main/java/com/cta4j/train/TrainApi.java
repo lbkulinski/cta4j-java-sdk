@@ -1,8 +1,8 @@
 package com.cta4j.train;
 
 import com.cta4j.train.arrival.ArrivalsApi;
-import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.common.internal.impl.TrainApiImpl;
+import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.location.LocationsApi;
 import com.cta4j.train.station.StationsApi;
 import org.jspecify.annotations.NullMarked;

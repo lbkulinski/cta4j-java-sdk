@@ -315,7 +315,7 @@ so it belongs with the exception rather than with `Arrival`/`FollowTrain`/`Train
 **New:**
 - `com.cta4j.bus.common.exception.Cta4jBusException` (shared across every bus feature)
 - `com.cta4j.train.common.exception.Cta4jTrainException` (shared across every train feature)
-- `com.cta4j.train.common.TrainApiConstants` — absorbs `SCHEME`/`DEFAULT_HOST`/`DEFAULT_STATIONS_URL`/`API_PREFIX`
+- `com.cta4j.train.common.internal.util.TrainApiConstants` — absorbs `SCHEME`/`DEFAULT_HOST`/`DEFAULT_STATIONS_URL`/`API_PREFIX`
   from `ApiUtils`, plus the new `ARRIVALS_ENDPOINT`/`FOLLOW_ENDPOINT`/`POSITIONS_ENDPOINT` constants (see
   "TrainApiConstants" above)
 - `com.cta4j.train.arrival.exception.Cta4jArrivalsException` (feature-specific)

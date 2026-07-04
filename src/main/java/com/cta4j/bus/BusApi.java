@@ -1,8 +1,8 @@
 package com.cta4j.bus;
 
+import com.cta4j.bus.common.internal.impl.BusApiImpl;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.direction.DirectionsApi;
-import com.cta4j.bus.common.internal.impl.BusApiImpl;
 import com.cta4j.bus.locale.LocalesApi;
 import com.cta4j.bus.pattern.PatternsApi;
 import com.cta4j.bus.prediction.PredictionsApi;

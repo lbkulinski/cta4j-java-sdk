@@ -1,9 +1,9 @@
 package com.cta4j.train.location.internal.impl;
 
 import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.train.common.TrainApiConstants;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.ApiUtils;
+import com.cta4j.train.common.internal.util.TrainApiConstants;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.location.LocationsApi;

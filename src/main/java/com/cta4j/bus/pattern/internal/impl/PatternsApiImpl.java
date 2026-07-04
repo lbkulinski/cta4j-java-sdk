@@ -1,13 +1,13 @@
 package com.cta4j.bus.pattern.internal.impl;
 
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.pattern.PatternsApi;
-import com.cta4j.bus.pattern.internal.wire.CtaPattern;
 import com.cta4j.bus.pattern.internal.mapper.RoutePatternMapper;
+import com.cta4j.bus.pattern.internal.wire.CtaPattern;
 import com.cta4j.bus.pattern.internal.wire.CtaPatternBustimeResponse;
 import com.cta4j.bus.pattern.internal.wire.CtaPatternError;
 import com.cta4j.bus.pattern.model.RoutePattern;

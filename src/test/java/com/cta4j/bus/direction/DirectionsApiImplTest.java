@@ -1,9 +1,9 @@
 package com.cta4j.bus.direction;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.direction.internal.impl.DirectionsApiImpl;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;

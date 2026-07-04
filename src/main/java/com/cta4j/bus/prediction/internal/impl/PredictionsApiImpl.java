@@ -1,12 +1,12 @@
 package com.cta4j.bus.prediction.internal.impl;
 
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
-import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
 import com.cta4j.bus.prediction.internal.mapper.PredictionMapper;
+import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
 import com.cta4j.bus.prediction.internal.wire.CtaPredictionBustimeResponse;
 import com.cta4j.bus.prediction.internal.wire.CtaPredictionError;
 import com.cta4j.bus.prediction.model.Prediction;

@@ -1,9 +1,9 @@
 package com.cta4j.bus.common.internal.impl;
 
-import com.cta4j.bus.common.BusApiConstants;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.common.internal.wire.CtaTimeBustimeResponse;
 import com.cta4j.bus.common.internal.wire.CtaTimeError;

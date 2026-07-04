@@ -6,12 +6,10 @@ import static org.assertj.core.api.Assertions.*;
 
 class ArrivalsErrorCodeTest {
     @Test
-    void fromCode_returnsCorrectValues() {
-        assertThat(ArrivalsErrorCode.fromCode(0)).isEqualTo(ArrivalsErrorCode.OK);
-        assertThat(ArrivalsErrorCode.fromCode(101)).isEqualTo(ArrivalsErrorCode.INVALID_API_KEY);
-        assertThat(ArrivalsErrorCode.fromCode(103)).isEqualTo(ArrivalsErrorCode.INVALID_MAPID);
-        assertThat(ArrivalsErrorCode.fromCode(108)).isEqualTo(ArrivalsErrorCode.INVALID_STPID);
-        assertThat(ArrivalsErrorCode.fromCode(900)).isEqualTo(ArrivalsErrorCode.SERVER_ERROR);
+    void fromCode_returnsCorrectValue_forEveryDefinedCode() {
+        for (ArrivalsErrorCode code : ArrivalsErrorCode.values()) {
+            assertThat(ArrivalsErrorCode.fromCode(code.getCode())).isEqualTo(code);
+        }
     }
 
     @Test

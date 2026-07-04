@@ -1,8 +1,8 @@
 package com.cta4j.train.arrival;
 
-import com.cta4j.train.common.model.Arrival;
 import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
+import com.cta4j.train.common.model.Arrival;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
