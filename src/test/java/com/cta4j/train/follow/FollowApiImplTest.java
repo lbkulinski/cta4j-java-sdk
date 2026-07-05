@@ -172,7 +172,10 @@ class FollowApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByRun("123"))
             .isInstanceOf(Cta4jFollowException.class)
-            .hasMessage("An unknown error occurred.");
+            .hasMessage("An unknown error occurred.")
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
+                .isEqualTo(FollowErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
     }
 
     @Test

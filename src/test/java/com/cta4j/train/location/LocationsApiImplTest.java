@@ -192,7 +192,10 @@ class LocationsApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
             .isInstanceOf(Cta4jLocationsException.class)
-            .hasMessage("An unknown error occurred.");
+            .hasMessage("An unknown error occurred.")
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
+                .isEqualTo(LocationsErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
     @Test

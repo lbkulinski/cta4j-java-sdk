@@ -214,6 +214,7 @@ class TrainQualifiersTest {
         CtaPosition position = new CtaPosition("not-a-number", "-87.672892", "180");
 
         assertThatIllegalArgumentException().isThrownBy(() -> Qualifiers.mapCoordinates(position))
+            .withMessage("Failed to parse coordinate: not-a-number")
             .withCauseInstanceOf(NumberFormatException.class);
     }
 

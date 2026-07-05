@@ -102,6 +102,7 @@ class BusQualifiersTest {
     void mapTimestamp_throwsIllegalArgumentException_whenTimestampIsInvalid() {
         assertThatIllegalArgumentException().isThrownBy(() ->
             Qualifiers.mapTimestamp("not-a-timestamp"))
+            .withMessage("Failed to parse timestamp: not-a-timestamp")
             .withCauseInstanceOf(DateTimeParseException.class);
     }
 }

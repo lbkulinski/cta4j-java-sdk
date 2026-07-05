@@ -317,7 +317,10 @@ class ArrivalsApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
-            .hasMessage("An unknown error occurred.");
+            .hasMessage("An unknown error occurred.")
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
+                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
     @Test
