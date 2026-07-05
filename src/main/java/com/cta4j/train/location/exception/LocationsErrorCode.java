@@ -55,7 +55,7 @@ public enum LocationsErrorCode {
     private final int code;
 
     /**
-     * Constructs an {@code LocationsErrorCode}.
+     * Constructs a {@code LocationsErrorCode}.
      *
      * @param code the integer code associated with the error code
      */

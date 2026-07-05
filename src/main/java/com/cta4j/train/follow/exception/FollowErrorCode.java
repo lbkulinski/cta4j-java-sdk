@@ -60,7 +60,7 @@ public enum FollowErrorCode {
     private final int code;
 
     /**
-     * Constructs an {@code FollowErrorCode}.
+     * Constructs a {@code FollowErrorCode}.
      *
      * @param code the integer code associated with the error code
      */
