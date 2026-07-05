@@ -13,27 +13,18 @@ import java.util.Objects;
  * @param type the type of this pattern point
  * @param stopId the identifier of the stop associated with this pattern point, if applicable
  * @param stopName the name of the stop associated with this pattern point, if applicable
- * @param distanceToPatternPoint the distance to the next pattern point, if applicable
+ * @param distanceToPatternPoint the distance from this pattern point to the next, if applicable
  * @param latitude the latitude coordinate of this pattern point
  * @param longitude the longitude coordinate of this pattern point
  */
 @NullMarked
 public record PatternPoint(
     int sequence,
-
     PatternPointType type,
-
-    @Nullable
-    String stopId,
-
-    @Nullable
-    String stopName,
-
-    @Nullable
-    BigDecimal distanceToPatternPoint,
-
+    @Nullable String stopId,
+    @Nullable String stopName,
+    @Nullable BigDecimal distanceToPatternPoint,
     BigDecimal latitude,
-
     BigDecimal longitude
 ) {
     /**
@@ -43,7 +34,7 @@ public record PatternPoint(
      * @param type the type of the pattern point
      * @param stopId the identifier of the stop associated with the pattern point, if applicable
      * @param stopName the name of the stop associated with the pattern point, if applicable
-     * @param distanceToPatternPoint the distance to the next pattern point, if applicable
+     * @param distanceToPatternPoint the distance from the pattern point to the next, if applicable
      * @param latitude the latitude coordinate of the pattern point
      * @param longitude the longitude coordinate of the pattern point
      * @throws NullPointerException if {@code type}, {@code latitude}, or {@code longitude} is {@code null}

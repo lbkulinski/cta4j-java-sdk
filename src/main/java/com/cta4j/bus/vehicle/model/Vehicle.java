@@ -18,15 +18,10 @@ import java.util.Objects;
 @NullMarked
 public record Vehicle(
     String id,
-
     String routeId,
-
     String destination,
-
     Coordinates coordinates,
-
     boolean delayed,
-
     VehicleMetadata metadata
 ) {
     /**

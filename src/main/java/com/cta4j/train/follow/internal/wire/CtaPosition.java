@@ -5,17 +5,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaPosition(
-    @Nullable
-    Double lat,
-
-    @Nullable
-    Double lon,
-
-    @Nullable
-    Integer heading
-) {
-}
+    @Nullable String lat,
+    @Nullable String lon,
+    @Nullable String heading
+) {}

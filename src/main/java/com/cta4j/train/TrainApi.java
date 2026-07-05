@@ -1,8 +1,8 @@
 package com.cta4j.train;
 
 import com.cta4j.train.arrival.ArrivalsApi;
-import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.common.internal.impl.TrainApiImpl;
+import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.location.LocationsApi;
 import com.cta4j.train.station.StationsApi;
 import org.jspecify.annotations.NullMarked;
@@ -59,6 +59,7 @@ public interface TrainApi {
          *
          * @param host the API host
          * @return this builder instance
+         * @throws NullPointerException if {@code host} is {@code null}
          */
         Builder host(String host);
 
@@ -69,6 +70,7 @@ public interface TrainApi {
          *
          * @param stationsUrl the URL for station data
          * @return this builder instance
+         * @throws NullPointerException if {@code stationsUrl} is {@code null}
          */
         Builder stationsUrl(String stationsUrl);
 

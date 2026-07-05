@@ -33,34 +33,17 @@ import java.util.Objects;
 @NullMarked
 public record PredictionMetadata(
     Instant timestamp,
-
     DynamicAction dynamicAction,
-
     String blockId,
-
     String tripId,
-
     String originalTripNumber,
-
-    @Nullable
-    String countdownLabel,
-
+    @Nullable String countdownLabel,
     String zone,
-
     PassengerLoad passengerLoad,
-
-    @Nullable
-    Integer gtfsSequence,
-
-    @Nullable
-    String nextBus,
-
-    @Nullable
-    Integer scheduledStartSeconds,
-
-    @Nullable
-    LocalDate scheduledStartDate,
-
+    @Nullable Integer gtfsSequence,
+    @Nullable String nextBus,
+    @Nullable Integer scheduledStartSeconds,
+    @Nullable LocalDate scheduledStartDate,
     FlagStop flagStop
 ) {
     /**
@@ -71,7 +54,7 @@ public record PredictionMetadata(
      * @param blockId the scheduled block identifier for the vehicle associated with the prediction
      * @param tripId the scheduled trip identifier for the vehicle associated with the prediction
      * @param originalTripNumber the trip identifier for the vehicle associated with the prediction
-     * @param countdownLabel the countdown label associated with this prediction (e.g., "10", "DUE")
+     * @param countdownLabel the countdown label associated with the prediction (e.g., "10", "DUE")
      * @param zone the zone name for the vehicle associated with the prediction, otherwise blank
      * @param passengerLoad the {@link PassengerLoad} of the vehicle associated with the prediction
      * @param gtfsSequence the GTFS sequence number associated with the prediction, if applicable

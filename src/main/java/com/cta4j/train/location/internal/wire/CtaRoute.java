@@ -9,15 +9,12 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaRoute(
-    @JsonProperty("@name")
-    String name,
-
-    @Nullable
-    List<CtaLocationTrain> train
+    @JsonProperty("@name") String name,
+    @Nullable List<CtaLocationTrain> train
 ) {
     public CtaRoute {
         Objects.requireNonNull(name);

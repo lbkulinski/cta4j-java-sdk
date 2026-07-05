@@ -16,9 +16,7 @@ import java.util.Objects;
  */
 @NullMarked
 public record FollowTrain(
-    @Nullable
-    Coordinates coordinates,
-
+    @Nullable Coordinates coordinates,
     List<Arrival> arrivals
 ) {
     /**

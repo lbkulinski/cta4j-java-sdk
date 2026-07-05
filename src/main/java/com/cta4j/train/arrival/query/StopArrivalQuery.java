@@ -16,12 +16,8 @@ import java.util.Objects;
 @NullMarked
 public record StopArrivalQuery(
     String stopId,
-
-    @Nullable
-    TrainLine line,
-
-    @Nullable
-    Integer maxResults
+    @Nullable TrainLine line,
+    @Nullable Integer maxResults
 ) {
     /**
      * Constructs a {@code StopArrivalQuery}.

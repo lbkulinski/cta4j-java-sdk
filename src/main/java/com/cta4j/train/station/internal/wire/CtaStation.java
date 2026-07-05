@@ -7,46 +7,25 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaStation(
-    @JsonProperty("stop_id")
-    String stopId,
-
-    @JsonProperty("direction_id")
-    String directionId,
-
-    @JsonProperty("stop_name")
-    String stopName,
-
-    @JsonProperty("station_name")
-    String stationName,
-
-    @JsonProperty("station_descriptive_name")
-    String stationDescriptiveName,
-
-    @JsonProperty("map_id")
-    String mapId,
-
+    @JsonProperty("stop_id") String stopId,
+    @JsonProperty("direction_id") String directionId,
+    @JsonProperty("stop_name") String stopName,
+    @JsonProperty("station_name") String stationName,
+    @JsonProperty("station_descriptive_name") String stationDescriptiveName,
+    @JsonProperty("map_id") String mapId,
     boolean ada,
-
     boolean red,
-
     boolean blue,
-
     boolean g,
-
     boolean brn,
-
     boolean p,
-
     boolean y,
-
     boolean pnk,
-
     boolean o,
-
     CtaLocation location
 ) {
     public CtaStation {

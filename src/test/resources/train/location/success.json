@@ -1,0 +1,30 @@
+{
+  "ctatt": {
+    "tmst": "2015-04-30T20:23:53",
+    "errCd": "0",
+    "errNm": null,
+    "route": [
+      {
+        "@name": "Red",
+        "train": [
+          {
+            "rn": "123",
+            "destSt": "30077",
+            "destNm": "O'Hare",
+            "trDr": "1",
+            "nextStaId": "40100",
+            "nextStpId": "30070",
+            "nextStaNm": "Howard",
+            "prdt": "2015-04-30T20:23:53",
+            "arrT": "2015-04-30T20:25:00",
+            "isApp": "0",
+            "isDly": "0",
+            "lat": "41.88",
+            "lon": "-87.63",
+            "heading": "180"
+          }
+        ]
+      }
+    ]
+  }
+}

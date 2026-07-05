@@ -1,0 +1,9 @@
+{
+  "bustime-response": {
+    "error": [
+      {
+        "msg": "Internal server error"
+      }
+    ]
+  }
+}

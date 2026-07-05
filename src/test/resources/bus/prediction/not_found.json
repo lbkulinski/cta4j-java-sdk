@@ -1,0 +1,10 @@
+{
+  "bustime-response": {
+    "error": [
+      {
+        "msg": "No data found for stop",
+        "stpid": "99999"
+      }
+    ]
+  }
+}

@@ -7,13 +7,12 @@ import java.util.Objects;
 /**
  * Represents a route and direction affected by a detour.
  *
- * @param routeId the route ID of the detour
- * @param direction the direction of the detour
+ * @param routeId the route ID of this detour
+ * @param direction the direction of this detour
  */
 @NullMarked
 public record DetourRouteDirection(
     String routeId,
-
     String direction
 ) {
     /**

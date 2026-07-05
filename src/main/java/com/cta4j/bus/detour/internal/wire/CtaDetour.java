@@ -8,26 +8,18 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaDetour(
     String id,
-
     int ver,
-
     int st,
-
     String desc,
-
-    List<CtaDetoursRouteDirection> rtdirs,
-
+    List<CtaDetourRouteDirection> rtdirs,
     String startdt,
-
     String enddt,
-
-    @Nullable
-    String rtpidatafeed
+    @Nullable String rtpidatafeed
 ) {
     public CtaDetour {
         Objects.requireNonNull(id);

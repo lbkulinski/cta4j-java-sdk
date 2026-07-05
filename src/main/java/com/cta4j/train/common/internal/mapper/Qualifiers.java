@@ -1,32 +1,32 @@
 package com.cta4j.train.common.internal.mapper;
 
 import com.cta4j.common.geo.Coordinates;
-import com.cta4j.common.internal.json.Cta4jObjectMapper;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
+import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.follow.internal.wire.CtaPosition;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.CardinalDirection;
 import com.cta4j.train.station.model.HumanAddress;
-import com.cta4j.train.common.model.TrainLine;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
 import tools.jackson.core.JacksonException;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.DateTimeParseException;
+import java.util.EnumSet;
 import java.util.Objects;
+import java.util.Set;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class Qualifiers {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
@@ -43,10 +43,10 @@ public final class Qualifiers {
     }
 
     @Named("mapTrainLines")
-    public static List<TrainLine> mapTrainLines(CtaStation station) {
+    public static Set<TrainLine> mapTrainLines(CtaStation station) {
         Objects.requireNonNull(station);
 
-        List<TrainLine> lines = new ArrayList<>();
+        EnumSet<TrainLine> lines = EnumSet.noneOf(TrainLine.class);
 
         if (station.red()) {
             lines.add(TrainLine.RED);
@@ -80,7 +80,7 @@ public final class Qualifiers {
             lines.add(TrainLine.YELLOW);
         }
 
-        return List.copyOf(lines);
+        return Set.copyOf(lines);
     }
 
     @Named("mapHumanAddress")
@@ -89,14 +89,13 @@ public final class Qualifiers {
             return null;
         }
 
-        ObjectMapper objectMapper = Cta4jObjectMapper.instance();
-
         HumanAddress address;
 
         try {
-            address = objectMapper.readValue(humanAddress, HumanAddress.class);
+            address = JsonMapper.shared()
+                                .readValue(humanAddress, HumanAddress.class);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse human address: %s", humanAddress);
+            String message = "Failed to parse human address: %s".formatted(humanAddress);
 
             throw new IllegalArgumentException(message, e);
         }
@@ -115,18 +114,26 @@ public final class Qualifiers {
     public static Instant mapTimestamp(String timestamp) {
         Objects.requireNonNull(timestamp);
 
-        return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
-                            .atZone(CHICAGO_ZONE_ID)
-                            .toInstant();
+        try {
+            return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
+                                .atZone(CHICAGO_ZONE_ID)
+                                .toInstant();
+        } catch (DateTimeParseException e) {
+            String message = "Failed to parse timestamp: %s".formatted(timestamp);
+
+            throw new IllegalArgumentException(message, e);
+        }
     }
 
     @Named("map01ToBoolean")
-    public static boolean map01ToBoolean(int value) {
+    public static boolean map01ToBoolean(String value) {
+        Objects.requireNonNull(value);
+
         return switch (value) {
-            case 0 -> false;
-            case 1 -> true;
+            case "0" -> false;
+            case "1" -> true;
             default -> {
-                String message = String.format("Invalid boolean value: %s. Expected 0 or 1", value);
+                String message = "Invalid boolean value: %s. Expected 0 or 1".formatted(value);
 
                 throw new IllegalArgumentException(message);
             }
@@ -134,8 +141,52 @@ public final class Qualifiers {
     }
 
     @Named("map15ToTrainDirection")
-    public static TrainDirection map15ToTrainDirection(int direction) {
-        return TrainDirection.fromCode(direction);
+    public static TrainDirection map15ToTrainDirection(String direction) {
+        Objects.requireNonNull(direction);
+
+        int code;
+
+        try {
+            code = Integer.parseInt(direction);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse train direction: %s".formatted(direction);
+
+            throw new IllegalArgumentException(message, e);
+        }
+
+        try {
+            return TrainDirection.fromCode(code);
+        } catch (IllegalArgumentException e) {
+            String message = "Failed to parse train direction: %s".formatted(direction);
+
+            throw new IllegalArgumentException(message, e);
+        }
+    }
+
+    @Named("parseCoordinate")
+    public static BigDecimal parseCoordinate(String value) {
+        Objects.requireNonNull(value);
+
+        try {
+            return new BigDecimal(value);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse coordinate: %s".formatted(value);
+
+            throw new IllegalArgumentException(message, e);
+        }
+    }
+
+    @Named("parseHeading")
+    public static int parseHeading(String value) {
+        Objects.requireNonNull(value);
+
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse heading: %s".formatted(value);
+
+            throw new IllegalArgumentException(message, e);
+        }
     }
 
     @Named("mapArrivalCoordinates")
@@ -146,16 +197,18 @@ public final class Qualifiers {
     }
 
     @Named("mapCoordinates")
-    public static @Nullable Coordinates mapCoordinates(CtaPosition position) {
-        Objects.requireNonNull(position);
+    public static @Nullable Coordinates mapCoordinates(@Nullable CtaPosition position) {
+        if (position == null) {
+            return null;
+        }
 
         return mapCoordinates(position.lat(), position.lon(), position.heading());
     }
 
     private static @Nullable Coordinates mapCoordinates(
-        @Nullable Double lat,
-        @Nullable Double lon,
-        @Nullable Integer heading
+        @Nullable String lat,
+        @Nullable String lon,
+        @Nullable String heading
     ) {
         if (lat == null) {
             return null;
@@ -169,9 +222,10 @@ public final class Qualifiers {
             return null;
         }
 
-        BigDecimal latitude = BigDecimal.valueOf(lat);
-        BigDecimal longitude = BigDecimal.valueOf(lon);
+        BigDecimal latitude = parseCoordinate(lat);
+        BigDecimal longitude = parseCoordinate(lon);
+        int headingValue = parseHeading(heading);
 
-        return new Coordinates(latitude, longitude, heading);
+        return new Coordinates(latitude, longitude, headingValue);
     }
 }

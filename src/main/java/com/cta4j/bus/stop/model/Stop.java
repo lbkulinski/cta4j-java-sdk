@@ -27,24 +27,13 @@ import java.util.Objects;
 @NullMarked
 public record Stop(
     String id,
-
     String name,
-
     BigDecimal latitude,
-
     BigDecimal longitude,
-
-    @Nullable
-    List<Integer> detoursAdded,
-
-    @Nullable
-    List<Integer> detoursRemoved,
-
-    @Nullable
-    Integer gtfsSequence,
-
-    @Nullable
-    Boolean adaAccessible
+    @Nullable List<Integer> detoursAdded,
+    @Nullable List<Integer> detoursRemoved,
+    @Nullable Integer gtfsSequence,
+    @Nullable Boolean adaAccessible
 ) {
     /**
      * Constructs a {@code Stop}.

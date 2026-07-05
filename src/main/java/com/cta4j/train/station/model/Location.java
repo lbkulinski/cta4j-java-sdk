@@ -16,11 +16,8 @@ import java.util.Objects;
 @NullMarked
 public record Location(
     BigDecimal latitude,
-
     BigDecimal longitude,
-
-    @Nullable
-    HumanAddress humanAddress
+    @Nullable HumanAddress humanAddress
 ) {
     /**
      * Constructs a {@code Location}.

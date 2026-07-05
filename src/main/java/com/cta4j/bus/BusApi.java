@@ -1,14 +1,15 @@
 package com.cta4j.bus;
 
+import com.cta4j.bus.common.internal.impl.BusApiImpl;
 import com.cta4j.bus.detour.DetoursApi;
 import com.cta4j.bus.direction.DirectionsApi;
-import com.cta4j.bus.common.internal.impl.BusApiImpl;
 import com.cta4j.bus.locale.LocalesApi;
 import com.cta4j.bus.pattern.PatternsApi;
 import com.cta4j.bus.prediction.PredictionsApi;
 import com.cta4j.bus.route.RoutesApi;
 import com.cta4j.bus.stop.StopsApi;
 import com.cta4j.bus.vehicle.VehiclesApi;
+import com.cta4j.common.exception.Cta4jException;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Instant;
@@ -30,6 +31,7 @@ public interface BusApi {
      * Returns the current system time reported by the Bus Tracker API.
      *
      * @return the API system time as an {@link Instant}
+     * @throws Cta4jException if the API returns an error response or the response cannot be parsed
      */
     Instant systemTime();
 
@@ -69,7 +71,7 @@ public interface BusApi {
     PatternsApi patterns();
 
     /**
-     * Provides access to prediction and arrival-related endpoints.
+     * Provides access to prediction-related endpoints.
      *
      * @return the {@link PredictionsApi}
      */
@@ -100,6 +102,7 @@ public interface BusApi {
          *
          * @param host the API host
          * @return this builder instance
+         * @throws NullPointerException if {@code host} is {@code null}
          */
         Builder host(String host);
 

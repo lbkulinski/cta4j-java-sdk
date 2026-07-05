@@ -1,8 +1,8 @@
 package com.cta4j.bus.detour.internal.mapper;
 
-import com.cta4j.bus.detour.internal.wire.CtaDetour;
-import com.cta4j.bus.detour.internal.wire.CtaDetoursRouteDirection;
 import com.cta4j.bus.common.internal.mapper.Qualifiers;
+import com.cta4j.bus.detour.internal.wire.CtaDetour;
+import com.cta4j.bus.detour.internal.wire.CtaDetourRouteDirection;
 import com.cta4j.bus.detour.model.Detour;
 import com.cta4j.bus.detour.model.DetourRouteDirection;
 import org.jetbrains.annotations.ApiStatus;
@@ -26,5 +26,5 @@ public interface DetourMapper {
 
     @Mapping(target = "routeId", source = "rt")
     @Mapping(target = "direction", source = "dir")
-    DetourRouteDirection toDomain(CtaDetoursRouteDirection dto);
+    DetourRouteDirection toDomain(CtaDetourRouteDirection dto);
 }

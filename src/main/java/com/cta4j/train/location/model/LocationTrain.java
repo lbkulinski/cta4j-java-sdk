@@ -28,30 +28,17 @@ import java.util.Objects;
 @NullMarked
 public record LocationTrain(
     String run,
-
     String destinationStationId,
-
     String destinationName,
-
     TrainDirection direction,
-
     String nextStationId,
-
     String nextStopId,
-
     String nextStationName,
-
     Instant predictionTime,
-
     Instant arrivalTime,
-
     boolean approaching,
-
     boolean delayed,
-
-    @Nullable
-    String flags,
-
+    @Nullable String flags,
     Coordinates coordinates
 ) {
     /**
@@ -72,7 +59,7 @@ public record LocationTrain(
      * @param coordinates the current coordinates of the train
      * @throws NullPointerException if {@code run}, {@code destinationStationId}, {@code destinationName},
      * {@code direction}, {@code nextStationId}, {@code nextStopId}, {@code nextStationName}, {@code predictionTime},
-     * {@code arrivalTime}, or {@code coordinates} are {@code null}
+     * {@code arrivalTime}, or {@code coordinates} is {@code null}
      */
     public LocationTrain {
         Objects.requireNonNull(run);

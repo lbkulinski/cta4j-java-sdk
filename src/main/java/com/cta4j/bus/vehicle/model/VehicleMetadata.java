@@ -41,57 +41,26 @@ import java.util.Objects;
  */
 @NullMarked
 public record VehicleMetadata(
-    @Nullable
-    String dataFeed,
-
-    @Nullable
-    Instant lastUpdated,
-
+    @Nullable String dataFeed,
+    @Nullable Instant lastUpdated,
     String patternId,
-
     int distanceToPatternPoint,
-
-    @Nullable
-    Integer stopStatus,
-
-    @Nullable
-    Integer timepointId,
-
-    @Nullable
-    String stopId,
-
-    @Nullable
-    Integer sequence,
-
-    @Nullable
-    Integer gtfsSequence,
-
-    @Nullable
-    Instant serverTimestamp,
-
-    @Nullable
-    Integer speed,
-
-    @Nullable
-    Integer block,
-
+    @Nullable Integer stopStatus,
+    @Nullable Integer timepointId,
+    @Nullable String stopId,
+    @Nullable Integer sequence,
+    @Nullable Integer gtfsSequence,
+    @Nullable Instant serverTimestamp,
+    @Nullable Integer speed,
+    @Nullable Integer block,
     String blockId,
-
     String tripId,
-
     String originalTripNumber,
-
     String zone,
-
     TransitMode mode,
-
     PassengerLoad passengerLoad,
-
-    @Nullable
-    Integer scheduledStartSeconds,
-
-    @Nullable
-    LocalDate scheduledStartDate
+    @Nullable Integer scheduledStartSeconds,
+    @Nullable LocalDate scheduledStartDate
 ) {
     /**
      * Constructs a {@code VehicleMetadata}.

@@ -1,8 +1,9 @@
 package com.cta4j.train.arrival;
 
-import com.cta4j.train.common.model.Arrival;
+import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
 import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
+import com.cta4j.train.common.model.Arrival;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public interface ArrivalsApi {
      * @return a {@link List} of {@link Arrival}s corresponding to the provided map ID, or an empty {@link List} if no
      * arrivals are found
      * @throws NullPointerException if {@code query} is {@code null}
+     * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
     List<Arrival> findByMapId(MapArrivalQuery query);
 
@@ -31,6 +33,7 @@ public interface ArrivalsApi {
      * @return a {@link List} of {@link Arrival}s corresponding to the provided stop ID, or an empty {@link List} if no
      * arrivals are found
      * @throws NullPointerException if {@code query} is {@code null}
+     * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
     List<Arrival> findByStopId(StopArrivalQuery query);
 
@@ -41,6 +44,7 @@ public interface ArrivalsApi {
      * @return a {@link List} of {@link Arrival}s corresponding to the provided map ID, or an empty {@link List} if no
      * arrivals are found
      * @throws NullPointerException if {@code mapId} is {@code null}
+     * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
     default List<Arrival> findByMapId(String mapId) {
         MapArrivalQuery query = MapArrivalQuery.builder(mapId)
@@ -56,6 +60,7 @@ public interface ArrivalsApi {
      * @return a {@link List} of {@link Arrival}s corresponding to the provided stop ID, or an empty {@link List} if no
      * arrivals are found
      * @throws NullPointerException if {@code stopId} is {@code null}
+     * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
     default List<Arrival> findByStopId(String stopId) {
         StopArrivalQuery query = StopArrivalQuery.builder(stopId)

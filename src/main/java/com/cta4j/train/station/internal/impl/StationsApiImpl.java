@@ -1,43 +1,66 @@
 package com.cta4j.train.station.internal.impl;
 
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.train.common.internal.context.TrainApiContext;
+import com.cta4j.train.common.exception.Cta4jTrainException;
+import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.station.StationsApi;
 import com.cta4j.train.station.internal.mapper.StationMapper;
 import com.cta4j.train.station.internal.wire.CtaStation;
 import com.cta4j.train.station.model.Station;
+import org.apache.hc.client5.http.fluent.Request;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class StationsApiImpl implements StationsApi {
-    private final TrainApiContext context;
+    private static final TypeReference<List<CtaStation>> TYPE_REFERENCE = new TypeReference<>() {};
 
-    public StationsApiImpl(TrainApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    private final TrainApiConfig config;
+
+    public StationsApiImpl(TrainApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
     public List<Station> list() {
-        String response = HttpClient.get(this.context.stationsUrl());
+        String stationsUrl = this.config.stationsUrl();
 
-        TypeReference<List<CtaStation>> typeReference = new TypeReference<>() {};
+        URI stationsUri;
+
+        try {
+            stationsUri = URI.create(stationsUrl);
+        } catch (IllegalArgumentException e) {
+            throw new Cta4jTrainException("Invalid stations URL", stationsUrl, e);
+        }
+
+        String response;
+
+        try {
+            response = Request.get(stationsUri)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
+
+            throw new Cta4jTrainException(message, stationsUrl, e);
+        }
+
         List<CtaStation> stations;
 
         try {
-            stations = this.context.objectMapper()
-                                   .readValue(response, typeReference);
+            stations = JsonMapper.shared()
+                                 .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", this.context.stationsUrl());
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jTrainException("Failed to parse response", stationsUrl, e);
         }
 
         return stations.stream()

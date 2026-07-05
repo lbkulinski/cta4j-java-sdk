@@ -8,22 +8,18 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaLocationResponse(
     String tmst,
-
-    int errCd,
-
-    @Nullable
-    String errNm,
-
-    @Nullable
-    List<CtaRoute> route
+    String errCd,
+    @Nullable String errNm,
+    @Nullable List<CtaRoute> route
 ) {
     public CtaLocationResponse {
         Objects.requireNonNull(tmst);
+        Objects.requireNonNull(errCd);
 
         if (route != null) {
             route = List.copyOf(route);

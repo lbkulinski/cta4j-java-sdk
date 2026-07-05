@@ -1,0 +1,12 @@
+{
+  "bustime-response": {
+    "routes": [
+      {
+        "rt": "22",
+        "rtnm": "Clark",
+        "rtclr": "#ffffff",
+        "rtdd": "22"
+      }
+    ]
+  }
+}

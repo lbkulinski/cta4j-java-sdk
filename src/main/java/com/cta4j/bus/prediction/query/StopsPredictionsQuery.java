@@ -1,5 +1,6 @@
 package com.cta4j.bus.prediction.query;
 
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -16,12 +17,8 @@ import java.util.Objects;
 @NullMarked
 public record StopsPredictionsQuery(
     List<String> stopIds,
-
-    @Nullable
-    List<String> routeIds,
-
-    @Nullable
-    Integer maxResults
+    @Nullable List<String> routeIds,
+    @Nullable Integer maxResults
 ) {
     /**
      * Constructs a {@code StopsPredictionsQuery}.
@@ -29,12 +26,15 @@ public record StopsPredictionsQuery(
      * @param stopIds the {@link List} of stop IDs to retrieve predictions for
      * @param routeIds the optional {@link List} of route IDs to filter predictions by
      * @param maxResults the optional maximum number of predictions to return
-     * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}, or if any element of
+     * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} or
      * {@code routeIds} is {@code null}
-     * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
+     * @throws IllegalArgumentException if more than 10 stop IDs are provided, or if {@code maxResults} is
+     * non-{@code null} and not positive
      */
     public StopsPredictionsQuery {
         Objects.requireNonNull(stopIds);
+
+        ApiUtils.requireMaxIds(stopIds, "stop");
 
         stopIds = List.copyOf(stopIds);
 
@@ -42,7 +42,7 @@ public record StopsPredictionsQuery(
             routeIds = List.copyOf(routeIds);
         }
 
-        if ((maxResults != null) && (maxResults <= 0)) {
+        if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("maxResults must be positive");
         }
     }
@@ -52,11 +52,10 @@ public record StopsPredictionsQuery(
      *
      * @param stopIds the {@link List} of stop IDs to retrieve predictions for
      * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
+     * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} is
+     * {@code null}
      */
     public static Builder builder(List<String> stopIds) {
-        Objects.requireNonNull(stopIds);
-
         return new Builder(stopIds);
     }
 
@@ -85,7 +84,8 @@ public record StopsPredictionsQuery(
          * Constructs a {@code Builder}.
          *
          * @param stopIds the {@link List} of stop IDs to retrieve predictions for
-         * @throws NullPointerException if {@code stopIds} or any of its elements are {@code null}
+         * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} is
+         * {@code null}
          */
         public Builder(List<String> stopIds) {
             Objects.requireNonNull(stopIds);
@@ -98,7 +98,8 @@ public record StopsPredictionsQuery(
          *
          * @param routeIds the {@link List} of route IDs
          * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code routeIds} or any of its elements are {@code null}
+         * @throws NullPointerException if {@code routeIds} is {@code null}, or if any element of {@code routeIds} is
+         * {@code null}
          */
         public Builder routeIds(List<String> routeIds) {
             Objects.requireNonNull(routeIds);
@@ -113,12 +114,9 @@ public record StopsPredictionsQuery(
          *
          * @param maxResults the maximum number of predictions
          * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code maxResults} is {@code null}
          * @throws IllegalArgumentException if {@code maxResults} is not positive
          */
-        public Builder maxResults(Integer maxResults) {
-            Objects.requireNonNull(maxResults);
-
+        public Builder maxResults(int maxResults) {
             if (maxResults <= 0) {
                 throw new IllegalArgumentException("maxResults must be positive");
             }
@@ -132,6 +130,7 @@ public record StopsPredictionsQuery(
          * Builds the {@code StopsPredictionsQuery}.
          *
          * @return a new {@code StopsPredictionsQuery} instance
+         * @throws IllegalArgumentException if more than 10 stop IDs are provided
          */
         public StopsPredictionsQuery build() {
             return new StopsPredictionsQuery(

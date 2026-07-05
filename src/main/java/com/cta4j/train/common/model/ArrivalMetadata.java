@@ -17,14 +17,9 @@ import java.util.Objects;
 @NullMarked
 public record ArrivalMetadata(
     String runNumber,
-
     TrainDirection direction,
-
-    @Nullable
-    Coordinates coordinates,
-
-    @Nullable
-    String flags
+    @Nullable Coordinates coordinates,
+    @Nullable String flags
 ) {
     /**
      * Constructs an {@code ArrivalMetadata}.

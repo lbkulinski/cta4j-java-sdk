@@ -1,5 +1,6 @@
 package com.cta4j.bus.prediction.query;
 
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -15,24 +16,26 @@ import java.util.Objects;
 @NullMarked
 public record VehiclesPredictionsQuery(
     List<String> vehicleIds,
-
-    @Nullable
-    Integer maxResults
+    @Nullable Integer maxResults
 ) {
     /**
      * Constructs a {@code VehiclesPredictionsQuery}.
      *
      * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @param maxResults the optional maximum number of predictions to return
-     * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
-     * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
+     * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of {@code vehicleIds} is
+     * {@code null}
+     * @throws IllegalArgumentException if more than 10 vehicle IDs are provided, or if {@code maxResults} is
+     * non-{@code null} and not positive
      */
     public VehiclesPredictionsQuery {
         Objects.requireNonNull(vehicleIds);
 
+        ApiUtils.requireMaxIds(vehicleIds, "vehicle");
+
         vehicleIds = List.copyOf(vehicleIds);
 
-        if ((maxResults != null) && (maxResults <= 0)) {
+        if (maxResults != null && maxResults <= 0) {
             throw new IllegalArgumentException("maxResults must be positive");
         }
     }
@@ -42,11 +45,10 @@ public record VehiclesPredictionsQuery(
      *
      * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
+     * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of {@code vehicleIds} is
+     * {@code null}
      */
     public static Builder builder(List<String> vehicleIds) {
-        Objects.requireNonNull(vehicleIds);
-
         return new Builder(vehicleIds);
     }
 
@@ -69,7 +71,8 @@ public record VehiclesPredictionsQuery(
          * Constructs a {@code Builder}.
          *
          * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
-         * @throws NullPointerException if {@code vehicleIds} or any of its elements are {@code null}
+         * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of
+         * {@code vehicleIds} is {@code null}
          */
         public Builder(List<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
@@ -82,12 +85,9 @@ public record VehiclesPredictionsQuery(
          *
          * @param maxResults the maximum number of predictions to return
          * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code maxResults} is {@code null}
          * @throws IllegalArgumentException if {@code maxResults} is not positive
          */
-        public Builder maxResults(Integer maxResults) {
-            Objects.requireNonNull(maxResults);
-
+        public Builder maxResults(int maxResults) {
             if (maxResults <= 0) {
                 throw new IllegalArgumentException("maxResults must be positive");
             }
@@ -101,6 +101,7 @@ public record VehiclesPredictionsQuery(
          * Builds the {@code VehiclesPredictionsQuery}.
          *
          * @return the constructed {@code VehiclesPredictionsQuery}
+         * @throws IllegalArgumentException if more than 10 vehicle IDs are provided
          */
         public VehiclesPredictionsQuery build() {
             return new VehiclesPredictionsQuery(

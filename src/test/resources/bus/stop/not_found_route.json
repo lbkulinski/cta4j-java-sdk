@@ -1,0 +1,11 @@
+{
+  "bustime-response": {
+    "error": [
+      {
+        "msg": "No service scheduled",
+        "rt": "999",
+        "dir": "Northbound"
+      }
+    ]
+  }
+}

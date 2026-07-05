@@ -1,38 +1,40 @@
 package com.cta4j.bus.prediction.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.exception.Cta4jBusException;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
+import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
-import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
 import com.cta4j.bus.prediction.internal.mapper.PredictionMapper;
+import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
+import com.cta4j.bus.prediction.internal.wire.CtaPredictionBustimeResponse;
+import com.cta4j.bus.prediction.internal.wire.CtaPredictionError;
 import com.cta4j.bus.prediction.model.Prediction;
 import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
-import com.cta4j.bus.common.internal.wire.CtaResponse;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.common.internal.http.HttpClient;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class PredictionsApiImpl implements PredictionsApi {
-    private static final String PREDICTIONS_ENDPOINT = String.format("%s/getpredictions", ApiUtils.API_PREFIX);
-    private static final int MAX_STOP_IDS_PER_REQUEST = 10;
-    private static final int MAX_VEHICLE_IDS_PER_REQUEST = 10;
+    private static final TypeReference<CtaResponse<CtaPredictionBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public PredictionsApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public PredictionsApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -45,25 +47,16 @@ public final class PredictionsApiImpl implements PredictionsApi {
             return List.of();
         }
 
-        if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
-            String message = String.format(
-                "A maximum of %d stop IDs can be requested at once, but %d were provided",
-                MAX_STOP_IDS_PER_REQUEST,
-                stopIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
-
         String stopIdsString = String.join(",", stopIds);
 
         URIBuilder builder = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(PREDICTIONS_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.PREDICTIONS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json");
 
         if (query.routeIds() != null) {
@@ -93,25 +86,16 @@ public final class PredictionsApiImpl implements PredictionsApi {
             return List.of();
         }
 
-        if (vehicleIds.size() > MAX_VEHICLE_IDS_PER_REQUEST) {
-            String message = String.format(
-                "A maximum of %d vehicle IDs can be requested at once, but %d were provided",
-                MAX_VEHICLE_IDS_PER_REQUEST,
-                vehicleIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
-
         String vehicleIdsString = String.join(",", vehicleIds);
 
         URIBuilder builder = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(PREDICTIONS_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.PREDICTIONS_ENDPOINT)
             .addParameter("vid", vehicleIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json");
 
         if (query.maxResults() != null) {
@@ -126,37 +110,41 @@ public final class PredictionsApiImpl implements PredictionsApi {
     }
 
     private List<Prediction> makeRequest(String url) {
-        String response = HttpClient.get(url);
-
-        TypeReference<CtaResponse<List<CtaPrediction>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaPrediction>> predictionsResponse;
+        String response;
 
         try {
-            predictionsResponse = this.context.objectMapper()
-                                              .readValue(response, typeReference);
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
+
+            throw new Cta4jBusException(message, BusApiConstants.PREDICTIONS_ENDPOINT, e);
+        }
+
+        CtaResponse<CtaPredictionBustimeResponse> predictionsResponse;
+
+        try {
+            predictionsResponse = JsonMapper.shared()
+                                            .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", PREDICTIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.PREDICTIONS_ENDPOINT, e);
         }
 
-        CtaBustimeResponse<List<CtaPrediction>> bustimeResponse = predictionsResponse.bustimeResponse();
+        CtaPredictionBustimeResponse bustimeResponse = predictionsResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaPrediction> predictions = bustimeResponse.data();
+        List<CtaPrediction> predictions = bustimeResponse.prd();
+        List<CtaPredictionError> errors = bustimeResponse.error();
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(PREDICTIONS_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
+        if (predictions != null && !predictions.isEmpty()) {
+            return predictions.stream()
+                              .map(PredictionMapper.INSTANCE::toDomain)
+                              .toList();
         }
 
-        if ((predictions == null) || predictions.isEmpty()) {
-            return List.of();
-        }
+        ApiUtils.checkErrors(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
 
-        return predictions.stream()
-                          .map(PredictionMapper.INSTANCE::toDomain)
-                          .toList();
+        return List.of();
     }
 }

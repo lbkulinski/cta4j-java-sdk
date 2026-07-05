@@ -1,56 +1,63 @@
 package com.cta4j.bus.vehicle.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.exception.Cta4jBusException;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
-import com.cta4j.bus.vehicle.VehiclesApi;
-import com.cta4j.bus.vehicle.internal.wire.CtaVehicle;
-import com.cta4j.bus.vehicle.internal.mapper.VehicleMapper;
-import com.cta4j.bus.vehicle.model.Vehicle;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.common.internal.http.HttpClient;
+import com.cta4j.bus.vehicle.VehiclesApi;
+import com.cta4j.bus.vehicle.internal.mapper.VehicleMapper;
+import com.cta4j.bus.vehicle.internal.wire.CtaVehicle;
+import com.cta4j.bus.vehicle.internal.wire.CtaVehicleBustimeResponse;
+import com.cta4j.bus.vehicle.internal.wire.CtaVehicleError;
+import com.cta4j.bus.vehicle.model.Vehicle;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class VehiclesApiImpl implements VehiclesApi {
-    private static final String VEHICLES_ENDPOINT = String.format("%s/getvehicles", ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaVehicleBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public VehiclesApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public VehiclesApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
     public List<Vehicle> findByIds(Collection<String> ids) {
         Objects.requireNonNull(ids);
 
+        ids = List.copyOf(ids);
+
         if (ids.isEmpty()) {
             return List.of();
         }
 
-        ids.forEach(Objects::requireNonNull);
+        ApiUtils.requireMaxIds(ids, "vehicle");
 
         String idsString = String.join(",", ids);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(VEHICLES_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.VEHICLES_ENDPOINT)
             .addParameter("vid", idsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -61,21 +68,24 @@ public final class VehiclesApiImpl implements VehiclesApi {
     public List<Vehicle> findByRouteIds(Collection<String> routeIds) {
         Objects.requireNonNull(routeIds);
 
+        routeIds = List.copyOf(routeIds);
+
         if (routeIds.isEmpty()) {
             return List.of();
         }
 
-        routeIds.forEach(Objects::requireNonNull);
+        ApiUtils.requireMaxIds(routeIds, "route");
 
         String routeIdsString = String.join(",", routeIds);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(VEHICLES_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.VEHICLES_ENDPOINT)
             .addParameter("rt", routeIdsString)
             .addParameter("tmres", "s")
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -83,37 +93,41 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     private List<Vehicle> makeRequest(String url) {
-        String response = HttpClient.get(url);
-
-        TypeReference<CtaResponse<List<CtaVehicle>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaVehicle>> vehicleResponse;
+        String response;
 
         try {
-            vehicleResponse = this.context.objectMapper()
-                                          .readValue(response, typeReference);
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
+
+            throw new Cta4jBusException(message, BusApiConstants.VEHICLES_ENDPOINT, e);
+        }
+
+        CtaResponse<CtaVehicleBustimeResponse> vehicleResponse;
+
+        try {
+            vehicleResponse = JsonMapper.shared()
+                                        .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", VEHICLES_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.VEHICLES_ENDPOINT, e);
         }
 
-        CtaBustimeResponse<List<CtaVehicle>> bustimeResponse = vehicleResponse.bustimeResponse();
+        CtaVehicleBustimeResponse bustimeResponse = vehicleResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaVehicle> vehicles = bustimeResponse.data();
+        List<CtaVehicle> vehicles = bustimeResponse.vehicle();
+        List<CtaVehicleError> errors = bustimeResponse.error();
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(VEHICLES_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
+        if (vehicles != null && !vehicles.isEmpty()) {
+            return vehicles.stream()
+                           .map(VehicleMapper.INSTANCE::toDomain)
+                           .toList();
         }
 
-        if ((vehicles == null) || vehicles.isEmpty()) {
-            return List.of();
-        }
+        ApiUtils.checkErrors(errors, BusApiConstants.VEHICLES_ENDPOINT);
 
-        return vehicles.stream()
-                       .map(VehicleMapper.INSTANCE::toDomain)
-                       .toList();
+        return List.of();
     }
 }

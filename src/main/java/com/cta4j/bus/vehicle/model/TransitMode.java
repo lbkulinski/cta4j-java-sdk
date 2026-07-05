@@ -1,8 +1,11 @@
 package com.cta4j.bus.vehicle.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the mode of transit for a vehicle.
  */
+@NullMarked
 public enum TransitMode {
     /**
      * Indicates no specific transit mode.
@@ -59,7 +62,7 @@ public enum TransitMode {
             case 3 -> RAIL;
             case 4 -> PEOPLE_MOVER;
             default -> {
-                String message = String.format("Unknown transit mode code: %d", code);
+                String message = "Unknown transit mode code: %d".formatted(code);
 
                 throw new IllegalArgumentException(message);
             }

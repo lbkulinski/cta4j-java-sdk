@@ -1,8 +1,11 @@
 package com.cta4j.bus.prediction.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the various dynamic actions that can be applied to a bus trip.
  */
+@NullMarked
 public enum DynamicAction {
     /**
      * Indicates that no dynamic action has been applied.
@@ -144,7 +147,7 @@ public enum DynamicAction {
             case 18 -> CANCELLED_TRIP_NEW;
             case 19 -> STOPS_AFFECTED_NEW;
             default -> {
-                String message = String.format("Unknown dynamic action code: %d", code);
+                String message = "Unknown dynamic action code: %d".formatted(code);
 
                 throw new IllegalArgumentException(message);
             }

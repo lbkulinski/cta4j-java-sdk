@@ -7,20 +7,15 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaRoute(
     String rt,
-
     String rtnm,
-
     String rtclr,
-
     String rtdd,
-
-    @Nullable
-    String rtpidatafeed
+    @Nullable String rtpidatafeed
 ) {
     public CtaRoute {
         Objects.requireNonNull(rt);

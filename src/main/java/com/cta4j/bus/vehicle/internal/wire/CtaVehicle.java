@@ -7,75 +7,37 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaVehicle(
     String vid,
-
-    @Nullable
-    String rtpidatafeed,
-
-    @Nullable
-    String tmpstmp,
-
+    @Nullable String rtpidatafeed,
+    @Nullable String tmpstmp,
     double lat,
-
     double lon,
-
     int hdg,
-
     int pid,
-
     String rt,
-
     String des,
-
     int pdist,
-
-    @Nullable
-    Integer stopstatus,
-
-    @Nullable
-    Integer timepointid,
-
-    @Nullable
-    String stopid,
-
-    @Nullable
-    Integer sequence,
-
-    @Nullable
-    Integer gtfsseq,
-
+    @Nullable Integer stopstatus,
+    @Nullable Integer timepointid,
+    @Nullable String stopid,
+    @Nullable Integer sequence,
+    @Nullable Integer gtfsseq,
     boolean dly,
-
-    @Nullable
-    String srvtmstmp,
-
-    @Nullable
-    Integer spd,
-
-    @Nullable
-    Integer blk,
-
+    @Nullable String srvtmstmp,
+    @Nullable Integer spd,
+    @Nullable Integer blk,
     String tablockid,
-
     String tatripid,
-
     String origtatripno,
-
     String zone,
-
     int mode,
-
     String psgld,
-
-    @Nullable
-    Integer stst,
-
-    @Nullable
-    String stsd
+    @Nullable Integer stst,
+    @Nullable String stsd
 ) {
     public CtaVehicle {
         Objects.requireNonNull(vid);

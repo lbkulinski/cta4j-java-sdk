@@ -1,66 +1,62 @@
 package com.cta4j.bus.pattern.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.exception.Cta4jBusException;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
-import com.cta4j.bus.pattern.PatternsApi;
-import com.cta4j.bus.pattern.internal.wire.CtaPattern;
-import com.cta4j.bus.pattern.internal.mapper.RoutePatternMapper;
-import com.cta4j.bus.pattern.model.RoutePattern;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.common.internal.http.HttpClient;
+import com.cta4j.bus.pattern.PatternsApi;
+import com.cta4j.bus.pattern.internal.mapper.RoutePatternMapper;
+import com.cta4j.bus.pattern.internal.wire.CtaPattern;
+import com.cta4j.bus.pattern.internal.wire.CtaPatternBustimeResponse;
+import com.cta4j.bus.pattern.internal.wire.CtaPatternError;
+import com.cta4j.bus.pattern.model.RoutePattern;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class PatternsApiImpl implements PatternsApi {
-    private static final String PATTERNS_ENDPOINT = String.format("%s/getpatterns", ApiUtils.API_PREFIX);
-    private static final int MAX_PATTERN_IDS_PER_REQUEST = 10;
+    private static final TypeReference<CtaResponse<CtaPatternBustimeResponse>> TYPE_REFERENCE =
+        new TypeReference<>() {};
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public PatternsApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public PatternsApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
     public List<RoutePattern> findByIds(Collection<String> patternIds) {
         Objects.requireNonNull(patternIds);
 
+        patternIds = List.copyOf(patternIds);
+
         if (patternIds.isEmpty()) {
             return List.of();
         }
 
-        patternIds.forEach(Objects::requireNonNull);
-
-        if (patternIds.size() > MAX_PATTERN_IDS_PER_REQUEST) {
-            String message = String.format(
-                "A maximum of %d pattern IDs can be requested at once, but %d were provided",
-                MAX_PATTERN_IDS_PER_REQUEST,
-                patternIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
+        ApiUtils.requireMaxIds(patternIds, "pattern");
 
         String patternIdsString = String.join(",", patternIds);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(PATTERNS_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.PATTERNS_ENDPOINT)
             .addParameter("pid", patternIdsString)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -72,11 +68,12 @@ public final class PatternsApiImpl implements PatternsApi {
         Objects.requireNonNull(routeId);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(PATTERNS_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.PATTERNS_ENDPOINT)
             .addParameter("rt", routeId)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -84,37 +81,41 @@ public final class PatternsApiImpl implements PatternsApi {
     }
 
     private List<RoutePattern> makeRequest(String url) {
-        String response = HttpClient.get(url);
-
-        TypeReference<CtaResponse<List<CtaPattern>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaPattern>> patternsResponse;
+        String response;
 
         try {
-            patternsResponse = this.context.objectMapper()
-                                           .readValue(response, typeReference);
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
+
+            throw new Cta4jBusException(message, BusApiConstants.PATTERNS_ENDPOINT, e);
+        }
+
+        CtaResponse<CtaPatternBustimeResponse> patternsResponse;
+
+        try {
+            patternsResponse = JsonMapper.shared()
+                                         .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", PATTERNS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.PATTERNS_ENDPOINT, e);
         }
 
-        CtaBustimeResponse<List<CtaPattern>> bustimeResponse = patternsResponse.bustimeResponse();
+        CtaPatternBustimeResponse bustimeResponse = patternsResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaPattern> patterns = bustimeResponse.data();
+        List<CtaPattern> patterns = bustimeResponse.ptr();
+        List<CtaPatternError> errors = bustimeResponse.error();
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(PATTERNS_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
+        if (patterns != null && !patterns.isEmpty()) {
+            return patterns.stream()
+                           .map(RoutePatternMapper.INSTANCE::toDomain)
+                           .toList();
         }
 
-        if ((patterns == null) || patterns.isEmpty()) {
-            return List.of();
-        }
+        ApiUtils.checkErrors(errors, BusApiConstants.PATTERNS_ENDPOINT);
 
-        return patterns.stream()
-                       .map(RoutePatternMapper.INSTANCE::toDomain)
-                       .toList();
+        return List.of();
     }
 }

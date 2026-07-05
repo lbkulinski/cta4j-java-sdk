@@ -8,14 +8,12 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaLocation(
     String latitude,
-
     String longitude,
-
     @Nullable
     @JsonProperty("human_address")
     String humanAddress

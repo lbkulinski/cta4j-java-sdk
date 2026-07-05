@@ -7,62 +7,33 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaPrediction(
     String tmstmp,
-
     String typ,
-
     String stpid,
-
     String stpnm,
-
     int vid,
-
     int dstp,
-
     String rt,
-
     String rtdd,
-
     String rtdir,
-
     String des,
-
     String prdtm,
-
-    @Nullable
-    Boolean dly,
-
+    @Nullable Boolean dly,
     int dyn,
-
     String tablockid,
-
     String tatripid,
-
     String origtatripno,
-
-    @Nullable
-    String prdctdn,
-
+    @Nullable String prdctdn,
     String zone,
-
     String psgld,
-
-    @Nullable
-    Integer gtfsseq,
-
-    @Nullable
-    String nbus,
-
-    @Nullable
-    Integer stst,
-
-    @Nullable
-    String stsd,
-
+    @Nullable Integer gtfsseq,
+    @Nullable String nbus,
+    @Nullable Integer stst,
+    @Nullable String stsd,
     int flagstop
 ) {
     public CtaPrediction {

@@ -1,9 +1,9 @@
 package com.cta4j.bus.common.internal.mapper;
 
+import com.cta4j.bus.pattern.model.PatternPointType;
 import com.cta4j.bus.prediction.model.DynamicAction;
 import com.cta4j.bus.prediction.model.FlagStop;
 import com.cta4j.bus.prediction.model.PassengerLoad;
-import com.cta4j.bus.pattern.model.PatternPointType;
 import com.cta4j.bus.prediction.model.PredictionType;
 import com.cta4j.bus.vehicle.model.TransitMode;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,11 +15,12 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class Qualifiers {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm[:ss]");
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
@@ -36,7 +37,7 @@ public final class Qualifiers {
             case "A" -> PredictionType.ARRIVAL;
             case "D" -> PredictionType.DEPARTURE;
             default -> {
-                String message = String.format("Unknown prediction type: %s", typ);
+                String message = "Unknown prediction type: %s".formatted(typ);
 
                 throw new IllegalArgumentException(message);
             }
@@ -49,9 +50,15 @@ public final class Qualifiers {
             return null;
         }
 
-        return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
-                            .atZone(CHICAGO_ZONE_ID)
-                            .toInstant();
+        try {
+            return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
+                                .atZone(CHICAGO_ZONE_ID)
+                                .toInstant();
+        } catch (DateTimeParseException e) {
+            String message = "Failed to parse timestamp: %s".formatted(timestamp);
+
+            throw new IllegalArgumentException(message, e);
+        }
     }
 
     @Named("mapDynamicAction")
@@ -69,7 +76,7 @@ public final class Qualifiers {
             case "EMPTY" -> PassengerLoad.EMPTY;
             case "N/A", "" -> PassengerLoad.UNKNOWN;
             default -> {
-                String message = String.format("Unknown passenger load: %s", psgld);
+                String message = "Unknown passenger load: %s".formatted(psgld);
 
                 throw new IllegalArgumentException(message);
             }
@@ -99,7 +106,7 @@ public final class Qualifiers {
             case "S" -> PatternPointType.STOP;
             case "W" -> PatternPointType.WAYPOINT;
             default -> {
-                String message = String.format("Unknown pattern point type: %s", type);
+                String message = "Unknown pattern point type: %s".formatted(type);
 
                 throw new IllegalArgumentException(message);
             }

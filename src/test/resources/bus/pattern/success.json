@@ -1,0 +1,22 @@
+{
+  "bustime-response": {
+    "ptr": [
+      {
+        "pid": 3630,
+        "ln": 14560,
+        "rtdir": "Northbound",
+        "pt": [
+          {
+            "seq": 1,
+            "typ": "S",
+            "stpid": "1001",
+            "stpnm": "First Stop",
+            "pdist": 0.0,
+            "lat": 41.921,
+            "lon": -87.648
+          }
+        ]
+      }
+    ]
+  }
+}

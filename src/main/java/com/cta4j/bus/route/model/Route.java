@@ -22,15 +22,10 @@ import java.util.Objects;
 @NullMarked
 public record Route(
     String id,
-
     String name,
-
     String color,
-
     String designator,
-
-    @Nullable
-    String dataFeed
+    @Nullable String dataFeed
 ) {
     /**
      * Constructs a {@code Route}.

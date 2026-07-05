@@ -7,45 +7,40 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaLocationTrain(
-    int rn,
-
-    int destSt,
-
+    String rn,
+    String destSt,
     String destNm,
-
-    int trDr,
-
-    int nextStaId,
-
-    int nextStpId,
-
+    String trDr,
+    String nextStaId,
+    String nextStpId,
     String nextStaNm,
-
     String prdt,
-
     String arrT,
-
-    int isApp,
-
-    int isDly,
-
-    @Nullable
-    String flags,
-
-    double lat,
-
-    double lon,
-
-    int heading
+    String isApp,
+    String isDly,
+    @Nullable String flags,
+    String lat,
+    String lon,
+    String heading
 ) {
     public CtaLocationTrain {
+        Objects.requireNonNull(rn);
+        Objects.requireNonNull(destSt);
         Objects.requireNonNull(destNm);
+        Objects.requireNonNull(trDr);
+        Objects.requireNonNull(nextStaId);
+        Objects.requireNonNull(nextStpId);
         Objects.requireNonNull(nextStaNm);
         Objects.requireNonNull(prdt);
         Objects.requireNonNull(arrT);
+        Objects.requireNonNull(isApp);
+        Objects.requireNonNull(isDly);
+        Objects.requireNonNull(lat);
+        Objects.requireNonNull(lon);
+        Objects.requireNonNull(heading);
     }
 }

@@ -1,36 +1,38 @@
 package com.cta4j.bus.stop.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.exception.Cta4jBusException;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
-import com.cta4j.bus.stop.StopsApi;
-import com.cta4j.bus.stop.internal.wire.CtaStop;
-import com.cta4j.bus.stop.internal.mapper.StopMapper;
-import com.cta4j.bus.stop.model.Stop;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.common.internal.http.HttpClient;
+import com.cta4j.bus.stop.StopsApi;
+import com.cta4j.bus.stop.internal.mapper.StopMapper;
+import com.cta4j.bus.stop.internal.wire.CtaStop;
+import com.cta4j.bus.stop.internal.wire.CtaStopBustimeResponse;
+import com.cta4j.bus.stop.internal.wire.CtaStopError;
+import com.cta4j.bus.stop.model.Stop;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class StopsApiImpl implements StopsApi {
-    private static final String STOPS_ENDPOINT = String.format("%s/getstops", ApiUtils.API_PREFIX);
-    private static final int MAX_STOP_IDS_PER_REQUEST = 10;
+    private static final TypeReference<CtaResponse<CtaStopBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
-    private final BusApiContext context;
+    private final BusApiConfig config;
 
-    public StopsApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public StopsApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -39,12 +41,13 @@ public final class StopsApiImpl implements StopsApi {
         Objects.requireNonNull(direction);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(STOPS_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.STOPS_ENDPOINT)
             .addParameter("rt", routeId)
             .addParameter("dir", direction)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -55,30 +58,23 @@ public final class StopsApiImpl implements StopsApi {
     public List<Stop> findByIds(Collection<String> stopIds) {
         Objects.requireNonNull(stopIds);
 
+        stopIds = List.copyOf(stopIds);
+
         if (stopIds.isEmpty()) {
             return List.of();
         }
 
-        stopIds.forEach(Objects::requireNonNull);
-
-        if (stopIds.size() > MAX_STOP_IDS_PER_REQUEST) {
-            String message = String.format(
-                "A maximum of %d stop IDs can be requested at once, but %d were provided",
-                MAX_STOP_IDS_PER_REQUEST,
-                stopIds.size()
-            );
-
-            throw new IllegalArgumentException(message);
-        }
+        ApiUtils.requireMaxIds(stopIds, "stop");
 
         String stopIdsString = String.join(",", stopIds);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(STOPS_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.STOPS_ENDPOINT)
             .addParameter("stpid", stopIdsString)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
@@ -86,37 +82,41 @@ public final class StopsApiImpl implements StopsApi {
     }
 
     private List<Stop> makeRequest(String url) {
-        String response = HttpClient.get(url);
-
-        TypeReference<CtaResponse<List<CtaStop>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaStop>> stopsResponse;
+        String response;
 
         try {
-            stopsResponse = this.context.objectMapper()
-                                        .readValue(response, typeReference);
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
+
+            throw new Cta4jBusException(message, BusApiConstants.STOPS_ENDPOINT, e);
+        }
+
+        CtaResponse<CtaStopBustimeResponse> stopsResponse;
+
+        try {
+            stopsResponse = JsonMapper.shared()
+                                      .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", STOPS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException("Failed to parse response", BusApiConstants.STOPS_ENDPOINT, e);
         }
 
-        CtaBustimeResponse<List<CtaStop>> bustimeResponse = stopsResponse.bustimeResponse();
+        CtaStopBustimeResponse bustimeResponse = stopsResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaStop> stops = bustimeResponse.data();
+        List<CtaStop> stops = bustimeResponse.stops();
+        List<CtaStopError> errors = bustimeResponse.error();
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(STOPS_ENDPOINT, errors);
-
-            throw new Cta4jException(message);
+        if (stops != null && !stops.isEmpty()) {
+            return stops.stream()
+                        .map(StopMapper.INSTANCE::toDomain)
+                        .toList();
         }
 
-        if ((stops == null) || stops.isEmpty()) {
-            return List.of();
-        }
+        ApiUtils.checkErrors(errors, BusApiConstants.STOPS_ENDPOINT);
 
-        return stops.stream()
-                    .map(StopMapper.INSTANCE::toDomain)
-                    .toList();
+        return List.of();
     }
 }

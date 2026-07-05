@@ -1,87 +1,87 @@
 package com.cta4j.bus.route.internal.impl;
 
-import com.cta4j.bus.common.internal.context.BusApiContext;
+import com.cta4j.bus.common.exception.Cta4jBusException;
+import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.ApiUtils;
-import com.cta4j.bus.route.RoutesApi;
-import com.cta4j.bus.route.internal.wire.CtaRoute;
-import com.cta4j.bus.route.internal.mapper.RouteMapper;
-import com.cta4j.bus.route.model.Route;
-import com.cta4j.bus.common.internal.wire.CtaBustimeResponse;
-import com.cta4j.bus.common.internal.wire.CtaError;
+import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.common.internal.http.HttpClient;
+import com.cta4j.bus.route.RoutesApi;
+import com.cta4j.bus.route.internal.mapper.RouteMapper;
+import com.cta4j.bus.route.internal.wire.CtaRoute;
+import com.cta4j.bus.route.internal.wire.CtaRouteBustimeResponse;
+import com.cta4j.bus.route.internal.wire.CtaRouteError;
+import com.cta4j.bus.route.model.Route;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class RoutesApiImpl implements RoutesApi {
-    private static final Logger log = LoggerFactory.getLogger(RoutesApiImpl.class);
+    private static final TypeReference<CtaResponse<CtaRouteBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
-    private static final String ROUTES_ENDPOINT = String.format("%s/getroutes", ApiUtils.API_PREFIX);
+    private final BusApiConfig config;
 
-    private final BusApiContext context;
-
-    public RoutesApiImpl(BusApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public RoutesApiImpl(BusApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
     public List<Route> list() {
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(ROUTES_ENDPOINT)
-            .addParameter("key", this.context.apiKey())
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(BusApiConstants.ROUTES_ENDPOINT)
+            .addParameter("key", this.config.apiKey())
             .addParameter("format", "json")
             .toString();
 
-        String response = HttpClient.get(url);
-
-        TypeReference<CtaResponse<List<CtaRoute>>> typeReference = new TypeReference<>() {};
-        CtaResponse<List<CtaRoute>> routesResponse;
+        String response;
 
         try {
-            routesResponse = this.context.objectMapper()
-                                         .readValue(response, typeReference);
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
+
+            throw new Cta4jBusException(message, BusApiConstants.ROUTES_ENDPOINT, e);
+        }
+
+        CtaResponse<CtaRouteBustimeResponse> routesResponse;
+
+        try {
+            routesResponse = JsonMapper.shared()
+                                       .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", ROUTES_ENDPOINT);
+            String message = "Failed to parse response";
 
-            throw new Cta4jException(message, e);
+            throw new Cta4jBusException(message, BusApiConstants.ROUTES_ENDPOINT, e);
         }
 
-        CtaBustimeResponse<List<CtaRoute>> bustimeResponse = routesResponse.bustimeResponse();
+        CtaRouteBustimeResponse bustimeResponse = routesResponse.bustimeResponse();
 
-        List<CtaError> errors = bustimeResponse.error();
-        List<CtaRoute> routes = bustimeResponse.data();
+        List<CtaRoute> routes = bustimeResponse.routes();
+        List<CtaRouteError> errors = bustimeResponse.error();
 
-        if ((errors == null) && (routes == null)) {
-            log.debug("Routes bustime response missing both error and data from {}", ROUTES_ENDPOINT);
-
-            return List.of();
+        if (routes != null && !routes.isEmpty()) {
+            return routes.stream()
+                         .map(RouteMapper.INSTANCE::toDomain)
+                         .toList();
         }
 
-        if ((errors != null) && !errors.isEmpty()) {
-            String message = ApiUtils.buildErrorMessage(ROUTES_ENDPOINT, errors);
+        ApiUtils.checkErrors(errors, BusApiConstants.ROUTES_ENDPOINT);
 
-            throw new Cta4jException(message);
-        }
-
-        if ((routes == null) || routes.isEmpty()) {
-            return List.of();
-        }
-
-        return routes.stream()
-                     .map(RouteMapper.INSTANCE::toDomain)
-                     .toList();
+        return List.of();
     }
 }

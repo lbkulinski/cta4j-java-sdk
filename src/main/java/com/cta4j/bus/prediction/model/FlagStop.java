@@ -1,8 +1,11 @@
 package com.cta4j.bus.prediction.model;
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Represents the flag-stop information for a prediction.
  */
+@NullMarked
 public enum FlagStop {
     /**
      * Indicates that no flag-stop information is available.
@@ -53,7 +56,7 @@ public enum FlagStop {
             case 1 -> PICKUP_AND_DISCHARGE;
             case 2 -> ONLY_DISCHARGE;
             default -> {
-                String message = String.format("Unknown flag stop code: %d", code);
+                String message = "Unknown flag stop code: %d".formatted(code);
 
                 throw new IllegalArgumentException(message);
             }

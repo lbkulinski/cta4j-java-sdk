@@ -1,34 +1,36 @@
 package com.cta4j.train.location.internal.impl;
 
-import com.cta4j.common.internal.http.HttpClient;
-import com.cta4j.exception.Cta4jException;
-import com.cta4j.train.common.internal.context.TrainApiContext;
-import com.cta4j.train.common.internal.util.ApiUtils;
-import com.cta4j.train.common.internal.wire.CtaError;
+import com.cta4j.train.common.internal.config.TrainApiConfig;
+import com.cta4j.train.common.internal.util.TrainApiConstants;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.location.LocationsApi;
+import com.cta4j.train.location.exception.Cta4jLocationsException;
+import com.cta4j.train.location.exception.LocationsErrorCode;
 import com.cta4j.train.location.internal.mapper.TrainLocationsMapper;
 import com.cta4j.train.location.internal.wire.CtaLocationResponse;
 import com.cta4j.train.location.model.TrainLocations;
+import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.json.JsonMapper;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
 @ApiStatus.Internal
+@NullMarked
 public final class LocationsApiImpl implements LocationsApi {
-    private static final String POSITIONS_ENDPOINT = String.format("%s/ttpositions.aspx", ApiUtils.API_PREFIX);
+    private static final TypeReference<CtaResponse<CtaLocationResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
-    private final TrainApiContext context;
+    private final TrainApiConfig config;
 
-    public LocationsApiImpl(TrainApiContext context) {
-        this.context = Objects.requireNonNull(context);
+    public LocationsApiImpl(TrainApiConfig config) {
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
@@ -39,20 +41,20 @@ public final class LocationsApiImpl implements LocationsApi {
             return List.of();
         }
 
-        lines.forEach(Objects::requireNonNull);
-
-        List<String> lineCodes = lines.stream()
-                                      .map(TrainLine::getCode)
-                                      .toList();
+        List<String> lineCodes = List.copyOf(lines)
+                                     .stream()
+                                     .map(TrainLine::getCode)
+                                     .toList();
 
         String linesString = String.join(",", lineCodes);
 
         String url = new URIBuilder()
-            .setScheme(ApiUtils.SCHEME)
-            .setHost(this.context.host())
-            .setPath(POSITIONS_ENDPOINT)
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(TrainApiConstants.POSITIONS_ENDPOINT)
             .addParameter("rt", linesString)
-            .addParameter("key", this.context.apiKey())
+            .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON")
             .toString();
 
@@ -60,28 +62,52 @@ public final class LocationsApiImpl implements LocationsApi {
     }
 
     private List<TrainLocations> makeRequest(String url) {
-        String response = HttpClient.get(url);
+        String response;
 
-        TypeReference<CtaResponse<CtaLocationResponse>> typeReference = new TypeReference<>() {};
+        try {
+            response = Request.get(url)
+                              .execute()
+                              .returnContent()
+                              .asString();
+        } catch (IOException e) {
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
+
+            throw new Cta4jLocationsException(message, e);
+        }
+
         CtaResponse<CtaLocationResponse> ctaResponse;
 
         try {
-            ctaResponse = this.context.objectMapper()
-                                      .readValue(response, typeReference);
+            ctaResponse = JsonMapper.shared()
+                                    .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            String message = String.format("Failed to parse response from %s", POSITIONS_ENDPOINT);
-
-            throw new Cta4jException(message, e);
+            throw new Cta4jLocationsException("Failed to parse response", e);
         }
 
         CtaLocationResponse locationResponse = ctaResponse.ctatt();
 
-        if (locationResponse.errCd() != 0) {
-            CtaError error = new CtaError(locationResponse.errCd(), locationResponse.errNm());
+        int errCd;
 
-            String message = ApiUtils.buildErrorMessage(POSITIONS_ENDPOINT, error);
+        try {
+            errCd = Integer.parseInt(locationResponse.errCd());
+        } catch (NumberFormatException e) {
+            throw new Cta4jLocationsException("Failed to parse error code", e);
+        }
 
-            throw new Cta4jException(message);
+        if (errCd < 0) {
+            throw new Cta4jLocationsException("Unknown error code", errCd);
+        }
+
+        LocationsErrorCode errorCode = LocationsErrorCode.fromCode(errCd);
+
+        if (errorCode != LocationsErrorCode.OK) {
+            String errNm = locationResponse.errNm();
+
+            String message = errNm == null || errNm.isBlank()
+                ? "An unknown error occurred."
+                : errNm;
+
+            throw new Cta4jLocationsException(message, errCd);
         }
 
         if (locationResponse.route() == null) {

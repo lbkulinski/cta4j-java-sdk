@@ -15,7 +15,6 @@ import java.util.Objects;
 @NullMarked
 public record TrainLocations(
     TrainLine line,
-
     List<LocationTrain> trains
 ) {
     /**

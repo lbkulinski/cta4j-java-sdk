@@ -9,22 +9,18 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-@NullMarked
-@ApiStatus.Internal
 @JsonIgnoreProperties(ignoreUnknown = true)
+@ApiStatus.Internal
+@NullMarked
 public record CtaArrivalsResponse(
     String tmst,
-
-    int errCd,
-
-    @Nullable
-    String errNm,
-
-    @Nullable
-    List<CtaArrival> eta
+    String errCd,
+    @Nullable String errNm,
+    @Nullable List<CtaArrival> eta
 ) {
     public CtaArrivalsResponse {
         Objects.requireNonNull(tmst);
+        Objects.requireNonNull(errCd);
 
         if (eta != null) {
             eta = List.copyOf(eta);
