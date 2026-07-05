@@ -163,6 +163,19 @@ class FollowApiImplTest {
     }
 
     @Test
+    void findByRun_throwsCta4jFollowException_withDefaultMessage_whenErrNmIsBlank() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"1\",\"errNm\":\"\"}}")));
+
+        assertThatThrownBy(() -> this.api.findByRun("123"))
+            .isInstanceOf(Cta4jFollowException.class)
+            .hasMessage("An unknown error occurred.");
+    }
+
+    @Test
     void findByRun_throwsCta4jFollowException_whenServerReturnsErrorStatus() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
             .willReturn(aResponse()

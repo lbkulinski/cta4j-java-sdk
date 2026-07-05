@@ -213,7 +213,8 @@ class TrainQualifiersTest {
     void mapCoordinates_throwsIllegalArgumentException_whenLatIsNotNumeric() {
         CtaPosition position = new CtaPosition("not-a-number", "-87.672892", "180");
 
-        assertThatIllegalArgumentException().isThrownBy(() -> Qualifiers.mapCoordinates(position));
+        assertThatIllegalArgumentException().isThrownBy(() -> Qualifiers.mapCoordinates(position))
+            .withCauseInstanceOf(NumberFormatException.class);
     }
 
     @Test

@@ -10,6 +10,7 @@ import com.cta4j.bus.vehicle.model.TransitMode;
 import org.junit.jupiter.api.Test;
 
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.*;
@@ -100,6 +101,7 @@ class BusQualifiersTest {
     @Test
     void mapTimestamp_throwsIllegalArgumentException_whenTimestampIsInvalid() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            Qualifiers.mapTimestamp("not-a-timestamp"));
+            Qualifiers.mapTimestamp("not-a-timestamp"))
+            .withCauseInstanceOf(DateTimeParseException.class);
     }
 }

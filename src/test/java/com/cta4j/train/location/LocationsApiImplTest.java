@@ -183,6 +183,19 @@ class LocationsApiImplTest {
     }
 
     @Test
+    void findByLines_throwsCta4jLocationsException_withDefaultMessage_whenErrNmIsBlank() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"1\",\"errNm\":\"\"}}")));
+
+        assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
+            .isInstanceOf(Cta4jLocationsException.class)
+            .hasMessage("An unknown error occurred.");
+    }
+
+    @Test
     void findByLines_throwsCta4jLocationsException_whenServerReturnsErrorStatus() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
             .willReturn(aResponse()

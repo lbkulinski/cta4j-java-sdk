@@ -15,8 +15,6 @@ import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -29,8 +27,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class PatternsApiImpl implements PatternsApi {
-    private static final Logger log = LoggerFactory.getLogger(PatternsApiImpl.class);
-
     private static final TypeReference<CtaResponse<CtaPatternBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -44,13 +40,13 @@ public final class PatternsApiImpl implements PatternsApi {
     public List<RoutePattern> findByIds(Collection<String> patternIds) {
         Objects.requireNonNull(patternIds);
 
+        patternIds = List.copyOf(patternIds);
+
         if (patternIds.isEmpty()) {
             return List.of();
         }
 
         ApiUtils.requireMaxIds(patternIds, "pattern");
-
-        patternIds = List.copyOf(patternIds);
 
         String patternIdsString = String.join(",", patternIds);
 
@@ -118,19 +114,8 @@ public final class PatternsApiImpl implements PatternsApi {
                            .toList();
         }
 
-        if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", BusApiConstants.PATTERNS_ENDPOINT);
+        ApiUtils.checkErrors(errors, BusApiConstants.PATTERNS_ENDPOINT);
 
-            return List.of();
-        }
-
-        boolean notFound = errors.stream()
-                                 .allMatch(CtaPatternError::notFound);
-
-        if (notFound) {
-            return List.of();
-        }
-
-        throw new Cta4jBusException(errors, BusApiConstants.PATTERNS_ENDPOINT);
+        return List.of();
     }
 }

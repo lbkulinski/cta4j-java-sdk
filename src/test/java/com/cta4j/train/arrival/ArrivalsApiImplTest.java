@@ -306,6 +306,21 @@ class ArrivalsApiImplTest {
     }
 
     @Test
+    void findByMapId_throwsCta4jArrivalsException_withDefaultMessage_whenErrNmIsBlank() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"1\",\"errNm\":\"\"}}")));
+
+        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+
+        assertThatThrownBy(() -> this.api.findByMapId(query))
+            .isInstanceOf(Cta4jArrivalsException.class)
+            .hasMessage("An unknown error occurred.");
+    }
+
+    @Test
     void findByMapId_throwsCta4jArrivalsException_whenServerReturnsErrorStatus() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .willReturn(aResponse()

@@ -127,7 +127,11 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         }
 
         if (errorCode != ArrivalsErrorCode.OK) {
-            String message = Objects.requireNonNullElse(arrivalsResponse.errNm(), "An unknown error occurred.");
+            String errNm = arrivalsResponse.errNm();
+
+            String message = (errNm == null || errNm.isBlank())
+                ? "An unknown error occurred."
+                : errNm;
 
             throw new Cta4jArrivalsException(message, errCd);
         }

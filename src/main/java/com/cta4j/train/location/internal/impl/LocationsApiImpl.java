@@ -101,7 +101,11 @@ public final class LocationsApiImpl implements LocationsApi {
         LocationsErrorCode errorCode = LocationsErrorCode.fromCode(errCd);
 
         if (errorCode != LocationsErrorCode.OK) {
-            String message = Objects.requireNonNullElse(locationResponse.errNm(), "An unknown error occurred.");
+            String errNm = locationResponse.errNm();
+
+            String message = (errNm == null || errNm.isBlank())
+                ? "An unknown error occurred."
+                : errNm;
 
             throw new Cta4jLocationsException(message, errCd);
         }

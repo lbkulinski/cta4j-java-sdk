@@ -222,19 +222,9 @@ public final class Qualifiers {
             return null;
         }
 
-        BigDecimal latitude;
-        BigDecimal longitude;
-        int headingValue;
-
-        try {
-            latitude = new BigDecimal(lat);
-            longitude = new BigDecimal(lon);
-            headingValue = Integer.parseInt(heading);
-        } catch (NumberFormatException e) {
-            String message = "Failed to parse coordinates: lat=%s, lon=%s, heading=%s".formatted(lat, lon, heading);
-
-            throw new IllegalArgumentException(message, e);
-        }
+        BigDecimal latitude = parseCoordinate(lat);
+        BigDecimal longitude = parseCoordinate(lon);
+        int headingValue = parseHeading(heading);
 
         return new Coordinates(latitude, longitude, headingValue);
     }

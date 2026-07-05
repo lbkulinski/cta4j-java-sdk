@@ -2,6 +2,7 @@ package com.cta4j.bus.prediction.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
@@ -16,8 +17,6 @@ import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -29,8 +28,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class PredictionsApiImpl implements PredictionsApi {
-    private static final Logger log = LoggerFactory.getLogger(PredictionsApiImpl.class);
-
     private static final TypeReference<CtaResponse<CtaPredictionBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -146,19 +143,8 @@ public final class PredictionsApiImpl implements PredictionsApi {
                               .toList();
         }
 
-        if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", BusApiConstants.PREDICTIONS_ENDPOINT);
+        ApiUtils.checkErrors(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
 
-            return List.of();
-        }
-
-        boolean notFound = errors.stream()
-                                 .allMatch(CtaPredictionError::notFound);
-
-        if (notFound) {
-            return List.of();
-        }
-
-        throw new Cta4jBusException(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
+        return List.of();
     }
 }

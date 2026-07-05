@@ -15,8 +15,6 @@ import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -29,8 +27,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class VehiclesApiImpl implements VehiclesApi {
-    private static final Logger log = LoggerFactory.getLogger(VehiclesApiImpl.class);
-
     private static final TypeReference<CtaResponse<CtaVehicleBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -130,19 +126,8 @@ public final class VehiclesApiImpl implements VehiclesApi {
                            .toList();
         }
 
-        if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", BusApiConstants.VEHICLES_ENDPOINT);
+        ApiUtils.checkErrors(errors, BusApiConstants.VEHICLES_ENDPOINT);
 
-            return List.of();
-        }
-
-        boolean notFound = errors.stream()
-                                 .allMatch(CtaVehicleError::notFound);
-
-        if (notFound) {
-            return List.of();
-        }
-
-        throw new Cta4jBusException(errors, BusApiConstants.VEHICLES_ENDPOINT);
+        return List.of();
     }
 }

@@ -57,7 +57,7 @@ public final class Qualifiers {
         } catch (DateTimeParseException e) {
             String message = "Failed to parse timestamp: %s".formatted(timestamp);
 
-            throw new IllegalArgumentException(message);
+            throw new IllegalArgumentException(message, e);
         }
     }
 

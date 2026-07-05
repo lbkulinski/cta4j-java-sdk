@@ -93,7 +93,11 @@ public final class FollowApiImpl implements FollowApi {
         }
 
         if (errorCode != FollowErrorCode.OK) {
-            String message = Objects.requireNonNullElse(followResponse.errNm(), "An unknown error occurred.");
+            String errNm = followResponse.errNm();
+
+            String message = (errNm == null || errNm.isBlank())
+                ? "An unknown error occurred."
+                : errNm;
 
             throw new Cta4jFollowException(message, errCd);
         }

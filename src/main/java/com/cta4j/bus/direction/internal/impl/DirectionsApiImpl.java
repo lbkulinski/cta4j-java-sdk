@@ -2,6 +2,7 @@ package com.cta4j.bus.direction.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.direction.DirectionsApi;
@@ -12,8 +13,6 @@ import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -25,8 +24,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class DirectionsApiImpl implements DirectionsApi {
-    private static final Logger log = LoggerFactory.getLogger(DirectionsApiImpl.class);
-
     private static final TypeReference<CtaResponse<CtaDirectionBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -83,19 +80,8 @@ public final class DirectionsApiImpl implements DirectionsApi {
                              .toList();
         }
 
-        if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", BusApiConstants.DIRECTIONS_ENDPOINT);
+        ApiUtils.checkErrors(errors, BusApiConstants.DIRECTIONS_ENDPOINT);
 
-            return List.of();
-        }
-
-        boolean notFound = errors.stream()
-                                 .allMatch(CtaDirectionError::notFound);
-
-        if (notFound) {
-            return List.of();
-        }
-
-        throw new Cta4jBusException(errors, BusApiConstants.DIRECTIONS_ENDPOINT);
+        return List.of();
     }
 }

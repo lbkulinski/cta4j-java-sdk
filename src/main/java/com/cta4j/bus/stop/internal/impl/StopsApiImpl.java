@@ -15,8 +15,6 @@ import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -29,8 +27,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class StopsApiImpl implements StopsApi {
-    private static final Logger log = LoggerFactory.getLogger(StopsApiImpl.class);
-
     private static final TypeReference<CtaResponse<CtaStopBustimeResponse>> TYPE_REFERENCE = new TypeReference<>() {};
 
     private final BusApiConfig config;
@@ -62,13 +58,13 @@ public final class StopsApiImpl implements StopsApi {
     public List<Stop> findByIds(Collection<String> stopIds) {
         Objects.requireNonNull(stopIds);
 
+        stopIds = List.copyOf(stopIds);
+
         if (stopIds.isEmpty()) {
             return List.of();
         }
 
         ApiUtils.requireMaxIds(stopIds, "stop");
-
-        stopIds = List.copyOf(stopIds);
 
         String stopIdsString = String.join(",", stopIds);
 
@@ -119,19 +115,8 @@ public final class StopsApiImpl implements StopsApi {
                         .toList();
         }
 
-        if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", BusApiConstants.STOPS_ENDPOINT);
+        ApiUtils.checkErrors(errors, BusApiConstants.STOPS_ENDPOINT);
 
-            return List.of();
-        }
-
-        boolean notFound = errors.stream()
-                                 .allMatch(CtaStopError::notFound);
-
-        if (notFound) {
-            return List.of();
-        }
-
-        throw new Cta4jBusException(errors, BusApiConstants.STOPS_ENDPOINT);
+        return List.of();
     }
 }

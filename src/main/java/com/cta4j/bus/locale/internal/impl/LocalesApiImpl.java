@@ -9,13 +9,12 @@ import com.cta4j.bus.locale.internal.mapper.SupportedLocaleMapper;
 import com.cta4j.bus.locale.internal.wire.CtaLocale;
 import com.cta4j.bus.locale.internal.wire.CtaLocaleBustimeResponse;
 import com.cta4j.bus.locale.internal.wire.CtaLocaleError;
+import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.locale.model.SupportedLocale;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
@@ -28,8 +27,6 @@ import java.util.Objects;
 @ApiStatus.Internal
 @NullMarked
 public final class LocalesApiImpl implements LocalesApi {
-    private static final Logger log = LoggerFactory.getLogger(LocalesApiImpl.class);
-
     private static final TypeReference<CtaResponse<CtaLocaleBustimeResponse>> TYPE_REFERENCE =
         new TypeReference<>() {};
 
@@ -121,12 +118,8 @@ public final class LocalesApiImpl implements LocalesApi {
                              .toList();
         }
 
-        if (errors == null || errors.isEmpty()) {
-            log.warn("Received empty response from {}", BusApiConstants.LOCALES_ENDPOINT);
+        ApiUtils.checkErrors(errors, BusApiConstants.LOCALES_ENDPOINT);
 
-            return List.of();
-        }
-
-        throw new Cta4jBusException(errors, BusApiConstants.LOCALES_ENDPOINT);
+        return List.of();
     }
 }
