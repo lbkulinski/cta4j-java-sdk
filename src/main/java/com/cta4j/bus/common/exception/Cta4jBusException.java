@@ -17,6 +17,7 @@ public final class Cta4jBusException extends Cta4jException {
      *
      * @param message the detail message
      * @param endpoint the endpoint associated with the exception
+     * @throws NullPointerException if {@code endpoint} is {@code null}
      */
     public Cta4jBusException(String message, String endpoint) {
         super(message, endpoint);
@@ -28,6 +29,7 @@ public final class Cta4jBusException extends Cta4jException {
      * @param message the detail message
      * @param endpoint the endpoint associated with the exception
      * @param cause the cause of the exception
+     * @throws NullPointerException if {@code endpoint} is {@code null}
      */
     public Cta4jBusException(String message, String endpoint, Throwable cause) {
         super(message, endpoint, cause);
@@ -38,6 +40,8 @@ public final class Cta4jBusException extends Cta4jException {
      *
      * @param errors the list of {@link CtaError} objects
      * @param endpoint the endpoint associated with the exception
+     * @throws NullPointerException if {@code errors} or {@code endpoint} is {@code null}, or if {@code errors}
+     * contains {@code null} elements
      */
     public Cta4jBusException(List<? extends CtaError> errors, String endpoint) {
         super(joinMessages(errors), endpoint);

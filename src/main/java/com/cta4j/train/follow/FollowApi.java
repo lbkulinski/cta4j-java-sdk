@@ -1,5 +1,6 @@
 package com.cta4j.train.follow;
 
+import com.cta4j.train.follow.exception.Cta4jFollowException;
 import com.cta4j.train.follow.model.FollowTrain;
 import org.jspecify.annotations.NullMarked;
 
@@ -17,8 +18,9 @@ public interface FollowApi {
      *
      * @param run the run number of the train
      * @return an {@link Optional} containing the {@link FollowTrain} if found, or an empty {@link Optional} if no
-     * train exists with the given run number
+     * train is found for the given run number
      * @throws NullPointerException if {@code run} is {@code null}
+     * @throws Cta4jFollowException if the API returns an error response or the response cannot be parsed
      */
     Optional<FollowTrain> findByRun(String run);
 }

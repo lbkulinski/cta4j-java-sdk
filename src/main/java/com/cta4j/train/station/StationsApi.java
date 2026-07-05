@@ -1,5 +1,6 @@
 package com.cta4j.train.station;
 
+import com.cta4j.train.common.exception.Cta4jTrainException;
 import com.cta4j.train.station.model.Station;
 import org.jspecify.annotations.NullMarked;
 
@@ -19,7 +20,8 @@ public interface StationsApi {
     /**
      * Retrieves all available stations.
      *
-     * @return a {@link List} of all available {@link Station}s
+     * @return a {@link List} of all available {@link Station}s, or an empty {@link List} if no stations are found
+     * @throws Cta4jTrainException if the API returns an error response or the response cannot be parsed
      */
     List<Station> list();
 }

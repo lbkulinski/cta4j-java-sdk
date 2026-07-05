@@ -19,6 +19,7 @@ public class Cta4jException extends RuntimeException {
      *
      * @param message the detail message
      * @param endpoint the endpoint associated with the exception
+     * @throws NullPointerException if {@code endpoint} is {@code null}
      */
     public Cta4jException(String message, String endpoint) {
         super(message);
@@ -32,6 +33,7 @@ public class Cta4jException extends RuntimeException {
      * @param message the detail message
      * @param endpoint the endpoint associated with the exception
      * @param cause the cause of the exception
+     * @throws NullPointerException if {@code endpoint} is {@code null}
      */
     public Cta4jException(String message, String endpoint, Throwable cause) {
         super(message, cause);

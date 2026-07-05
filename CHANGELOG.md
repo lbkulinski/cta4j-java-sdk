@@ -14,9 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive test suite covering `*ApiImpl` classes (WireMock integration tests), MapStruct mappers, domain
   models, enums, query objects, and qualifiers.
 - JaCoCo code coverage reporting integrated into the Maven build.
-- `@throws Cta4jException` documented on all public API methods that may throw on error or parse failure.
-- `ApiUtils.parseErrCd` (train) — parses the raw `errCd` string from train API responses into an `int`, throwing
-  `Cta4jException` on non-numeric or negative values.
+- `@throws` javadoc documented on every public API method that may throw on error or parse failure, using the
+  feature-specific exception type (e.g. `Cta4jBusException` on bus interfaces; `Cta4jArrivalsException`/
+  `Cta4jFollowException`/`Cta4jLocationsException`/`Cta4jTrainException` on train interfaces).
 - Structured exception hierarchy: `Cta4jBusException` (bus, shared across every feature) and `Cta4jTrainException`
   (train, shared across every feature; used directly by `StationsApiImpl` and train `Qualifiers`), plus
   feature-specific `Cta4jArrivalsException`/`Cta4jFollowException`/`Cta4jLocationsException`, each exposing a

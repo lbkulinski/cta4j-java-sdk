@@ -20,6 +20,7 @@ public class Cta4jTrainException extends Cta4jException {
      *
      * @param message the detail message
      * @param endpoint the endpoint associated with the exception
+     * @throws NullPointerException if {@code endpoint} is {@code null}
      */
     public Cta4jTrainException(String message, String endpoint) {
         super(message, endpoint);
@@ -33,6 +34,7 @@ public class Cta4jTrainException extends Cta4jException {
      * @param message the detail message
      * @param endpoint the endpoint associated with the exception
      * @param cause the cause of the exception
+     * @throws NullPointerException if {@code endpoint} is {@code null}
      */
     public Cta4jTrainException(String message, String endpoint, Throwable cause) {
         super(message, endpoint, cause);
@@ -46,6 +48,7 @@ public class Cta4jTrainException extends Cta4jException {
      * @param message the detail message
      * @param endpoint the endpoint associated with the exception
      * @param rawErrorCode the raw error code associated with the exception
+     * @throws NullPointerException if {@code endpoint} is {@code null}
      */
     public Cta4jTrainException(String message, String endpoint, int rawErrorCode) {
         super(message, endpoint);
