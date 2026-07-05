@@ -89,7 +89,7 @@ public final class PatternsApiImpl implements PatternsApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jBusException(message, BusApiConstants.PATTERNS_ENDPOINT, e);
         }

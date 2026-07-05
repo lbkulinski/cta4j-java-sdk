@@ -94,7 +94,7 @@ public final class DetoursApiImpl implements DetoursApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jBusException(message, BusApiConstants.DETOURS_ENDPOINT, e);
         }

@@ -58,7 +58,7 @@ public final class FollowApiImpl implements FollowApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jFollowException(message, e);
         }
@@ -95,7 +95,7 @@ public final class FollowApiImpl implements FollowApi {
         if (errorCode != FollowErrorCode.OK) {
             String errNm = followResponse.errNm();
 
-            String message = (errNm == null || errNm.isBlank())
+            String message = errNm == null || errNm.isBlank()
                 ? "An unknown error occurred."
                 : errNm;
 

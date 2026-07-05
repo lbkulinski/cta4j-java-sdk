@@ -55,7 +55,7 @@ public final class DirectionsApiImpl implements DirectionsApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jBusException(message, BusApiConstants.DIRECTIONS_ENDPOINT, e);
         }

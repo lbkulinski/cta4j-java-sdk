@@ -51,21 +51,24 @@ Shared types live in `bus/common/` or `train/common/`. Cross-cutting types (geo,
 ## Wire Layer Conventions
 
 - All wire records are `@ApiStatus.Internal` and not part of the public API.
-- Each feature has a typed `Cta<Feature>BustimeResponse` record with `@Nullable` fields for both the data list and the error list.
-- Each feature has a typed `Cta<Feature>Error` record implementing `CtaError` (bus) or extending the train equivalent. Typed error fields (e.g. `rt`, `stpid`, `vid`) identify which input caused the error and drive not-found decisions — do not collapse these into a generic map.
+- **Bus**: each feature has a typed `Cta<Feature>BustimeResponse` record (envelope field `bustimeResponse`, mapped from `"bustime-response"`) with `@Nullable` fields for both the data list and a typed `Cta<Feature>Error` list. Each `Cta<Feature>Error` implements `CtaError` and overrides `notFound()` using its own typed fields (e.g. `rt`, `stpid`, `vid`) to identify which input caused the error — do not collapse these into a generic map.
+- **Train**: there is no shared `CtaError`-style record. Each feature's wire response record carries `errCd`/`errNm` fields directly; `errCd` is parsed to an `int` and mapped via `<Feature>ErrorCode.fromCode(int)` to a feature-specific enum (e.g. `ArrivalsErrorCode`) whose constants identify resource-specific ("not found") codes.
 - All wire records use `@JsonIgnoreProperties(ignoreUnknown = true)`.
-- The outer envelope is `CtaResponse<T>` with a `bustimeResponse` field mapped from `"bustime-response"`.
+- The outer envelope is `CtaResponse<T>`, with a `bustimeResponse` field (bus) or a `ctatt` field (train).
 
 ## Error Handling Pattern
 
-All `*ApiImpl` classes follow this pattern in `makeRequest` / the main method body:
+**Bus** `*ApiImpl` classes returning a `List` follow this pattern in `makeRequest`:
 
 1. If the data list is non-null and non-empty → map and return it.
-2. If the error list is null or empty → log a warn and return `List.of()`.
-3. Check whether all errors are resource-specific (not-found) by inspecting typed fields (e.g. `error.rt() != null`, `error.stpid() != null || error.vid() != null`). If so → return `List.of()`.
-4. Otherwise → throw `Cta4jException` via `ApiUtils.buildErrorMessage(...)`.
+2. Otherwise, call `ApiUtils.checkErrors(errors, endpoint)` (`bus/common/internal/util/ApiUtils`): it logs a warn and returns if the error list is null/empty, returns if every error's `notFound()` is `true`, or throws `Cta4jBusException` otherwise.
+3. Return `List.of()`.
 
-`find*` methods return an empty `List` for not-found; they never throw for missing resources.
+`SystemTimeApiImpl` is the one exception: it returns a single `Instant`, not a `List`, so a missing value has no valid "empty" result — it throws directly instead of calling `ApiUtils.checkErrors`.
+
+**Train** `*ApiImpl` classes follow a related but distinct pattern (no shared helper — each impl inlines it with its own exception type): parse `errCd` to the feature's `*ErrorCode` enum; if it's a resource-specific not-found code → return an empty result (or `Optional.empty()`); if it isn't `OK` → throw the feature-specific exception (e.g. `Cta4jArrivalsException`) using `errNm` as the message, falling back to a default message when `errNm` is `null` or blank.
+
+`find*` methods return an empty `List` (or `Optional.empty()`) for not-found; they never throw for missing resources.
 
 ## Annotation Ordering
 

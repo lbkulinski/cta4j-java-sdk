@@ -101,7 +101,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jBusException(message, BusApiConstants.VEHICLES_ENDPOINT, e);
         }

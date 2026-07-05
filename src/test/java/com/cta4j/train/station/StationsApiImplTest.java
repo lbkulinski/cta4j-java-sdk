@@ -93,6 +93,26 @@ class StationsApiImplTest {
     }
 
     @Test
+    void list_throwsCta4jTrainException_whenStationsUrlIsInvalid() {
+        TrainApiConfig config = new TrainApiConfig(
+            "http",
+            "localhost",
+            this.server.port(),
+            "not a valid url",
+            "testkey"
+        );
+        StationsApiImpl invalidApi = new StationsApiImpl(config);
+
+        assertThatThrownBy(invalidApi::list)
+            .isInstanceOf(Cta4jTrainException.class)
+            .hasMessage("Invalid stations URL")
+            .satisfies(e -> assertThat(((Cta4jTrainException) e).getEndpoint()).isEqualTo("not a valid url"))
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(IllegalArgumentException.class));
+
+        this.server.verify(0, anyRequestedFor(anyUrl()));
+    }
+
+    @Test
     void list_throwsCta4jTrainException_whenServerReturnsErrorStatus() {
         this.server.stubFor(get(urlPathEqualTo(STATIONS_PATH))
             .willReturn(aResponse()

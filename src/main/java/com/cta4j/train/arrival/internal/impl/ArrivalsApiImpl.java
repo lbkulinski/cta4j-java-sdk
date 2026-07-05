@@ -92,7 +92,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jArrivalsException(message, e);
         }
@@ -129,7 +129,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         if (errorCode != ArrivalsErrorCode.OK) {
             String errNm = arrivalsResponse.errNm();
 
-            String message = (errNm == null || errNm.isBlank())
+            String message = errNm == null || errNm.isBlank()
                 ? "An unknown error occurred."
                 : errNm;
 

@@ -14,6 +14,7 @@ import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,17 +31,27 @@ public final class StationsApiImpl implements StationsApi {
 
     @Override
     public List<Station> list() {
+        String stationsUrl = this.config.stationsUrl();
+
+        URI stationsUri;
+
+        try {
+            stationsUri = URI.create(stationsUrl);
+        } catch (IllegalArgumentException e) {
+            throw new Cta4jTrainException("Invalid stations URL", stationsUrl, e);
+        }
+
         String response;
 
         try {
-            response = Request.get(this.config.stationsUrl())
+            response = Request.get(stationsUri)
                               .execute()
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
-            throw new Cta4jTrainException(message, this.config.stationsUrl(), e);
+            throw new Cta4jTrainException(message, stationsUrl, e);
         }
 
         List<CtaStation> stations;
@@ -49,7 +60,7 @@ public final class StationsApiImpl implements StationsApi {
             stations = JsonMapper.shared()
                                  .readValue(response, TYPE_REFERENCE);
         } catch (JacksonException e) {
-            throw new Cta4jTrainException("Failed to parse response", this.config.stationsUrl(), e);
+            throw new Cta4jTrainException("Failed to parse response", stationsUrl, e);
         }
 
         return stations.stream()

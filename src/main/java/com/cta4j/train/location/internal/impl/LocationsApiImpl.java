@@ -70,7 +70,7 @@ public final class LocationsApiImpl implements LocationsApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jLocationsException(message, e);
         }
@@ -103,7 +103,7 @@ public final class LocationsApiImpl implements LocationsApi {
         if (errorCode != LocationsErrorCode.OK) {
             String errNm = locationResponse.errNm();
 
-            String message = (errNm == null || errNm.isBlank())
+            String message = errNm == null || errNm.isBlank()
                 ? "An unknown error occurred."
                 : errNm;
 

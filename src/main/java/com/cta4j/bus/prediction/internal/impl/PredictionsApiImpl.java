@@ -118,7 +118,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
                               .returnContent()
                               .asString();
         } catch (IOException e) {
-            String message = e.getMessage();
+            String message = Objects.requireNonNullElse(e.getMessage(), "Request failed");
 
             throw new Cta4jBusException(message, BusApiConstants.PREDICTIONS_ENDPOINT, e);
         }
