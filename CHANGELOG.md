@@ -13,7 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Comprehensive test suite covering `*ApiImpl` classes (WireMock integration tests), MapStruct mappers, domain
   models, enums, query objects, and qualifiers.
-- JaCoCo code coverage reporting integrated into the Maven build.
 - `@throws` javadoc documented on every public API method that may throw on error or parse failure, using the
   feature-specific exception type (e.g. `Cta4jBusException` on bus interfaces; `Cta4jArrivalsException`/
   `Cta4jFollowException`/`Cta4jLocationsException`/`Cta4jTrainException` on train interfaces).
@@ -24,36 +23,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `LocationsErrorCode` enums (verified against the CTA Train Tracker API's documented error codes).
 - `Cta4jException.getEndpoint()` — a required, always-populated accessor for the endpoint or URL associated with
   any exception the SDK throws.
-- `BusApiConstants`/`TrainApiConstants` — public constants holders for each transit type's scheme, default host,
-  and per-feature endpoint paths.
 
 ### Changed
 
-- `StopsPredictionsQuery` and `VehiclesPredictionsQuery` now enforce the CTA API's 10-ID-per-request limit at
-  construction time, throwing `IllegalArgumentException` instead of deferring the error to the API.
-- `StopsPredictionsQuery.Builder.maxResults` and `VehiclesPredictionsQuery.Builder.maxResults` parameter type
-  changed from `Integer` to `int`.
 - Internal wire layer refactored: the generic `CtaBustimeResponse<T>` envelope replaced with feature-specific typed
   response records per endpoint, improving type safety and removing cross-feature coupling.
-- `BusApiContext`/`TrainApiContext` replaced with `BusApiConfig`/`TrainApiConfig`, adding `scheme` and `port`
-  fields to support configurable HTTP schemes.
 - `CtaError` (bus) refactored from a concrete record to an interface, allowing each feature to define its own typed
   error record with resource-specific fields for accurate not-found classification.
-- `Cta4jException` reverts to a plain, non-`final` class (see Removed below) so the new exception hierarchy can
-  extend it; `getMessage()` now returns CTA's raw reported text unmodified instead of a
-  `"Error response from %s: ..."` template, since `getEndpoint()` and the error-code accessors now carry that
-  context as structured fields.
+- Bumped `tools.jackson.core:jackson-databind` from **3.1.3** → **3.2.0**
 
-### Removed
+### Breaking Changes ⚠️
 
-- `Cta4jException` is no longer `final` and can once again be subclassed — this reverses that change from earlier
-  in this same 6.0.0 cycle; see the new exception hierarchy above.
-- The ad hoc magic-number not-found checks introduced earlier this cycle (`FollowApiImpl.NOT_FOUND_ERROR_CODE`,
-  `ArrivalsApiImpl.INVALID_MAPID_ERROR_CODE`/`INVALID_STPID_ERROR_CODE`), replaced by comparisons against the new
-  error-code enums.
-- `train.common.internal.wire.CtaError` and `ApiUtils.buildErrorMessage` (both bus and train) — message formatting
-  is now owned by the exception classes themselves (`Cta4jBusException` joins bus error messages; train error text
-  is passed through unmodified).
+- `StopsPredictionsQuery.Builder.maxResults` and `VehiclesPredictionsQuery.Builder.maxResults` now take `int`
+  instead of `Integer`; passing `null` no longer compiles.
+- `StopsPredictionsQuery` and `VehiclesPredictionsQuery` now throw `IllegalArgumentException` at construction time
+  when more than 10 IDs are supplied, instead of deferring to the CTA API's own error response.
+- `Cta4jException.getMessage()` no longer includes the `"Error response from %s: ..."` prefix; it now returns
+  CTA's raw reported text unmodified, since `getEndpoint()` and the error-code accessors now carry that context as
+  structured fields.
 
 ## [5.0.0] - 2026-05-22
 
