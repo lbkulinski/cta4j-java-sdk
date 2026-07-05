@@ -8,6 +8,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.time.Instant;
 
@@ -87,6 +88,21 @@ class SystemTimeApiImplTest {
             .isInstanceOf(Cta4jBusException.class)
             .hasMessage("Failed to parse response")
             .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
-                .isEqualTo(BusApiConstants.SYSTEM_TIME_ENDPOINT));
+                .isEqualTo(BusApiConstants.SYSTEM_TIME_ENDPOINT))
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(JacksonException.class));
+    }
+
+    @Test
+    void systemTime_throwsCta4jBusException_whenServerReturnsErrorStatus() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/gettime"))
+            .willReturn(aResponse()
+                .withStatus(500)));
+
+        assertThatThrownBy(() -> this.api.systemTime())
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessageContaining("status code: 500")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.SYSTEM_TIME_ENDPOINT))
+            .satisfies(e -> assertThat(e.getCause()).isNotNull());
     }
 }

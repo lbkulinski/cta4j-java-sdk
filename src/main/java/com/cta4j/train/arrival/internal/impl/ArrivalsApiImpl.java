@@ -8,7 +8,6 @@ import com.cta4j.train.arrival.query.MapArrivalQuery;
 import com.cta4j.train.arrival.query.StopArrivalQuery;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.mapper.ArrivalMapper;
-import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.util.TrainApiConstants;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.internal.wire.CtaResponse;
@@ -109,7 +108,17 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
 
         CtaArrivalsResponse arrivalsResponse = ctaResponse.ctatt();
 
-        int errCd = ApiUtils.parseErrCd(arrivalsResponse.errCd(), TrainApiConstants.ARRIVALS_ENDPOINT);
+        int errCd;
+
+        try {
+            errCd = Integer.parseInt(arrivalsResponse.errCd());
+        } catch (NumberFormatException e) {
+            throw new Cta4jArrivalsException("Failed to parse error code", e);
+        }
+
+        if (errCd < 0) {
+            throw new Cta4jArrivalsException("Unknown error code", errCd);
+        }
 
         ArrivalsErrorCode errorCode = ArrivalsErrorCode.fromCode(errCd);
 

@@ -10,6 +10,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.util.List;
 
@@ -87,6 +88,21 @@ class StationsApiImplTest {
             .isInstanceOf(Cta4jTrainException.class)
             .hasMessage("Failed to parse response")
             .satisfies(e -> assertThat(((Cta4jTrainException) e).getEndpoint())
-                .isEqualTo(this.stationsUrl));
+                .isEqualTo(this.stationsUrl))
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(JacksonException.class));
+    }
+
+    @Test
+    void list_throwsCta4jTrainException_whenServerReturnsErrorStatus() {
+        this.server.stubFor(get(urlPathEqualTo(STATIONS_PATH))
+            .willReturn(aResponse()
+                .withStatus(500)));
+
+        assertThatThrownBy(() -> this.api.list())
+            .isInstanceOf(Cta4jTrainException.class)
+            .hasMessageContaining("status code: 500")
+            .satisfies(e -> assertThat(((Cta4jTrainException) e).getEndpoint())
+                .isEqualTo(this.stationsUrl))
+            .satisfies(e -> assertThat(e.getCause()).isNotNull());
     }
 }

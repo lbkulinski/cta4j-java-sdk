@@ -12,7 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Comprehensive test suite covering `*ApiImpl` classes (WireMock integration tests), MapStruct mappers, domain
-  models, enums, query objects, qualifiers, and `HttpClient` (unit tests).
+  models, enums, query objects, and qualifiers.
 - JaCoCo code coverage reporting integrated into the Maven build.
 - `@throws Cta4jException` documented on all public API methods that may throw on error or parse failure.
 - `ApiUtils.parseErrCd` (train) — parses the raw `errCd` string from train API responses into an `int`, throwing

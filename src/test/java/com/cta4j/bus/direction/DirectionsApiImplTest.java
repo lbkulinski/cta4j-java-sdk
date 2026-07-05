@@ -9,6 +9,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.util.List;
 
@@ -99,6 +100,21 @@ class DirectionsApiImplTest {
             .isInstanceOf(Cta4jBusException.class)
             .hasMessage("Failed to parse response")
             .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
-                .isEqualTo(BusApiConstants.DIRECTIONS_ENDPOINT));
+                .isEqualTo(BusApiConstants.DIRECTIONS_ENDPOINT))
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(JacksonException.class));
+    }
+
+    @Test
+    void findByRouteId_throwsCta4jBusException_whenServerReturnsErrorStatus() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getdirections"))
+            .willReturn(aResponse()
+                .withStatus(500)));
+
+        assertThatThrownBy(() -> this.api.findByRouteId("22"))
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessageContaining("status code: 500")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.DIRECTIONS_ENDPOINT))
+            .satisfies(e -> assertThat(e.getCause()).isNotNull());
     }
 }

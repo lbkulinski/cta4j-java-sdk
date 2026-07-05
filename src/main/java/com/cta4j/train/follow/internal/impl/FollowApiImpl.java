@@ -1,7 +1,6 @@
 package com.cta4j.train.follow.internal.impl;
 
 import com.cta4j.train.common.internal.config.TrainApiConfig;
-import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.util.TrainApiConstants;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.follow.FollowApi;
@@ -75,7 +74,17 @@ public final class FollowApiImpl implements FollowApi {
 
         CtaFollowResponse followResponse = ctaResponse.ctatt();
 
-        int errCd = ApiUtils.parseErrCd(followResponse.errCd(), TrainApiConstants.FOLLOW_ENDPOINT);
+        int errCd;
+
+        try {
+            errCd = Integer.parseInt(followResponse.errCd());
+        } catch (NumberFormatException e) {
+            throw new Cta4jFollowException("Failed to parse error code", e);
+        }
+
+        if (errCd < 0) {
+            throw new Cta4jFollowException("Unknown error code", errCd);
+        }
 
         FollowErrorCode errorCode = FollowErrorCode.fromCode(errCd);
 

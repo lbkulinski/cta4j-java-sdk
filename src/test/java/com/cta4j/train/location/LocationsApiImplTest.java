@@ -1,7 +1,6 @@
 package com.cta4j.train.location;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.location.exception.Cta4jLocationsException;
@@ -12,6 +11,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.util.List;
 
@@ -91,7 +91,8 @@ class LocationsApiImplTest {
             .isInstanceOf(Cta4jLocationsException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
-                .isEqualTo(LocationsErrorCode.UNKNOWN));
+                .isEqualTo(LocationsErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
     @Test
@@ -104,7 +105,9 @@ class LocationsApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
             .isInstanceOf(Cta4jLocationsException.class)
-            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode()).isNull());
+            .hasMessage("Failed to parse response")
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode()).isNull())
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(JacksonException.class));
     }
 
     @Test
@@ -149,7 +152,7 @@ class LocationsApiImplTest {
     }
 
     @Test
-    void findByLines_throwsCta4jException_whenErrCdIsNotNumeric() {
+    void findByLines_throwsCta4jLocationsException_whenErrCdIsNotNumeric() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -157,6 +160,37 @@ class LocationsApiImplTest {
                 .withBody(TestFixtures.read("train/location/invalid_err_cd.json"))));
 
         assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jLocationsException.class)
+            .hasMessage("Failed to parse error code")
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode()).isNull())
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(NumberFormatException.class));
+    }
+
+    @Test
+    void findByLines_throwsCta4jLocationsException_whenErrCdIsNegative() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"-1\",\"errNm\":\"Unexpected error\"}}")));
+
+        assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
+            .isInstanceOf(Cta4jLocationsException.class)
+            .hasMessage("Unknown error code")
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
+                .isEqualTo(LocationsErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jLocationsException) e).getRawErrorCode()).isEqualTo(-1));
+    }
+
+    @Test
+    void findByLines_throwsCta4jLocationsException_whenServerReturnsErrorStatus() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttpositions.aspx"))
+            .willReturn(aResponse()
+                .withStatus(500)));
+
+        assertThatThrownBy(() -> this.api.findByLines(List.of(TrainLine.RED)))
+            .isInstanceOf(Cta4jLocationsException.class)
+            .hasMessageContaining("status code: 500")
+            .satisfies(e -> assertThat(e.getCause()).isNotNull());
     }
 }

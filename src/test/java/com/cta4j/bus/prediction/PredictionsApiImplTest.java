@@ -12,6 +12,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.util.List;
 
@@ -122,7 +123,24 @@ class PredictionsApiImplTest {
             .isInstanceOf(Cta4jBusException.class)
             .hasMessage("Failed to parse response")
             .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
-                .isEqualTo(BusApiConstants.PREDICTIONS_ENDPOINT));
+                .isEqualTo(BusApiConstants.PREDICTIONS_ENDPOINT))
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(JacksonException.class));
+    }
+
+    @Test
+    void findByStopIds_throwsCta4jBusException_whenServerReturnsErrorStatus() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .willReturn(aResponse()
+                .withStatus(500)));
+
+        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
+
+        assertThatThrownBy(() -> this.api.findByStopIds(query))
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessageContaining("status code: 500")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.PREDICTIONS_ENDPOINT))
+            .satisfies(e -> assertThat(e.getCause()).isNotNull());
     }
 
     @Test

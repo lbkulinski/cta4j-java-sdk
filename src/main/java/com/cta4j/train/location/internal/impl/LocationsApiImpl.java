@@ -1,7 +1,6 @@
 package com.cta4j.train.location.internal.impl;
 
 import com.cta4j.train.common.internal.config.TrainApiConfig;
-import com.cta4j.train.common.internal.util.ApiUtils;
 import com.cta4j.train.common.internal.util.TrainApiConstants;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.common.model.TrainLine;
@@ -87,7 +86,17 @@ public final class LocationsApiImpl implements LocationsApi {
 
         CtaLocationResponse locationResponse = ctaResponse.ctatt();
 
-        int errCd = ApiUtils.parseErrCd(locationResponse.errCd(), TrainApiConstants.POSITIONS_ENDPOINT);
+        int errCd;
+
+        try {
+            errCd = Integer.parseInt(locationResponse.errCd());
+        } catch (NumberFormatException e) {
+            throw new Cta4jLocationsException("Failed to parse error code", e);
+        }
+
+        if (errCd < 0) {
+            throw new Cta4jLocationsException("Unknown error code", errCd);
+        }
 
         LocationsErrorCode errorCode = LocationsErrorCode.fromCode(errCd);
 

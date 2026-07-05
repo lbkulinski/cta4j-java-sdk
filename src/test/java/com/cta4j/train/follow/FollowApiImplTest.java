@@ -1,7 +1,6 @@
 package com.cta4j.train.follow;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.follow.exception.Cta4jFollowException;
 import com.cta4j.train.follow.exception.FollowErrorCode;
@@ -11,6 +10,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.util.Optional;
 
@@ -98,7 +98,8 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN));
+                .isEqualTo(FollowErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
     }
 
     @Test
@@ -111,7 +112,9 @@ class FollowApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByRun("123"))
             .isInstanceOf(Cta4jFollowException.class)
-            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode()).isNull());
+            .hasMessage("Failed to parse response")
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode()).isNull())
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(JacksonException.class));
     }
 
     @Test
@@ -129,7 +132,7 @@ class FollowApiImplTest {
     }
 
     @Test
-    void findByRun_throwsCta4jException_whenErrCdIsNotNumeric() {
+    void findByRun_throwsCta4jFollowException_whenErrCdIsNotNumeric() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -137,6 +140,37 @@ class FollowApiImplTest {
                 .withBody(TestFixtures.read("train/follow/invalid_err_cd.json"))));
 
         assertThatThrownBy(() -> this.api.findByRun("123"))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jFollowException.class)
+            .hasMessage("Failed to parse error code")
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode()).isNull())
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(NumberFormatException.class));
+    }
+
+    @Test
+    void findByRun_throwsCta4jFollowException_whenErrCdIsNegative() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"-1\",\"errNm\":\"Unexpected error\"}}")));
+
+        assertThatThrownBy(() -> this.api.findByRun("123"))
+            .isInstanceOf(Cta4jFollowException.class)
+            .hasMessage("Unknown error code")
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
+                .isEqualTo(FollowErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(-1));
+    }
+
+    @Test
+    void findByRun_throwsCta4jFollowException_whenServerReturnsErrorStatus() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
+            .willReturn(aResponse()
+                .withStatus(500)));
+
+        assertThatThrownBy(() -> this.api.findByRun("123"))
+            .isInstanceOf(Cta4jFollowException.class)
+            .hasMessageContaining("status code: 500")
+            .satisfies(e -> assertThat(e.getCause()).isNotNull());
     }
 }

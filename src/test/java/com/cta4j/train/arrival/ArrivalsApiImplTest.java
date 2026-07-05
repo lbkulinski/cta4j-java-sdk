@@ -1,7 +1,6 @@
 package com.cta4j.train.arrival;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.common.exception.Cta4jException;
 import com.cta4j.train.arrival.exception.ArrivalsErrorCode;
 import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
@@ -14,6 +13,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.core.JacksonException;
 
 import java.util.List;
 
@@ -106,7 +106,8 @@ class ArrivalsApiImplTest {
             .isInstanceOf(Cta4jArrivalsException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
-                .isEqualTo(ArrivalsErrorCode.UNKNOWN));
+                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
     @Test
@@ -135,7 +136,9 @@ class ArrivalsApiImplTest {
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
-            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode()).isNull());
+            .hasMessage("Failed to parse response")
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode()).isNull())
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(JacksonException.class));
     }
 
     @Test
@@ -181,7 +184,8 @@ class ArrivalsApiImplTest {
             .isInstanceOf(Cta4jArrivalsException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
-                .isEqualTo(ArrivalsErrorCode.UNKNOWN));
+                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
     @Test
@@ -267,7 +271,7 @@ class ArrivalsApiImplTest {
     }
 
     @Test
-    void findByMapId_throwsCta4jException_whenErrCdIsNotNumeric() {
+    void findByMapId_throwsCta4jArrivalsException_whenErrCdIsNotNumeric() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
@@ -277,6 +281,41 @@ class ArrivalsApiImplTest {
         MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
-            .isInstanceOf(Cta4jException.class);
+            .isInstanceOf(Cta4jArrivalsException.class)
+            .hasMessage("Failed to parse error code")
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode()).isNull())
+            .satisfies(e -> assertThat(e.getCause()).isInstanceOf(NumberFormatException.class));
+    }
+
+    @Test
+    void findByMapId_throwsCta4jArrivalsException_whenErrCdIsNegative() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"-1\",\"errNm\":\"Unexpected error\"}}")));
+
+        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+
+        assertThatThrownBy(() -> this.api.findByMapId(query))
+            .isInstanceOf(Cta4jArrivalsException.class)
+            .hasMessage("Unknown error code")
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
+                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+            .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(-1));
+    }
+
+    @Test
+    void findByMapId_throwsCta4jArrivalsException_whenServerReturnsErrorStatus() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
+            .willReturn(aResponse()
+                .withStatus(500)));
+
+        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+
+        assertThatThrownBy(() -> this.api.findByMapId(query))
+            .isInstanceOf(Cta4jArrivalsException.class)
+            .hasMessageContaining("status code: 500")
+            .satisfies(e -> assertThat(e.getCause()).isNotNull());
     }
 }
