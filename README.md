@@ -36,13 +36,13 @@ After applying, you'll receive an API key by email. Keep it safe — you'll use 
 <dependency>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>6.0.0</version>
+    <version>6.1.0</version>
 </dependency>
 ```
 
 ### Gradle (Kotlin DSL)
 ```kotlin
-implementation("com.cta4j:cta4j-java-sdk:6.0.0")
+implementation("com.cta4j:cta4j-java-sdk:6.1.0")
 ```
 
 ---
