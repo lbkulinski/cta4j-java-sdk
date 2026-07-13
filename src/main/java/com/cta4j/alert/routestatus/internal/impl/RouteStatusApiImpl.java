@@ -1,6 +1,7 @@
 package com.cta4j.alert.routestatus.internal.impl;
 
 import com.cta4j.alert.common.internal.config.AlertApiConfig;
+import com.cta4j.alert.common.internal.util.AlertApiConstants;
 import com.cta4j.alert.routestatus.RouteStatusApi;
 import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.exception.RouteStatusErrorCode;
@@ -11,6 +12,7 @@ import com.cta4j.alert.routestatus.internal.wire.CtaRoutes;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import com.cta4j.alert.routestatus.model.ServiceType;
 import org.apache.hc.client5.http.fluent.Request;
+import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import tools.jackson.core.JacksonException;
@@ -32,7 +34,15 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
 
     @Override
     public List<RouteStatus> list() {
-        return List.of();
+        String url = new URIBuilder()
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(AlertApiConstants.ROUTE_STATUS_ENDPOINT)
+            .addParameter("outputType", "JSON")
+            .toString();
+
+        return this.makeRequest(url);
     }
 
     @Override
