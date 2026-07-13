@@ -7,8 +7,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,13 +18,11 @@ public record CtaRoutes(
     String timestamp,
 
     @JsonProperty("ErrorCode")
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-    List<String> errorCode,
+    String errorCode,
 
     @JsonProperty("ErrorMessage")
-    @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
     @Nullable
-    List<@Nullable String> errorMessage,
+    String errorMessage,
 
     @JsonProperty("RouteInfo")
     @JsonFormat(with = JsonFormat.Feature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
@@ -36,12 +32,6 @@ public record CtaRoutes(
     public CtaRoutes {
         Objects.requireNonNull(timestamp);
         Objects.requireNonNull(errorCode);
-
-        errorCode = List.copyOf(errorCode);
-
-        if (errorMessage != null) {
-            errorMessage = Collections.unmodifiableList(new ArrayList<>(errorMessage));
-        }
 
         if (routeInfo != null) {
             routeInfo = List.copyOf(routeInfo);
