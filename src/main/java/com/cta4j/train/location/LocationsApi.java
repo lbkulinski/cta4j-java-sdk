@@ -1,6 +1,6 @@
 package com.cta4j.train.location;
 
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.cta4j.train.location.exception.Cta4jLocationsException;
 import com.cta4j.train.location.model.TrainLocations;
 import org.jspecify.annotations.NullMarked;

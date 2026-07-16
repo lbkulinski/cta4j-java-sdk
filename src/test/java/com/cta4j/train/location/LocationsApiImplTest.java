@@ -2,7 +2,7 @@ package com.cta4j.train.location;
 
 import com.cta4j.TestFixtures;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.cta4j.train.location.exception.Cta4jLocationsException;
 import com.cta4j.train.location.exception.LocationsErrorCode;
 import com.cta4j.train.location.internal.impl.LocationsApiImpl;

@@ -1,4 +1,4 @@
-package com.cta4j.train.common.model;
+package com.cta4j.common.train;
 
 import org.jspecify.annotations.NullMarked;
 

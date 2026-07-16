@@ -1,5 +1,6 @@
 package com.cta4j.train.common.model;
 
+import com.cta4j.common.train.TrainLine;
 import org.jspecify.annotations.NullMarked;
 
 import java.time.Instant;

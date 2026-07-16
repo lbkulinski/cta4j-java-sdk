@@ -12,7 +12,7 @@ import com.cta4j.train.common.internal.util.TrainApiConstants;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.internal.wire.CtaResponse;
 import com.cta4j.train.common.model.Arrival;
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;

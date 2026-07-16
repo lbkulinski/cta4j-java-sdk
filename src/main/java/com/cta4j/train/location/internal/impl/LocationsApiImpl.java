@@ -3,7 +3,7 @@ package com.cta4j.train.location.internal.impl;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.util.TrainApiConstants;
 import com.cta4j.train.common.internal.wire.CtaResponse;
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.cta4j.train.location.LocationsApi;
 import com.cta4j.train.location.exception.Cta4jLocationsException;
 import com.cta4j.train.location.exception.LocationsErrorCode;

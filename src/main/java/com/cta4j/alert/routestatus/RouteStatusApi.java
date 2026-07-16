@@ -3,6 +3,8 @@ package com.cta4j.alert.routestatus;
 import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import com.cta4j.alert.routestatus.model.ServiceType;
+import com.cta4j.alert.routestatus.model.TrainRouteStatus;
+import com.cta4j.common.train.TrainLine;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
@@ -12,8 +14,8 @@ import java.util.Objects;
 /**
  * Provides access to route status-related endpoints of the CTA Alerts API.
  * <p>
- * This API allows retrieval of the status of all bus and train routes, or filtered by service type, route ID, or
- * station ID.
+ * This API allows retrieval of the status of all bus and train routes, or filtered by service type, bus route ID,
+ * train line, or station ID.
  */
 @NullMarked
 public interface RouteStatusApi {
@@ -54,31 +56,59 @@ public interface RouteStatusApi {
     }
 
     /**
-     * Retrieves route statuses for the specified route IDs.
+     * Retrieves route statuses for the specified bus route IDs.
      *
-     * @param routeIds a {@link Collection} of route IDs
-     * @return a {@link List} of {@link RouteStatus}es associated with the route IDs, or an empty {@link List} if no
-     * route statuses are found for the route IDs
+     * @param routeIds a {@link Collection} of bus route IDs
+     * @return a {@link List} of {@link RouteStatus}es associated with the bus route IDs, or an empty {@link List} if
+     * no route statuses are found for the bus route IDs
      * @throws NullPointerException if {@code routeIds} is {@code null} or contains {@code null} elements
      * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
      */
-    List<RouteStatus> findByRouteIds(Collection<String> routeIds);
+    List<RouteStatus> findByBusRouteIds(Collection<String> routeIds);
 
     /**
-     * Retrieves route statuses for the specified route ID.
+     * Retrieves route statuses for the specified bus route ID.
      *
-     * @param routeId the route ID
-     * @return a {@link List} of {@link RouteStatus}es associated with the route ID, or an empty {@link List} if no
-     * route statuses are found for the route ID
+     * @param routeId the bus route ID
+     * @return a {@link List} of {@link RouteStatus}es associated with the bus route ID, or an empty {@link List} if
+     * no route statuses are found for the bus route ID
      * @throws NullPointerException if {@code routeId} is {@code null}
      * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
      */
-    default List<RouteStatus> findByRouteId(String routeId) {
+    default List<RouteStatus> findByBusRouteId(String routeId) {
         Objects.requireNonNull(routeId);
 
         List<String> routeIds = List.of(routeId);
 
-        return this.findByRouteIds(routeIds);
+        return this.findByBusRouteIds(routeIds);
+    }
+
+    /**
+     * Retrieves route statuses for the specified train lines.
+     *
+     * @param lines a {@link Collection} of train lines
+     * @return a {@link List} of {@link TrainRouteStatus}es associated with the train lines, or an empty {@link List}
+     * if no route statuses are found for the train lines
+     * @throws NullPointerException if {@code lines} is {@code null} or contains {@code null} elements
+     * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
+     */
+    List<TrainRouteStatus> findByLines(Collection<TrainLine> lines);
+
+    /**
+     * Retrieves route statuses for the specified train line.
+     *
+     * @param line the train line
+     * @return a {@link List} of {@link TrainRouteStatus}es associated with the train line, or an empty {@link List}
+     * if no route statuses are found for the train line
+     * @throws NullPointerException if {@code line} is {@code null}
+     * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
+     */
+    default List<TrainRouteStatus> findByLine(TrainLine line) {
+        Objects.requireNonNull(line);
+
+        List<TrainLine> lines = List.of(line);
+
+        return this.findByLines(lines);
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.cta4j.train.arrival.query;
 
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
