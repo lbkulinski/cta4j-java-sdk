@@ -6,6 +6,7 @@ import com.cta4j.alert.routestatus.RouteStatusApi;
 import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.exception.RouteStatusErrorCode;
 import com.cta4j.alert.routestatus.internal.mapper.RouteStatusMapper;
+import com.cta4j.alert.routestatus.internal.mapper.TrainRouteStatusMapper;
 import com.cta4j.alert.routestatus.internal.wire.CtaRouteInfo;
 import com.cta4j.alert.routestatus.internal.wire.CtaRouteStatusResponse;
 import com.cta4j.alert.routestatus.internal.wire.CtaRoutes;
@@ -17,6 +18,9 @@ import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -25,11 +29,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @ApiStatus.Internal
 @NullMarked
 public final class RouteStatusApiImpl implements RouteStatusApi {
+    private static final Logger log = LoggerFactory.getLogger(RouteStatusApiImpl.class);
+
     private final AlertApiConfig config;
 
     public RouteStatusApiImpl(AlertApiConfig config) {
@@ -46,7 +53,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             .addParameter("outputType", "JSON")
             .toString();
 
-        return this.makeRequest(url);
+        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
     }
 
     @Override
@@ -73,7 +80,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             .addParameter("outputType", "JSON")
             .toString();
 
-        return this.makeRequest(url);
+        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
     }
 
     @Override
@@ -96,22 +103,63 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             }
         }
 
-        return List.of();
+        String routeIdsString = String.join(",", routeIdsList);
+
+        String url = new URIBuilder()
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(AlertApiConstants.ROUTE_STATUS_ENDPOINT)
+            .addParameter("routeid", routeIdsString)
+            .addParameter("outputType", "JSON")
+            .toString();
+
+        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
     }
 
     @Override
     public List<TrainRouteStatus> findByLines(Collection<TrainLine> lines) {
-        return List.of();
+        Objects.requireNonNull(lines);
+
+        List<TrainLine> linesList = List.copyOf(lines);
+
+        if (linesList.isEmpty()) {
+            return List.of();
+        }
+
+        String linesString = linesList.stream()
+                                      .map(TrainLine::getCode)
+                                      .collect(Collectors.joining(","));
+
+        String url = new URIBuilder()
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(AlertApiConstants.ROUTE_STATUS_ENDPOINT)
+            .addParameter("routeid", linesString)
+            .addParameter("outputType", "JSON")
+            .toString();
+
+        return this.makeRequest(url, TrainRouteStatusMapper.INSTANCE::toDomain);
     }
 
     @Override
     public List<RouteStatus> findByStationId(String stationId) {
         Objects.requireNonNull(stationId);
 
-        return List.of();
+        String url = new URIBuilder()
+            .setScheme(this.config.scheme())
+            .setHost(this.config.host())
+            .setPort(this.config.port())
+            .setPath(AlertApiConstants.ROUTE_STATUS_ENDPOINT)
+            .addParameter("stationid", stationId)
+            .addParameter("outputType", "JSON")
+            .toString();
+
+        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
     }
 
-    private List<RouteStatus> makeRequest(String url) {
+    private <T> List<T> makeRequest(String url, Function<CtaRouteInfo, T> mapper) {
         String response;
 
         try {
@@ -140,14 +188,36 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
 
         if (routeInfo != null && !routeInfo.isEmpty()) {
             return routeInfo.stream()
-                            .map(RouteStatusMapper.INSTANCE::toDomain)
+                            .map(mapper)
                             .toList();
         }
+
+        List<String> errorCodeStrings = ctaRoutes.errorCode();
+
+        if (errorCodeStrings == null || errorCodeStrings.isEmpty()) {
+            log.warn("Received empty response from {}", AlertApiConstants.ROUTE_STATUS_ENDPOINT);
+
+            return List.of();
+        }
+
+        long distinctCount = errorCodeStrings.stream()
+                                             .distinct()
+                                             .count();
+
+        if (distinctCount > 1L) {
+            log.warn(
+                "Received multiple distinct error codes from {}: {}",
+                AlertApiConstants.ROUTE_STATUS_ENDPOINT,
+                errorCodeStrings
+            );
+        }
+
+        String errorCodeString = errorCodeStrings.getFirst();
 
         int integerCode;
 
         try {
-            integerCode = Integer.parseInt(ctaRoutes.errorCode());
+            integerCode = Integer.parseInt(errorCodeString);
         } catch (NumberFormatException e) {
             throw new Cta4jRouteStatusException("Failed to parse error code", e);
         }
@@ -158,11 +228,15 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             return List.of();
         }
 
-        String errorMessage = ctaRoutes.errorMessage();
+        List<@Nullable String> errorMessages = ctaRoutes.errorMessage();
 
-        String message = errorMessage == null || errorMessage.isBlank()
+        String message = errorMessages == null || errorMessages.isEmpty()
             ? "An unknown error occurred."
-            : errorMessage;
+            : errorMessages.getFirst();
+
+        if (message == null || message.isBlank()) {
+            message = "An unknown error occurred.";
+        }
 
         throw new Cta4jRouteStatusException(message, integerCode);
     }

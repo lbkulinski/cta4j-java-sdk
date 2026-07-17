@@ -10,16 +10,14 @@ import java.util.Objects;
 public record AlertApiConfig(
     String scheme,
     String host,
-    int port,
-    String apiKey
+    int port
 ) {
     public AlertApiConfig {
         Objects.requireNonNull(scheme);
         Objects.requireNonNull(host);
-        Objects.requireNonNull(apiKey);
     }
 
-    public AlertApiConfig(String scheme, String host, String apiKey) {
-        this(scheme, host, -1, apiKey);
+    public AlertApiConfig(String scheme, String host) {
+        this(scheme, host, -1);
     }
 }
