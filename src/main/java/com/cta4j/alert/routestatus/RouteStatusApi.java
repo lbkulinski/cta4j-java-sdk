@@ -62,6 +62,8 @@ public interface RouteStatusApi {
      * @return a {@link List} of {@link RouteStatus}es associated with the bus route IDs, or an empty {@link List} if
      * no route statuses are found for the bus route IDs
      * @throws NullPointerException if {@code routeIds} is {@code null} or contains {@code null} elements
+     * @throws IllegalArgumentException if any of the {@code routeIds} matches a train line code (e.g. {@code "Red"});
+     * use {@link #findByLines(Collection)} instead
      * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
      */
     List<RouteStatus> findByBusRouteIds(Collection<String> routeIds);
@@ -73,6 +75,8 @@ public interface RouteStatusApi {
      * @return a {@link List} of {@link RouteStatus}es associated with the bus route ID, or an empty {@link List} if
      * no route statuses are found for the bus route ID
      * @throws NullPointerException if {@code routeId} is {@code null}
+     * @throws IllegalArgumentException if {@code routeId} matches a train line code (e.g. {@code "Red"}); use
+     * {@link #findByLine(TrainLine)} instead
      * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
      */
     default List<RouteStatus> findByBusRouteId(String routeId) {

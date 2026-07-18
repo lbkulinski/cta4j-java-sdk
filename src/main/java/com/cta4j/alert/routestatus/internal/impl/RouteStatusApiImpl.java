@@ -40,7 +40,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
     private final AlertApiConfig config;
 
     public RouteStatusApiImpl(AlertApiConfig config) {
-        this.config = config;
+        this.config = Objects.requireNonNull(config);
     }
 
     @Override
