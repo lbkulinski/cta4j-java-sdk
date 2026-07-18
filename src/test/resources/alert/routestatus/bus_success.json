@@ -1,0 +1,14 @@
+{
+  "CTARoutes": {
+    "TimeStamp": "2026-07-17T14:10:43",
+    "RouteInfo": {
+      "Route": "Clark",
+      "RouteColorCode": "565a5c",
+      "RouteTextColor": "ffffff",
+      "ServiceId": "22",
+      "RouteURL": {"#cdata-section": "http://www.transitchicago.com/bus/22/"},
+      "RouteStatus": "Bus Stop Note",
+      "RouteStatusColor": "000000"
+    }
+  }
+}

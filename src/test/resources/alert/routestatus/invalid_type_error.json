@@ -1,0 +1,7 @@
+{
+  "CTARoutes": {
+    "TimeStamp": "2026-07-17T14:14:52",
+    "ErrorCode": "101",
+    "ErrorMessage": "Invalid option for parameter 'type': Valid options are 'bus', 'rail', 'station' or 'systemwide'"
+  }
+}

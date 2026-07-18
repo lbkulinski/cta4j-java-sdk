@@ -99,3 +99,4 @@ MapStruct mappers live in `internal/mapper/`. They are interfaces annotated with
 - No comments unless the why is non-obvious.
 - No `Optional` for fields or parameters. Use method overloading or `@Nullable` fields instead.
 - Prefer `List.of()` for empty returns; use `List.copyOf()` for defensive copies.
+- All files must end with a trailing newline.
