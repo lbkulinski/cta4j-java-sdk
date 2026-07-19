@@ -1,9 +1,9 @@
-package com.cta4j.alert.routestatus.model;
+package com.cta4j.alert.common.model;
 
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Represents the type of service to filter route statuses by.
+ * Represents a category of CTA service — a bus route, train route, train station, or systemwide grouping.
  */
 @NullMarked
 public enum ServiceType {

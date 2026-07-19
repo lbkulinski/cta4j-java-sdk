@@ -10,7 +10,7 @@ import com.cta4j.alert.routestatus.internal.wire.CtaRouteInfo;
 import com.cta4j.alert.routestatus.internal.wire.CtaRouteStatusResponse;
 import com.cta4j.alert.routestatus.internal.wire.CtaRoutes;
 import com.cta4j.alert.routestatus.model.RouteStatus;
-import com.cta4j.alert.routestatus.model.ServiceType;
+import com.cta4j.alert.common.model.ServiceType;
 import com.cta4j.common.train.TrainLine;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;

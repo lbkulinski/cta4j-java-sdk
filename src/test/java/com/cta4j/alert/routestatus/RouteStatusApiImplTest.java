@@ -7,7 +7,7 @@ import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.exception.RouteStatusErrorCode;
 import com.cta4j.alert.routestatus.internal.impl.RouteStatusApiImpl;
 import com.cta4j.alert.routestatus.model.RouteStatus;
-import com.cta4j.alert.routestatus.model.ServiceType;
+import com.cta4j.alert.common.model.ServiceType;
 import com.cta4j.common.train.TrainLine;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;

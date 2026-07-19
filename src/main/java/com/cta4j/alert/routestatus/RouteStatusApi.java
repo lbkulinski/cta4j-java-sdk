@@ -2,7 +2,7 @@ package com.cta4j.alert.routestatus;
 
 import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.model.RouteStatus;
-import com.cta4j.alert.routestatus.model.ServiceType;
+import com.cta4j.alert.common.model.ServiceType;
 import com.cta4j.common.train.TrainLine;
 import org.jspecify.annotations.NullMarked;
 
