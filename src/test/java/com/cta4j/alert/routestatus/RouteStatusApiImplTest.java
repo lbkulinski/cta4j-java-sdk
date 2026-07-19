@@ -8,7 +8,6 @@ import com.cta4j.alert.routestatus.exception.RouteStatusErrorCode;
 import com.cta4j.alert.routestatus.internal.impl.RouteStatusApiImpl;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import com.cta4j.alert.routestatus.model.ServiceType;
-import com.cta4j.alert.routestatus.model.TrainRouteStatus;
 import com.cta4j.common.train.TrainLine;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
@@ -352,7 +351,7 @@ class RouteStatusApiImplTest {
 
     @Test
     void findByLines_returnsEmpty_whenInputIsEmpty() {
-        List<TrainRouteStatus> statuses = this.api.findByLines(List.of());
+        List<RouteStatus> statuses = this.api.findByLines(List.of());
 
         assertThat(statuses).isEmpty();
         this.server.verify(0, anyRequestedFor(anyUrl()));
@@ -367,24 +366,24 @@ class RouteStatusApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("alert/routestatus/rail_success.json"))));
 
-        List<TrainRouteStatus> statuses = this.api.findByLines(List.of(TrainLine.RED, TrainLine.BLUE));
+        List<RouteStatus> statuses = this.api.findByLines(List.of(TrainLine.RED, TrainLine.BLUE));
 
         assertThat(statuses).hasSize(2);
     }
 
     @Test
-    void findByLines_returnsTrainRouteStatuses_whenResponseContainsData() {
+    void findByLines_returnsRouteStatuses_whenResponseContainsData() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/routes.aspx"))
             .willReturn(aResponse()
                 .withStatus(200)
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("alert/routestatus/rail_success.json"))));
 
-        List<TrainRouteStatus> statuses = this.api.findByLines(List.of(TrainLine.RED, TrainLine.BLUE));
+        List<RouteStatus> statuses = this.api.findByLines(List.of(TrainLine.RED, TrainLine.BLUE));
 
         assertThat(statuses).hasSize(2);
-        TrainRouteStatus redLine = statuses.getFirst();
-        assertThat(redLine.line()).isEqualTo(TrainLine.RED);
+        RouteStatus redLine = statuses.getFirst();
+        assertThat(redLine.serviceId()).isEqualTo("Red");
         assertThat(redLine.route()).isEqualTo("Red Line");
         assertThat(redLine.status()).isEqualTo("Normal Service");
     }
@@ -398,7 +397,7 @@ class RouteStatusApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("alert/routestatus/rail_success.json"))));
 
-        List<TrainRouteStatus> statuses = this.api.findByLine(TrainLine.RED);
+        List<RouteStatus> statuses = this.api.findByLine(TrainLine.RED);
 
         assertThat(statuses).hasSize(2);
     }

@@ -6,13 +6,11 @@ import com.cta4j.alert.routestatus.RouteStatusApi;
 import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.exception.RouteStatusErrorCode;
 import com.cta4j.alert.routestatus.internal.mapper.RouteStatusMapper;
-import com.cta4j.alert.routestatus.internal.mapper.TrainRouteStatusMapper;
 import com.cta4j.alert.routestatus.internal.wire.CtaRouteInfo;
 import com.cta4j.alert.routestatus.internal.wire.CtaRouteStatusResponse;
 import com.cta4j.alert.routestatus.internal.wire.CtaRoutes;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import com.cta4j.alert.routestatus.model.ServiceType;
-import com.cta4j.alert.routestatus.model.TrainRouteStatus;
 import com.cta4j.common.train.TrainLine;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
@@ -29,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @ApiStatus.Internal
@@ -53,7 +50,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             .addParameter("outputType", "JSON")
             .toString();
 
-        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
+        return this.makeRequest(url);
     }
 
     @Override
@@ -80,7 +77,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             .addParameter("outputType", "JSON")
             .toString();
 
-        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
+        return this.makeRequest(url);
     }
 
     @Override
@@ -114,11 +111,11 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             .addParameter("outputType", "JSON")
             .toString();
 
-        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
+        return this.makeRequest(url);
     }
 
     @Override
-    public List<TrainRouteStatus> findByLines(Collection<TrainLine> lines) {
+    public List<RouteStatus> findByLines(Collection<TrainLine> lines) {
         Objects.requireNonNull(lines);
 
         List<TrainLine> linesList = List.copyOf(lines);
@@ -140,7 +137,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             .addParameter("outputType", "JSON")
             .toString();
 
-        return this.makeRequest(url, TrainRouteStatusMapper.INSTANCE::toDomain);
+        return this.makeRequest(url);
     }
 
     @Override
@@ -156,10 +153,10 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             .addParameter("outputType", "JSON")
             .toString();
 
-        return this.makeRequest(url, RouteStatusMapper.INSTANCE::toDomain);
+        return this.makeRequest(url);
     }
 
-    private <T> List<T> makeRequest(String url, Function<CtaRouteInfo, T> mapper) {
+    private List<RouteStatus> makeRequest(String url) {
         String response;
 
         try {
@@ -188,7 +185,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
 
         if (routeInfo != null && !routeInfo.isEmpty()) {
             return routeInfo.stream()
-                            .map(mapper)
+                            .map(RouteStatusMapper.INSTANCE::toDomain)
                             .toList();
         }
 

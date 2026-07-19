@@ -1,7 +1,6 @@
 package com.cta4j.alert.common;
 
 import com.cta4j.alert.common.internal.mapper.Qualifiers;
-import com.cta4j.common.train.TrainLine;
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;
@@ -21,17 +20,5 @@ class AlertQualifiersTest {
         assertThatIllegalArgumentException().isThrownBy(() -> Qualifiers.mapUri("not a uri"))
             .withMessageContaining("Failed to parse URI")
             .withCauseInstanceOf(java.net.URISyntaxException.class);
-    }
-
-    @Test
-    void mapTrainLine_returnsTrainLine_whenCodeIsValid() {
-        assertThat(Qualifiers.mapTrainLine("Red")).isEqualTo(TrainLine.RED);
-    }
-
-    @Test
-    void mapTrainLine_throwsIllegalArgumentException_whenCodeIsInvalid() {
-        assertThatIllegalArgumentException().isThrownBy(() -> Qualifiers.mapTrainLine("22"))
-            .withMessage("Failed to parse train line code: 22")
-            .withCauseInstanceOf(IllegalArgumentException.class);
     }
 }

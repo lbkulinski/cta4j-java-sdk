@@ -3,7 +3,6 @@ package com.cta4j.alert.routestatus;
 import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import com.cta4j.alert.routestatus.model.ServiceType;
-import com.cta4j.alert.routestatus.model.TrainRouteStatus;
 import com.cta4j.common.train.TrainLine;
 import org.jspecify.annotations.NullMarked;
 
@@ -91,23 +90,23 @@ public interface RouteStatusApi {
      * Retrieves route statuses for the specified train lines.
      *
      * @param lines a {@link Collection} of train lines
-     * @return a {@link List} of {@link TrainRouteStatus}es associated with the train lines, or an empty {@link List}
+     * @return a {@link List} of {@link RouteStatus}es associated with the train lines, or an empty {@link List}
      * if no route statuses are found for the train lines
      * @throws NullPointerException if {@code lines} is {@code null} or contains {@code null} elements
      * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
      */
-    List<TrainRouteStatus> findByLines(Collection<TrainLine> lines);
+    List<RouteStatus> findByLines(Collection<TrainLine> lines);
 
     /**
      * Retrieves route statuses for the specified train line.
      *
      * @param line the train line
-     * @return a {@link List} of {@link TrainRouteStatus}es associated with the train line, or an empty {@link List}
+     * @return a {@link List} of {@link RouteStatus}es associated with the train line, or an empty {@link List}
      * if no route statuses are found for the train line
      * @throws NullPointerException if {@code line} is {@code null}
      * @throws Cta4jRouteStatusException if the API returns an error response or the response cannot be parsed
      */
-    default List<TrainRouteStatus> findByLine(TrainLine line) {
+    default List<RouteStatus> findByLine(TrainLine line) {
         Objects.requireNonNull(line);
 
         List<TrainLine> lines = List.of(line);
