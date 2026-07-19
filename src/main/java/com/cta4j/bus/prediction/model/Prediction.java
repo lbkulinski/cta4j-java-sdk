@@ -17,9 +17,10 @@ import java.util.Objects;
  * @param vehicleId the unique identifier of the vehicle for which this prediction was generated
  * @param distanceToStop the feet left to be traveled by the vehicle before it reaches the stop associated with this
  *                       prediction
- * @param routeId the alphanumeric designator of the route (e.g. "20" or "X20") for which this prediction was generated
- * @param routeDesignator the language-specific route designator of this prediction, intended for display
- * @param routeDirection the direction of travel of the route associated with this prediction (e.g. "Eastbound")
+ * @param routeId the alphanumeric designator of the route (e.g., "20" or "X9") for which this prediction was generated
+ * @param routeDesignator the language-specific route designator of this prediction, intended for display; identical
+ *                        to {@code routeId} in practice (e.g., "20")
+ * @param routeDirection the direction of travel of the route associated with this prediction (e.g., "Eastbound")
  * @param destination the final destination of the vehicle associated with this prediction
  * @param arrivalTime the predicted date and time (UTC) of a vehicle’s arrival or departure to the stop associated with
  *                    this prediction
@@ -50,10 +51,11 @@ public record Prediction(
      * @param vehicleId the unique identifier of the vehicle for which the prediction was generated
      * @param distanceToStop the feet left to be traveled by the vehicle before it reaches the stop associated with the
      *                       prediction
-     * @param routeId the alphanumeric designator of the route (e.g. "20" or "X20") for which the prediction was
+     * @param routeId the alphanumeric designator of the route (e.g., "20" or "X9") for which the prediction was
      *                generated
-     * @param routeDesignator the language-specific route designator of the prediction, intended for display
-     * @param routeDirection the direction of travel of the route associated with the prediction (e.g. "Eastbound")
+     * @param routeDesignator the language-specific route designator of the prediction, intended for display;
+     *                        identical to {@code routeId} in practice (e.g., "20")
+     * @param routeDirection the direction of travel of the route associated with the prediction (e.g., "Eastbound")
      * @param destination the final destination of the vehicle associated with the prediction
      * @param arrivalTime the predicted date and time (UTC) of a vehicle’s arrival or departure to the stop associated
      *                    with the prediction

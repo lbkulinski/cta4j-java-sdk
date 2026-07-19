@@ -11,6 +11,11 @@ import java.util.Objects;
 /**
  * Represents the location of a train on a route.
  *
+ * <p>
+ *     <b>NOTE:</b> {@code flags} is not well-documented by the CTA. As such, its presence here is primarily for
+ *     completeness and may not be populated or described correctly.
+ * </p>
+ *
  * @param run the run number of this train
  * @param destinationStationId the unique identifier of the destination station for this train
  * @param destinationName the display name of the destination station for this train

@@ -16,7 +16,7 @@ import java.util.Objects;
  * </p>
  *
  * @param id the unique identifier of this stop
- * @param name the display name of this stop (e.g. "Madison and Clark")
+ * @param name the display name of this stop (e.g., "Clark &amp; Addison")
  * @param latitude the latitude coordinate of this stop
  * @param longitude the longitude coordinate of this stop
  * @param detoursAdded the {@link List} of detour IDs which temporarily add service to this stop
@@ -39,7 +39,7 @@ public record Stop(
      * Constructs a {@code Stop}.
      *
      * @param id the unique identifier of the stop
-     * @param name the display name of the stop (e.g. "Madison and Clark")
+     * @param name the display name of the stop (e.g., "Clark &amp; Addison")
      * @param latitude the latitude coordinate of the stop
      * @param longitude the longitude coordinate of the stop
      * @param detoursAdded the {@link List} of detour IDs which temporarily add service to the stop

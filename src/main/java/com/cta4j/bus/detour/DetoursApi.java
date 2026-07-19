@@ -37,7 +37,7 @@ public interface DetoursApi {
      * Retrieves all active detours for the specified route ID and direction.
      *
      * @param routeId the route ID
-     * @param direction the travel direction (e.g. Northbound, Southbound)
+     * @param direction the travel direction (e.g., "Northbound", "Southbound")
      * @return a {@link List} of {@link Detour}s associated with the route ID and direction, or an empty {@link List}
      * if no detours are found for the route ID and direction
      * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}

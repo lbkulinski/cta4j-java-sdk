@@ -14,8 +14,9 @@ import java.util.Objects;
  * @param name the name of this service (e.g., "Clark", "Red Line", "Jackson", "All Bus Routes")
  * @param serviceId the identifier of this service; matches GTFS route or station IDs, except for systemwide groupings,
  *                  which use a fixed identifier instead (e.g., "22", "Red", "Systemwide")
- * @param color the color of this service used in maps, as {@code rrggbb}
- * @param textColor the suggested color of text displayed against {@code color}, as {@code rrggbb}
+ * @param color the color of this service used in maps; length and casing vary (e.g., "059", "565a5c")
+ * @param textColor the suggested color of text displayed against {@code color}; casing varies (e.g., "ffffff",
+ *                  "FFFFFF")
  * @param url the URL of this service's page on transitchicago.com
  */
 @NullMarked
@@ -34,8 +35,9 @@ public record ImpactedService(
      * @param name the name of the service (e.g., "Clark", "Red Line", "Jackson", "All Bus Routes")
      * @param serviceId the identifier of the service; matches GTFS route or station IDs, except for systemwide
      *                  groupings, which use a fixed identifier instead (e.g., "22", "Red", "Systemwide")
-     * @param color the color of the service used in maps, as {@code rrggbb}
-     * @param textColor the suggested color of text displayed against {@code color}, as {@code rrggbb}
+     * @param color the color of the service used in maps; length and casing vary (e.g., "059", "565a5c")
+     * @param textColor the suggested color of text displayed against {@code color}; casing varies (e.g., "ffffff",
+     *                  "FFFFFF")
      * @param url the URL of the service's page on transitchicago.com
      * @throws NullPointerException if {@code type}, {@code name}, {@code serviceId}, {@code color},
      * {@code textColor}, or {@code url} is {@code null}

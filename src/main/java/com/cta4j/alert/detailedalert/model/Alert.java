@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * Represents a detailed alert describing an event that affects one or more CTA services.
  *
- * @param id the unique ID of this alert
+ * @param id the unique ID of this alert (e.g., "115070")
  * @param headline the headline of this alert
  * @param shortDescription the short description of this alert
  * @param fullDescription the full description of this alert
@@ -43,7 +43,7 @@ public record Alert(
     /**
      * Constructs an {@code Alert}.
      *
-     * @param id the unique ID of the alert
+     * @param id the unique ID of the alert (e.g., "115070")
      * @param headline the headline of the alert
      * @param shortDescription the short description of the alert
      * @param fullDescription the full description of the alert

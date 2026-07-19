@@ -13,7 +13,7 @@ import java.util.List;
 @NullMarked
 public interface DirectionsApi {
     /**
-     * Retrieves the available travel directions for the specified route (e.g., Northbound, Southbound).
+     * Retrieves the available travel directions for the specified route (e.g., "Northbound", "Southbound").
      *
      * @param routeId the route identifier
      * @return a {@link List} of direction identifiers for the route, or an empty {@link List} if no directions are

@@ -9,11 +9,10 @@ import java.util.Objects;
  *
  * @param score the numerical score used to rank this severity, based on the alert's impact on overall service, between
  *              0 and 99 (inclusive)
- * @param color the hexadecimal RGB color code used to color this severity's text on transitchicago.com, as
- * {@code rrggbb}
- * @param css the category used to pick the icon and display style of the alert (e.g., "normal", "planned", "minor",
- *            "major"); note that this set is not exhaustive, as other values (e.g., "special-note") have been observed
- *            in practice that are not documented in the CTA Alerts API documentation
+ * @param color the hexadecimal RGB color code used to color this severity's text on transitchicago.com; length and
+ *              casing vary (e.g., "000000", "06c", "B45F04")
+ * @param css the category used to pick the icon and display style of the alert; not limited to the four documented
+ *            values (e.g., "normal", "planned", "minor", "major", "special-note")
  */
 @NullMarked
 public record Severity(
@@ -26,10 +25,10 @@ public record Severity(
      *
      * @param score the numerical score used to rank the severity, based on the alert's impact on overall
      *              service, between 0 and 99 (inclusive)
-     * @param color the hexadecimal RGB color code used to color the severity's text on transitchicago.com, as
-     *              {@code rrggbb}
-     * @param css the category used to pick the icon and display style of the alert (e.g., "normal", "planned",
-     *            "minor", "major")
+     * @param color the hexadecimal RGB color code used to color the severity's text on transitchicago.com; length and
+     *              casing vary (e.g., "000000", "06c", "B45F04")
+     * @param css the category used to pick the icon and display style of the alert; not limited to the four
+     *            documented values (e.g., "normal", "planned", "minor", "major", "special-note")
      * @throws NullPointerException if {@code color} or {@code css} is {@code null}
      * @throws IllegalArgumentException if {@code score} is not between 0 and 99 (inclusive)
      */

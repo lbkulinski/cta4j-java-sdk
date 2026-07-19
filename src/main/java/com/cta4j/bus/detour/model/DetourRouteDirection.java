@@ -8,7 +8,7 @@ import java.util.Objects;
  * Represents a route and direction affected by a detour.
  *
  * @param routeId the route ID of this detour
- * @param direction the direction of this detour
+ * @param direction the direction of this detour (e.g., "Northbound", "Southbound")
  */
 @NullMarked
 public record DetourRouteDirection(
@@ -19,7 +19,7 @@ public record DetourRouteDirection(
      * Constructs a {@code DetourRouteDirection}.
      *
      * @param routeId the route ID of the detour
-     * @param direction the direction of the detour
+     * @param direction the direction of the detour (e.g., "Northbound", "Southbound")
      * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
      */
     public DetourRouteDirection {
