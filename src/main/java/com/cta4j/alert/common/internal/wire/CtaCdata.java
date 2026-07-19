@@ -1,4 +1,4 @@
-package com.cta4j.alert.routestatus.internal.wire;
+package com.cta4j.alert.common.internal.wire;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -10,10 +10,10 @@ import java.util.Objects;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @ApiStatus.Internal
 @NullMarked
-public record CtaRouteInfoUrl(
+public record CtaCdata(
     @JsonProperty("#cdata-section") String cdataSection
 ) {
-    public CtaRouteInfoUrl {
+    public CtaCdata {
         Objects.requireNonNull(cdataSection);
     }
 }

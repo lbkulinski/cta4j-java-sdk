@@ -1,4 +1,4 @@
-package com.cta4j.alert.detail.query;
+package com.cta4j.alert.detailedalert.query;
 
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -7,7 +7,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * Represents a query for detailed alert information.
+ * Represents a query for detailed alerts.
  *
  * @param activeOnly whether to include only alerts that are currently active
  * @param accessibility whether to include alerts that affect accessible paths in stations

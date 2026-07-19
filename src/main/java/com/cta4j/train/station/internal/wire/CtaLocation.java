@@ -13,9 +13,11 @@ import java.util.Objects;
 @NullMarked
 public record CtaLocation(
     String latitude,
+
     String longitude,
-    @Nullable
+
     @JsonProperty("human_address")
+    @Nullable
     String humanAddress
 ) {
     public CtaLocation {

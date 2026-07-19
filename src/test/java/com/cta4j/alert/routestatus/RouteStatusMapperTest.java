@@ -2,7 +2,7 @@ package com.cta4j.alert.routestatus;
 
 import com.cta4j.alert.routestatus.internal.mapper.RouteStatusMapper;
 import com.cta4j.alert.routestatus.internal.wire.CtaRouteInfo;
-import com.cta4j.alert.routestatus.internal.wire.CtaRouteInfoUrl;
+import com.cta4j.alert.common.internal.wire.CtaCdata;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ class RouteStatusMapperTest {
     void toDomain_mapsAllFields() {
         CtaRouteInfo wire = new CtaRouteInfo(
             "Clark", "565a5c", "ffffff", "22",
-            new CtaRouteInfoUrl("http://www.transitchicago.com/bus/22/"),
+            new CtaCdata("http://www.transitchicago.com/bus/22/"),
             "Bus Stop Note", "000000"
         );
 

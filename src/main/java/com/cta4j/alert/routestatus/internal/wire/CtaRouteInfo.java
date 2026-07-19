@@ -1,5 +1,6 @@
 package com.cta4j.alert.routestatus.internal.wire;
 
+import com.cta4j.alert.common.internal.wire.CtaCdata;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,7 +16,7 @@ public record CtaRouteInfo(
     @JsonProperty("RouteColorCode") String routeColorCode,
     @JsonProperty("RouteTextColor") String routeTextColor,
     @JsonProperty("ServiceId") String serviceId,
-    @JsonProperty("RouteURL") CtaRouteInfoUrl routeUrl,
+    @JsonProperty("RouteURL") CtaCdata routeUrl,
     @JsonProperty("RouteStatus") String routeStatus,
     @JsonProperty("RouteStatusColor") String routeStatusColor
 ) {
