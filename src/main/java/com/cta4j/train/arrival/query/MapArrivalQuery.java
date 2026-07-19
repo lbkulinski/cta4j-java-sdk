@@ -7,11 +7,11 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Represents a query for train arrival information for a specific map.
+ * Represents a query for train arrivals at a specific map.
  *
- * @param mapId the ID of the map to retrieve arrival information for
- * @param line the optional train line to filter arrival information by
- * @param maxResults the optional maximum number of arrival information to return
+ * @param mapId the ID of the map to retrieve arrivals for
+ * @param line the optional train line to filter arrivals by
+ * @param maxResults the optional maximum number of arrivals to return
  */
 @NullMarked
 public record MapArrivalQuery(
@@ -22,9 +22,9 @@ public record MapArrivalQuery(
     /**
      * Constructs a {@code MapArrivalQuery}.
      *
-     * @param mapId the ID of the map to retrieve arrival information for
-     * @param line the optional train line to filter arrival information by
-     * @param maxResults the optional maximum number of arrival information to return
+     * @param mapId the ID of the map to retrieve arrivals for
+     * @param line the optional train line to filter arrivals by
+     * @param maxResults the optional maximum number of arrivals to return
      * @throws NullPointerException if {@code mapId} is {@code null}
      * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
      */
@@ -39,7 +39,7 @@ public record MapArrivalQuery(
     /**
      * Creates a builder for {@code MapArrivalQuery}.
      *
-     * @param mapId the ID of the map to retrieve arrival information for
+     * @param mapId the ID of the map to retrieve arrivals for
      * @return a new {@code Builder} instance
      * @throws NullPointerException if {@code mapId} is {@code null}
      */
@@ -52,18 +52,18 @@ public record MapArrivalQuery(
      */
     public static final class Builder {
         /**
-         * The ID of the map to retrieve arrival information for.
+         * The ID of the map to retrieve arrivals for.
          */
         private final String mapId;
 
         /**
-         * The optional train line to filter arrival information by.
+         * The optional train line to filter arrivals by.
          */
         @Nullable
         private TrainLine line;
 
         /**
-         * The optional maximum number of arrival information to return.
+         * The optional maximum number of arrivals to return.
          */
         @Nullable
         private Integer maxResults;
@@ -71,7 +71,7 @@ public record MapArrivalQuery(
         /**
          * Constructs a {@code Builder}.
          *
-         * @param mapId the ID of the map to retrieve arrival information for
+         * @param mapId the ID of the map to retrieve arrivals for
          * @throws NullPointerException if {@code mapId} is {@code null}
          */
         public Builder(String mapId) {
@@ -79,7 +79,7 @@ public record MapArrivalQuery(
         }
 
         /**
-         * Sets the train line to filter arrival information by.
+         * Sets the train line to filter arrivals by.
          *
          * @param line the train line
          * @return this {@code Builder} instance
@@ -92,9 +92,9 @@ public record MapArrivalQuery(
         }
 
         /**
-         * Sets the maximum number of arrival information to return.
+         * Sets the maximum number of arrivals to return.
          *
-         * @param maxResults the maximum number of arrival information
+         * @param maxResults the maximum number of arrivals
          * @return this {@code Builder} instance
          * @throws IllegalArgumentException if {@code maxResults} is not positive
          */

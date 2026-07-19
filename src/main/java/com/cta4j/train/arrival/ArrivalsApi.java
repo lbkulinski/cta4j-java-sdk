@@ -11,14 +11,14 @@ import java.util.List;
 /**
  * Provides access to arrival-related endpoints of the CTA Train Tracker API.
  * <p>
- * This API allows retrieval of arrival information by map ID or stop ID.
+ * This API allows retrieval of arrivals by map ID or stop ID.
  */
 @NullMarked
 public interface ArrivalsApi {
     /**
-     * Retrieves arrival information by map ID.
+     * Retrieves arrivals by map ID.
      *
-     * @param query the query parameters for fetching arrival information by map ID
+     * @param query the query parameters for fetching arrivals by map ID
      * @return a {@link List} of {@link Arrival}s corresponding to the provided map ID, or an empty {@link List} if no
      * arrivals are found
      * @throws NullPointerException if {@code query} is {@code null}
@@ -27,9 +27,9 @@ public interface ArrivalsApi {
     List<Arrival> findByMapId(MapArrivalQuery query);
 
     /**
-     * Retrieves arrival information by stop ID.
+     * Retrieves arrivals by stop ID.
      *
-     * @param query the query parameters for fetching arrival information by stop ID
+     * @param query the query parameters for fetching arrivals by stop ID
      * @return a {@link List} of {@link Arrival}s corresponding to the provided stop ID, or an empty {@link List} if no
      * arrivals are found
      * @throws NullPointerException if {@code query} is {@code null}
@@ -38,7 +38,7 @@ public interface ArrivalsApi {
     List<Arrival> findByStopId(StopArrivalQuery query);
 
     /**
-     * Retrieves arrival information by map ID.
+     * Retrieves arrivals by map ID.
      *
      * @param mapId the map ID
      * @return a {@link List} of {@link Arrival}s corresponding to the provided map ID, or an empty {@link List} if no
@@ -54,7 +54,7 @@ public interface ArrivalsApi {
     }
 
     /**
-     * Retrieves arrival information by stop ID.
+     * Retrieves arrivals by stop ID.
      *
      * @param stopId the stop ID
      * @return a {@link List} of {@link Arrival}s corresponding to the provided stop ID, or an empty {@link List} if no
