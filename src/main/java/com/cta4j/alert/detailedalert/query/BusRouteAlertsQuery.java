@@ -4,11 +4,14 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * Represents a query for detailed alerts.
+ * Represents a query for detailed bus route alerts.
  *
+ * @param routeIds the {@link List} of bus route IDs to retrieve alerts for
  * @param activeOnly whether to include only alerts that are currently active
  * @param accessibility whether to include alerts that affect accessible paths in stations
  * @param planned whether to include common planned alerts
@@ -17,7 +20,8 @@ import java.util.Objects;
  *                   included
  */
 @NullMarked
-public record AlertQuery(
+public record BusRouteAlertsQuery(
+    List<String> routeIds,
     boolean activeOnly,
     boolean accessibility,
     boolean planned,
@@ -25,18 +29,25 @@ public record AlertQuery(
     @Nullable Integer recentDays
 ) {
     /**
-     * Constructs an {@code AlertQuery}.
+     * Constructs a {@code BusRouteAlertsQuery}.
      *
+     * @param routeIds the {@link List} of bus route IDs to retrieve alerts for
      * @param activeOnly whether to include only alerts that are currently active
      * @param accessibility whether to include alerts that affect accessible paths in stations
      * @param planned whether to include common planned alerts
      * @param byStartDate the optional date; only alerts with a start date before this date are included
      * @param recentDays the optional number of days; only alerts that started within this many days of today are
      *                   included
+     * @throws NullPointerException if {@code routeIds} is {@code null}, or if any element of {@code routeIds} is
+     * {@code null}
      * @throws IllegalArgumentException if both {@code byStartDate} and {@code recentDays} are specified, or if
      * {@code recentDays} is non-{@code null} and not positive
      */
-    public AlertQuery {
+    public BusRouteAlertsQuery {
+        Objects.requireNonNull(routeIds);
+
+        routeIds = List.copyOf(routeIds);
+
         if (byStartDate != null && recentDays != null) {
             throw new IllegalArgumentException("byStartDate and recentDays cannot both be specified");
         }
@@ -47,18 +58,26 @@ public record AlertQuery(
     }
 
     /**
-     * Creates a builder for {@code AlertQuery}.
+     * Creates a builder for {@code BusRouteAlertsQuery}.
      *
+     * @param routeIds the {@link Collection} of bus route IDs to retrieve alerts for
      * @return a new {@code Builder} instance
+     * @throws NullPointerException if {@code routeIds} is {@code null}, or if any element of {@code routeIds} is
+     * {@code null}
      */
-    public static Builder builder() {
-        return new Builder();
+    public static Builder builder(Collection<String> routeIds) {
+        return new Builder(routeIds);
     }
 
     /**
-     * A builder for {@code AlertQuery}.
+     * A builder for {@code BusRouteAlertsQuery}.
      */
     public static final class Builder {
+        /**
+         * The {@link List} of bus route IDs to retrieve alerts for.
+         */
+        private final List<String> routeIds;
+
         /**
          * Whether to include only alerts that are currently active.
          */
@@ -91,8 +110,15 @@ public record AlertQuery(
          * <p>
          * By default, {@code activeOnly} is {@code false}, and {@code accessibility} and {@code planned} are
          * {@code true}, matching the CTA Alerts API's own defaults.
+         *
+         * @param routeIds the {@link Collection} of bus route IDs to retrieve alerts for
+         * @throws NullPointerException if {@code routeIds} is {@code null}, or if any element of {@code routeIds} is
+         * {@code null}
          */
-        public Builder() {
+        public Builder(Collection<String> routeIds) {
+            Objects.requireNonNull(routeIds);
+
+            this.routeIds = List.copyOf(routeIds);
             this.activeOnly = false;
             this.accessibility = true;
             this.planned = true;
@@ -167,13 +193,14 @@ public record AlertQuery(
         }
 
         /**
-         * Builds the {@code AlertQuery}.
+         * Builds the {@code BusRouteAlertsQuery}.
          *
-         * @return a new {@code AlertQuery} instance
+         * @return a new {@code BusRouteAlertsQuery} instance
          * @throws IllegalArgumentException if both {@code byStartDate} and {@code recentDays} were specified
          */
-        public AlertQuery build() {
-            return new AlertQuery(
+        public BusRouteAlertsQuery build() {
+            return new BusRouteAlertsQuery(
+                this.routeIds,
                 this.activeOnly,
                 this.accessibility,
                 this.planned,
