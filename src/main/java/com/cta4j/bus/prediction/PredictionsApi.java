@@ -6,6 +6,7 @@ import com.cta4j.bus.prediction.query.StopPredictionsQuery;
 import com.cta4j.bus.prediction.query.VehiclePredictionsQuery;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,15 +29,25 @@ public interface PredictionsApi {
     List<Prediction> findByStopIds(StopPredictionsQuery query);
 
     /**
-     * Retrieves predictions by vehicle IDs.
+     * Retrieves predictions by stop IDs.
      *
-     * @param query the query parameters for fetching predictions by vehicle IDs
-     * @return a {@link List} of {@link Prediction}s corresponding to the provided vehicle IDs, or an empty
-     * {@link List} if no predictions are found
-     * @throws NullPointerException if {@code query} is {@code null}
+     * @param stopIds a {@link Collection} of stop IDs
+     * @return a {@link List} of {@link Prediction}s corresponding to the provided stop IDs, or an empty {@link List}
+     * if no predictions are found
+     * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} is
+     * {@code null}
      * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
-    List<Prediction> findByVehicleIds(VehiclePredictionsQuery query);
+    default List<Prediction> findByStopIds(Collection<String> stopIds) {
+        Objects.requireNonNull(stopIds);
+
+        List<String> stopIdsList = List.copyOf(stopIds);
+
+        StopPredictionsQuery query = StopPredictionsQuery.builder(stopIdsList)
+                                                         .build();
+
+        return this.findByStopIds(query);
+    }
 
     /**
      * Retrieves predictions by stop ID.
@@ -56,6 +67,58 @@ public interface PredictionsApi {
                                                          .build();
 
         return this.findByStopIds(query);
+    }
+
+    /**
+     * Retrieves predictions by vehicle IDs.
+     *
+     * @param query the query parameters for fetching predictions by vehicle IDs
+     * @return a {@link List} of {@link Prediction}s corresponding to the provided vehicle IDs, or an empty
+     * {@link List} if no predictions are found
+     * @throws NullPointerException if {@code query} is {@code null}
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
+     */
+    List<Prediction> findByVehicleIds(VehiclePredictionsQuery query);
+
+    /**
+     * Retrieves predictions by vehicle IDs.
+     *
+     * @param vehicleIds a {@link Collection} of vehicle IDs
+     * @return a {@link List} of {@link Prediction}s corresponding to the provided vehicle IDs, or an empty
+     * {@link List} if no predictions are found
+     * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of {@code vehicleIds}
+     * is {@code null}
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
+     */
+    default List<Prediction> findByVehicleIds(Collection<String> vehicleIds) {
+        Objects.requireNonNull(vehicleIds);
+
+        List<String> vehicleIdsList = List.copyOf(vehicleIds);
+
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(vehicleIdsList)
+                                                               .build();
+
+        return this.findByVehicleIds(query);
+    }
+
+    /**
+     * Retrieves predictions by vehicle ID.
+     *
+     * @param vehicleId the vehicle ID
+     * @return a {@link List} of {@link Prediction}s corresponding to the provided vehicle ID, or an empty {@link List}
+     * if no predictions are found
+     * @throws NullPointerException if {@code vehicleId} is {@code null}
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
+     */
+    default List<Prediction> findByVehicleId(String vehicleId) {
+        Objects.requireNonNull(vehicleId);
+
+        List<String> vehicleIds = List.of(vehicleId);
+
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(vehicleIds)
+                                                               .build();
+
+        return this.findByVehicleIds(query);
     }
 
     /**
@@ -80,25 +143,5 @@ public interface PredictionsApi {
                                                          .build();
 
         return this.findByStopIds(query);
-    }
-
-    /**
-     * Retrieves predictions by vehicle ID.
-     *
-     * @param vehicleId the vehicle ID
-     * @return a {@link List} of {@link Prediction}s corresponding to the provided vehicle ID, or an empty {@link List}
-     * if no predictions are found
-     * @throws NullPointerException if {@code vehicleId} is {@code null}
-     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
-     */
-    default List<Prediction> findByVehicleId(String vehicleId) {
-        Objects.requireNonNull(vehicleId);
-
-        List<String> vehicleIds = List.of(vehicleId);
-
-        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(vehicleIds)
-                                                               .build();
-
-        return this.findByVehicleIds(query);
     }
 }

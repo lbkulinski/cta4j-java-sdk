@@ -18,18 +18,6 @@ import java.util.Optional;
 @NullMarked
 public interface StopsApi {
     /**
-     * Retrieves stops by route ID and direction.
-     *
-     * @param routeId the route ID
-     * @param direction the direction (e.g., "Northbound", "Southbound")
-     * @return a {@link List} of {@link Stop}s corresponding to the provided route ID and direction, or an empty
-     * {@link List} if no stops are found
-     * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
-     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
-     */
-    List<Stop> findByRouteIdAndDirection(String routeId, String direction);
-
-    /**
      * Retrieves stops by their IDs.
      *
      * @param stopIds a {@link Collection} of stop IDs
@@ -72,4 +60,16 @@ public interface StopsApi {
 
         return Optional.of(stop);
     }
+
+    /**
+     * Retrieves stops by route ID and direction.
+     *
+     * @param routeId the route ID
+     * @param direction the direction (e.g., "Northbound", "Southbound")
+     * @return a {@link List} of {@link Stop}s corresponding to the provided route ID and direction, or an empty
+     * {@link List} if no stops are found
+     * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
+     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
+     */
+    List<Stop> findByRouteIdAndDirection(String routeId, String direction);
 }

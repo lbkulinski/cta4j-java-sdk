@@ -27,17 +27,6 @@ public interface ArrivalsApi {
     List<Arrival> findByMapId(MapArrivalsQuery query);
 
     /**
-     * Retrieves arrivals by stop ID.
-     *
-     * @param query the query parameters for fetching arrivals by stop ID
-     * @return a {@link List} of {@link Arrival}s corresponding to the provided stop ID, or an empty {@link List} if no
-     * arrivals are found
-     * @throws NullPointerException if {@code query} is {@code null}
-     * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
-     */
-    List<Arrival> findByStopId(StopArrivalsQuery query);
-
-    /**
      * Retrieves arrivals by map ID.
      *
      * @param mapId the map ID
@@ -52,6 +41,17 @@ public interface ArrivalsApi {
 
         return this.findByMapId(query);
     }
+
+    /**
+     * Retrieves arrivals by stop ID.
+     *
+     * @param query the query parameters for fetching arrivals by stop ID
+     * @return a {@link List} of {@link Arrival}s corresponding to the provided stop ID, or an empty {@link List} if no
+     * arrivals are found
+     * @throws NullPointerException if {@code query} is {@code null}
+     * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
+     */
+    List<Arrival> findByStopId(StopArrivalsQuery query);
 
     /**
      * Retrieves arrivals by stop ID.
