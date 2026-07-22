@@ -2,8 +2,8 @@ package com.cta4j.bus.prediction;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.prediction.model.Prediction;
-import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
-import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
+import com.cta4j.bus.prediction.query.StopPredictionsQuery;
+import com.cta4j.bus.prediction.query.VehiclePredictionsQuery;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public interface PredictionsApi {
      * @throws NullPointerException if {@code query} is {@code null}
      * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
-    List<Prediction> findByStopIds(StopsPredictionsQuery query);
+    List<Prediction> findByStopIds(StopPredictionsQuery query);
 
     /**
      * Retrieves predictions by vehicle IDs.
@@ -36,7 +36,7 @@ public interface PredictionsApi {
      * @throws NullPointerException if {@code query} is {@code null}
      * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
      */
-    List<Prediction> findByVehicleIds(VehiclesPredictionsQuery query);
+    List<Prediction> findByVehicleIds(VehiclePredictionsQuery query);
 
     /**
      * Retrieves predictions by stop ID.
@@ -52,8 +52,8 @@ public interface PredictionsApi {
 
         List<String> stopIds = List.of(stopId);
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(stopIds)
-                                                           .build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(stopIds)
+                                                         .build();
 
         return this.findByStopIds(query);
     }
@@ -75,9 +75,9 @@ public interface PredictionsApi {
         List<String> stopIds = List.of(stopId);
         List<String> routeIds = List.of(routeId);
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(stopIds)
-                                                           .routeIds(routeIds)
-                                                           .build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(stopIds)
+                                                         .routeIds(routeIds)
+                                                         .build();
 
         return this.findByStopIds(query);
     }
@@ -96,8 +96,8 @@ public interface PredictionsApi {
 
         List<String> vehicleIds = List.of(vehicleId);
 
-        VehiclesPredictionsQuery query = VehiclesPredictionsQuery.builder(vehicleIds)
-                                                                 .build();
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(vehicleIds)
+                                                               .build();
 
         return this.findByVehicleIds(query);
     }

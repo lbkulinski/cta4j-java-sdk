@@ -1,8 +1,8 @@
 package com.cta4j.train.arrival;
 
 import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
-import com.cta4j.train.arrival.query.MapArrivalQuery;
-import com.cta4j.train.arrival.query.StopArrivalQuery;
+import com.cta4j.train.arrival.query.MapArrivalsQuery;
+import com.cta4j.train.arrival.query.StopArrivalsQuery;
 import com.cta4j.train.common.model.Arrival;
 import org.jspecify.annotations.NullMarked;
 
@@ -24,7 +24,7 @@ public interface ArrivalsApi {
      * @throws NullPointerException if {@code query} is {@code null}
      * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
-    List<Arrival> findByMapId(MapArrivalQuery query);
+    List<Arrival> findByMapId(MapArrivalsQuery query);
 
     /**
      * Retrieves arrivals by stop ID.
@@ -35,7 +35,7 @@ public interface ArrivalsApi {
      * @throws NullPointerException if {@code query} is {@code null}
      * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
-    List<Arrival> findByStopId(StopArrivalQuery query);
+    List<Arrival> findByStopId(StopArrivalsQuery query);
 
     /**
      * Retrieves arrivals by map ID.
@@ -47,8 +47,8 @@ public interface ArrivalsApi {
      * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
     default List<Arrival> findByMapId(String mapId) {
-        MapArrivalQuery query = MapArrivalQuery.builder(mapId)
-                                               .build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder(mapId)
+                                                 .build();
 
         return this.findByMapId(query);
     }
@@ -63,8 +63,8 @@ public interface ArrivalsApi {
      * @throws Cta4jArrivalsException if the API returns an error response or the response cannot be parsed
      */
     default List<Arrival> findByStopId(String stopId) {
-        StopArrivalQuery query = StopArrivalQuery.builder(stopId)
-                                                 .build();
+        StopArrivalsQuery query = StopArrivalsQuery.builder(stopId)
+                                                   .build();
 
         return this.findByStopId(query);
     }

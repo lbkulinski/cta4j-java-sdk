@@ -6,8 +6,8 @@ import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.prediction.internal.impl.PredictionsApiImpl;
 import com.cta4j.bus.prediction.model.Prediction;
-import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
-import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
+import com.cta4j.bus.prediction.query.StopPredictionsQuery;
+import com.cta4j.bus.prediction.query.VehiclePredictionsQuery;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/success.json"))));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456")).build();
         List<Prediction> predictions = this.api.findByStopIds(query);
 
         assertThat(predictions).hasSize(1);
@@ -57,7 +57,7 @@ class PredictionsApiImplTest {
 
     @Test
     void findByStopIds_returnsEmpty_whenInputIsEmpty() {
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of()).build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of()).build();
         List<Prediction> predictions = this.api.findByStopIds(query);
 
         assertThat(predictions).isEmpty();
@@ -72,7 +72,7 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/empty.json"))));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456")).build();
         List<Prediction> predictions = this.api.findByStopIds(query);
 
         assertThat(predictions).isEmpty();
@@ -86,7 +86,7 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/not_found.json"))));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("99999")).build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("99999")).build();
         List<Prediction> predictions = this.api.findByStopIds(query);
 
         assertThat(predictions).isEmpty();
@@ -100,7 +100,7 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/error.json"))));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456")).build();
 
         assertThatThrownBy(() -> this.api.findByStopIds(query))
             .isInstanceOf(Cta4jBusException.class)
@@ -117,7 +117,7 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody("not-json")));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456")).build();
 
         assertThatThrownBy(() -> this.api.findByStopIds(query))
             .isInstanceOf(Cta4jBusException.class)
@@ -133,7 +133,7 @@ class PredictionsApiImplTest {
             .willReturn(aResponse()
                 .withStatus(500)));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456")).build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456")).build();
 
         assertThatThrownBy(() -> this.api.findByStopIds(query))
             .isInstanceOf(Cta4jBusException.class)
@@ -145,7 +145,7 @@ class PredictionsApiImplTest {
 
     @Test
     void findByVehicleIds_returnsEmpty_whenInputIsEmpty() {
-        VehiclesPredictionsQuery query = VehiclesPredictionsQuery.builder(List.of()).build();
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(List.of()).build();
         List<Prediction> predictions = this.api.findByVehicleIds(query);
 
         assertThat(predictions).isEmpty();
@@ -161,7 +161,7 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/success.json"))));
 
-        VehiclesPredictionsQuery query = VehiclesPredictionsQuery.builder(List.of("509")).build();
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(List.of("509")).build();
         List<Prediction> predictions = this.api.findByVehicleIds(query);
 
         assertThat(predictions).hasSize(1);
@@ -176,9 +176,9 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/success.json"))));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456"))
-            .routeIds(List.of("8"))
-            .build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456"))
+                                                         .routeIds(List.of("8"))
+                                                         .build();
         List<Prediction> predictions = this.api.findByStopIds(query);
 
         assertThat(predictions).hasSize(1);
@@ -193,9 +193,9 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/success.json"))));
 
-        StopsPredictionsQuery query = StopsPredictionsQuery.builder(List.of("456"))
-            .maxResults(5)
-            .build();
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456"))
+                                                         .maxResults(5)
+                                                         .build();
         List<Prediction> predictions = this.api.findByStopIds(query);
 
         assertThat(predictions).hasSize(1);
@@ -253,9 +253,9 @@ class PredictionsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("bus/prediction/success.json"))));
 
-        VehiclesPredictionsQuery query = VehiclesPredictionsQuery.builder(List.of("509"))
-            .maxResults(3)
-            .build();
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(List.of("509"))
+                                                               .maxResults(3)
+                                                               .build();
         List<Prediction> predictions = this.api.findByVehicleIds(query);
 
         assertThat(predictions).hasSize(1);

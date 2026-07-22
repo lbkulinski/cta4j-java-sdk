@@ -4,6 +4,7 @@ import com.cta4j.bus.common.internal.util.ApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,12 +15,12 @@ import java.util.Objects;
  * @param maxResults the optional maximum number of predictions to return
  */
 @NullMarked
-public record VehiclesPredictionsQuery(
+public record VehiclePredictionsQuery(
     List<String> vehicleIds,
     @Nullable Integer maxResults
 ) {
     /**
-     * Constructs a {@code VehiclesPredictionsQuery}.
+     * Constructs a {@code VehiclePredictionsQuery}.
      *
      * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
      * @param maxResults the optional maximum number of predictions to return
@@ -28,7 +29,7 @@ public record VehiclesPredictionsQuery(
      * @throws IllegalArgumentException if more than 10 vehicle IDs are provided, or if {@code maxResults} is
      * non-{@code null} and not positive
      */
-    public VehiclesPredictionsQuery {
+    public VehiclePredictionsQuery {
         Objects.requireNonNull(vehicleIds);
 
         ApiUtils.requireMaxIds(vehicleIds, "vehicle");
@@ -41,19 +42,19 @@ public record VehiclesPredictionsQuery(
     }
 
     /**
-     * Creates a builder for {@code VehiclesPredictionsQuery}.
+     * Creates a builder for {@code VehiclePredictionsQuery}.
      *
-     * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
+     * @param vehicleIds the {@link Collection} of vehicle IDs to retrieve predictions for
      * @return a new {@code Builder} instance
      * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of {@code vehicleIds} is
      * {@code null}
      */
-    public static Builder builder(List<String> vehicleIds) {
+    public static Builder builder(Collection<String> vehicleIds) {
         return new Builder(vehicleIds);
     }
 
     /**
-     * Builder for {@code VehiclesPredictionsQuery}.
+     * Builder for {@code VehiclePredictionsQuery}.
      */
     public static final class Builder {
         /**
@@ -70,11 +71,11 @@ public record VehiclesPredictionsQuery(
         /**
          * Constructs a {@code Builder}.
          *
-         * @param vehicleIds the {@link List} of vehicle IDs to retrieve predictions for
+         * @param vehicleIds the {@link Collection} of vehicle IDs to retrieve predictions for
          * @throws NullPointerException if {@code vehicleIds} is {@code null}, or if any element of
          * {@code vehicleIds} is {@code null}
          */
-        public Builder(List<String> vehicleIds) {
+        public Builder(Collection<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
 
             this.vehicleIds = List.copyOf(vehicleIds);
@@ -98,13 +99,13 @@ public record VehiclesPredictionsQuery(
         }
 
         /**
-         * Builds the {@code VehiclesPredictionsQuery}.
+         * Builds the {@code VehiclePredictionsQuery}.
          *
-         * @return the constructed {@code VehiclesPredictionsQuery}
+         * @return the constructed {@code VehiclePredictionsQuery}
          * @throws IllegalArgumentException if more than 10 vehicle IDs are provided
          */
-        public VehiclesPredictionsQuery build() {
-            return new VehiclesPredictionsQuery(
+        public VehiclePredictionsQuery build() {
+            return new VehiclePredictionsQuery(
                 this.vehicleIds,
                 this.maxResults
             );

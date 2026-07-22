@@ -7,29 +7,29 @@ import org.jspecify.annotations.Nullable;
 import java.util.Objects;
 
 /**
- * Represents a query for train arrivals at a specific map.
+ * Represents a query for train arrivals at a specific stop.
  *
- * @param mapId the ID of the map to retrieve arrivals for
+ * @param stopId the ID of the stop to retrieve arrivals for
  * @param line the optional train line to filter arrivals by
  * @param maxResults the optional maximum number of arrivals to return
  */
 @NullMarked
-public record MapArrivalQuery(
-    String mapId,
+public record StopArrivalsQuery(
+    String stopId,
     @Nullable TrainLine line,
     @Nullable Integer maxResults
 ) {
     /**
-     * Constructs a {@code MapArrivalQuery}.
+     * Constructs a {@code StopArrivalsQuery}.
      *
-     * @param mapId the ID of the map to retrieve arrivals for
+     * @param stopId the ID of the stop to retrieve arrivals for
      * @param line the optional train line to filter arrivals by
      * @param maxResults the optional maximum number of arrivals to return
-     * @throws NullPointerException if {@code mapId} is {@code null}
+     * @throws NullPointerException if {@code stopId} is {@code null}
      * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
      */
-    public MapArrivalQuery {
-        Objects.requireNonNull(mapId);
+    public StopArrivalsQuery {
+        Objects.requireNonNull(stopId);
 
         if ((maxResults != null) && (maxResults <= 0)) {
             throw new IllegalArgumentException("maxResults must be positive");
@@ -37,24 +37,24 @@ public record MapArrivalQuery(
     }
 
     /**
-     * Creates a builder for {@code MapArrivalQuery}.
+     * Creates a builder for {@code StopArrivalsQuery}.
      *
-     * @param mapId the ID of the map to retrieve arrivals for
+     * @param stopId the ID of the stop to retrieve arrivals for
      * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code mapId} is {@code null}
+     * @throws NullPointerException if {@code stopId} is {@code null}
      */
-    public static Builder builder(String mapId) {
-        return new Builder(mapId);
+    public static Builder builder(String stopId) {
+        return new Builder(stopId);
     }
 
     /**
-     * A builder for {@code MapArrivalQuery}.
+     * A builder for {@code StopArrivalsQuery}.
      */
     public static final class Builder {
         /**
-         * The ID of the map to retrieve arrivals for.
+         * The ID of the stop to retrieve arrivals for.
          */
-        private final String mapId;
+        private final String stopId;
 
         /**
          * The optional train line to filter arrivals by.
@@ -71,11 +71,11 @@ public record MapArrivalQuery(
         /**
          * Constructs a {@code Builder}.
          *
-         * @param mapId the ID of the map to retrieve arrivals for
-         * @throws NullPointerException if {@code mapId} is {@code null}
+         * @param stopId the ID of the stop to retrieve arrivals for
+         * @throws NullPointerException if {@code stopId} is {@code null}
          */
-        public Builder(String mapId) {
-            this.mapId = Objects.requireNonNull(mapId);
+        public Builder(String stopId) {
+            this.stopId = Objects.requireNonNull(stopId);
         }
 
         /**
@@ -109,13 +109,13 @@ public record MapArrivalQuery(
         }
 
         /**
-         * Builds the {@code MapArrivalQuery}.
+         * Builds the {@code StopArrivalsQuery}.
          *
-         * @return a new {@code MapArrivalQuery} instance
+         * @return a new {@code StopArrivalsQuery} instance
          */
-        public MapArrivalQuery build() {
-            return new MapArrivalQuery(
-                this.mapId,
+        public StopArrivalsQuery build() {
+            return new StopArrivalsQuery(
+                this.stopId,
                 this.line,
                 this.maxResults
             );

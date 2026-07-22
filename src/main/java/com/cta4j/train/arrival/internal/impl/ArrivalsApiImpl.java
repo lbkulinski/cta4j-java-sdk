@@ -4,8 +4,8 @@ import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.arrival.exception.ArrivalsErrorCode;
 import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
 import com.cta4j.train.arrival.internal.wire.CtaArrivalsResponse;
-import com.cta4j.train.arrival.query.MapArrivalQuery;
-import com.cta4j.train.arrival.query.StopArrivalQuery;
+import com.cta4j.train.arrival.query.MapArrivalsQuery;
+import com.cta4j.train.arrival.query.StopArrivalsQuery;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.internal.mapper.ArrivalMapper;
 import com.cta4j.train.common.internal.util.TrainApiConstants;
@@ -38,7 +38,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
     }
 
     @Override
-    public List<Arrival> findByMapId(MapArrivalQuery query) {
+    public List<Arrival> findByMapId(MapArrivalsQuery query) {
         Objects.requireNonNull(query);
 
         URIBuilder builder = new URIBuilder()
@@ -54,7 +54,7 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
     }
 
     @Override
-    public List<Arrival> findByStopId(StopArrivalQuery query) {
+    public List<Arrival> findByStopId(StopArrivalsQuery query) {
         Objects.requireNonNull(query);
 
         URIBuilder builder = new URIBuilder()
