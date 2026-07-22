@@ -1,6 +1,6 @@
 package com.cta4j.train.location;
 
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.cta4j.train.location.exception.Cta4jLocationsException;
 import com.cta4j.train.location.model.TrainLocations;
 import org.jspecify.annotations.NullMarked;
@@ -14,6 +14,17 @@ import java.util.List;
  */
 @NullMarked
 public interface LocationsApi {
+    /**
+     * Retrieves train locations for all lines.
+     *
+     * @return a {@link List} of {@link TrainLocations} for all lines, or an empty {@link List} if no train locations
+     * are found
+     * @throws Cta4jLocationsException if the API returns an error response or the response cannot be parsed
+     */
+    default List<TrainLocations> list() {
+        return findByLines(List.of(TrainLine.values()));
+    }
+
     /**
      * Retrieves train locations for the specified lines.
      *
@@ -36,16 +47,5 @@ public interface LocationsApi {
      */
     default List<TrainLocations> findByLine(TrainLine line) {
         return findByLines(List.of(line));
-    }
-
-    /**
-     * Retrieves train locations for all lines.
-     *
-     * @return a {@link List} of {@link TrainLocations} for all lines, or an empty {@link List} if no train locations
-     * are found
-     * @throws Cta4jLocationsException if the API returns an error response or the response cannot be parsed
-     */
-    default List<TrainLocations> findAll() {
-        return findByLines(List.of(TrainLine.values()));
     }
 }

@@ -9,6 +9,11 @@ import java.util.Objects;
 /**
  * Represents metadata associated with a train arrival.
  *
+ * <p>
+ *     <b>NOTE:</b> {@code flags} is not well-documented by the CTA. As such, its presence here is primarily for
+ *     completeness and may not be populated or described correctly.
+ * </p>
+ *
  * @param runNumber the run number of the train associated with this arrival
  * @param direction the direction of travel of the train associated with this arrival
  * @param coordinates the coordinates of the train associated with this arrival, if applicable

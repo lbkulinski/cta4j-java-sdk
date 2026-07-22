@@ -4,6 +4,7 @@ import com.cta4j.bus.common.internal.util.ApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,13 +16,13 @@ import java.util.Objects;
  * @param maxResults the optional maximum number of predictions to return
  */
 @NullMarked
-public record StopsPredictionsQuery(
+public record StopPredictionsQuery(
     List<String> stopIds,
     @Nullable List<String> routeIds,
     @Nullable Integer maxResults
 ) {
     /**
-     * Constructs a {@code StopsPredictionsQuery}.
+     * Constructs a {@code StopPredictionsQuery}.
      *
      * @param stopIds the {@link List} of stop IDs to retrieve predictions for
      * @param routeIds the optional {@link List} of route IDs to filter predictions by
@@ -31,7 +32,7 @@ public record StopsPredictionsQuery(
      * @throws IllegalArgumentException if more than 10 stop IDs are provided, or if {@code maxResults} is
      * non-{@code null} and not positive
      */
-    public StopsPredictionsQuery {
+    public StopPredictionsQuery {
         Objects.requireNonNull(stopIds);
 
         ApiUtils.requireMaxIds(stopIds, "stop");
@@ -48,19 +49,19 @@ public record StopsPredictionsQuery(
     }
 
     /**
-     * Creates a builder for {@code StopsPredictionsQuery}.
+     * Creates a builder for {@code StopPredictionsQuery}.
      *
-     * @param stopIds the {@link List} of stop IDs to retrieve predictions for
+     * @param stopIds the {@link Collection} of stop IDs to retrieve predictions for
      * @return a new {@code Builder} instance
      * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} is
      * {@code null}
      */
-    public static Builder builder(List<String> stopIds) {
+    public static Builder builder(Collection<String> stopIds) {
         return new Builder(stopIds);
     }
 
     /**
-     * A builder for {@code StopsPredictionsQuery}.
+     * A builder for {@code StopPredictionsQuery}.
      */
     public static final class Builder {
         /**
@@ -83,25 +84,25 @@ public record StopsPredictionsQuery(
         /**
          * Constructs a {@code Builder}.
          *
-         * @param stopIds the {@link List} of stop IDs to retrieve predictions for
+         * @param stopIds the {@link Collection} of stop IDs to retrieve predictions for
          * @throws NullPointerException if {@code stopIds} is {@code null}, or if any element of {@code stopIds} is
          * {@code null}
          */
-        public Builder(List<String> stopIds) {
+        public Builder(Collection<String> stopIds) {
             Objects.requireNonNull(stopIds);
 
             this.stopIds = List.copyOf(stopIds);
         }
 
         /**
-         * Sets the {@link List} of route IDs to filter predictions by.
+         * Sets the {@link Collection} of route IDs to filter predictions by.
          *
-         * @param routeIds the {@link List} of route IDs
+         * @param routeIds the {@link Collection} of route IDs
          * @return this {@code Builder} instance
          * @throws NullPointerException if {@code routeIds} is {@code null}, or if any element of {@code routeIds} is
          * {@code null}
          */
-        public Builder routeIds(List<String> routeIds) {
+        public Builder routeIds(Collection<String> routeIds) {
             Objects.requireNonNull(routeIds);
 
             this.routeIds = List.copyOf(routeIds);
@@ -127,13 +128,13 @@ public record StopsPredictionsQuery(
         }
 
         /**
-         * Builds the {@code StopsPredictionsQuery}.
+         * Builds the {@code StopPredictionsQuery}.
          *
-         * @return a new {@code StopsPredictionsQuery} instance
+         * @return a new {@code StopPredictionsQuery} instance
          * @throws IllegalArgumentException if more than 10 stop IDs are provided
          */
-        public StopsPredictionsQuery build() {
-            return new StopsPredictionsQuery(
+        public StopPredictionsQuery build() {
+            return new StopPredictionsQuery(
                 this.stopIds,
                 this.routeIds,
                 this.maxResults

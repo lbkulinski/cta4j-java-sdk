@@ -4,11 +4,11 @@ import com.cta4j.TestFixtures;
 import com.cta4j.train.arrival.exception.ArrivalsErrorCode;
 import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
-import com.cta4j.train.arrival.query.MapArrivalQuery;
-import com.cta4j.train.arrival.query.StopArrivalQuery;
+import com.cta4j.train.arrival.query.MapArrivalsQuery;
+import com.cta4j.train.arrival.query.StopArrivalsQuery;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.Arrival;
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -52,7 +52,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/success.json"))));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
         List<Arrival> arrivals = this.api.findByMapId(query);
 
         assertThat(arrivals).hasSize(1);
@@ -72,7 +72,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/empty.json"))));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
         List<Arrival> arrivals = this.api.findByMapId(query);
 
         assertThat(arrivals).isEmpty();
@@ -86,7 +86,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"0\",\"errNm\":null,\"eta\":[]}}")));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
         List<Arrival> arrivals = this.api.findByMapId(query);
 
         assertThat(arrivals).isEmpty();
@@ -100,7 +100,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/error.json"))));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
@@ -118,7 +118,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/not_found_mapid.json"))));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("99999").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("99999").build();
         List<Arrival> arrivals = this.api.findByMapId(query);
 
         assertThat(arrivals).isEmpty();
@@ -132,7 +132,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody("not-json")));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
@@ -150,7 +150,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/success.json"))));
 
-        StopArrivalQuery query = StopArrivalQuery.builder("30070").build();
+        StopArrivalsQuery query = StopArrivalsQuery.builder("30070").build();
         List<Arrival> arrivals = this.api.findByStopId(query);
 
         assertThat(arrivals).hasSize(1);
@@ -164,7 +164,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/empty.json"))));
 
-        StopArrivalQuery query = StopArrivalQuery.builder("30070").build();
+        StopArrivalsQuery query = StopArrivalsQuery.builder("30070").build();
         List<Arrival> arrivals = this.api.findByStopId(query);
 
         assertThat(arrivals).isEmpty();
@@ -178,7 +178,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/error.json"))));
 
-        StopArrivalQuery query = StopArrivalQuery.builder("30070").build();
+        StopArrivalsQuery query = StopArrivalsQuery.builder("30070").build();
 
         assertThatThrownBy(() -> this.api.findByStopId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
@@ -196,7 +196,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/not_found_stpid.json"))));
 
-        StopArrivalQuery query = StopArrivalQuery.builder("99999").build();
+        StopArrivalsQuery query = StopArrivalsQuery.builder("99999").build();
         List<Arrival> arrivals = this.api.findByStopId(query);
 
         assertThat(arrivals).isEmpty();
@@ -212,10 +212,10 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/success.json"))));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900")
-            .line(TrainLine.RED)
-            .maxResults(5)
-            .build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900")
+                                                 .line(TrainLine.RED)
+                                                 .maxResults(5)
+                                                 .build();
 
         List<Arrival> arrivals = this.api.findByMapId(query);
 
@@ -233,10 +233,10 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/success.json"))));
 
-        StopArrivalQuery query = StopArrivalQuery.builder("30070")
-            .line(TrainLine.RED)
-            .maxResults(5)
-            .build();
+        StopArrivalsQuery query = StopArrivalsQuery.builder("30070")
+                                                   .line(TrainLine.RED)
+                                                   .maxResults(5)
+                                                   .build();
 
         List<Arrival> arrivals = this.api.findByStopId(query);
 
@@ -278,7 +278,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("train/arrival/invalid_err_cd.json"))));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
@@ -295,7 +295,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"-1\",\"errNm\":\"Unexpected error\"}}")));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
@@ -313,7 +313,7 @@ class ArrivalsApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"1\",\"errNm\":\"\"}}")));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)
@@ -329,7 +329,7 @@ class ArrivalsApiImplTest {
             .willReturn(aResponse()
                 .withStatus(500)));
 
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
 
         assertThatThrownBy(() -> this.api.findByMapId(query))
             .isInstanceOf(Cta4jArrivalsException.class)

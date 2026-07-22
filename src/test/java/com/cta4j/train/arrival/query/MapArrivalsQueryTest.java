@@ -1,17 +1,17 @@
 package com.cta4j.train.arrival.query;
 
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
-class MapArrivalQueryTest {
+class MapArrivalsQueryTest {
     @Test
     void builder_buildsQueryWithOptionalParams() {
-        MapArrivalQuery query = MapArrivalQuery.builder("40900")
-            .line(TrainLine.RED)
-            .maxResults(5)
-            .build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900")
+                                                 .line(TrainLine.RED)
+                                                 .maxResults(5)
+                                                 .build();
 
         assertThat(query.mapId()).isEqualTo("40900");
         assertThat(query.line()).isEqualTo(TrainLine.RED);
@@ -20,7 +20,7 @@ class MapArrivalQueryTest {
 
     @Test
     void builder_buildsQueryWithNoOptionalParams() {
-        MapArrivalQuery query = MapArrivalQuery.builder("40900").build();
+        MapArrivalsQuery query = MapArrivalsQuery.builder("40900").build();
 
         assertThat(query.mapId()).isEqualTo("40900");
         assertThat(query.line()).isNull();
@@ -30,18 +30,18 @@ class MapArrivalQueryTest {
     @Test
     void builder_throwsIllegalArgumentException_whenMaxResultsIsZero() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            MapArrivalQuery.builder("40900").maxResults(0));
+            MapArrivalsQuery.builder("40900").maxResults(0));
     }
 
     @Test
     void builder_throwsIllegalArgumentException_whenMaxResultsIsNegative() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            MapArrivalQuery.builder("40900").maxResults(-1));
+            MapArrivalsQuery.builder("40900").maxResults(-1));
     }
 
     @Test
     void constructor_throwsIllegalArgumentException_whenMaxResultsIsNotPositive() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            new MapArrivalQuery("40900", null, 0));
+            new MapArrivalsQuery("40900", null, 0));
     }
 }

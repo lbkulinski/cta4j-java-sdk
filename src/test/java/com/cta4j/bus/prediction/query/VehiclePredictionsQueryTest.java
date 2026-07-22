@@ -7,12 +7,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-class VehiclesPredictionsQueryTest {
+class VehiclePredictionsQueryTest {
     @Test
     void builder_buildsQueryWithMaxResults() {
-        VehiclesPredictionsQuery query = VehiclesPredictionsQuery.builder(List.of("509"))
-            .maxResults(3)
-            .build();
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(List.of("509"))
+                                                               .maxResults(3)
+                                                               .build();
 
         assertThat(query.vehicleIds()).containsExactly("509");
         assertThat(query.maxResults()).isEqualTo(3);
@@ -20,7 +20,7 @@ class VehiclesPredictionsQueryTest {
 
     @Test
     void builder_buildsQueryWithNoOptionalParams() {
-        VehiclesPredictionsQuery query = VehiclesPredictionsQuery.builder(List.of("509")).build();
+        VehiclePredictionsQuery query = VehiclePredictionsQuery.builder(List.of("509")).build();
 
         assertThat(query.vehicleIds()).containsExactly("509");
         assertThat(query.maxResults()).isNull();
@@ -29,13 +29,13 @@ class VehiclesPredictionsQueryTest {
     @Test
     void builder_throwsIllegalArgumentException_whenMaxResultsIsZero() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            VehiclesPredictionsQuery.builder(List.of("509")).maxResults(0));
+            VehiclePredictionsQuery.builder(List.of("509")).maxResults(0));
     }
 
     @Test
     void builder_throwsIllegalArgumentException_whenMaxResultsIsNegative() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            VehiclesPredictionsQuery.builder(List.of("509")).maxResults(-1));
+            VehiclePredictionsQuery.builder(List.of("509")).maxResults(-1));
     }
 
     @Test
@@ -43,12 +43,12 @@ class VehiclesPredictionsQueryTest {
         List<String> ids = Collections.nCopies(11, "509");
 
         assertThatIllegalArgumentException().isThrownBy(() ->
-            new VehiclesPredictionsQuery(ids, null));
+            new VehiclePredictionsQuery(ids, null));
     }
 
     @Test
     void constructor_throwsIllegalArgumentException_whenMaxResultsIsNotPositive() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            new VehiclesPredictionsQuery(List.of("509"), 0));
+            new VehiclePredictionsQuery(List.of("509"), 0));
     }
 }

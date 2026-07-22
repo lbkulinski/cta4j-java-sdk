@@ -4,7 +4,7 @@ import com.cta4j.common.geo.Coordinates;
 import com.cta4j.train.common.internal.mapper.Qualifiers;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.cta4j.train.follow.internal.wire.CtaPosition;
 import com.cta4j.train.station.internal.wire.CtaLocation;
 import com.cta4j.train.station.internal.wire.CtaStation;

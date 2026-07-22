@@ -1,5 +1,11 @@
 # cta4j Java SDK
 
+[![Maven Central](https://img.shields.io/maven-central/v/com.cta4j/cta4j-java-sdk)](https://central.sonatype.com/artifact/com.cta4j/cta4j-java-sdk)
+[![Build & Test](https://github.com/lbkulinski/cta4j-java-sdk/actions/workflows/build.yaml/badge.svg)](https://github.com/lbkulinski/cta4j-java-sdk/actions/workflows/build.yaml)
+[![Javadoc](https://javadoc.io/badge2/com.cta4j/cta4j-java-sdk/javadoc.svg)](https://javadoc.io/doc/com.cta4j/cta4j-java-sdk)
+![Java Version](https://img.shields.io/badge/Java-21%2B-orange)
+[![License](https://img.shields.io/github/license/lbkulinski/cta4j-java-sdk)](LICENSE)
+
 A lightweight Java SDK for interacting with the [Chicago Transit Authority (CTA)](https://www.transitchicago.com/) APIs — both Train Tracker and Bus Tracker.  
 
 Built for simplicity, reliability, and minimal external dependencies.
@@ -36,13 +42,13 @@ After applying, you'll receive an API key by email. Keep it safe — you'll use 
 <dependency>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>6.0.0</version>
+    <version>7.0.0</version>
 </dependency>
 ```
 
 ### Gradle (Kotlin DSL)
 ```kotlin
-implementation("com.cta4j:cta4j-java-sdk:6.0.0")
+implementation("com.cta4j:cta4j-java-sdk:7.0.0")
 ```
 
 ---

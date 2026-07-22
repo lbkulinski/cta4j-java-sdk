@@ -1,34 +1,34 @@
 package com.cta4j.train.arrival.query;
 
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
 /**
- * Represents a query for train arrival information for a specific stop.
+ * Represents a query for train arrivals at a specific stop.
  *
- * @param stopId the ID of the stop to retrieve arrival information for
- * @param line the optional train line to filter arrival information by
- * @param maxResults the optional maximum number of arrival information to return
+ * @param stopId the ID of the stop to retrieve arrivals for
+ * @param line the optional train line to filter arrivals by
+ * @param maxResults the optional maximum number of arrivals to return
  */
 @NullMarked
-public record StopArrivalQuery(
+public record StopArrivalsQuery(
     String stopId,
     @Nullable TrainLine line,
     @Nullable Integer maxResults
 ) {
     /**
-     * Constructs a {@code StopArrivalQuery}.
+     * Constructs a {@code StopArrivalsQuery}.
      *
-     * @param stopId the ID of the stop to retrieve arrival information for
-     * @param line the optional train line to filter arrival information by
-     * @param maxResults the optional maximum number of arrival information to return
+     * @param stopId the ID of the stop to retrieve arrivals for
+     * @param line the optional train line to filter arrivals by
+     * @param maxResults the optional maximum number of arrivals to return
      * @throws NullPointerException if {@code stopId} is {@code null}
      * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
      */
-    public StopArrivalQuery {
+    public StopArrivalsQuery {
         Objects.requireNonNull(stopId);
 
         if ((maxResults != null) && (maxResults <= 0)) {
@@ -37,9 +37,9 @@ public record StopArrivalQuery(
     }
 
     /**
-     * Creates a builder for {@code StopArrivalQuery}.
+     * Creates a builder for {@code StopArrivalsQuery}.
      *
-     * @param stopId the ID of the stop to retrieve arrival information for
+     * @param stopId the ID of the stop to retrieve arrivals for
      * @return a new {@code Builder} instance
      * @throws NullPointerException if {@code stopId} is {@code null}
      */
@@ -48,22 +48,22 @@ public record StopArrivalQuery(
     }
 
     /**
-     * A builder for {@code StopArrivalQuery}.
+     * A builder for {@code StopArrivalsQuery}.
      */
     public static final class Builder {
         /**
-         * The ID of the stop to retrieve arrival information for.
+         * The ID of the stop to retrieve arrivals for.
          */
         private final String stopId;
 
         /**
-         * The optional train line to filter arrival information by.
+         * The optional train line to filter arrivals by.
          */
         @Nullable
         private TrainLine line;
 
         /**
-         * The optional maximum number of arrival information to return.
+         * The optional maximum number of arrivals to return.
          */
         @Nullable
         private Integer maxResults;
@@ -71,7 +71,7 @@ public record StopArrivalQuery(
         /**
          * Constructs a {@code Builder}.
          *
-         * @param stopId the ID of the stop to retrieve arrival information for
+         * @param stopId the ID of the stop to retrieve arrivals for
          * @throws NullPointerException if {@code stopId} is {@code null}
          */
         public Builder(String stopId) {
@@ -79,7 +79,7 @@ public record StopArrivalQuery(
         }
 
         /**
-         * Sets the train line to filter arrival information by.
+         * Sets the train line to filter arrivals by.
          *
          * @param line the train line
          * @return this {@code Builder} instance
@@ -92,16 +92,13 @@ public record StopArrivalQuery(
         }
 
         /**
-         * Sets the maximum number of arrival information to return.
+         * Sets the maximum number of arrivals to return.
          *
-         * @param maxResults the maximum number of arrival information
+         * @param maxResults the maximum number of arrivals
          * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code maxResults} is {@code null}
          * @throws IllegalArgumentException if {@code maxResults} is not positive
          */
-        public Builder maxResults(Integer maxResults) {
-            Objects.requireNonNull(maxResults);
-
+        public Builder maxResults(int maxResults) {
             if (maxResults <= 0) {
                 throw new IllegalArgumentException("maxResults must be positive");
             }
@@ -112,12 +109,12 @@ public record StopArrivalQuery(
         }
 
         /**
-         * Builds the {@code StopArrivalQuery}.
+         * Builds the {@code StopArrivalsQuery}.
          *
-         * @return a new {@code StopArrivalQuery} instance
+         * @return a new {@code StopArrivalsQuery} instance
          */
-        public StopArrivalQuery build() {
-            return new StopArrivalQuery(
+        public StopArrivalsQuery build() {
+            return new StopArrivalsQuery(
                 this.stopId,
                 this.line,
                 this.maxResults

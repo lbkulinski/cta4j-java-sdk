@@ -1,6 +1,6 @@
 package com.cta4j.train.location;
 
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.cta4j.train.location.internal.mapper.TrainLocationsMapper;
 import com.cta4j.train.location.internal.wire.CtaLocationTrain;
 import com.cta4j.train.location.internal.wire.CtaRoute;

@@ -3,7 +3,7 @@ package com.cta4j.train.station;
 import com.cta4j.TestFixtures;
 import com.cta4j.train.common.exception.Cta4jTrainException;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
-import com.cta4j.train.common.model.TrainLine;
+import com.cta4j.common.train.TrainLine;
 import com.cta4j.train.station.internal.impl.StationsApiImpl;
 import com.cta4j.train.station.model.Station;
 import com.github.tomakehurst.wiremock.WireMockServer;

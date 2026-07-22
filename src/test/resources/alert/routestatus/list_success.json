@@ -1,0 +1,36 @@
+{
+  "CTARoutes": {
+    "TimeStamp": "2026-07-17T14:06:58",
+    "ErrorCode": ["0", "0"],
+    "ErrorMessage": [null, null],
+    "RouteInfo": [
+      {
+        "Route": "Red Line",
+        "RouteColorCode": "c60c30",
+        "RouteTextColor": "ffffff",
+        "ServiceId": "Red",
+        "RouteURL": {"#cdata-section": "http://www.transitchicago.com/redline/"},
+        "RouteStatus": "Normal Service",
+        "RouteStatusColor": "404040"
+      },
+      {
+        "Route": "Clark",
+        "RouteColorCode": "565a5c",
+        "RouteTextColor": "ffffff",
+        "ServiceId": "22",
+        "RouteURL": {"#cdata-section": "http://www.transitchicago.com/bus/22/"},
+        "RouteStatus": "Bus Stop Note",
+        "RouteStatusColor": "000000"
+      },
+      {
+        "Route": "All Routes",
+        "RouteColorCode": "000000",
+        "RouteTextColor": "ffffff",
+        "ServiceId": "Systemwide",
+        "RouteURL": {"#cdata-section": "http://www.transitchicago.com/travel_information/systemalerts.aspx"},
+        "RouteStatus": "Normal Service",
+        "RouteStatusColor": "404040"
+      }
+    ]
+  }
+}
