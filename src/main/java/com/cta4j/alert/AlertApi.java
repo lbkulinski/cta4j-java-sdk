@@ -1,6 +1,7 @@
 package com.cta4j.alert;
 
 import com.cta4j.alert.common.internal.impl.AlertApiImpl;
+import com.cta4j.alert.detailedalert.DetailedAlertsApi;
 import com.cta4j.alert.routestatus.RouteStatusApi;
 import org.jspecify.annotations.NullMarked;
 
@@ -21,6 +22,13 @@ public interface AlertApi {
      * @return the {@link RouteStatusApi}
      */
     RouteStatusApi routeStatus();
+
+    /**
+     * Provides access to detailed alert-related endpoints.
+     *
+     * @return the {@link DetailedAlertsApi}
+     */
+    DetailedAlertsApi detailedAlerts();
 
     /**
      * Builder for constructing {@link AlertApi} instances.

@@ -3,6 +3,7 @@ package com.cta4j.alert.common.internal.impl;
 import com.cta4j.alert.AlertApi;
 import com.cta4j.alert.common.internal.config.AlertApiConfig;
 import com.cta4j.alert.common.internal.util.AlertApiConstants;
+import com.cta4j.alert.detailedalert.DetailedAlertsApi;
 import com.cta4j.alert.routestatus.RouteStatusApi;
 import com.cta4j.alert.routestatus.internal.impl.RouteStatusApiImpl;
 import org.jetbrains.annotations.ApiStatus;
@@ -25,6 +26,11 @@ public final class AlertApiImpl implements AlertApi {
     @Override
     public RouteStatusApi routeStatus() {
         return this.routeStatusApi;
+    }
+
+    @Override
+    public DetailedAlertsApi detailedAlerts() {
+        return null;
     }
 
     public static final class BuilderImpl implements AlertApi.Builder {

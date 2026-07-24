@@ -3,7 +3,7 @@ package com.cta4j.alert.common.model;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Represents a category of CTA service — a bus route, train route, train station, or systemwide grouping.
+ * Represents a category of CTA service - a bus route, train route, train station, or systemwide grouping.
  */
 @NullMarked
 public enum ServiceType {
