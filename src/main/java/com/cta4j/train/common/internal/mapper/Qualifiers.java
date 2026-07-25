@@ -1,6 +1,8 @@
 package com.cta4j.train.common.internal.mapper;
 
 import com.cta4j.common.geo.Coordinates;
+import com.cta4j.common.internal.util.BooleanParser;
+import com.cta4j.common.internal.util.TimestampParser;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
 import com.cta4j.common.train.TrainLine;
@@ -17,10 +19,8 @@ import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
@@ -114,30 +114,14 @@ public final class Qualifiers {
     public static Instant mapTimestamp(String timestamp) {
         Objects.requireNonNull(timestamp);
 
-        try {
-            return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
-                                .atZone(CHICAGO_ZONE_ID)
-                                .toInstant();
-        } catch (DateTimeParseException e) {
-            String message = "Failed to parse timestamp: %s".formatted(timestamp);
-
-            throw new IllegalArgumentException(message, e);
-        }
+        return TimestampParser.parse(timestamp, TIMESTAMP_FORMATTER, CHICAGO_ZONE_ID);
     }
 
     @Named("map01ToBoolean")
     public static boolean map01ToBoolean(String value) {
         Objects.requireNonNull(value);
 
-        return switch (value) {
-            case "0" -> false;
-            case "1" -> true;
-            default -> {
-                String message = "Invalid boolean value: %s. Expected 0 or 1".formatted(value);
-
-                throw new IllegalArgumentException(message);
-            }
-        };
+        return BooleanParser.parse01(value);
     }
 
     @Named("map15ToTrainDirection")
