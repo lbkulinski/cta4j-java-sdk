@@ -11,6 +11,7 @@ import java.util.Objects;
  * an alert.
  *
  * @param type the type of service this service represents
+ * @param typeDescription the plain English description of {@code type} (e.g., "Bus Route")
  * @param name the name of this service (e.g., "Clark", "Red Line", "Jackson", "All Bus Routes")
  * @param serviceId the identifier of this service; matches GTFS route or station IDs, except for systemwide groupings,
  *                  which use a fixed identifier instead (e.g., "22", "Red", "Systemwide")
@@ -22,6 +23,7 @@ import java.util.Objects;
 @NullMarked
 public record ImpactedService(
     ServiceType type,
+    String typeDescription,
     String name,
     String serviceId,
     String color,
@@ -32,6 +34,7 @@ public record ImpactedService(
      * Constructs an {@code ImpactedService}.
      *
      * @param type the type of service the service represents
+     * @param typeDescription the plain English description of {@code type} (e.g., "Bus Route")
      * @param name the name of the service (e.g., "Clark", "Red Line", "Jackson", "All Bus Routes")
      * @param serviceId the identifier of the service; matches GTFS route or station IDs, except for systemwide
      *                  groupings, which use a fixed identifier instead (e.g., "22", "Red", "Systemwide")
@@ -39,11 +42,12 @@ public record ImpactedService(
      * @param textColor the suggested color of text displayed against {@code color}; casing varies (e.g., "ffffff",
      *                  "FFFFFF")
      * @param url the URL of the service's page on transitchicago.com
-     * @throws NullPointerException if {@code type}, {@code name}, {@code serviceId}, {@code color},
-     * {@code textColor}, or {@code url} is {@code null}
+     * @throws NullPointerException if {@code type}, {@code typeDescription}, {@code name}, {@code serviceId},
+     * {@code color}, {@code textColor}, or {@code url} is {@code null}
      */
     public ImpactedService {
         Objects.requireNonNull(type);
+        Objects.requireNonNull(typeDescription);
         Objects.requireNonNull(name);
         Objects.requireNonNull(serviceId);
         Objects.requireNonNull(color);

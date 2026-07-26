@@ -1,5 +1,6 @@
 package com.cta4j.alert.common.internal.mapper;
 
+import com.cta4j.alert.common.model.ServiceType;
 import com.cta4j.common.internal.util.BooleanParser;
 import com.cta4j.common.internal.util.TimestampParser;
 import org.jetbrains.annotations.ApiStatus;
@@ -47,5 +48,22 @@ public final class Qualifiers {
         Objects.requireNonNull(value);
 
         return BooleanParser.parse01(value);
+    }
+
+    @Named("mapServiceType")
+    public static ServiceType mapServiceType(String serviceType) {
+        Objects.requireNonNull(serviceType);
+
+        return switch (serviceType) {
+            case "B" -> ServiceType.BUS;
+            case "R" -> ServiceType.RAIL;
+            case "T" -> ServiceType.STATION;
+            case "X" -> ServiceType.SYSTEMWIDE;
+            default -> {
+                String message = "Unknown service type: %s".formatted(serviceType);
+
+                throw new IllegalArgumentException(message);
+            }
+        };
     }
 }

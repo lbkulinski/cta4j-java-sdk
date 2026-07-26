@@ -24,6 +24,10 @@ import java.util.Objects;
  * @param major whether this alert is of major significance
  * @param url the URL of this alert's detail page on transitchicago.com
  * @param impactedServices the services impacted by this alert
+ * @param ttim an undocumented field returned by the CTA Alerts API; its meaning is not specified and its presence
+ *             is not guaranteed, or {@code null} if not returned
+ * @param guid an undocumented field returned by the CTA Alerts API that appears to be a stable, globally unique
+ *             identifier for this alert, distinct from {@link #id}, or {@code null} if not returned
  */
 @NullMarked
 public record Alert(
@@ -38,7 +42,9 @@ public record Alert(
     boolean openEnded,
     boolean major,
     URI url,
-    List<ImpactedService> impactedServices
+    List<ImpactedService> impactedServices,
+    @Nullable String ttim,
+    @Nullable String guid
 ) {
     /**
      * Constructs an {@code Alert}.
@@ -56,6 +62,10 @@ public record Alert(
      * @param major whether the alert is of major significance
      * @param url the URL of the alert's detail page on transitchicago.com
      * @param impactedServices the services impacted by the alert
+     * @param ttim an undocumented field returned by the CTA Alerts API; its meaning is not specified and its
+     *             presence is not guaranteed, or {@code null} if not returned
+     * @param guid an undocumented field returned by the CTA Alerts API that appears to be a stable, globally
+     *             unique identifier for the alert, distinct from {@code id}, or {@code null} if not returned
      * @throws NullPointerException if {@code id}, {@code headline}, {@code shortDescription},
      * {@code fullDescription}, {@code severity}, {@code impact}, {@code startTime}, {@code url}, or
      * {@code impactedServices} is {@code null}, or if any element of {@code impactedServices} is {@code null}
