@@ -1,0 +1,7 @@
+{
+  "CTAAlerts": {
+    "TimeStamp": "2026-07-28T12:00:00",
+    "ErrorCode": "100",
+    "ErrorMessage": "Invalid option for parameter 'activeonly': Valid options are 'true', 'false'"
+  }
+}

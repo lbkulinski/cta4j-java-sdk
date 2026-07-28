@@ -2,6 +2,7 @@ package com.cta4j.alert.common.internal.impl;
 
 import com.cta4j.alert.AlertApi;
 import com.cta4j.alert.common.internal.config.AlertApiConfig;
+import com.cta4j.alert.detailedalert.DetailedAlertsApi;
 import com.cta4j.alert.routestatus.RouteStatusApi;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
@@ -36,6 +37,13 @@ class AlertApiImplTest {
     @Test
     void routeStatus_returnsNonNull() {
         RouteStatusApi result = this.api.routeStatus();
+
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    void detailedAlerts_returnsNonNull() {
+        DetailedAlertsApi result = this.api.detailedAlerts();
 
         assertThat(result).isNotNull();
     }
