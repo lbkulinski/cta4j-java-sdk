@@ -50,6 +50,19 @@ public final class Qualifiers {
         return BooleanParser.parse01(value);
     }
 
+    @Named("mapScore")
+    public static int mapScore(String value) {
+        Objects.requireNonNull(value);
+
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            String message = "Failed to parse score: %s".formatted(value);
+
+            throw new IllegalArgumentException(message, e);
+        }
+    }
+
     @Named("mapServiceType")
     public static ServiceType mapServiceType(String serviceType) {
         Objects.requireNonNull(serviceType);

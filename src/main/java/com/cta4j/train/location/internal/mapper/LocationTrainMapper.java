@@ -25,8 +25,8 @@ public interface LocationTrainMapper {
     @Mapping(target = "approaching", source = "isApp", qualifiedByName = "map01ToBoolean")
     @Mapping(target = "delayed", source = "isDly", qualifiedByName = "map01ToBoolean")
     @Mapping(target = "flags", source = "flags")
-    @Mapping(target = "coordinates.latitude", source = "lat", qualifiedByName = "parseCoordinate")
-    @Mapping(target = "coordinates.longitude", source = "lon", qualifiedByName = "parseCoordinate")
-    @Mapping(target = "coordinates.heading", source = "heading", qualifiedByName = "parseHeading")
+    @Mapping(target = "coordinates.latitude", source = "lat", qualifiedByName = "mapCoordinate")
+    @Mapping(target = "coordinates.longitude", source = "lon", qualifiedByName = "mapCoordinate")
+    @Mapping(target = "coordinates.heading", source = "heading", qualifiedByName = "mapHeading")
     LocationTrain toDomain(CtaLocationTrain train);
 }

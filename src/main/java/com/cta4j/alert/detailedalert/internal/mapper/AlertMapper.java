@@ -17,7 +17,7 @@ public interface AlertMapper {
 
     @Mapping(target = "id", source = "alertId")
     @Mapping(target = "fullDescription", source = "fullDescription.cdataSection")
-    @Mapping(target = "severity.score", source = "severityScore")
+    @Mapping(target = "severity.score", source = "severityScore", qualifiedByName = "mapScore")
     @Mapping(target = "severity.color", source = "severityColor")
     @Mapping(target = "severity.css", source = "severityCss")
     @Mapping(target = "startTime", source = "eventStart", qualifiedByName = "mapTimestamp")

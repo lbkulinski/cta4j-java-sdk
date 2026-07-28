@@ -147,8 +147,8 @@ public final class Qualifiers {
         }
     }
 
-    @Named("parseCoordinate")
-    public static BigDecimal parseCoordinate(String value) {
+    @Named("mapCoordinate")
+    public static BigDecimal mapCoordinate(String value) {
         Objects.requireNonNull(value);
 
         try {
@@ -160,8 +160,8 @@ public final class Qualifiers {
         }
     }
 
-    @Named("parseHeading")
-    public static int parseHeading(String value) {
+    @Named("mapHeading")
+    public static int mapHeading(String value) {
         Objects.requireNonNull(value);
 
         try {
@@ -206,9 +206,9 @@ public final class Qualifiers {
             return null;
         }
 
-        BigDecimal latitude = parseCoordinate(lat);
-        BigDecimal longitude = parseCoordinate(lon);
-        int headingValue = parseHeading(heading);
+        BigDecimal latitude = mapCoordinate(lat);
+        BigDecimal longitude = mapCoordinate(lon);
+        int headingValue = mapHeading(heading);
 
         return new Coordinates(latitude, longitude, headingValue);
     }

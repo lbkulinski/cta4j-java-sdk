@@ -176,25 +176,25 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void parseCoordinate_returnsBigDecimal_whenValueIsValid() {
-        assertThat(Qualifiers.parseCoordinate("42.019063")).isEqualByComparingTo(new BigDecimal("42.019063"));
+    void mapCoordinate_returnsBigDecimal_whenValueIsValid() {
+        assertThat(Qualifiers.mapCoordinate("42.019063")).isEqualByComparingTo(new BigDecimal("42.019063"));
     }
 
     @Test
-    void parseCoordinate_throwsIllegalArgumentException_whenValueIsNotNumeric() {
+    void mapCoordinate_throwsIllegalArgumentException_whenValueIsNotNumeric() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            Qualifiers.parseCoordinate("not-a-number"));
+            Qualifiers.mapCoordinate("not-a-number"));
     }
 
     @Test
-    void parseHeading_returnsInt_whenValueIsValid() {
-        assertThat(Qualifiers.parseHeading("180")).isEqualTo(180);
+    void mapHeading_returnsInt_whenValueIsValid() {
+        assertThat(Qualifiers.mapHeading("180")).isEqualTo(180);
     }
 
     @Test
-    void parseHeading_throwsIllegalArgumentException_whenValueIsNotNumeric() {
+    void mapHeading_throwsIllegalArgumentException_whenValueIsNotNumeric() {
         assertThatIllegalArgumentException().isThrownBy(() ->
-            Qualifiers.parseHeading("not-a-number"));
+            Qualifiers.mapHeading("not-a-number"));
     }
 
     @Test
