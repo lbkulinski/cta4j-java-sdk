@@ -1,12 +1,12 @@
 package com.cta4j.alert.detailedalert;
 
+import com.cta4j.alert.common.model.AlertTrainLine;
 import com.cta4j.alert.detailedalert.exception.Cta4jDetailedAlertsException;
 import com.cta4j.alert.detailedalert.model.Alert;
 import com.cta4j.alert.detailedalert.query.AlertsQuery;
 import com.cta4j.alert.detailedalert.query.BusRouteAlertsQuery;
 import com.cta4j.alert.detailedalert.query.LineAlertsQuery;
 import com.cta4j.alert.detailedalert.query.StationAlertsQuery;
-import com.cta4j.common.train.TrainLine;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
@@ -114,10 +114,10 @@ public interface DetailedAlertsApi {
      * {@code null}
      * @throws Cta4jDetailedAlertsException if the API returns an error response or the response cannot be parsed
      */
-    default List<Alert> findByLines(Collection<TrainLine> lines) {
+    default List<Alert> findByLines(Collection<AlertTrainLine> lines) {
         Objects.requireNonNull(lines);
 
-        List<TrainLine> linesList = List.copyOf(lines);
+        List<AlertTrainLine> linesList = List.copyOf(lines);
 
         LineAlertsQuery query = LineAlertsQuery.builder(linesList)
                                                .build();
@@ -134,10 +134,10 @@ public interface DetailedAlertsApi {
      * @throws NullPointerException if {@code line} is {@code null}
      * @throws Cta4jDetailedAlertsException if the API returns an error response or the response cannot be parsed
      */
-    default List<Alert> findByLine(TrainLine line) {
+    default List<Alert> findByLine(AlertTrainLine line) {
         Objects.requireNonNull(line);
 
-        List<TrainLine> lines = List.of(line);
+        List<AlertTrainLine> lines = List.of(line);
 
         return this.findByLines(lines);
     }

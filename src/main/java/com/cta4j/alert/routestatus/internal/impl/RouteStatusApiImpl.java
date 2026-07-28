@@ -2,6 +2,7 @@ package com.cta4j.alert.routestatus.internal.impl;
 
 import com.cta4j.alert.common.internal.config.AlertApiConfig;
 import com.cta4j.alert.common.internal.util.AlertApiConstants;
+import com.cta4j.alert.common.model.AlertTrainLine;
 import com.cta4j.alert.routestatus.RouteStatusApi;
 import com.cta4j.alert.routestatus.exception.Cta4jRouteStatusException;
 import com.cta4j.alert.routestatus.exception.RouteStatusErrorCode;
@@ -11,7 +12,6 @@ import com.cta4j.alert.routestatus.internal.wire.CtaRouteStatusResponse;
 import com.cta4j.alert.routestatus.internal.wire.CtaRoutes;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import com.cta4j.alert.common.model.ServiceType;
-import com.cta4j.common.train.TrainLine;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -94,7 +94,7 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
             if (isTrainLine(routeId)) {
                 String message = """
                 %s is a train line, not a bus route; \
-                use findByLines(Collection<TrainLine>) instead""".formatted(routeId);
+                use findByLines(Collection<AlertTrainLine>) instead""".formatted(routeId);
 
                 throw new IllegalArgumentException(message);
             }
@@ -115,17 +115,17 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
     }
 
     @Override
-    public List<RouteStatus> findByLines(Collection<TrainLine> lines) {
+    public List<RouteStatus> findByLines(Collection<AlertTrainLine> lines) {
         Objects.requireNonNull(lines);
 
-        List<TrainLine> linesList = List.copyOf(lines);
+        List<AlertTrainLine> linesList = List.copyOf(lines);
 
         if (linesList.isEmpty()) {
             return List.of();
         }
 
         String linesString = linesList.stream()
-                                      .map(TrainLine::getCode)
+                                      .map(AlertTrainLine::getCode)
                                       .collect(Collectors.joining(","));
 
         String url = new URIBuilder()
@@ -239,8 +239,8 @@ public final class RouteStatusApiImpl implements RouteStatusApi {
     }
 
     private static boolean isTrainLine(String routeId) {
-        return Arrays.stream(TrainLine.values())
-                     .map(TrainLine::getCode)
+        return Arrays.stream(AlertTrainLine.values())
+                     .map(AlertTrainLine::getCode)
                      .anyMatch(code -> code.equalsIgnoreCase(routeId));
     }
 }

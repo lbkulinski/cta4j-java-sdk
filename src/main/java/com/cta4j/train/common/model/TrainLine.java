@@ -1,4 +1,4 @@
-package com.cta4j.common.train;
+package com.cta4j.train.common.model;
 
 import org.jspecify.annotations.NullMarked;
 
@@ -10,42 +10,42 @@ import java.util.Objects;
 @NullMarked
 public enum TrainLine {
     /**
-     * The Red Line.
+     * Indicates the Red Line.
      */
     RED("Red", "#C60C30"),
 
     /**
-     * The Blue Line.
+     * Indicates the Blue Line.
      */
     BLUE("Blue", "#00A1DE"),
 
     /**
-     * The Brown Line.
+     * Indicates the Brown Line.
      */
     BROWN("Brn", "#62361B"),
 
     /**
-     * The Green Line.
+     * Indicates the Green Line.
      */
     GREEN("G", "#009B3A"),
 
     /**
-     * The Orange Line.
+     * Indicates the Orange Line.
      */
     ORANGE("Org", "#F9461C"),
 
     /**
-     * The Purple Line.
+     * Indicates the Purple Line.
      */
     PURPLE("P", "#522398"),
 
     /**
-     * The Pink Line.
+     * Indicates the Pink Line.
      */
     PINK("Pink", "#E27EA6"),
 
     /**
-     * The Yellow Line.
+     * Indicates the Yellow Line.
      */
     YELLOW("Y", "#F9E300");
 

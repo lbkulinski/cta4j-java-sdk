@@ -10,22 +10,22 @@ import java.util.Objects;
 @NullMarked
 public enum CardinalDirection {
     /**
-     * North direction.
+     * Indicates the north direction.
      */
     NORTH,
 
     /**
-     * East direction.
+     * Indicates the east direction.
      */
     EAST,
 
     /**
-     * South direction.
+     * Indicates the south direction.
      */
     SOUTH,
 
     /**
-     * West direction.
+     * Indicates the west direction.
      */
     WEST;
 

@@ -1,6 +1,6 @@
 package com.cta4j.alert.detailedalert.query;
 
-import com.cta4j.common.train.TrainLine;
+import com.cta4j.alert.common.model.AlertTrainLine;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * Represents a query for detailed train line alerts.
  *
- * @param lines the {@link List} of {@link TrainLine}s to retrieve alerts for
+ * @param lines the {@link List} of {@link AlertTrainLine}s to retrieve alerts for
  * @param activeOnly whether to include only alerts that are currently active
  * @param accessibility whether to include alerts that affect accessible paths in stations
  * @param planned whether to include common planned alerts
@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 @NullMarked
 public record LineAlertsQuery(
-    List<TrainLine> lines,
+    List<AlertTrainLine> lines,
     boolean activeOnly,
     boolean accessibility,
     boolean planned,
@@ -32,7 +32,7 @@ public record LineAlertsQuery(
     /**
      * Constructs a {@code LineAlertsQuery}.
      *
-     * @param lines the {@link List} of {@link TrainLine}s to retrieve alerts for
+     * @param lines the {@link List} of {@link AlertTrainLine}s to retrieve alerts for
      * @param activeOnly whether to include only alerts that are currently active
      * @param accessibility whether to include alerts that affect accessible paths in stations
      * @param planned whether to include common planned alerts
@@ -61,12 +61,12 @@ public record LineAlertsQuery(
     /**
      * Creates a builder for {@code LineAlertsQuery}.
      *
-     * @param lines the {@link Collection} of {@link TrainLine}s to retrieve alerts for
+     * @param lines the {@link Collection} of {@link AlertTrainLine}s to retrieve alerts for
      * @return a new {@code Builder} instance
      * @throws NullPointerException if {@code lines} is {@code null}, or if any element of {@code lines} is
      * {@code null}
      */
-    public static Builder builder(Collection<TrainLine> lines) {
+    public static Builder builder(Collection<AlertTrainLine> lines) {
         return new Builder(lines);
     }
 
@@ -75,9 +75,9 @@ public record LineAlertsQuery(
      */
     public static final class Builder {
         /**
-         * The {@link List} of {@link TrainLine}s to retrieve alerts for.
+         * The {@link List} of {@link AlertTrainLine}s to retrieve alerts for.
          */
-        private final List<TrainLine> lines;
+        private final List<AlertTrainLine> lines;
 
         /**
          * Whether to include only alerts that are currently active.
@@ -112,11 +112,11 @@ public record LineAlertsQuery(
          * By default, {@code activeOnly} is {@code false}, and {@code accessibility} and {@code planned} are
          * {@code true}, matching the CTA Alerts API's own defaults.
          *
-         * @param lines the {@link Collection} of {@link TrainLine}s to retrieve alerts for
+         * @param lines the {@link Collection} of {@link AlertTrainLine}s to retrieve alerts for
          * @throws NullPointerException if {@code lines} is {@code null}, or if any element of {@code lines} is
          * {@code null}
          */
-        public Builder(Collection<TrainLine> lines) {
+        public Builder(Collection<AlertTrainLine> lines) {
             Objects.requireNonNull(lines);
 
             this.lines = List.copyOf(lines);

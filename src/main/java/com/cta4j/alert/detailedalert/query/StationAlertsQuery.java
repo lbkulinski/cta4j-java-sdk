@@ -112,8 +112,8 @@ public record StationAlertsQuery(
          * {@code true}, matching the CTA Alerts API's own defaults.
          *
          * @param stationIds the {@link Collection} of train station IDs to retrieve alerts for
-         * @throws NullPointerException if {@code stationIds} is {@code null}, or if any element of {@code stationIds} is
-         * {@code null}
+         * @throws NullPointerException if {@code stationIds} is {@code null}, or if any element of {@code stationIds}
+         * is {@code null}
          */
         public Builder(Collection<String> stationIds) {
             Objects.requireNonNull(stationIds);

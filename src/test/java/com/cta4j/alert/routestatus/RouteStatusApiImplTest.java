@@ -8,7 +8,7 @@ import com.cta4j.alert.routestatus.exception.RouteStatusErrorCode;
 import com.cta4j.alert.routestatus.internal.impl.RouteStatusApiImpl;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import com.cta4j.alert.common.model.ServiceType;
-import com.cta4j.common.train.TrainLine;
+import com.cta4j.alert.common.model.AlertTrainLine;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -366,7 +366,7 @@ class RouteStatusApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("alert/routestatus/rail_success.json"))));
 
-        List<RouteStatus> statuses = this.api.findByLines(List.of(TrainLine.RED, TrainLine.BLUE));
+        List<RouteStatus> statuses = this.api.findByLines(List.of(AlertTrainLine.RED, AlertTrainLine.BLUE));
 
         assertThat(statuses).hasSize(2);
     }
@@ -379,7 +379,7 @@ class RouteStatusApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("alert/routestatus/rail_success.json"))));
 
-        List<RouteStatus> statuses = this.api.findByLines(List.of(TrainLine.RED, TrainLine.BLUE));
+        List<RouteStatus> statuses = this.api.findByLines(List.of(AlertTrainLine.RED, AlertTrainLine.BLUE));
 
         assertThat(statuses).hasSize(2);
         RouteStatus redLine = statuses.getFirst();
@@ -397,7 +397,7 @@ class RouteStatusApiImplTest {
                 .withHeader("Content-Type", "application/json")
                 .withBody(TestFixtures.read("alert/routestatus/rail_success.json"))));
 
-        List<RouteStatus> statuses = this.api.findByLine(TrainLine.RED);
+        List<RouteStatus> statuses = this.api.findByLine(AlertTrainLine.RED);
 
         assertThat(statuses).hasSize(2);
     }

@@ -8,7 +8,7 @@ import com.cta4j.train.arrival.query.MapArrivalsQuery;
 import com.cta4j.train.arrival.query.StopArrivalsQuery;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.Arrival;
-import com.cta4j.common.train.TrainLine;
+import com.cta4j.train.common.model.TrainLine;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

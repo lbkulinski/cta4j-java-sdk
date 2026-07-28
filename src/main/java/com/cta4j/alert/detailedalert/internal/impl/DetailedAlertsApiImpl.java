@@ -2,6 +2,7 @@ package com.cta4j.alert.detailedalert.internal.impl;
 
 import com.cta4j.alert.common.internal.config.AlertApiConfig;
 import com.cta4j.alert.common.internal.util.AlertApiConstants;
+import com.cta4j.alert.common.model.AlertTrainLine;
 import com.cta4j.alert.detailedalert.DetailedAlertsApi;
 import com.cta4j.alert.detailedalert.exception.Cta4jDetailedAlertsException;
 import com.cta4j.alert.detailedalert.exception.DetailedAlertsErrorCode;
@@ -14,7 +15,6 @@ import com.cta4j.alert.detailedalert.query.AlertsQuery;
 import com.cta4j.alert.detailedalert.query.BusRouteAlertsQuery;
 import com.cta4j.alert.detailedalert.query.LineAlertsQuery;
 import com.cta4j.alert.detailedalert.query.StationAlertsQuery;
-import com.cta4j.common.train.TrainLine;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -84,14 +84,14 @@ public final class DetailedAlertsApiImpl implements DetailedAlertsApi {
     public List<Alert> findByLines(LineAlertsQuery query) {
         Objects.requireNonNull(query);
 
-        List<TrainLine> lines = query.lines();
+        List<AlertTrainLine> lines = query.lines();
 
         if (lines.isEmpty()) {
             return List.of();
         }
 
         List<String> lineStrings = lines.stream()
-                                        .map(TrainLine::getCode)
+                                        .map(AlertTrainLine::getCode)
                                         .toList();
 
         return this.makeRequest(
