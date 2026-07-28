@@ -13,12 +13,23 @@ import java.net.URISyntaxException;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Objects;
 
 @ApiStatus.Internal
 @NullMarked
 public final class Qualifiers {
-    private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    private static final DateTimeFormatter TIMESTAMP_FORMATTER = new DateTimeFormatterBuilder()
+        .appendPattern("yyyy-MM-dd")
+        .optionalStart()
+        .appendPattern("'T'HH:mm:ss")
+        .optionalEnd()
+        .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+        .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+        .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
+        .toFormatter();
+
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
 
     private Qualifiers() {

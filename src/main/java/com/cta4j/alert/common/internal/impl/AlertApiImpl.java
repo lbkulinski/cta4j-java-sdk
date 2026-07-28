@@ -4,6 +4,7 @@ import com.cta4j.alert.AlertApi;
 import com.cta4j.alert.common.internal.config.AlertApiConfig;
 import com.cta4j.alert.common.internal.util.AlertApiConstants;
 import com.cta4j.alert.detailedalert.DetailedAlertsApi;
+import com.cta4j.alert.detailedalert.internal.impl.DetailedAlertsApiImpl;
 import com.cta4j.alert.routestatus.RouteStatusApi;
 import com.cta4j.alert.routestatus.internal.impl.RouteStatusApiImpl;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,11 +17,13 @@ import java.util.Objects;
 @NullMarked
 public final class AlertApiImpl implements AlertApi {
     private final RouteStatusApi routeStatusApi;
+    private final DetailedAlertsApi detailedAlertsApi;
 
     public AlertApiImpl(AlertApiConfig config) {
         Objects.requireNonNull(config);
 
         this.routeStatusApi = new RouteStatusApiImpl(config);
+        this.detailedAlertsApi = new DetailedAlertsApiImpl(config);
     }
 
     @Override
@@ -30,7 +33,7 @@ public final class AlertApiImpl implements AlertApi {
 
     @Override
     public DetailedAlertsApi detailedAlerts() {
-        return null;
+        return this.detailedAlertsApi;
     }
 
     public static final class BuilderImpl implements AlertApi.Builder {

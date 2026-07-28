@@ -79,7 +79,9 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
         }
 
         if (maxResults != null) {
-            builder.addParameter("max", maxResults.toString());
+            String maxResultString = String.valueOf(maxResults);
+
+            builder.addParameter("max", maxResultString);
         }
 
         String url = builder.toString();
