@@ -1,4 +1,4 @@
-package com.cta4j.train.arrival;
+package com.cta4j.train.common;
 
 import com.cta4j.train.common.internal.mapper.ArrivalMapper;
 import com.cta4j.train.common.internal.wire.CtaArrival;
