@@ -28,7 +28,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @ApiStatus.Internal
 @NullMarked
@@ -70,16 +69,12 @@ public final class DetailedAlertsApiImpl implements DetailedAlertsApi {
             return List.of();
         }
 
-        String activeOnlyString = String.valueOf(query.activeOnly());
-        String accessibilityString = String.valueOf(query.accessibility());
-        String plannedString = String.valueOf(query.planned());
-        String routeIdsString = String.join(",", routeIds);
-
         return this.makeRequest(
-            activeOnlyString,
-            accessibilityString,
-            plannedString,
-            routeIdsString,
+            query.activeOnly(),
+            query.accessibility(),
+            query.planned(),
+            routeIds,
+            "routeid",
             query.byStartDate(),
             query.recentDays()
         );
@@ -95,19 +90,16 @@ public final class DetailedAlertsApiImpl implements DetailedAlertsApi {
             return List.of();
         }
 
-        String activeOnlyString = String.valueOf(query.activeOnly());
-        String accessibilityString = String.valueOf(query.accessibility());
-        String plannedString = String.valueOf(query.planned());
-
-        String linesString = lines.stream()
-                                  .map(TrainLine::getCode)
-                                  .collect(Collectors.joining(","));
+        List<String> lineStrings = lines.stream()
+                                        .map(TrainLine::getCode)
+                                        .toList();
 
         return this.makeRequest(
-            activeOnlyString,
-            accessibilityString,
-            plannedString,
-            linesString,
+            query.activeOnly(),
+            query.accessibility(),
+            query.planned(),
+            lineStrings,
+            "routeid",
             query.byStartDate(),
             query.recentDays()
         );
@@ -123,10 +115,30 @@ public final class DetailedAlertsApiImpl implements DetailedAlertsApi {
             return List.of();
         }
 
-        String activeOnlyString = String.valueOf(query.activeOnly());
-        String accessibilityString = String.valueOf(query.accessibility());
-        String plannedString = String.valueOf(query.planned());
-        String stationIdsString = String.join(",", stationIds);
+        return this.makeRequest(
+            query.activeOnly(),
+            query.accessibility(),
+            query.planned(),
+            stationIds,
+            "stationid",
+            query.byStartDate(),
+            query.recentDays()
+        );
+    }
+
+    private List<Alert> makeRequest(
+        boolean activeOnly,
+        boolean accessibility,
+        boolean planned,
+        List<String> ids,
+        String idsParameterName,
+        @Nullable LocalDate byStartDate,
+        @Nullable Integer recentDays
+    ) {
+        String activeOnlyString = String.valueOf(activeOnly);
+        String accessibilityString = String.valueOf(accessibility);
+        String plannedString = String.valueOf(planned);
+        String idsString = String.join(",", ids);
 
         URIBuilder builder = new URIBuilder()
             .setScheme(this.config.scheme())
@@ -136,29 +148,7 @@ public final class DetailedAlertsApiImpl implements DetailedAlertsApi {
             .addParameter("activeonly", activeOnlyString)
             .addParameter("accessibility", accessibilityString)
             .addParameter("planned", plannedString)
-            .addParameter("stationid", stationIdsString)
-            .addParameter("outputType", "JSON");
-
-        return this.makeRequest(builder, query.byStartDate(), query.recentDays());
-    }
-
-    private List<Alert> makeRequest(
-        String activeOnly,
-        String accessibility,
-        String planned,
-        String routeIds,
-        @Nullable LocalDate byStartDate,
-        @Nullable Integer recentDays
-    ) {
-        URIBuilder builder = new URIBuilder()
-            .setScheme(this.config.scheme())
-            .setHost(this.config.host())
-            .setPort(this.config.port())
-            .setPath(AlertApiConstants.DETAILED_ALERTS_ENDPOINT)
-            .addParameter("activeonly", activeOnly)
-            .addParameter("accessibility", accessibility)
-            .addParameter("planned", planned)
-            .addParameter("routeid", routeIds)
+            .addParameter(idsParameterName, idsString)
             .addParameter("outputType", "JSON");
 
         return this.makeRequest(builder, byStartDate, recentDays);
