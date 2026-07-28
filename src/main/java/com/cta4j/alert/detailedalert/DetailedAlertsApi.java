@@ -51,6 +51,8 @@ public interface DetailedAlertsApi {
      * @return a {@link List} of {@link Alert}s corresponding to the provided bus route IDs, or an empty {@link List}
      * if no alerts are found
      * @throws NullPointerException if {@code query} is {@code null}
+     * @throws IllegalArgumentException if any of the query's route IDs matches a train line code (e.g., "Red"); use
+     * {@link #findByLines(LineAlertsQuery)} instead
      * @throws Cta4jDetailedAlertsException if the API returns an error response or the response cannot be parsed
      */
     List<Alert> findByBusRouteIds(BusRouteAlertsQuery query);
@@ -63,6 +65,8 @@ public interface DetailedAlertsApi {
      * if no alerts are found
      * @throws NullPointerException if {@code routeIds} is {@code null}, or if any element of {@code routeIds} is
      * {@code null}
+     * @throws IllegalArgumentException if any of the {@code routeIds} matches a train line code (e.g., "Red"); use
+     * {@link #findByLines(Collection)} instead
      * @throws Cta4jDetailedAlertsException if the API returns an error response or the response cannot be parsed
      */
     default List<Alert> findByBusRouteIds(Collection<String> routeIds) {
@@ -83,6 +87,8 @@ public interface DetailedAlertsApi {
      * @return a {@link List} of {@link Alert}s corresponding to the provided bus route ID, or an empty {@link List}
      * if no alerts are found
      * @throws NullPointerException if {@code routeId} is {@code null}
+     * @throws IllegalArgumentException if {@code routeId} matches a train line code (e.g., "Red"); use
+     * {@link #findByLine(AlertTrainLine)} instead
      * @throws Cta4jDetailedAlertsException if the API returns an error response or the response cannot be parsed
      */
     default List<Alert> findByBusRouteId(String routeId) {

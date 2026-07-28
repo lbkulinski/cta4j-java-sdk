@@ -26,8 +26,6 @@ public interface AlertMapper {
     @Mapping(target = "major", source = "majorAlert", qualifiedByName = "map01ToBoolean")
     @Mapping(target = "url", source = "alertUrl.cdataSection", qualifiedByName = "mapUri")
     @Mapping(target = "impactedServices", source = "impactedService.service")
-    @Mapping(target = "ttim", source = "ttim")
-    @Mapping(target = "guid", source = "guid")
     Alert toDomain(CtaAlert alert);
 
     @Mapping(target = "type", source = "serviceType", qualifiedByName = "mapServiceType")

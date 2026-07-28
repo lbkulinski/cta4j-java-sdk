@@ -26,6 +26,7 @@ import tools.jackson.databind.json.JsonMapper;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -67,6 +68,16 @@ public final class DetailedAlertsApiImpl implements DetailedAlertsApi {
 
         if (routeIds.isEmpty()) {
             return List.of();
+        }
+
+        for (String routeId : routeIds) {
+            if (isTrainLine(routeId)) {
+                String message = """
+                %s is a train line, not a bus route; \
+                use findByLines(Collection<AlertTrainLine>) instead""".formatted(routeId);
+
+                throw new IllegalArgumentException(message);
+            }
         }
 
         return this.makeRequest(
@@ -230,5 +241,11 @@ public final class DetailedAlertsApiImpl implements DetailedAlertsApi {
             : errorMessage;
 
         throw new Cta4jDetailedAlertsException(message, integerCode);
+    }
+
+    private static boolean isTrainLine(String routeId) {
+        return Arrays.stream(AlertTrainLine.values())
+                     .map(AlertTrainLine::getCode)
+                     .anyMatch(code -> code.equalsIgnoreCase(routeId));
     }
 }

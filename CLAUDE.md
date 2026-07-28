@@ -100,3 +100,32 @@ MapStruct mappers live in `internal/mapper/`. They are interfaces annotated with
 - No `Optional` for fields or parameters. Use method overloading or `@Nullable` fields instead.
 - Prefer `List.of()` for empty returns; use `List.copyOf()` for defensive copies.
 - All files must end with a trailing newline.
+
+## Javadoc Conventions
+
+This project uses Markdown documentation comments (`///`, JEP 467, JDK 23+)
+instead of traditional `/** */` HTML Javadoc. Do not use `{@code}`, `{@link}`,
+or HTML tags — use plain Markdown (backticks, `[Type]` links, etc.).
+
+References:
+- Content/style conventions (summary sentence, tag usage):
+  https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html
+- Markdown comment syntax (`///`, CommonMark extensions, JDK 23+):
+  https://docs.oracle.com/en/java/javase/25/javadoc/using-markdown-documentation-comments.html
+
+- **Summary sentence:** The first line is a standalone summary fragment
+  ending in a period, third-person descriptive ("Returns the active
+  arrivals for a station," not "This method returns...").
+- **Tag order:** `@param` → `@return` → `@deprecated` → `@since` → `@throws`
+  → `@see`.
+- **@param / @throws descriptions:** Lowercase phrase, no trailing period.
+- **Code references:** Use backtick spans (`` `RoutesApi` ``, `` `List<Route>` ``)
+  instead of `{@code}`. Use Markdown reference links (`[RoutesApi]`) instead
+  of `{@link}` only when the cross-reference meaningfully aids understanding.
+- **What gets documented:** Public interfaces (`*Api`), public domain models
+  (`model/`), and builders always. Wire records (`internal/wire/`), mappers,
+  and `*ApiImpl` classes are `@ApiStatus.Internal` and are not documented
+  unless the "why" is non-obvious (per Code Style).
+- **Package docs:** Each top-level feature package (e.g. `bus.route`,
+  `train.arrivals`) gets a `package-info.java` with a one-paragraph summary
+  of the feature's responsibility, written in the same Markdown style.

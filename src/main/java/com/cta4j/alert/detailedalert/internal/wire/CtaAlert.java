@@ -57,9 +57,11 @@ public record CtaAlert(
     CtaImpactedServices impactedService,
 
     @JsonProperty("ttim")
+    @Nullable
     String ttim,
 
     @JsonProperty("GUID")
+    @Nullable
     String guid
 ) {
     public CtaAlert {
@@ -76,7 +78,5 @@ public record CtaAlert(
         Objects.requireNonNull(majorAlert);
         Objects.requireNonNull(alertUrl);
         Objects.requireNonNull(impactedService);
-        Objects.requireNonNull(ttim);
-        Objects.requireNonNull(guid);
     }
 }
