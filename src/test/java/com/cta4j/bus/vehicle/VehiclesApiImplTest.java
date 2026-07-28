@@ -76,6 +76,19 @@ class VehiclesApiImplTest {
     }
 
     @Test
+    void findByIds_returnsEmpty_whenVehicleIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getvehicles"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/vehicle/empty_vehicle_array.json"))));
+
+        List<Vehicle> vehicles = this.api.findByIds(List.of("509"));
+
+        assertThat(vehicles).isEmpty();
+    }
+
+    @Test
     void findByIds_returnsEmpty_whenAllErrorsAreResourceSpecific() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getvehicles"))
             .willReturn(aResponse()

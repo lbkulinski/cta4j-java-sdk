@@ -68,6 +68,19 @@ class RoutesApiImplTest {
     }
 
     @Test
+    void list_returnsEmpty_whenRoutesIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getroutes"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/route/empty_routes_array.json"))));
+
+        List<Route> routes = this.api.list();
+
+        assertThat(routes).isEmpty();
+    }
+
+    @Test
     void list_throwsCta4jBusException_whenResponseContainsFatalErrors() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getroutes"))
             .willReturn(aResponse()

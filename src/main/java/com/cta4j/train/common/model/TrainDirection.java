@@ -31,13 +31,8 @@ public enum TrainDirection {
      * Constructs a {@code TrainDirection}.
      *
      * @param code the CTA direction code associated with this train direction
-     * @throws IllegalArgumentException if {@code code} is not 1 (northbound) or 5 (southbound)
      */
     TrainDirection(int code) {
-        if ((code != 1) && (code != 5)) {
-            throw new IllegalArgumentException("CTA direction code must be either 1 (northbound) or 5 (southbound)");
-        }
-
         this.code = code;
     }
 

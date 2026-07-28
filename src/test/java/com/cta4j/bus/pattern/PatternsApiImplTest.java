@@ -76,6 +76,19 @@ class PatternsApiImplTest {
     }
 
     @Test
+    void findByIds_returnsEmpty_whenPtrIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/pattern/empty_ptr_array.json"))));
+
+        List<RoutePattern> patterns = this.api.findByIds(List.of("3630"));
+
+        assertThat(patterns).isEmpty();
+    }
+
+    @Test
     void findByIds_returnsEmpty_whenAllErrorsAreResourceSpecific() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpatterns"))
             .willReturn(aResponse()

@@ -79,6 +79,20 @@ class PredictionsApiImplTest {
     }
 
     @Test
+    void findByStopIds_returnsEmpty_whenPrdIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/empty_prd_array.json"))));
+
+        StopPredictionsQuery query = StopPredictionsQuery.builder(List.of("456")).build();
+        List<Prediction> predictions = this.api.findByStopIds(query);
+
+        assertThat(predictions).isEmpty();
+    }
+
+    @Test
     void findByStopIds_returnsEmpty_whenAllErrorsAreResourceSpecific() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
             .willReturn(aResponse()
@@ -257,6 +271,34 @@ class PredictionsApiImplTest {
                                                                .maxResults(3)
                                                                .build();
         List<Prediction> predictions = this.api.findByVehicleIds(query);
+
+        assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByStopIds_collectionOverload_returnsPredictions_whenResponseContainsPredictions() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("stpid", equalTo("456,789"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        List<Prediction> predictions = this.api.findByStopIds(List.of("456", "789"));
+
+        assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByVehicleIds_collectionOverload_returnsPredictions_whenResponseContainsPredictions() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getpredictions"))
+            .withQueryParam("vid", equalTo("509,510"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/prediction/success.json"))));
+
+        List<Prediction> predictions = this.api.findByVehicleIds(List.of("509", "510"));
 
         assertThat(predictions).hasSize(1);
     }
