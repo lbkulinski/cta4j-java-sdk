@@ -32,7 +32,7 @@ public final class Cta4jRouteStatusException extends Cta4jAlertException {
         this.errorCode = RouteStatusErrorCode.fromCode(rawErrorCode);
     }
 
-    /// Returns the error code a ssociated with this exception, if available.
+    /// Returns the error code associated with this exception, if available.
     ///
     /// @return the error code, or `null` if not available
     public @Nullable RouteStatusErrorCode getErrorCode() {

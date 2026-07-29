@@ -10,8 +10,8 @@ import org.jspecify.annotations.NullMarked;
 /// This interface provides grouped sub-APIs for different aspects of the CTA Alerts API, such as route status and
 /// detailed alerts.
 ///
-/// Instances of `AlertApi` are immutable and thread-safe once built.
-/// Use [#builder()] to construct a configured instance.
+/// Instances of `AlertApi` are immutable and thread-safe once built. Use [#builder()] to construct a configured
+/// instance.
 @NullMarked
 public interface AlertApi {
     /// Provides access to route status-related endpoints.

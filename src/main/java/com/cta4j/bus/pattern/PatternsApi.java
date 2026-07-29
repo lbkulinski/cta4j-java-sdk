@@ -10,35 +10,29 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Provides access to route pattern-related endpoints of the CTA BusTime API.
- * <p>
- * This API allows retrieval of route patterns by their IDs or by associated route IDs.
- */
+/// Provides access to route pattern-related endpoints of the CTA BusTime API.
+///
+/// This API allows retrieval of route patterns by their IDs or by associated route IDs.
 @NullMarked
 public interface PatternsApi {
-    /**
-     * Retrieves route patterns by their pattern IDs.
-     *
-     * @param patternIds a {@link Collection} of route pattern IDs
-     * @return a {@link List} of {@link RoutePattern}s corresponding to the provided IDs, or an empty {@link List} if
-     * no patterns are found
-     * @throws NullPointerException if {@code patternIds} is {@code null} or contains {@code null} elements
-     * @throws IllegalArgumentException if more than 10 pattern IDs are provided
-     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
-     */
+    /// Retrieves route patterns by their pattern IDs.
+    ///
+    /// @param patternIds a [Collection] of route pattern IDs
+    /// @return a [List] of [RoutePattern]s corresponding to the provided IDs, or an empty [List] if no patterns are
+    /// found
+    /// @throws NullPointerException if `patternIds` is `null` or contains `null` elements
+    /// @throws IllegalArgumentException if more than 10 pattern IDs are provided
+    /// @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
     List<RoutePattern> findByIds(Collection<String> patternIds);
 
-    /**
-     * Retrieves a route pattern by its pattern ID.
-     *
-     * @param patternId the route pattern ID
-     * @return an {@link Optional} containing the {@link RoutePattern} if found, or an empty {@link Optional} if no
-     * pattern is found for the given ID
-     * @throws NullPointerException if {@code patternId} is {@code null}
-     * @throws Cta4jBusException if multiple route patterns are found for the given ID, or if the API returns an error
-     * response or the response cannot be parsed
-     */
+    /// Retrieves a route pattern by its pattern ID.
+    ///
+    /// @param patternId the route pattern ID
+    /// @return an [Optional] containing the [RoutePattern] if found, or an empty [Optional] if no pattern is found for
+    /// the given ID
+    /// @throws NullPointerException if `patternId` is `null`
+    /// @throws Cta4jBusException if multiple route patterns are found for the given ID, or if the API returns an error
+    /// response or the response cannot be parsed
     default Optional<RoutePattern> findById(String patternId) {
         Objects.requireNonNull(patternId);
 
@@ -61,14 +55,12 @@ public interface PatternsApi {
         return Optional.of(pattern);
     }
 
-    /**
-     * Retrieves all route patterns for the specified route ID.
-     *
-     * @param routeId the route ID
-     * @return a {@link List} of {@link RoutePattern}s associated with the route ID, or an empty {@link List} if no
-     * patterns are found for the route ID
-     * @throws NullPointerException if {@code routeId} is {@code null}
-     * @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
-     */
+    /// Retrieves all route patterns for the specified route ID.
+    ///
+    /// @param routeId the route ID
+    /// @return a [List] of [RoutePattern]s associated with the route ID, or an empty [List] if no patterns are found
+    /// for the route ID
+    /// @throws NullPointerException if `routeId` is `null`
+    /// @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
     List<RoutePattern> findByRouteId(String routeId);
 }
