@@ -50,20 +50,15 @@ public record AlertsQuery(
 
     /// A builder for `AlertsQuery`.
     public static final class Builder {
-        /// Whether to include only alerts that are currently active.
         private boolean activeOnly;
 
-        /// Whether to include alerts that affect accessible paths in stations.
         private boolean accessibility;
 
-        /// Whether to include common planned alerts.
         private boolean planned;
 
-        /// The optional date; only alerts with a start date before this date are included.
         @Nullable
         private LocalDate byStartDate;
 
-        /// The optional number of days; only alerts that started within this many days of today are included.
         @Nullable
         private Integer recentDays;
 

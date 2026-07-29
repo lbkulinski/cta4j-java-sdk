@@ -47,10 +47,8 @@ public record VehiclePredictionsQuery(
 
     /// Builder for `VehiclePredictionsQuery`.
     public static final class Builder {
-        /// The [List] of vehicle IDs to retrieve predictions for.
         private final List<String> vehicleIds;
 
-        /// The optional maximum number of predictions to return.
         @Nullable
         private Integer maxResults;
 

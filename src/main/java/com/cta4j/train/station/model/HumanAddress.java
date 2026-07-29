@@ -4,14 +4,12 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-/**
- * Represents a human-readable address.
- *
- * @param address the street address
- * @param city the city
- * @param state the state
- * @param zip the ZIP code
- */
+/// Represents a human-readable address.
+///
+/// @param address the street address
+/// @param city the city
+/// @param state the state
+/// @param zip the ZIP code
 @NullMarked
 public record HumanAddress(
     String address,
@@ -19,15 +17,13 @@ public record HumanAddress(
     String state,
     String zip
 ) {
-    /**
-     * Constructs a {@code HumanAddress}.
-     *
-     * @param address the street address
-     * @param city the city
-     * @param state the state
-     * @param zip the ZIP code
-     * @throws NullPointerException if {@code address}, {@code city}, {@code state}, or {@code zip} is {@code null}
-     */
+    /// Constructs a `HumanAddress`.
+    ///
+    /// @param address the street address
+    /// @param city the city
+    /// @param state the state
+    /// @param zip the ZIP code
+    /// @throws NullPointerException if `address`, `city`, `state`, or `zip` is `null`
     public HumanAddress {
         Objects.requireNonNull(address);
         Objects.requireNonNull(city);

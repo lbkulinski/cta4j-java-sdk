@@ -39,12 +39,8 @@ public enum RouteStatusErrorCode {
     /// Indicates that an unknown error occurred that does not match any of the defined error codes.
     UNKNOWN(-1);
 
-    /// The integer code associated with this error code.
     private final int code;
 
-    /// Constructs a `RouteStatusErrorCode`.
-    ///
-    /// @param code the integer code associated with the error code
     RouteStatusErrorCode(int code) {
         this.code = code;
     }

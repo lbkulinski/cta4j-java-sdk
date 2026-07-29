@@ -38,13 +38,8 @@ public enum AlertTrainLine {
     /// Indicates the Yellow Line.
     YELLOW("Y");
 
-    /// The CTA Alerts API route designator for this train line.
     private final String code;
 
-    /// Constructs an `AlertTrainLine`.
-    ///
-    /// @param code the CTA Alerts API route designator of the train line
-    /// @throws NullPointerException if `code` is `null`
     AlertTrainLine(String code) {
         this.code = Objects.requireNonNull(code);
     }

@@ -8,7 +8,6 @@ import org.jspecify.annotations.Nullable;
 /// A custom exception class for handling cta4j detailed alerts-specific errors.
 @NullMarked
 public final class Cta4jDetailedAlertsException extends Cta4jAlertException {
-    /// The error code associated with this exception, if available.
     @Nullable
     private final DetailedAlertsErrorCode errorCode;
 

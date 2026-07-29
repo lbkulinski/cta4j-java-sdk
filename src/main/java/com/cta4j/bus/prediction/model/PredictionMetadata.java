@@ -9,8 +9,8 @@ import java.util.Objects;
 
 /// Represents metadata associated with a bus arrival prediction.
 ///
-/// **NOTE:** `gtfsSequence` and `nextBus` are not well-documented by the CTA. As such, their presence here is
-/// primarily for completeness and may not be populated or described correctly.
+/// @apiNote `gtfsSequence` and `nextBus` are not well-documented by the CTA. As such, their presence here is primarily
+/// for completeness and may not be populated or described correctly.
 ///
 /// @param timestamp the date and time (UTC) this prediction was generated
 /// @param dynamicAction the [DynamicAction] affecting this prediction

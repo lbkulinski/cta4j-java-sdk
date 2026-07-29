@@ -54,14 +54,11 @@ public record StopPredictionsQuery(
 
     /// A builder for `StopPredictionsQuery`.
     public static final class Builder {
-        /// The [List] of stop IDs to retrieve predictions for.
         private final List<String> stopIds;
 
-        /// The optional [List] of route IDs to filter predictions by.
         @Nullable
         private List<String> routeIds;
 
-        /// The optional maximum number of predictions to return.
         @Nullable
         private Integer maxResults;
 

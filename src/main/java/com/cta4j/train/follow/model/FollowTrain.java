@@ -8,25 +8,20 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Represents a response from the "follow" endpoint of the CTA Train Tracker API.
- *
- * @param coordinates the current coordinates of this train being followed
- * @param arrivals the {@link List} of {@link Arrival}s for this train being followed
- */
+/// Represents a response from the "follow" endpoint of the CTA Train Tracker API.
+///
+/// @param coordinates the current coordinates of this train being followed
+/// @param arrivals the [List] of [Arrival]s for this train being followed
 @NullMarked
 public record FollowTrain(
     @Nullable Coordinates coordinates,
     List<Arrival> arrivals
 ) {
-    /**
-     * Constructs a {@code FollowTrain}.
-     *
-     * @param coordinates the current coordinates of the train being followed
-     * @param arrivals the {@link List} of {@link Arrival}s for the train being followed
-     * @throws NullPointerException if {@code arrivals} is {@code null}, or if {@code arrivals} contains {@code null}
-     * elements
-     */
+    /// Constructs a `FollowTrain`.
+    ///
+    /// @param coordinates the current coordinates of the train being followed
+    /// @param arrivals the [List] of [Arrival]s for the train being followed
+    /// @throws NullPointerException if `arrivals` is `null`, or if `arrivals` contains `null` elements
     public FollowTrain {
         Objects.requireNonNull(arrivals);
 

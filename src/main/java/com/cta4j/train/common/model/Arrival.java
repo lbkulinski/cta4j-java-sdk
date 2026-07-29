@@ -5,25 +5,23 @@ import org.jspecify.annotations.NullMarked;
 import java.time.Instant;
 import java.util.Objects;
 
-/**
- * Represents a train arrival.
- *
- * @param stationId the unique identifier of the station for which this arrival was generated
- * @param stationName the display name of the station for which this arrival was generated
- * @param stopId the unique identifier of the stop for which this arrival was generated
- * @param stopDescription the display name of the stop for which this arrival was generated
- * @param line the train line associated with this arrival
- * @param destinationStationId the unique identifier of the destination station for this arrival
- * @param destinationName the display name of the destination station for this arrival
- * @param predictionTime the date and time (UTC) this arrival was generated
- * @param arrivalTime the date and time (UTC) of a train’s arrival or departure to the stop associated with this
- *                    arrival
- * @param approaching whether the train associated with this arrival is currently approaching the stop
- * @param scheduled whether this arrival is based on a scheduled time rather than a real-time prediction
- * @param delayed whether the train associated with this arrival is currently delayed
- * @param fault whether the train associated with this arrival is currently experiencing a fault
- * @param metadata the metadata associated with this arrival
- */
+/// Represents a train arrival.
+///
+/// @param stationId the unique identifier of the station for which this arrival was generated
+/// @param stationName the display name of the station for which this arrival was generated
+/// @param stopId the unique identifier of the stop for which this arrival was generated
+/// @param stopDescription the display name of the stop for which this arrival was generated
+/// @param line the train line associated with this arrival
+/// @param destinationStationId the unique identifier of the destination station for this arrival
+/// @param destinationName the display name of the destination station for this arrival
+/// @param predictionTime the date and time (UTC) this arrival was generated
+/// @param arrivalTime the date and time (UTC) of a train’s arrival or departure to the stop associated with this
+///                    arrival
+/// @param approaching whether the train associated with this arrival is currently approaching the stop
+/// @param scheduled whether this arrival is based on a scheduled time rather than a real-time prediction
+/// @param delayed whether the train associated with this arrival is currently delayed
+/// @param fault whether the train associated with this arrival is currently experiencing a fault
+/// @param metadata the metadata associated with this arrival
 @NullMarked
 public record Arrival(
     String stationId,
@@ -41,28 +39,25 @@ public record Arrival(
     boolean fault,
     ArrivalMetadata metadata
 ) {
-    /**
-     * Constructs an {@code Arrival}.
-     *
-     * @param stationId the unique identifier of the station for which the arrival was generated
-     * @param stationName the display name of the station for which the arrival was generated
-     * @param stopId the unique identifier of the stop for which the arrival was generated
-     * @param stopDescription the display name of the stop for which the arrival was generated
-     * @param line the train line associated with the arrival
-     * @param destinationStationId the unique identifier of the destination station for the arrival
-     * @param destinationName the display name of the destination station for the arrival
-     * @param predictionTime the date and time (UTC) the arrival was generated
-     * @param arrivalTime the date and time (UTC) of a train’s arrival or departure to the stop associated with the
-     *                    arrival
-     * @param approaching whether the train associated with the arrival is currently approaching the stop
-     * @param scheduled whether the arrival is based on a scheduled time rather than a real-time prediction
-     * @param delayed whether the train associated with the arrival is currently delayed
-     * @param fault whether the train associated with the arrival is currently experiencing a fault
-     * @param metadata the metadata associated with the arrival
-     * @throws NullPointerException if {@code stationId}, {@code stationName}, {@code stopId}, {@code stopDescription},
-     * {@code line}, {@code destinationStationId}, {@code destinationName}, {@code predictionTime},
-     * {@code arrivalTime}, or {@code metadata} is {@code null}
-     */
+    /// Constructs an `Arrival`.
+    ///
+    /// @param stationId the unique identifier of the station for which the arrival was generated
+    /// @param stationName the display name of the station for which the arrival was generated
+    /// @param stopId the unique identifier of the stop for which the arrival was generated
+    /// @param stopDescription the display name of the stop for which the arrival was generated
+    /// @param line the train line associated with the arrival
+    /// @param destinationStationId the unique identifier of the destination station for the arrival
+    /// @param destinationName the display name of the destination station for the arrival
+    /// @param predictionTime the date and time (UTC) the arrival was generated
+    /// @param arrivalTime the date and time (UTC) of a train’s arrival or departure to the stop associated with the
+    ///                    arrival
+    /// @param approaching whether the train associated with the arrival is currently approaching the stop
+    /// @param scheduled whether the arrival is based on a scheduled time rather than a real-time prediction
+    /// @param delayed whether the train associated with the arrival is currently delayed
+    /// @param fault whether the train associated with the arrival is currently experiencing a fault
+    /// @param metadata the metadata associated with the arrival
+    /// @throws NullPointerException if `stationId`, `stationName`, `stopId`, `stopDescription`, `line`,
+    /// `destinationStationId`, `destinationName`, `predictionTime`, `arrivalTime`, or `metadata` is `null`
     public Arrival {
         Objects.requireNonNull(stationId);
         Objects.requireNonNull(stationName);

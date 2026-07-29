@@ -6,28 +6,24 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
-/**
- * Represents a query for train arrivals at a specific map.
- *
- * @param mapId the ID of the map to retrieve arrivals for
- * @param line the optional train line to filter arrivals by
- * @param maxResults the optional maximum number of arrivals to return
- */
+/// Represents a query for train arrivals at a specific map.
+///
+/// @param mapId the ID of the map to retrieve arrivals for
+/// @param line the optional train line to filter arrivals by
+/// @param maxResults the optional maximum number of arrivals to return
 @NullMarked
 public record MapArrivalsQuery(
     String mapId,
     @Nullable TrainLine line,
     @Nullable Integer maxResults
 ) {
-    /**
-     * Constructs a {@code MapArrivalsQuery}.
-     *
-     * @param mapId the ID of the map to retrieve arrivals for
-     * @param line the optional train line to filter arrivals by
-     * @param maxResults the optional maximum number of arrivals to return
-     * @throws NullPointerException if {@code mapId} is {@code null}
-     * @throws IllegalArgumentException if {@code maxResults} is non-{@code null} and not positive
-     */
+    /// Constructs a `MapArrivalsQuery`.
+    ///
+    /// @param mapId the ID of the map to retrieve arrivals for
+    /// @param line the optional train line to filter arrivals by
+    /// @param maxResults the optional maximum number of arrivals to return
+    /// @throws NullPointerException if `mapId` is `null`
+    /// @throws IllegalArgumentException if `maxResults` is non-`null` and not positive
     public MapArrivalsQuery {
         Objects.requireNonNull(mapId);
 
@@ -36,68 +32,49 @@ public record MapArrivalsQuery(
         }
     }
 
-    /**
-     * Creates a builder for {@code MapArrivalsQuery}.
-     *
-     * @param mapId the ID of the map to retrieve arrivals for
-     * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code mapId} is {@code null}
-     */
+    /// Creates a builder for `MapArrivalsQuery`.
+    ///
+    /// @param mapId the ID of the map to retrieve arrivals for
+    /// @return a new `Builder` instance
+    /// @throws NullPointerException if `mapId` is `null`
     public static Builder builder(String mapId) {
         return new Builder(mapId);
     }
 
-    /**
-     * A builder for {@code MapArrivalsQuery}.
-     */
+    /// A builder for `MapArrivalsQuery`.
     public static final class Builder {
-        /**
-         * The ID of the map to retrieve arrivals for.
-         */
         private final String mapId;
 
-        /**
-         * The optional train line to filter arrivals by.
-         */
         @Nullable
         private TrainLine line;
 
-        /**
-         * The optional maximum number of arrivals to return.
-         */
         @Nullable
         private Integer maxResults;
 
-        /**
-         * Constructs a {@code Builder}.
-         *
-         * @param mapId the ID of the map to retrieve arrivals for
-         * @throws NullPointerException if {@code mapId} is {@code null}
-         */
+        /// Constructs a `Builder`.
+        ///
+        /// @param mapId the ID of the map to retrieve arrivals for
+        /// @throws NullPointerException if `mapId` is `null`
         public Builder(String mapId) {
             this.mapId = Objects.requireNonNull(mapId);
         }
 
-        /**
-         * Sets the train line to filter arrivals by.
-         *
-         * @param line the train line
-         * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code line} is {@code null}
-         */
+        /// Sets the train line to filter arrivals by.
+        ///
+        /// @param line the train line
+        /// @return this `Builder` instance
+        /// @throws NullPointerException if `line` is `null`
         public Builder line(TrainLine line) {
             this.line = Objects.requireNonNull(line);
 
             return this;
         }
 
-        /**
-         * Sets the maximum number of arrivals to return.
-         *
-         * @param maxResults the maximum number of arrivals
-         * @return this {@code Builder} instance
-         * @throws IllegalArgumentException if {@code maxResults} is not positive
-         */
+        /// Sets the maximum number of arrivals to return.
+        ///
+        /// @param maxResults the maximum number of arrivals
+        /// @return this `Builder` instance
+        /// @throws IllegalArgumentException if `maxResults` is not positive
         public Builder maxResults(int maxResults) {
             if (maxResults <= 0) {
                 throw new IllegalArgumentException("maxResults must be positive");
@@ -108,11 +85,9 @@ public record MapArrivalsQuery(
             return this;
         }
 
-        /**
-         * Builds the {@code MapArrivalsQuery}.
-         *
-         * @return a new {@code MapArrivalsQuery} instance
-         */
+        /// Builds the `MapArrivalsQuery`.
+        ///
+        /// @return a new `MapArrivalsQuery` instance
         public MapArrivalsQuery build() {
             return new MapArrivalsQuery(
                 this.mapId,

@@ -116,7 +116,7 @@ References:
 - **Summary sentence:** The first line is a standalone summary fragment
   ending in a period, third-person descriptive ("Returns the active
   arrivals for a station," not "This method returns...").
-- **Tag order:** `@param` → `@return` → `@deprecated` → `@since` → `@throws`
+- **Tag order:** `@apiNote` → `@param` → `@return` → `@deprecated` → `@since` → `@throws`
   → `@see`.
 - **@param / @throws descriptions:** Lowercase phrase, no trailing period.
 - **Code references:** Use backtick spans (`` `RoutesApi` ``, `` `List<Route>` ``)

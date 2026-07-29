@@ -49,12 +49,8 @@ public enum DetailedAlertsErrorCode {
     /// Indicates that an unknown error occurred that does not match any of the defined error codes.
     UNKNOWN(-1);
 
-    /// The integer code associated with this error code.
     private final int code;
 
-    /// Constructs a `DetailedAlertsErrorCode`.
-    ///
-    /// @param code the integer code associated with the error code
     DetailedAlertsErrorCode(int code) {
         this.code = code;
     }

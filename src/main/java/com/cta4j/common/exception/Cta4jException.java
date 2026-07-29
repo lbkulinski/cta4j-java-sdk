@@ -7,7 +7,6 @@ import java.util.Objects;
 /// A custom exception class for handling cta4j-specific errors.
 @NullMarked
 public class Cta4jException extends RuntimeException {
-    /// The endpoint associated with this exception.
     private final String endpoint;
 
     /// Constructs a `Cta4jException`.
