@@ -14,33 +14,33 @@ public enum DetailedAlertsErrorCode {
     /// Indicates that there are no active alerts based on the provided filter criteria.
     NO_ACTIVE_ALERTS_FOR_FILTER(50),
 
-    /// Indicates that the provided "activeonly" value is invalid.
+    /// Indicates that the provided `activeonly` value is invalid.
     INVALID_ACTIVEONLY(100),
 
-    /// Indicates that the provided "accessibility" value is invalid.
+    /// Indicates that the provided `accessibility` value is invalid.
     INVALID_ACCESSIBILITY(101),
 
-    /// Indicates that the provided "planned" value is invalid.
+    /// Indicates that the provided `planned` value is invalid.
     INVALID_PLANNED(102),
 
     /// Indicates that the provided station ID is not an integer.
     STATIONID_NOT_INTEGER(103),
 
-    /// Indicates that the provided "bystartdate" value is not a valid date in "yyyyMMdd" format.
+    /// Indicates that the provided `bystartdate` value is not a valid date in `yyyyMMdd` format.
     INVALID_BYSTARTDATE(104),
 
-    /// Indicates that the provided "recentdays" value is not an integer.
+    /// Indicates that the provided `recentdays` value is not an integer.
     RECENTDAYS_NOT_INTEGER(105),
 
-    /// Indicates that the "routeid" and "stationid" parameters were both provided, which is not allowed.
+    /// Indicates that the `routeid` and `stationid` parameters were both provided, which is not allowed.
     ROUTEID_STATIONID_CONFLICT(106),
 
-    /// Indicates that the "recentdays" and "bystartdate" parameters were both provided, which is not allowed.
+    /// Indicates that the `recentdays` and `bystartdate` parameters were both provided, which is not allowed.
     RECENTDAYS_BYSTARTDATE_CONFLICT(107),
 
     /// Indicates that the query string contains a parameter that is not recognized by the API. The supported API
-    /// parameters are "activeonly", "accessibility", "planned", "routeid", "stationid", "bystartdate", "recentdays",
-    /// and "outputType".
+    /// parameters are `activeonly`, `accessibility`, `planned`, `routeid`, `stationid`, `bystartdate`, `recentdays`,
+    /// and `outputType`.
     INVALID_PARAMETER(500),
 
     /// Indicates that the server encountered an unexpected error that prevented it from fulfilling the request.

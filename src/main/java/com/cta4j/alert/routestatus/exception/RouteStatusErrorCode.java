@@ -20,17 +20,17 @@ public enum RouteStatusErrorCode {
     /// Indicates that the provided service type is invalid.
     INVALID_TYPE(101),
 
-    /// Indicates that the "routeid" and "stationid" parameters were both provided, which is not allowed.
+    /// Indicates that the `routeid` and `stationid` parameters were both provided, which is not allowed.
     ROUTEID_STATIONID_CONFLICT(102),
 
-    /// Indicates that the "routeid" and "type" parameters were both provided, which is not allowed.
+    /// Indicates that the `routeid` and `type` parameters were both provided, which is not allowed.
     ROUTEID_TYPE_CONFLICT(103),
 
-    /// Indicates that the "stationid" and "type" parameters were both provided, which is not allowed.
+    /// Indicates that the `stationid` and `type` parameters were both provided, which is not allowed.
     STATIONID_TYPE_CONFLICT(104),
 
     /// Indicates that the query string contains a parameter that is not recognized by the API. The supported API
-    /// parameters are "type", "routeid", "stationid", and "outputType".
+    /// parameters are `type`, `routeid`, `stationid`, and `outputType`.
     INVALID_PARAMETER(500),
 
     /// Indicates that the server encountered an unexpected error that prevented it from fulfilling the request.

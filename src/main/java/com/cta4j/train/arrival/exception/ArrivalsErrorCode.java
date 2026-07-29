@@ -48,7 +48,7 @@ public enum ArrivalsErrorCode {
     STPID_NOT_INTEGER(112),
 
     /// Indicates that the query string contains a parameter that is not recognized by the API. The supported API
-    /// parameters are "mapid", "key", "rt", "stpid", and "max".
+    /// parameters are `mapid`, `key`, `rt`, `stpid`, and `max`.
     INVALID_PARAMETER(500),
 
     /// Indicates that the server encountered an unexpected error that prevented it from fulfilling the request.

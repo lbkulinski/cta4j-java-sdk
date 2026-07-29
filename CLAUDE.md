@@ -126,6 +126,9 @@ References:
   (`model/`), and builders always. Wire records (`internal/wire/`), mappers,
   and `*ApiImpl` classes are `@ApiStatus.Internal` and are not documented
   unless the "why" is non-obvious (per Code Style).
-- **Package docs:** Each top-level feature package (e.g. `bus.route`,
-  `train.arrivals`) gets a `package-info.java` with a one-paragraph summary
-  of the feature's responsibility, written in the same Markdown style.
+- **Package docs:** Every package containing at least one non-internal
+  type (public `*Api` interfaces, public domain models, builders — per
+  "What gets documented" above) gets a `package-info.java` with a
+  one-paragraph summary of the package's responsibility, written in the
+  same Markdown style. Packages containing only `internal/wire`, mapper,
+  or `*ApiImpl` classes do not require a package-info.java.

@@ -18,7 +18,7 @@ public enum FollowErrorCode {
     DAILY_LIMIT_EXCEEDED(102),
 
     /// Indicates that the query string contains a parameter that is not recognized by the API. The supported API
-    /// parameters are "runnumber" and "key".
+    /// parameters are `runnumber` and `key`.
     INVALID_PARAMETER(500),
 
     /// Indicates that the specified run number does not correspond to any known train run.

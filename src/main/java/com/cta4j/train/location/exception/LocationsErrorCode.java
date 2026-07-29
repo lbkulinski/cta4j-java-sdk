@@ -25,7 +25,7 @@ public enum LocationsErrorCode {
     TOO_MANY_ROUTES(107),
 
     /// Indicates that the query string contains a parameter that is not recognized by the API. The supported API
-    /// parameters are "rt" and "key".
+    /// parameters are `rt` and `key`.
     INVALID_PARAMETER(500),
 
     /// Indicates that an unknown error occurred that does not match any of the defined error codes.
