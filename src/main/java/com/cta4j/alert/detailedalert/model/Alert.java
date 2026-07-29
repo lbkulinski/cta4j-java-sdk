@@ -8,27 +8,25 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Represents a detailed alert describing an event that affects one or more CTA services.
- *
- * @param id the unique ID of this alert (e.g., "115070")
- * @param headline the headline of this alert
- * @param shortDescription the short description of this alert
- * @param fullDescription the full description of this alert
- * @param severity the severity of this alert
- * @param impact the descriptive text of the impact this alert has on service (e.g., "Elevator Status",
- *               "Bus Stop Relocation", "Planned Reroute")
- * @param startTime the start time of this alert
- * @param endTime the end time of this alert, or {@code null} if not known
- * @param openEnded whether this alert is open-ended (has no known end time)
- * @param major whether this alert is of major significance
- * @param url the URL of this alert's detail page on transitchicago.com
- * @param impactedServices the services impacted by this alert
- * @param ttim an undocumented field returned by the CTA Alerts API; its meaning is not specified and its presence
- *             is not guaranteed, or {@code null} if not returned
- * @param guid an undocumented field returned by the CTA Alerts API that appears to be a stable, globally unique
- *             identifier for this alert, distinct from {@link #id}, or {@code null} if not returned
- */
+/// Represents a detailed alert describing an event that affects one or more CTA services.
+///
+/// @param id the unique ID of this alert (e.g., "115070")
+/// @param headline the headline of this alert
+/// @param shortDescription the short description of this alert
+/// @param fullDescription the full description of this alert
+/// @param severity the severity of this alert
+/// @param impact the descriptive text of the impact this alert has on service
+///               (e.g., "Elevator Status", "Bus Stop Relocation", "Planned Reroute")
+/// @param startTime the start time of this alert
+/// @param endTime the end time of this alert, or `null` if not known
+/// @param openEnded whether this alert is open-ended (has no known end time)
+/// @param major whether this alert is of major significance
+/// @param url the URL of this alert's detail page on transitchicago.com
+/// @param impactedServices the services impacted by this alert
+/// @param ttim an undocumented field returned by the CTA Alerts API; its meaning is not specified and its presence is
+///             not guaranteed, or `null` if not returned
+/// @param guid an undocumented field returned by the CTA Alerts API that appears to be a stable, globally unique
+///             identifier for this alert, distinct from [#id], or `null` if not returned
 @NullMarked
 public record Alert(
     String id,
@@ -46,30 +44,27 @@ public record Alert(
     @Nullable String ttim,
     @Nullable String guid
 ) {
-    /**
-     * Constructs an {@code Alert}.
-     *
-     * @param id the unique ID of the alert (e.g., "115070")
-     * @param headline the headline of the alert
-     * @param shortDescription the short description of the alert
-     * @param fullDescription the full description of the alert
-     * @param severity the severity of the alert
-     * @param impact the descriptive text of the impact the alert has on service (e.g., "Elevator Status",
-     *               "Bus Stop Relocation", "Planned Reroute")
-     * @param startTime the start time of the alert
-     * @param endTime the end time of the alert, or {@code null} if not known
-     * @param openEnded whether the alert is open-ended (has no known end time)
-     * @param major whether the alert is of major significance
-     * @param url the URL of the alert's detail page on transitchicago.com
-     * @param impactedServices the services impacted by the alert
-     * @param ttim an undocumented field returned by the CTA Alerts API; its meaning is not specified and its
-     *             presence is not guaranteed, or {@code null} if not returned
-     * @param guid an undocumented field returned by the CTA Alerts API that appears to be a stable, globally
-     *             unique identifier for the alert, distinct from {@code id}, or {@code null} if not returned
-     * @throws NullPointerException if {@code id}, {@code headline}, {@code shortDescription},
-     * {@code fullDescription}, {@code severity}, {@code impact}, {@code startTime}, {@code url}, or
-     * {@code impactedServices} is {@code null}, or if any element of {@code impactedServices} is {@code null}
-     */
+    /// Constructs an `Alert`.
+    ///
+    /// @param id the unique ID of the alert (e.g., "115070")
+    /// @param headline the headline of the alert
+    /// @param shortDescription the short description of the alert
+    /// @param fullDescription the full description of the alert
+    /// @param severity the severity of the alert
+    /// @param impact the descriptive text of the impact the alert has on service
+    ///               (e.g., "Elevator Status", "Bus Stop Relocation", "Planned Reroute")
+    /// @param startTime the start time of the alert
+    /// @param endTime the end time of the alert, or `null` if not known
+    /// @param openEnded whether the alert is open-ended (has no known end time)
+    /// @param major whether the alert is of major significance
+    /// @param url the URL of the alert's detail page on transitchicago.com
+    /// @param impactedServices the services impacted by the alert
+    /// @param ttim an undocumented field returned by the CTA Alerts API; its meaning is not specified and its presence
+    ///             is not guaranteed, or `null` if not returned
+    /// @param guid an undocumented field returned by the CTA Alerts API that appears to be a stable, globally unique
+    ///             identifier for the alert, distinct from `id`, or `null` if not returned
+    /// @throws NullPointerException if `id`, `headline`, `shortDescription`, `fullDescription`, `severity`, `impact`,
+    /// `startTime`, `url`, or `impactedServices` is `null`, or if any element of `impactedServices` is `null`
     public Alert {
         Objects.requireNonNull(id);
         Objects.requireNonNull(headline);

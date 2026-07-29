@@ -9,17 +9,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Represents a query for detailed train line alerts.
- *
- * @param lines the {@link List} of {@link AlertTrainLine}s to retrieve alerts for
- * @param activeOnly whether to include only alerts that are currently active
- * @param accessibility whether to include alerts that affect accessible paths in stations
- * @param planned whether to include common planned alerts
- * @param byStartDate the optional date; only alerts with a start date before this date are included
- * @param recentDays the optional number of days; only alerts that started within this many days of today are
- *                   included
- */
+/// Represents a query for detailed train line alerts.
+///
+/// @param lines the [List] of [AlertTrainLine]s to retrieve alerts for
+/// @param activeOnly whether to include only alerts that are currently active
+/// @param accessibility whether to include alerts that affect accessible paths in stations
+/// @param planned whether to include common planned alerts
+/// @param byStartDate the optional date; only alerts with a start date before this date are included
+/// @param recentDays the optional number of days; only alerts that started within this many days of today are included
 @NullMarked
 public record LineAlertsQuery(
     List<AlertTrainLine> lines,
@@ -29,21 +26,18 @@ public record LineAlertsQuery(
     @Nullable LocalDate byStartDate,
     @Nullable Integer recentDays
 ) {
-    /**
-     * Constructs a {@code LineAlertsQuery}.
-     *
-     * @param lines the {@link List} of {@link AlertTrainLine}s to retrieve alerts for
-     * @param activeOnly whether to include only alerts that are currently active
-     * @param accessibility whether to include alerts that affect accessible paths in stations
-     * @param planned whether to include common planned alerts
-     * @param byStartDate the optional date; only alerts with a start date before this date are included
-     * @param recentDays the optional number of days; only alerts that started within this many days of today are
-     *                   included
-     * @throws NullPointerException if {@code lines} is {@code null}, or if any element of {@code lines} is
-     * {@code null}
-     * @throws IllegalArgumentException if both {@code byStartDate} and {@code recentDays} are specified, or if
-     * {@code recentDays} is non-{@code null} and not positive
-     */
+    /// Constructs a `LineAlertsQuery`.
+    ///
+    /// @param lines the [List] of [AlertTrainLine]s to retrieve alerts for
+    /// @param activeOnly whether to include only alerts that are currently active
+    /// @param accessibility whether to include alerts that affect accessible paths in stations
+    /// @param planned whether to include common planned alerts
+    /// @param byStartDate the optional date; only alerts with a start date before this date are included
+    /// @param recentDays the optional number of days; only alerts that started within this many days of today are
+    ///                   included
+    /// @throws NullPointerException if `lines` is `null`, or if any element of `lines` is `null`
+    /// @throws IllegalArgumentException if both `byStartDate` and `recentDays` are specified, or if `recentDays` is
+    /// non-`null` and not positive
     public LineAlertsQuery {
         Objects.requireNonNull(lines);
 
@@ -58,64 +52,44 @@ public record LineAlertsQuery(
         }
     }
 
-    /**
-     * Creates a builder for {@code LineAlertsQuery}.
-     *
-     * @param lines the {@link Collection} of {@link AlertTrainLine}s to retrieve alerts for
-     * @return a new {@code Builder} instance
-     * @throws NullPointerException if {@code lines} is {@code null}, or if any element of {@code lines} is
-     * {@code null}
-     */
+    /// Creates a builder for `LineAlertsQuery`.
+    ///
+    /// @param lines the [Collection] of [AlertTrainLine]s to retrieve alerts for
+    /// @return a new `Builder` instance
+    /// @throws NullPointerException if `lines` is `null`, or if any element of `lines` is `null`
     public static Builder builder(Collection<AlertTrainLine> lines) {
         return new Builder(lines);
     }
 
-    /**
-     * A builder for {@code LineAlertsQuery}.
-     */
+    /// A builder for `LineAlertsQuery`.
     public static final class Builder {
-        /**
-         * The {@link List} of {@link AlertTrainLine}s to retrieve alerts for.
-         */
+        /// The [List] of [AlertTrainLine]s to retrieve alerts for.
         private final List<AlertTrainLine> lines;
 
-        /**
-         * Whether to include only alerts that are currently active.
-         */
+        /// Whether to include only alerts that are currently active.
         private boolean activeOnly;
 
-        /**
-         * Whether to include alerts that affect accessible paths in stations.
-         */
+        /// Whether to include alerts that affect accessible paths in stations.
         private boolean accessibility;
 
-        /**
-         * Whether to include common planned alerts.
-         */
+        /// Whether to include common planned alerts.
         private boolean planned;
 
-        /**
-         * The optional date; only alerts with a start date before this date are included.
-         */
+        /// The optional date; only alerts with a start date before this date are included.
         @Nullable
         private LocalDate byStartDate;
 
-        /**
-         * The optional number of days; only alerts that started within this many days of today are included.
-         */
+        /// The optional number of days; only alerts that started within this many days of today are included.
         @Nullable
         private Integer recentDays;
 
-        /**
-         * Constructs a {@code Builder}.
-         * <p>
-         * By default, {@code activeOnly} is {@code false}, and {@code accessibility} and {@code planned} are
-         * {@code true}, matching the CTA Alerts API's own defaults.
-         *
-         * @param lines the {@link Collection} of {@link AlertTrainLine}s to retrieve alerts for
-         * @throws NullPointerException if {@code lines} is {@code null}, or if any element of {@code lines} is
-         * {@code null}
-         */
+        /// Constructs a `Builder`.
+        ///
+        /// By default, `activeOnly` is `false`, and `accessibility` and `planned` are `true`, matching the CTA Alerts
+        /// API's own defaults.
+        ///
+        /// @param lines the [Collection] of [AlertTrainLine]s to retrieve alerts for
+        /// @throws NullPointerException if `lines` is `null`, or if any element of `lines` is `null`
         public Builder(Collection<AlertTrainLine> lines) {
             Objects.requireNonNull(lines);
 
@@ -125,49 +99,41 @@ public record LineAlertsQuery(
             this.planned = true;
         }
 
-        /**
-         * Sets whether to include only alerts that are currently active.
-         *
-         * @param activeOnly whether to include only active alerts
-         * @return this {@code Builder} instance
-         */
+        /// Sets whether to include only alerts that are currently active.
+        ///
+        /// @param activeOnly whether to include only active alerts
+        /// @return this `Builder` instance
         public Builder activeOnly(boolean activeOnly) {
             this.activeOnly = activeOnly;
 
             return this;
         }
 
-        /**
-         * Sets whether to include alerts that affect accessible paths in stations.
-         *
-         * @param accessibility whether to include accessibility-related alerts
-         * @return this {@code Builder} instance
-         */
+        /// Sets whether to include alerts that affect accessible paths in stations.
+        ///
+        /// @param accessibility whether to include accessibility-related alerts
+        /// @return this `Builder` instance
         public Builder accessibility(boolean accessibility) {
             this.accessibility = accessibility;
 
             return this;
         }
 
-        /**
-         * Sets whether to include common planned alerts.
-         *
-         * @param planned whether to include planned alerts
-         * @return this {@code Builder} instance
-         */
+        /// Sets whether to include common planned alerts.
+        ///
+        /// @param planned whether to include planned alerts
+        /// @return this `Builder` instance
         public Builder planned(boolean planned) {
             this.planned = planned;
 
             return this;
         }
 
-        /**
-         * Sets the date; only alerts with a start date before this date are included.
-         *
-         * @param byStartDate the date to filter alerts by
-         * @return this {@code Builder} instance
-         * @throws NullPointerException if {@code byStartDate} is {@code null}
-         */
+        /// Sets the date; only alerts with a start date before this date are included.
+        ///
+        /// @param byStartDate the date to filter alerts by
+        /// @return this `Builder` instance
+        /// @throws NullPointerException if `byStartDate` is `null`
         public Builder byStartDate(LocalDate byStartDate) {
             Objects.requireNonNull(byStartDate);
 
@@ -176,13 +142,11 @@ public record LineAlertsQuery(
             return this;
         }
 
-        /**
-         * Sets the number of days; only alerts that started within this many days of today are included.
-         *
-         * @param recentDays the number of days to filter alerts by
-         * @return this {@code Builder} instance
-         * @throws IllegalArgumentException if {@code recentDays} is not positive
-         */
+        /// Sets the number of days; only alerts that started within this many days of today are included.
+        ///
+        /// @param recentDays the number of days to filter alerts by
+        /// @return this `Builder` instance
+        /// @throws IllegalArgumentException if `recentDays` is not positive
         public Builder recentDays(int recentDays) {
             if (recentDays <= 0) {
                 throw new IllegalArgumentException("recentDays must be positive");
@@ -193,12 +157,10 @@ public record LineAlertsQuery(
             return this;
         }
 
-        /**
-         * Builds the {@code LineAlertsQuery}.
-         *
-         * @return a new {@code LineAlertsQuery} instance
-         * @throws IllegalArgumentException if both {@code byStartDate} and {@code recentDays} were specified
-         */
+        /// Builds the `LineAlertsQuery`.
+        ///
+        /// @return a new `LineAlertsQuery` instance
+        /// @throws IllegalArgumentException if both `byStartDate` and `recentDays` were specified
         public LineAlertsQuery build() {
             return new LineAlertsQuery(
                 this.lines,
