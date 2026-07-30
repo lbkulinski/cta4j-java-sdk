@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-/// Provides access to station-related endpoints.
+/// Provides access to station-related endpoints of the CTA Train Tracker API.
 ///
 /// This API allows retrieval of station information, including station names, IDs, and other details.
 ///

@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-/// Provides access to detour-related endpoints of the CTA BusTime API.
+/// Provides access to detour-related endpoints of the CTA Bus Tracker API.
 ///
 /// This API allows retrieval of active service detours across all routes, or filtered by route and direction.
 @NullMarked
@@ -29,7 +29,7 @@ public interface DetoursApi {
     /// Retrieves all active detours for the specified route ID and direction.
     ///
     /// @param routeId the route ID
-    /// @param direction the travel direction (e.g., "Northbound", "Southbound")
+    /// @param direction the direction (e.g., "Northbound", "Southbound")
     /// @return a [List] of [Detour]s associated with the route ID and direction, or an empty [List] if no detours are
     /// found for the route ID and direction
     /// @throws NullPointerException if `routeId` or `direction` is `null`

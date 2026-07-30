@@ -51,10 +51,10 @@ public record StationAlertsQuery(
         }
     }
 
-    /// Creates a builder for `StationAlertsQuery`.
+    /// Creates a new `Builder` for constructing a `StationAlertsQuery`.
     ///
     /// @param stationIds the [Collection] of train station IDs to retrieve alerts for
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     /// @throws NullPointerException if `stationIds` is `null`, or if any element of `stationIds` is `null`
     public static Builder builder(Collection<String> stationIds) {
         return new Builder(stationIds);
@@ -150,9 +150,9 @@ public record StationAlertsQuery(
             return this;
         }
 
-        /// Builds the `StationAlertsQuery`.
+        /// Builds a configured `StationAlertsQuery` instance.
         ///
-        /// @return a new `StationAlertsQuery` instance
+        /// @return a new `StationAlertsQuery`
         /// @throws IllegalArgumentException if both `byStartDate` and `recentDays` were specified
         public StationAlertsQuery build() {
             return new StationAlertsQuery(

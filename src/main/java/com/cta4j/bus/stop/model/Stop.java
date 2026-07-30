@@ -16,8 +16,8 @@ import java.util.Objects;
 /// @param name the display name of this stop (e.g., "Clark & Addison")
 /// @param latitude the latitude coordinate of this stop
 /// @param longitude the longitude coordinate of this stop
-/// @param detoursAdded the [List] of detour IDs which temporarily add service to this stop
-/// @param detoursRemoved the [List] of detour IDs which temporarily remove service from this stop
+/// @param detoursAdded the [List] of detour IDs which temporarily add service to this stop, if applicable
+/// @param detoursRemoved the [List] of detour IDs which temporarily remove service from this stop, if applicable
 /// @param gtfsSequence the GTFS sequence number of this stop, if applicable
 /// @param adaAccessible whether this stop is ADA accessible, if known
 @NullMarked
@@ -37,8 +37,8 @@ public record Stop(
     /// @param name the display name of the stop (e.g., "Clark & Addison")
     /// @param latitude the latitude coordinate of the stop
     /// @param longitude the longitude coordinate of the stop
-    /// @param detoursAdded the [List] of detour IDs which temporarily add service to the stop
-    /// @param detoursRemoved the [List] of detour IDs which temporarily remove service from the stop
+    /// @param detoursAdded the [List] of detour IDs which temporarily add service to the stop, if applicable
+    /// @param detoursRemoved the [List] of detour IDs which temporarily remove service from the stop, if applicable
     /// @param gtfsSequence the GTFS sequence number of the stop, if applicable
     /// @param adaAccessible whether the stop is ADA accessible, if known
     /// @throws NullPointerException if `id`, `name`, `latitude`, or `longitude` is `null`, or if any element of

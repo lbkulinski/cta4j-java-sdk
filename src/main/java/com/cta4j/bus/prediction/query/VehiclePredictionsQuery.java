@@ -36,10 +36,10 @@ public record VehiclePredictionsQuery(
         }
     }
 
-    /// Creates a builder for `VehiclePredictionsQuery`.
+    /// Creates a new `Builder` for constructing a `VehiclePredictionsQuery`.
     ///
     /// @param vehicleIds the [Collection] of vehicle IDs to retrieve predictions for
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     /// @throws NullPointerException if `vehicleIds` is `null`, or if any element of `vehicleIds` is `null`
     public static Builder builder(Collection<String> vehicleIds) {
         return new Builder(vehicleIds);
@@ -77,9 +77,9 @@ public record VehiclePredictionsQuery(
             return this;
         }
 
-        /// Builds the `VehiclePredictionsQuery`.
+        /// Builds a configured `VehiclePredictionsQuery` instance.
         ///
-        /// @return the constructed `VehiclePredictionsQuery`
+        /// @return a new `VehiclePredictionsQuery`
         /// @throws IllegalArgumentException if more than 10 vehicle IDs are provided
         public VehiclePredictionsQuery build() {
             return new VehiclePredictionsQuery(

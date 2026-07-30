@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/// Provides access to vehicle-related endpoints of the CTA BusTime API.
+/// Provides access to vehicle-related endpoints of the CTA Bus Tracker API.
 ///
 /// This API allows retrieval of vehicles by their IDs or by associated route IDs.
 @NullMarked
@@ -19,7 +19,7 @@ public interface VehiclesApi {
     ///
     /// @param ids a [Collection] of vehicle IDs
     /// @return a [List] of [Vehicle]s corresponding to the provided IDs, or an empty [List] if no vehicles are found
-    /// @throws NullPointerException if `ids` is `null` or contains `null` elements
+    /// @throws NullPointerException if `ids` is `null`, or if any element of `ids` is `null`
     /// @throws IllegalArgumentException if more than 10 vehicle IDs are provided
     /// @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
     List<Vehicle> findByIds(Collection<String> ids);
@@ -62,7 +62,7 @@ public interface VehiclesApi {
     /// @param routeIds a [Collection] of route IDs
     /// @return a [List] of [Vehicle]s associated with the route IDs, or an empty [List] if no vehicles are found for
     /// the route IDs
-    /// @throws NullPointerException if `routeIds` is `null` or contains `null` elements
+    /// @throws NullPointerException if `routeIds` is `null`, or if any element of `routeIds` is `null`
     /// @throws IllegalArgumentException if more than 10 route IDs are provided
     /// @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
     List<Vehicle> findByRouteIds(Collection<String> routeIds);

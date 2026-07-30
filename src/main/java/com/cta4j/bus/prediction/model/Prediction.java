@@ -24,7 +24,7 @@ import java.util.Objects;
 /// @param destination the final destination of the vehicle associated with this prediction
 /// @param arrivalTime the predicted date and time (UTC) of a vehicle’s arrival or departure to the stop associated
 ///                    with this prediction
-/// @param delayed whether the vehicle associated with this prediction is currently delayed
+/// @param delayed whether the vehicle associated with this prediction is currently delayed, if known
 /// @param metadata the metadata associated with this prediction
 @NullMarked
 public record Prediction(
@@ -57,7 +57,7 @@ public record Prediction(
     /// @param destination the final destination of the vehicle associated with the prediction
     /// @param arrivalTime the predicted date and time (UTC) of a vehicle’s arrival or departure to the stop associated
     ///                    with the prediction
-    /// @param delayed whether the vehicle associated with the prediction is currently delayed
+    /// @param delayed whether the vehicle associated with the prediction is currently delayed, if known
     /// @param metadata the metadata associated with the prediction
     /// @throws NullPointerException if `predictionType`, `stopId`, `stopName`, `vehicleId`, `distanceToStop`,
     /// `routeId`, `routeDesignator`, `routeDirection`, `destination`, `arrivalTime`, or `metadata` is `null`

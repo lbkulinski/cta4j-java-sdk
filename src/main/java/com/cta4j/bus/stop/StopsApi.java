@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/// Provides access to stop-related endpoints of the CTA BusTime API.
+/// Provides access to stop-related endpoints of the CTA Bus Tracker API.
 ///
 /// This API allows retrieval of stops by route ID and direction, as well as by stop IDs.
 @NullMarked
@@ -19,7 +19,7 @@ public interface StopsApi {
     ///
     /// @param stopIds a [Collection] of stop IDs
     /// @return a [List] of [Stop]s corresponding to the provided stop IDs, or an empty [List] if no stops are found
-    /// @throws NullPointerException if `stopIds` is `null` or contains `null` elements
+    /// @throws NullPointerException if `stopIds` is `null`, or if any element of `stopIds` is `null`
     /// @throws IllegalArgumentException if more than 10 stop IDs are provided
     /// @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
     List<Stop> findByIds(Collection<String> stopIds);

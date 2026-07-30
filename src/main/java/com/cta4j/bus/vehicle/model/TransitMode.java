@@ -26,7 +26,7 @@ public enum TransitMode {
         this.code = code;
     }
 
-    /// Gets the code associated with this transit mode.
+    /// Returns the code associated with this transit mode.
     ///
     /// @return the transit mode code
     public int getCode() {

@@ -77,7 +77,7 @@ public interface BusApi {
         /// If not specified, the default CTA Bus Tracker API host is used.
         ///
         /// @param host the API host
-        /// @return this builder instance
+        /// @return this `Builder` instance
         /// @throws NullPointerException if `host` is `null`
         Builder host(String host);
 

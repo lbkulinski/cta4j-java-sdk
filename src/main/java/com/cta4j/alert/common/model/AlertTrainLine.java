@@ -44,7 +44,7 @@ public enum AlertTrainLine {
         this.code = Objects.requireNonNull(code);
     }
 
-    /// Gets the CTA Alerts API route designator for this train line.
+    /// Returns the CTA Alerts API route designator for this train line.
     ///
     /// @return the route designator
     public String getCode() {

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /// Represents a response from the "follow" endpoint of the CTA Train Tracker API.
 ///
-/// @param coordinates the current coordinates of this train being followed
+/// @param coordinates the current coordinates of this train being followed, if applicable
 /// @param arrivals the [List] of [Arrival]s for this train being followed
 @NullMarked
 public record FollowTrain(
@@ -19,9 +19,9 @@ public record FollowTrain(
 ) {
     /// Constructs a `FollowTrain`.
     ///
-    /// @param coordinates the current coordinates of the train being followed
+    /// @param coordinates the current coordinates of the train being followed, if applicable
     /// @param arrivals the [List] of [Arrival]s for the train being followed
-    /// @throws NullPointerException if `arrivals` is `null`, or if `arrivals` contains `null` elements
+    /// @throws NullPointerException if `arrivals` is `null`, or if any element of `arrivals` is `null`
     public FollowTrain {
         Objects.requireNonNull(arrivals);
 

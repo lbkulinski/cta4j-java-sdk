@@ -69,7 +69,7 @@ public enum DynamicAction {
         this.code = code;
     }
 
-    /// Gets the code associated with this dynamic action.
+    /// Returns the code associated with this dynamic action.
     ///
     /// @return the dynamic action code
     public int getCode() {

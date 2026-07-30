@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/// Provides access to route pattern-related endpoints of the CTA BusTime API.
+/// Provides access to route pattern-related endpoints of the CTA Bus Tracker API.
 ///
 /// This API allows retrieval of route patterns by their IDs or by associated route IDs.
 @NullMarked
@@ -20,7 +20,7 @@ public interface PatternsApi {
     /// @param patternIds a [Collection] of route pattern IDs
     /// @return a [List] of [RoutePattern]s corresponding to the provided IDs, or an empty [List] if no patterns are
     /// found
-    /// @throws NullPointerException if `patternIds` is `null` or contains `null` elements
+    /// @throws NullPointerException if `patternIds` is `null`, or if any element of `patternIds` is `null`
     /// @throws IllegalArgumentException if more than 10 pattern IDs are provided
     /// @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
     List<RoutePattern> findByIds(Collection<String> patternIds);

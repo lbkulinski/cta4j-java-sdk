@@ -116,6 +116,19 @@ References:
 - **Summary sentence:** The first line is a standalone summary fragment
   ending in a period, third-person descriptive ("Returns the active
   arrivals for a station," not "This method returns...").
+- **Single-item accessor verb:** Always "Returns the X" — no exceptions.
+  This applies uniformly to every single-value accessor, including
+  wire-code accessors on domain-value enums (e.g. `getCode()` on
+  `TransitMode`, `DynamicAction`, `TrainLine`) and numeric/status-code
+  accessors on error-code enums or exceptions alike. Do not use "Gets the
+  X" to distinguish the two.
+- **Builder setter `@return`:** Always backticked, "this `Builder` instance" —
+  never the unbacked "this builder instance" variant.
+- **Builder creator methods:** One template for every builder, top-level
+  client builders and query-parameter builders alike — no terser variant.
+  The static `builder(...)` method: "Creates a new `Builder` for
+  constructing a/an `X`.", `@return` tag "a new `Builder`". The `build()`
+  method: "Builds a configured `X` instance.", `@return` tag "a new `X`".
 - **Tag order:** `@apiNote` → `@param` → `@return` → `@deprecated` → `@since` → `@throws`
   → `@see`.
 - **@param / @throws descriptions:** Lowercase phrase, no trailing period.

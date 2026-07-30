@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-/// Provides access to prediction-related endpoints of the CTA BusTime API.
+/// Provides access to prediction-related endpoints of the CTA Bus Tracker API.
 ///
 /// This API allows retrieval of predictions by stop IDs or vehicle IDs.
 @NullMarked

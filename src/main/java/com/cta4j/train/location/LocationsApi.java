@@ -25,7 +25,7 @@ public interface LocationsApi {
     /// @param lines a [List] of [TrainLine]s to filter the train locations by
     /// @return a [List] of [TrainLocations] corresponding to the provided lines, or an empty [List] if no train
     /// locations are found for the specified lines
-    /// @throws NullPointerException if `lines` is `null` or contains `null` elements
+    /// @throws NullPointerException if `lines` is `null`, or if any element of `lines` is `null`
     /// @throws Cta4jLocationsException if the API returns an error response or the response cannot be parsed
     List<TrainLocations> findByLines(List<TrainLine> lines);
 

@@ -8,7 +8,7 @@ import java.util.Optional;
 
 /// Provides access to follow-related endpoints of the CTA Train Tracker API.
 ///
-/// This API allows retrieval of information about a specific train run.
+/// This API allows retrieval of upcoming predictions for a train by its run number.
 @NullMarked
 public interface FollowApi {
     /// Retrieves a train by its run number.

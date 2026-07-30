@@ -4,7 +4,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-/// A custom exception class for handling cta4j-specific errors.
+/// A custom exception type for handling SDK-specific errors.
 @NullMarked
 public class Cta4jException extends RuntimeException {
     private final String endpoint;
@@ -12,7 +12,7 @@ public class Cta4jException extends RuntimeException {
     /// Constructs a `Cta4jException`.
     ///
     /// @param message the detail message
-    /// @param endpoint the endpoint associated with the exception
+    /// @param endpoint the URL of the API endpoint associated with the exception
     /// @throws NullPointerException if `endpoint` is `null`
     public Cta4jException(String message, String endpoint) {
         super(message);
@@ -23,7 +23,7 @@ public class Cta4jException extends RuntimeException {
     /// Constructs a `Cta4jException`.
     ///
     /// @param message the detail message
-    /// @param endpoint the endpoint associated with the exception
+    /// @param endpoint the URL of the API endpoint associated with the exception
     /// @param cause the cause of the exception
     /// @throws NullPointerException if `endpoint` is `null`
     public Cta4jException(String message, String endpoint, Throwable cause) {
@@ -32,9 +32,9 @@ public class Cta4jException extends RuntimeException {
         this.endpoint = Objects.requireNonNull(endpoint);
     }
 
-    /// Returns the endpoint associated with this exception.
+    /// Returns the URL of the API endpoint associated with this exception.
     ///
-    /// @return the endpoint
+    /// @return the endpoint URL
     public String getEndpoint() {
         return this.endpoint;
     }

@@ -13,7 +13,7 @@ import java.util.Set;
 /// @param stopName the stop name of this station
 /// @param name the name of this station
 /// @param descriptiveName the descriptive name of this station
-/// @param mapId the map identifier of this station
+/// @param mapId the unique map identifier of this station
 /// @param adaAccessible whether this station is ADA accessible
 /// @param lines the [Set] of [TrainLine]s that serve this station
 /// @param location the [Location] of this station
@@ -36,7 +36,7 @@ public record Station(
     /// @param stopName the stop name of the station
     /// @param name the name of the station
     /// @param descriptiveName the descriptive name of the station
-    /// @param mapId the map identifier of the station
+    /// @param mapId the unique map identifier of the station
     /// @param adaAccessible whether the station is ADA accessible
     /// @param lines the [Set] of [TrainLine]s that serve the station
     /// @param location the [Location] of the station

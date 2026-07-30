@@ -7,9 +7,9 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 import java.util.Locale;
 
-/// Provides access to locale-related endpoints of the CTA BusTime API.
+/// Provides access to locale-related endpoints of the CTA Bus Tracker API.
 ///
-/// This API allows retrieval of supported locales for the CTA BusTime services.
+/// This API allows retrieval of supported locales for the CTA Bus Tracker services.
 @NullMarked
 public interface LocalesApi {
     /// Retrieves the supported locales.

@@ -23,7 +23,7 @@ public enum FlagStop {
         this.code = code;
     }
 
-    /// Gets the code associated with this flag-stop.
+    /// Returns the code associated with this flag-stop.
     ///
     /// @return the flag-stop code
     public int getCode() {

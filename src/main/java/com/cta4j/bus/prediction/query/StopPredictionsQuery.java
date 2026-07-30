@@ -43,10 +43,10 @@ public record StopPredictionsQuery(
         }
     }
 
-    /// Creates a builder for `StopPredictionsQuery`.
+    /// Creates a new `Builder` for constructing a `StopPredictionsQuery`.
     ///
     /// @param stopIds the [Collection] of stop IDs to retrieve predictions for
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     /// @throws NullPointerException if `stopIds` is `null`, or if any element of `stopIds` is `null`
     public static Builder builder(Collection<String> stopIds) {
         return new Builder(stopIds);
@@ -100,9 +100,9 @@ public record StopPredictionsQuery(
             return this;
         }
 
-        /// Builds the `StopPredictionsQuery`.
+        /// Builds a configured `StopPredictionsQuery` instance.
         ///
-        /// @return a new `StopPredictionsQuery` instance
+        /// @return a new `StopPredictionsQuery`
         /// @throws IllegalArgumentException if more than 10 stop IDs are provided
         public StopPredictionsQuery build() {
             return new StopPredictionsQuery(

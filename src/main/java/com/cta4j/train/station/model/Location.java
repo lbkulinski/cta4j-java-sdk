@@ -10,7 +10,7 @@ import java.util.Objects;
 ///
 /// @param latitude the latitude
 /// @param longitude the longitude
-/// @param humanAddress the human-readable address, or `null` if not available
+/// @param humanAddress the human-readable address, if applicable
 @NullMarked
 public record Location(
     BigDecimal latitude,
@@ -21,7 +21,7 @@ public record Location(
     ///
     /// @param latitude the latitude
     /// @param longitude the longitude
-    /// @param humanAddress the human-readable address, or `null` if not available
+    /// @param humanAddress the human-readable address, if applicable
     /// @throws NullPointerException if `latitude` or `longitude` is `null`
     public Location {
         Objects.requireNonNull(latitude);

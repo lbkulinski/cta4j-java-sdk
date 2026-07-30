@@ -28,7 +28,7 @@ public interface TrainApi {
     /// @return the [ArrivalsApi]
     ArrivalsApi arrivals();
 
-    /// Provides access to train follow-related endpoints.
+    /// Provides access to follow-related endpoints.
     ///
     /// @return the [FollowApi]
     FollowApi follow();
@@ -45,7 +45,7 @@ public interface TrainApi {
         /// If not specified, the default CTA Train Tracker API host is used.
         ///
         /// @param host the API host
-        /// @return this builder instance
+        /// @return this `Builder` instance
         /// @throws NullPointerException if `host` is `null`
         Builder host(String host);
 
@@ -54,7 +54,7 @@ public interface TrainApi {
         /// If not specified, the default URL for station data is used.
         ///
         /// @param stationsUrl the URL for station data
-        /// @return this builder instance
+        /// @return this `Builder` instance
         /// @throws NullPointerException if `stationsUrl` is `null`
         Builder stationsUrl(String stationsUrl);
 

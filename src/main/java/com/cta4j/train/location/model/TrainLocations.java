@@ -19,7 +19,7 @@ public record TrainLocations(
     ///
     /// @param line the train line associated with the locations
     /// @param trains the [List] of [LocationTrain]s for the train line
-    /// @throws NullPointerException if `line` or `trains` is `null`, or if `trains` contains `null` elements
+    /// @throws NullPointerException if `line` or `trains` is `null`, or if any element of `trains` is `null`
     public TrainLocations {
         Objects.requireNonNull(line);
         Objects.requireNonNull(trains);

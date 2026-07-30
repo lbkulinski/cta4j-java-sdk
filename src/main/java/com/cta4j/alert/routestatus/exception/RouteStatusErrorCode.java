@@ -10,8 +10,7 @@ public enum RouteStatusErrorCode {
 
     /// Indicates that no routes or stations matched the provided filter criteria.
     ///
-    /// This code is not documented in the CTA Alerts API documentation for the Route Status API, but has been observed
-    /// in practice.
+    /// This code is not documented in the CTA Route Status API documentation, but has been observed in practice.
     NO_RESULTS(50),
 
     /// Indicates that the provided station ID is not an integer.

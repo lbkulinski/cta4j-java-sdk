@@ -52,10 +52,10 @@ public record LineAlertsQuery(
         }
     }
 
-    /// Creates a builder for `LineAlertsQuery`.
+    /// Creates a new `Builder` for constructing a `LineAlertsQuery`.
     ///
     /// @param lines the [Collection] of [AlertTrainLine]s to retrieve alerts for
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     /// @throws NullPointerException if `lines` is `null`, or if any element of `lines` is `null`
     public static Builder builder(Collection<AlertTrainLine> lines) {
         return new Builder(lines);
@@ -151,9 +151,9 @@ public record LineAlertsQuery(
             return this;
         }
 
-        /// Builds the `LineAlertsQuery`.
+        /// Builds a configured `LineAlertsQuery` instance.
         ///
-        /// @return a new `LineAlertsQuery` instance
+        /// @return a new `LineAlertsQuery`
         /// @throws IllegalArgumentException if both `byStartDate` and `recentDays` were specified
         public LineAlertsQuery build() {
             return new LineAlertsQuery(

@@ -21,7 +21,7 @@ public enum TrainDirection {
         this.code = code;
     }
 
-    /// Gets the CTA direction code associated with this direction.
+    /// Returns the CTA direction code associated with this direction.
     ///
     /// @return the CTA direction code
     public int getCode() {

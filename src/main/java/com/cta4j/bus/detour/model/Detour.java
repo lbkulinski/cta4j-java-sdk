@@ -19,7 +19,7 @@ import java.util.Objects;
 /// @param routeDirections the routes and directions affected by this detour
 /// @param startTime the time at which this detour begins
 /// @param endTime the time at which this detour ends
-/// @param dataFeed the identifier for the data feed that supplied this detour, or `null` if not available
+/// @param dataFeed the identifier for the data feed that supplied this detour, if applicable
 @NullMarked
 public record Detour(
     String id,
@@ -40,7 +40,7 @@ public record Detour(
     /// @param routeDirections the routes and directions affected by the detour
     /// @param startTime the time at which the detour begins
     /// @param endTime the time at which the detour ends
-    /// @param dataFeed the identifier for the data feed that supplied the detour, or `null` if not available
+    /// @param dataFeed the identifier for the data feed that supplied the detour, if applicable
     /// @throws NullPointerException if `id`, `version`, `description`, `routeDirections`, `startTime`, or `endTime` is
     /// `null`, or if any element of `routeDirections` is `null`
     public Detour {

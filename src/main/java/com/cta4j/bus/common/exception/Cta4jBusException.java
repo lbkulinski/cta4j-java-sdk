@@ -33,7 +33,7 @@ public final class Cta4jBusException extends Cta4jException {
     ///
     /// @param errors the list of [CtaError] objects
     /// @param endpoint the endpoint associated with the exception
-    /// @throws NullPointerException if `errors` or `endpoint` is `null`, or if `errors` contains `null` elements
+    /// @throws NullPointerException if `errors` or `endpoint` is `null`, or if any element of `errors` is `null`
     public Cta4jBusException(List<? extends CtaError> errors, String endpoint) {
         super(joinMessages(errors), endpoint);
     }

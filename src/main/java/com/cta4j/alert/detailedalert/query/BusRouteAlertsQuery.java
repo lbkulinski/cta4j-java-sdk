@@ -51,10 +51,10 @@ public record BusRouteAlertsQuery(
         }
     }
 
-    /// Creates a builder for `BusRouteAlertsQuery`.
+    /// Creates a new `Builder` for constructing a `BusRouteAlertsQuery`.
     ///
     /// @param routeIds the [Collection] of bus route IDs to retrieve alerts for
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     /// @throws NullPointerException if `routeIds` is `null`, or if any element of `routeIds` is `null`
     public static Builder builder(Collection<String> routeIds) {
         return new Builder(routeIds);
@@ -150,9 +150,9 @@ public record BusRouteAlertsQuery(
             return this;
         }
 
-        /// Builds the `BusRouteAlertsQuery`.
+        /// Builds a configured `BusRouteAlertsQuery` instance.
         ///
-        /// @return a new `BusRouteAlertsQuery` instance
+        /// @return a new `BusRouteAlertsQuery`
         /// @throws IllegalArgumentException if both `byStartDate` and `recentDays` were specified
         public BusRouteAlertsQuery build() {
             return new BusRouteAlertsQuery(

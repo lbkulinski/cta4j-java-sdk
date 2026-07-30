@@ -32,10 +32,10 @@ public record StopArrivalsQuery(
         }
     }
 
-    /// Creates a builder for `StopArrivalsQuery`.
+    /// Creates a new `Builder` for constructing a `StopArrivalsQuery`.
     ///
     /// @param stopId the ID of the stop to retrieve arrivals for
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     /// @throws NullPointerException if `stopId` is `null`
     public static Builder builder(String stopId) {
         return new Builder(stopId);
@@ -85,9 +85,9 @@ public record StopArrivalsQuery(
             return this;
         }
 
-        /// Builds the `StopArrivalsQuery`.
+        /// Builds a configured `StopArrivalsQuery` instance.
         ///
-        /// @return a new `StopArrivalsQuery` instance
+        /// @return a new `StopArrivalsQuery`
         public StopArrivalsQuery build() {
             return new StopArrivalsQuery(
                 this.stopId,

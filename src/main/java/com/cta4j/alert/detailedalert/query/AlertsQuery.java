@@ -41,9 +41,9 @@ public record AlertsQuery(
         }
     }
 
-    /// Creates a builder for `AlertsQuery`.
+    /// Creates a new `Builder` for constructing an `AlertsQuery`.
     ///
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     public static Builder builder() {
         return new Builder();
     }
@@ -130,9 +130,9 @@ public record AlertsQuery(
             return this;
         }
 
-        /// Builds the `AlertsQuery`.
+        /// Builds a configured `AlertsQuery` instance.
         ///
-        /// @return a new `AlertsQuery` instance
+        /// @return a new `AlertsQuery`
         /// @throws IllegalArgumentException if both `byStartDate` and `recentDays` were specified
         public AlertsQuery build() {
             return new AlertsQuery(

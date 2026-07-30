@@ -32,10 +32,10 @@ public record MapArrivalsQuery(
         }
     }
 
-    /// Creates a builder for `MapArrivalsQuery`.
+    /// Creates a new `Builder` for constructing a `MapArrivalsQuery`.
     ///
     /// @param mapId the ID of the map to retrieve arrivals for
-    /// @return a new `Builder` instance
+    /// @return a new `Builder`
     /// @throws NullPointerException if `mapId` is `null`
     public static Builder builder(String mapId) {
         return new Builder(mapId);
@@ -85,9 +85,9 @@ public record MapArrivalsQuery(
             return this;
         }
 
-        /// Builds the `MapArrivalsQuery`.
+        /// Builds a configured `MapArrivalsQuery` instance.
         ///
-        /// @return a new `MapArrivalsQuery` instance
+        /// @return a new `MapArrivalsQuery`
         public MapArrivalsQuery build() {
             return new MapArrivalsQuery(
                 this.mapId,

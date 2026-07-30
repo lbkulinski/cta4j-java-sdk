@@ -39,14 +39,14 @@ public enum TrainLine {
         this.colorHex = Objects.requireNonNull(colorHex);
     }
 
-    /// Gets the CTA code for this train line.
+    /// Returns the CTA code for this train line.
     ///
     /// @return the CTA code
     public String getCode() {
         return this.code;
     }
 
-    /// Gets the hex color code of this train line.
+    /// Returns the hex color code of this train line.
     ///
     /// @return the hex color code
     public String getColorHex() {

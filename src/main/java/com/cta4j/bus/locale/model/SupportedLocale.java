@@ -5,7 +5,7 @@ import org.jspecify.annotations.NullMarked;
 import java.util.Locale;
 import java.util.Objects;
 
-/// Represents a locale supported by the CTA Bus API.
+/// Represents a locale supported by the CTA Bus Tracker API.
 ///
 /// @param locale the supported [Locale]
 /// @param displayName the human-readable name of this supported locale (e.g., "English", "Spanish")

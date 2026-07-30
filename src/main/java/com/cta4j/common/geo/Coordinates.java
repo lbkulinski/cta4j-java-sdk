@@ -8,8 +8,8 @@ import java.util.Objects;
 
 /// Represents geographic coordinates.
 ///
-/// @param latitude the latitude of these coordinates
-/// @param longitude the longitude of these coordinates
+/// @param latitude the latitude of these coordinates, in degrees (-90-90)
+/// @param longitude the longitude of these coordinates, in degrees (-180-180)
 /// @param heading the heading of these coordinates in degrees (0-359)
 @NullMarked
 public record Coordinates(
@@ -19,8 +19,8 @@ public record Coordinates(
 ) {
     /// Constructs a `Coordinates`.
     ///
-    /// @param latitude the latitude of the coordinates
-    /// @param longitude the longitude of the coordinates
+    /// @param latitude the latitude of the coordinates, in degrees (-90-90)
+    /// @param longitude the longitude of the coordinates, in degrees (-180-180)
     /// @param heading the heading of the coordinates in degrees (0-359)
     /// @throws NullPointerException if `latitude` or `longitude` is `null`
     /// @throws IllegalArgumentException if `latitude` is not between -90 and 90 (inclusive), `longitude` is not

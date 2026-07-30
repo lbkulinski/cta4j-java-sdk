@@ -5,7 +5,7 @@ import com.cta4j.alert.common.internal.util.AlertApiConstants;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/// A custom exception class for handling cta4j alert route status-specific errors.
+/// A custom exception class for handling cta4j route status-specific errors.
 @NullMarked
 public final class Cta4jRouteStatusException extends Cta4jAlertException {
     @Nullable

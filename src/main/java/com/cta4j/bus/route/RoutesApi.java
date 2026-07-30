@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-/// Provides access to route-related endpoints of the CTA BusTime API.
+/// Provides access to route-related endpoints of the CTA Bus Tracker API.
 ///
 /// This API allows retrieval of all available routes.
 @NullMarked

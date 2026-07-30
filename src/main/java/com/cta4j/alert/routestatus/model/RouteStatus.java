@@ -10,7 +10,8 @@ import java.util.Objects;
 /// @param route the name of this route (e.g., "Clark")
 /// @param color the color of this route used in maps; casing varies (e.g., "565a5c", "0065BD")
 /// @param textColor the suggested color of text displayed against `color`; casing varies (e.g., "ffffff", "FFFFFF")
-/// @param serviceId the unique GTFS route or station identifier of this route (e.g., "22")
+/// @param serviceId the unique GTFS route or station identifier of this route (e.g., "22"); except for systemwide
+///                  groupings, which use a fixed identifier instead (e.g., "Systemwide")
 /// @param url the URL of this route's or station's page on transitchicago.com
 /// @param status the ultimate, human-readable status of this route
 ///               (e.g., "Normal Service", "Service Change", "Bus Stop Note")
@@ -32,7 +33,8 @@ public record RouteStatus(
     /// @param color the color of the route used in maps; casing varies (e.g., "565a5c", "0065BD")
     /// @param textColor the suggested color of text displayed against `color`; casing varies
     ///                  (e.g., "ffffff", "FFFFFF")
-    /// @param serviceId the unique GTFS route or station identifier of the route (e.g., "22")
+    /// @param serviceId the unique GTFS route or station identifier of the route (e.g., "22"); except for systemwide
+    ///                  groupings, which use a fixed identifier instead (e.g., "Systemwide")
     /// @param url the URL of the route's or station's page on transitchicago.com
     /// @param status the ultimate, human-readable status of the route
     ///               (e.g., "Normal Service", "Service Change", "Bus Stop Note")
