@@ -136,6 +136,11 @@ class TrainQualifiersTest {
     }
 
     @Test
+    void mapLine_returnsUnknown_whenLineIsNotApplicable() {
+        assertThat(Qualifiers.mapLine("N/A")).isEqualTo(TrainLine.UNKNOWN);
+    }
+
+    @Test
     void mapTimestamp_returnsInstant_whenTimestampIsValid() {
         Instant instant = Qualifiers.mapTimestamp("2015-04-30T20:23:53");
 

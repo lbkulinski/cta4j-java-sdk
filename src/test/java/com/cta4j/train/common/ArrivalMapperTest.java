@@ -75,4 +75,23 @@ class ArrivalMapperTest {
 
         assertThat(arrival.approaching()).isTrue();
     }
+
+    @Test
+    void toDomain_mapsUnknownLine_whenRtIsNotApplicable() {
+        CtaArrival wire = new CtaArrival(
+            "40100", "30070",
+            "Howard", "Service toward O'Hare",
+            "123", "N/A",
+            "30077", "O'Hare",
+            "1",
+            "2015-04-30T20:23:53",
+            "2015-04-30T20:25:00",
+            "0", "0", "0", "0",
+            null, null, null, null
+        );
+
+        Arrival arrival = ArrivalMapper.INSTANCE.toDomain(wire);
+
+        assertThat(arrival.line()).isEqualTo(TrainLine.UNKNOWN);
+    }
 }

@@ -26,13 +26,20 @@ class TrainLineTest {
     }
 
     @Test
-    void fromCode_throwsIllegalArgumentException_whenCodeIsUnknown() {
-        assertThatIllegalArgumentException().isThrownBy(() -> TrainLine.fromCode("Unknown"));
+    void fromCode_returnsUnknown_whenCodeIsUnrecognized() {
+        assertThat(TrainLine.fromCode("N/A")).isEqualTo(TrainLine.UNKNOWN);
+        assertThat(TrainLine.fromCode("Unknown")).isEqualTo(TrainLine.UNKNOWN);
     }
 
     @Test
     void getCode_andGetColorHex_returnValues() {
         assertThat(TrainLine.RED.getCode()).isEqualTo("Red");
         assertThat(TrainLine.RED.getColorHex()).isEqualTo("#C60C30");
+    }
+
+    @Test
+    void getCode_andGetColorHex_returnValues_forUnknown() {
+        assertThat(TrainLine.UNKNOWN.getCode()).isEqualTo("N/A");
+        assertThat(TrainLine.UNKNOWN.getColorHex()).isEqualTo("#808080");
     }
 }

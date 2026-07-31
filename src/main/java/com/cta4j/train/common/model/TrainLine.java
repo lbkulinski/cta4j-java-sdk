@@ -29,7 +29,13 @@ public enum TrainLine {
     PINK("Pink", "#E27EA6"),
 
     /// Indicates the Yellow Line.
-    YELLOW("Y", "#F9E300");
+    YELLOW("Y", "#F9E300"),
+
+    /// Indicates that the train line is unknown.
+    ///
+    /// The CTA will occasionally report an unknown line for an arrival, even though "unknown" is not itself a valid
+    /// train line.
+    UNKNOWN("N/A", "#808080");
 
     private final String code;
     private final String colorHex;
@@ -56,8 +62,8 @@ public enum TrainLine {
     /// Returns the `TrainLine` corresponding to the given code.
     ///
     /// @param code the CTA code of the train line (case-insensitive, may include "LINE" suffix)
-    /// @return the corresponding `TrainLine`
-    /// @throws IllegalArgumentException if the code does not correspond to any known train line
+    /// @return the corresponding `TrainLine`, or `TrainLine.UNKNOWN` if the code does not correspond to any known
+    /// train line
     public static TrainLine fromCode(String code) {
         Objects.requireNonNull(code);
 
@@ -70,7 +76,7 @@ public enum TrainLine {
             case "P", "PURPLE LINE" -> TrainLine.PURPLE;
             case "PINK", "PINK LINE" -> TrainLine.PINK;
             case "Y", "YELLOW LINE" -> TrainLine.YELLOW;
-            default -> throw new IllegalArgumentException("Invalid train line: %s".formatted(code));
+            default -> TrainLine.UNKNOWN;
         };
     }
 }
