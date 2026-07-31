@@ -4,7 +4,7 @@ import org.jspecify.annotations.NullMarked;
 
 /// Represents the operational direction of a train.
 ///
-/// @apiNote This direction is operational in nature and does not necessarily reflect the physical direction of the
+/// **NOTE:** This direction is operational in nature and does not necessarily reflect the physical direction of the
 /// train at its current location. It loosely translates to a northbound or southbound direction, though this may not
 /// be intuitive for all lines.
 @NullMarked

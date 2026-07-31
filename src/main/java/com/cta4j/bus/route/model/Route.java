@@ -7,8 +7,8 @@ import java.util.Objects;
 
 /// Represents a bus route.
 ///
-/// @apiNote `dataFeed` is not well-documented by the CTA. As such, its presence here is primarily for completeness and
-/// may not be populated or described correctly.
+/// **NOTE:** `dataFeed` is not well-documented by the CTA. As such, its presence here is primarily for completeness
+/// and may not be populated or described correctly.
 ///
 /// @param id the alphanumeric designator of this route (e.g., "22", "J14", "X9")
 /// @param name the common name of this route (e.g., "Clark", "Jeffery Jump", "Ashland Express")

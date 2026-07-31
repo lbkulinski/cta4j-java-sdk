@@ -10,7 +10,7 @@ import java.util.List;
 ///
 /// This API allows retrieval of station information, including station names, IDs, and other details.
 ///
-/// @apiNote The CTA Train Tracker API does not provide an endpoint for retrieving station information. This API uses
+/// **NOTE:** The CTA Train Tracker API does not provide an endpoint for retrieving station information. This API uses
 /// the City of Chicago's Data Portal as its data source by default. The URL used to retrieve station information is
 /// configurable to accommodate changes to the data source.
 @NullMarked

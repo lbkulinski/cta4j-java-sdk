@@ -8,7 +8,7 @@ import java.util.Objects;
 
 /// Represents metadata associated with a train arrival.
 ///
-/// @apiNote `flags` is not well-documented by the CTA. As such, its presence here is primarily for completeness and
+/// **NOTE:** `flags` is not well-documented by the CTA. As such, its presence here is primarily for completeness and
 /// may not be populated or described correctly.
 ///
 /// @param runNumber the run number of the train associated with this arrival

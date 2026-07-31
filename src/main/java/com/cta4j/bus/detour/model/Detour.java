@@ -9,8 +9,8 @@ import java.util.Objects;
 
 /// Represents a service detour affecting one or more routes and directions within a specific time window.
 ///
-/// @apiNote `dataFeed` is not well-documented by the CTA. As such, its presence here is primarily for completeness and
-/// may not be populated or described correctly.
+/// **NOTE:** `dataFeed` is not well-documented by the CTA. As such, its presence here is primarily for completeness
+/// and may not be populated or described correctly.
 ///
 /// @param id the unique identifier of this detour
 /// @param version the version of this detour

@@ -10,7 +10,7 @@ import java.util.Objects;
 
 /// Represents the location of a train on a route.
 ///
-/// @apiNote `flags` is not well-documented by the CTA. As such, its presence here is primarily for completeness and
+/// **NOTE:** `flags` is not well-documented by the CTA. As such, its presence here is primarily for completeness and
 /// may not be populated or described correctly.
 ///
 /// @param run the run number of this train

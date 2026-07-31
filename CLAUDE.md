@@ -129,7 +129,7 @@ References:
   The static `builder(...)` method: "Creates a new `Builder` for
   constructing a/an `X`.", `@return` tag "a new `Builder`". The `build()`
   method: "Builds a configured `X` instance.", `@return` tag "a new `X`".
-- **Tag order:** `@apiNote` → `@param` → `@return` → `@deprecated` → `@since` → `@throws`
+- **Tag order:** `@param` → `@return` → `@deprecated` → `@since` → `@throws`
   → `@see`.
 - **@param / @throws descriptions:** Lowercase phrase, no trailing period.
 - **Code references:** Use backtick spans (`` `RoutesApi` ``, `` `List<Route>` ``)

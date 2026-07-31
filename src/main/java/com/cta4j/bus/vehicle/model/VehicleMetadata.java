@@ -10,9 +10,9 @@ import java.util.Objects;
 
 /// Represents metadata associated with a vehicle.
 ///
-/// @apiNote `dataFeed`, `stopStatus`, `timepointId`, `stopId`, `sequence`, `gtfsSequence`, `serverTimestamp`, `speed`,
-/// and `block` are not well-documented by the CTA. As such, their presence here is primarily for completeness and may
-/// not be populated or described correctly.
+/// **NOTE:** `dataFeed`, `stopStatus`, `timepointId`, `stopId`, `sequence`, `gtfsSequence`, `serverTimestamp`,
+/// `speed`, and `block` are not well-documented by the CTA. As such, their presence here is primarily for completeness
+/// and may not be populated or described correctly.
 ///
 /// @param dataFeed the data feed from which this vehicle information was obtained, if applicable
 /// @param lastUpdated the date and time (UTC) this vehicle information was last updated, if applicable

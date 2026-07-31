@@ -9,8 +9,8 @@ import java.util.Objects;
 
 /// Represents a bus stop.
 ///
-/// @apiNote `gtfsSequence` is not well-documented by the CTA. As such, its presence here is primarily for completeness
-/// and may not be populated or described correctly.
+/// **NOTE:** `gtfsSequence` is not well-documented by the CTA. As such, its presence here is primarily for
+/// completeness and may not be populated or described correctly.
 ///
 /// @param id the unique identifier of this stop
 /// @param name the display name of this stop (e.g., "Clark & Addison")
