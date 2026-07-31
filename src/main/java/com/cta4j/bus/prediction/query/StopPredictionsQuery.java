@@ -1,6 +1,6 @@
 package com.cta4j.bus.prediction.query;
 
-import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -30,7 +30,7 @@ public record StopPredictionsQuery(
     public StopPredictionsQuery {
         Objects.requireNonNull(stopIds);
 
-        ApiUtils.requireMaxIds(stopIds, "stop");
+        BusApiUtils.requireMaxIds(stopIds, "stop");
 
         stopIds = List.copyOf(stopIds);
 
@@ -62,11 +62,7 @@ public record StopPredictionsQuery(
         @Nullable
         private Integer maxResults;
 
-        /// Constructs a `Builder`.
-        ///
-        /// @param stopIds the [Collection] of stop IDs to retrieve predictions for
-        /// @throws NullPointerException if `stopIds` is `null`, or if any element of `stopIds` is `null`
-        public Builder(Collection<String> stopIds) {
+        private Builder(Collection<String> stopIds) {
             Objects.requireNonNull(stopIds);
 
             this.stopIds = List.copyOf(stopIds);

@@ -51,11 +51,7 @@ public record MapArrivalsQuery(
         @Nullable
         private Integer maxResults;
 
-        /// Constructs a `Builder`.
-        ///
-        /// @param mapId the ID of the map to retrieve arrivals for
-        /// @throws NullPointerException if `mapId` is `null`
-        public Builder(String mapId) {
+        private Builder(String mapId) {
             this.mapId = Objects.requireNonNull(mapId);
         }
 

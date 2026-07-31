@@ -14,12 +14,12 @@ import java.util.Objects;
 
 @ApiStatus.Internal
 @NullMarked
-public final class ApiUtils {
-    private static final Logger log = LoggerFactory.getLogger(ApiUtils.class);
+public final class BusApiUtils {
+    private static final Logger log = LoggerFactory.getLogger(BusApiUtils.class);
 
     public static final int MAX_IDS_PER_REQUEST = 10;
 
-    private ApiUtils() {
+    private BusApiUtils() {
         throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 

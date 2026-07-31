@@ -2,7 +2,7 @@ package com.cta4j.bus.prediction.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
@@ -143,7 +143,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
                               .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
 
         return List.of();
     }

@@ -76,14 +76,7 @@ public record BusRouteAlertsQuery(
         @Nullable
         private Integer recentDays;
 
-        /// Constructs a `Builder`.
-        ///
-        /// By default, `activeOnly` is `false`, and `accessibility` and `planned` are `true`, matching the CTA Alerts
-        /// API's own defaults.
-        ///
-        /// @param routeIds the [Collection] of bus route IDs to retrieve alerts for
-        /// @throws NullPointerException if `routeIds` is `null`, or if any element of `routeIds` is `null`
-        public Builder(Collection<String> routeIds) {
+        private Builder(Collection<String> routeIds) {
             Objects.requireNonNull(routeIds);
 
             this.routeIds = List.copyOf(routeIds);

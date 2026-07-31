@@ -1,6 +1,6 @@
 package com.cta4j.bus.prediction.query;
 
-import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -27,7 +27,7 @@ public record VehiclePredictionsQuery(
     public VehiclePredictionsQuery {
         Objects.requireNonNull(vehicleIds);
 
-        ApiUtils.requireMaxIds(vehicleIds, "vehicle");
+        BusApiUtils.requireMaxIds(vehicleIds, "vehicle");
 
         vehicleIds = List.copyOf(vehicleIds);
 
@@ -52,11 +52,7 @@ public record VehiclePredictionsQuery(
         @Nullable
         private Integer maxResults;
 
-        /// Constructs a `Builder`.
-        ///
-        /// @param vehicleIds the [Collection] of vehicle IDs to retrieve predictions for
-        /// @throws NullPointerException if `vehicleIds` is `null`, or if any element of `vehicleIds` is `null`
-        public Builder(Collection<String> vehicleIds) {
+        private Builder(Collection<String> vehicleIds) {
             Objects.requireNonNull(vehicleIds);
 
             this.vehicleIds = List.copyOf(vehicleIds);

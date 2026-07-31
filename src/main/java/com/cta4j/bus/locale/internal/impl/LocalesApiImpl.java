@@ -9,7 +9,7 @@ import com.cta4j.bus.locale.internal.mapper.SupportedLocaleMapper;
 import com.cta4j.bus.locale.internal.wire.CtaLocale;
 import com.cta4j.bus.locale.internal.wire.CtaLocaleBustimeResponse;
 import com.cta4j.bus.locale.internal.wire.CtaLocaleError;
-import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.locale.model.SupportedLocale;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
@@ -118,7 +118,7 @@ public final class LocalesApiImpl implements LocalesApi {
                              .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.LOCALES_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.LOCALES_ENDPOINT);
 
         return List.of();
     }

@@ -76,14 +76,7 @@ public record StationAlertsQuery(
         @Nullable
         private Integer recentDays;
 
-        /// Constructs a `Builder`.
-        ///
-        /// By default, `activeOnly` is `false`, and `accessibility` and `planned` are `true`, matching the CTA Alerts
-        /// API's own defaults.
-        ///
-        /// @param stationIds the [Collection] of train station IDs to retrieve alerts for
-        /// @throws NullPointerException if `stationIds` is `null`, or if any element of `stationIds` is `null`
-        public Builder(Collection<String> stationIds) {
+        private Builder(Collection<String> stationIds) {
             Objects.requireNonNull(stationIds);
 
             this.stationIds = List.copyOf(stationIds);

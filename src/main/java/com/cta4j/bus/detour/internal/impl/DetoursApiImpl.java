@@ -2,7 +2,7 @@ package com.cta4j.bus.detour.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.detour.DetoursApi;
@@ -119,7 +119,7 @@ public final class DetoursApiImpl implements DetoursApi {
                           .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.DETOURS_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.DETOURS_ENDPOINT);
 
         return List.of();
     }

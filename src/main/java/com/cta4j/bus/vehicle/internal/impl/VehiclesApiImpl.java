@@ -2,7 +2,7 @@ package com.cta4j.bus.vehicle.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.vehicle.VehiclesApi;
@@ -46,7 +46,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             return List.of();
         }
 
-        ApiUtils.requireMaxIds(ids, "vehicle");
+        BusApiUtils.requireMaxIds(ids, "vehicle");
 
         String idsString = String.join(",", ids);
 
@@ -74,7 +74,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             return List.of();
         }
 
-        ApiUtils.requireMaxIds(routeIds, "route");
+        BusApiUtils.requireMaxIds(routeIds, "route");
 
         String routeIdsString = String.join(",", routeIds);
 
@@ -126,7 +126,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
                            .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.VEHICLES_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.VEHICLES_ENDPOINT);
 
         return List.of();
     }

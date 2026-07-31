@@ -62,11 +62,7 @@ public record AlertsQuery(
         @Nullable
         private Integer recentDays;
 
-        /// Constructs a `Builder`.
-        ///
-        /// By default, `activeOnly` is `false`, and `accessibility` and `planned` are `true`, matching the CTA Alerts
-        /// API's own defaults.
-        public Builder() {
+        private Builder() {
             this.activeOnly = false;
             this.accessibility = true;
             this.planned = true;

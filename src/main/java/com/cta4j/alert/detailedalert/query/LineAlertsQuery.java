@@ -77,14 +77,7 @@ public record LineAlertsQuery(
         @Nullable
         private Integer recentDays;
 
-        /// Constructs a `Builder`.
-        ///
-        /// By default, `activeOnly` is `false`, and `accessibility` and `planned` are `true`, matching the CTA Alerts
-        /// API's own defaults.
-        ///
-        /// @param lines the [Collection] of [AlertTrainLine]s to retrieve alerts for
-        /// @throws NullPointerException if `lines` is `null`, or if any element of `lines` is `null`
-        public Builder(Collection<AlertTrainLine> lines) {
+        private Builder(Collection<AlertTrainLine> lines) {
             Objects.requireNonNull(lines);
 
             this.lines = List.copyOf(lines);

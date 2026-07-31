@@ -51,11 +51,7 @@ public record StopArrivalsQuery(
         @Nullable
         private Integer maxResults;
 
-        /// Constructs a `Builder`.
-        ///
-        /// @param stopId the ID of the stop to retrieve arrivals for
-        /// @throws NullPointerException if `stopId` is `null`
-        public Builder(String stopId) {
+        private Builder(String stopId) {
             this.stopId = Objects.requireNonNull(stopId);
         }
 
