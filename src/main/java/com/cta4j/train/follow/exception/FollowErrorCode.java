@@ -1,6 +1,7 @@
 package com.cta4j.train.follow.exception;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /// Represents the error codes returned by the CTA Follow API.
 @NullMarked
@@ -29,10 +30,7 @@ public enum FollowErrorCode {
     UNABLE_TO_DETERMINE_STOPS(502),
 
     /// Indicates that the specified train run exists, but none of its available predictions are for active stations.
-    UNABLE_TO_FIND_PREDICTIONS(503),
-
-    /// Indicates that an unknown error occurred that does not match any of the defined error codes.
-    UNKNOWN(-1);
+    UNABLE_TO_FIND_PREDICTIONS(503);
 
     private final int code;
 
@@ -50,9 +48,8 @@ public enum FollowErrorCode {
     /// Returns the `FollowErrorCode` corresponding to the given integer code.
     ///
     /// @param code the integer code to look up
-    /// @return the corresponding `FollowErrorCode`, or `UNKNOWN` if the code does not match any defined
-    /// error code
-    public static FollowErrorCode fromCode(int code) {
+    /// @return the corresponding `FollowErrorCode`, or `null` if the code does not match any defined error code
+    public static @Nullable FollowErrorCode fromCode(int code) {
         return switch (code) {
             case 0 -> OK;
             case 100 -> MISSING_PARAMETER;
@@ -62,7 +59,7 @@ public enum FollowErrorCode {
             case 501 -> RUN_NOT_FOUND;
             case 502 -> UNABLE_TO_DETERMINE_STOPS;
             case 503 -> UNABLE_TO_FIND_PREDICTIONS;
-            default -> UNKNOWN;
+            default -> null;
         };
     }
 }

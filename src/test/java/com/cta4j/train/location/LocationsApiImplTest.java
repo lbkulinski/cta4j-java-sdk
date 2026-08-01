@@ -4,7 +4,6 @@ import com.cta4j.TestFixtures;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.location.exception.Cta4jLocationsException;
-import com.cta4j.train.location.exception.LocationsErrorCode;
 import com.cta4j.train.location.internal.impl.LocationsApiImpl;
 import com.cta4j.train.location.model.TrainLocations;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -91,7 +90,7 @@ class LocationsApiImplTest {
             .isInstanceOf(Cta4jLocationsException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
-                .isEqualTo(LocationsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -178,7 +177,7 @@ class LocationsApiImplTest {
             .isInstanceOf(Cta4jLocationsException.class)
             .hasMessage("Unknown error code")
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
-                .isEqualTo(LocationsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getRawErrorCode()).isEqualTo(-1));
     }
 
@@ -194,7 +193,7 @@ class LocationsApiImplTest {
             .isInstanceOf(Cta4jLocationsException.class)
             .hasMessage("An unknown error occurred.")
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
-                .isEqualTo(LocationsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -210,7 +209,7 @@ class LocationsApiImplTest {
             .isInstanceOf(Cta4jLocationsException.class)
             .hasMessage("An unknown error occurred.")
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getErrorCode())
-                .isEqualTo(LocationsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jLocationsException) e).getRawErrorCode()).isEqualTo(1));
     }
 

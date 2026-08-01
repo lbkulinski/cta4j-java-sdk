@@ -31,10 +31,10 @@ class Cta4jLocationsExceptionTest {
     }
 
     @Test
-    void constructor_setsUnknownErrorCode_whenRawErrorCodeIsUnrecognized() {
+    void constructor_setsNullErrorCode_whenRawErrorCodeIsUnrecognized() {
         Cta4jLocationsException exception = new Cta4jLocationsException("Something odd happened", 999);
 
         assertThat(exception.getRawErrorCode()).isEqualTo(999);
-        assertThat(exception.getErrorCode()).isEqualTo(LocationsErrorCode.UNKNOWN);
+        assertThat(exception.getErrorCode()).isNull();
     }
 }

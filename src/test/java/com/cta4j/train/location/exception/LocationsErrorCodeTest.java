@@ -13,13 +13,12 @@ class LocationsErrorCodeTest {
     }
 
     @Test
-    void fromCode_returnsUnknown_whenCodeIsUnrecognized() {
-        assertThat(LocationsErrorCode.fromCode(999)).isEqualTo(LocationsErrorCode.UNKNOWN);
+    void fromCode_returnsNull_whenCodeIsUnrecognized() {
+        assertThat(LocationsErrorCode.fromCode(999)).isNull();
     }
 
     @Test
     void getCode_returnsCode() {
         assertThat(LocationsErrorCode.INVALID_ROUTE.getCode()).isEqualTo(106);
-        assertThat(LocationsErrorCode.UNKNOWN.getCode()).isEqualTo(-1);
     }
 }

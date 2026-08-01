@@ -1,6 +1,7 @@
 package com.cta4j.train.location.exception;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /// Represents the error codes returned by the CTA Location API.
 @NullMarked
@@ -26,10 +27,7 @@ public enum LocationsErrorCode {
 
     /// Indicates that the query string contains a parameter that is not recognized by the API. The supported API
     /// parameters are `rt` and `key`.
-    INVALID_PARAMETER(500),
-
-    /// Indicates that an unknown error occurred that does not match any of the defined error codes.
-    UNKNOWN(-1);
+    INVALID_PARAMETER(500);
 
     private final int code;
 
@@ -47,9 +45,8 @@ public enum LocationsErrorCode {
     /// Returns the `LocationsErrorCode` corresponding to the given integer code.
     ///
     /// @param code the integer code to look up
-    /// @return the corresponding `LocationsErrorCode`, or `UNKNOWN` if the code does not match any defined
-    /// error code
-    public static LocationsErrorCode fromCode(int code) {
+    /// @return the corresponding `LocationsErrorCode`, or `null` if the code does not match any defined error code
+    public static @Nullable LocationsErrorCode fromCode(int code) {
         return switch (code) {
             case 0 -> OK;
             case 100 -> MISSING_PARAMETER;
@@ -58,7 +55,7 @@ public enum LocationsErrorCode {
             case 106 -> INVALID_ROUTE;
             case 107 -> TOO_MANY_ROUTES;
             case 500 -> INVALID_PARAMETER;
-            default -> UNKNOWN;
+            default -> null;
         };
     }
 }

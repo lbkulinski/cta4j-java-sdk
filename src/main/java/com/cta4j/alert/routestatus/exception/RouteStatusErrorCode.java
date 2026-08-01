@@ -1,6 +1,7 @@
 package com.cta4j.alert.routestatus.exception;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /// Represents the error codes returned by the CTA Route Status API.
 @NullMarked
@@ -33,10 +34,7 @@ public enum RouteStatusErrorCode {
     INVALID_PARAMETER(500),
 
     /// Indicates that the server encountered an unexpected error that prevented it from fulfilling the request.
-    SERVER_ERROR(900),
-
-    /// Indicates that an unknown error occurred that does not match any of the defined error codes.
-    UNKNOWN(-1);
+    SERVER_ERROR(900);
 
     private final int code;
 
@@ -54,9 +52,8 @@ public enum RouteStatusErrorCode {
     /// Returns the `RouteStatusErrorCode` corresponding to the given integer code.
     ///
     /// @param code the integer code to look up
-    /// @return the corresponding `RouteStatusErrorCode`, or `UNKNOWN` if the code does not match any defined error
-    /// code
-    public static RouteStatusErrorCode fromCode(int code) {
+    /// @return the corresponding `RouteStatusErrorCode`, or `null` if the code does not match any defined error code
+    public static @Nullable RouteStatusErrorCode fromCode(int code) {
         return switch (code) {
             case 0 -> OK;
             case 50 -> NO_RESULTS;
@@ -67,7 +64,7 @@ public enum RouteStatusErrorCode {
             case 104 -> STATIONID_TYPE_CONFLICT;
             case 500 -> INVALID_PARAMETER;
             case 900 -> SERVER_ERROR;
-            default -> UNKNOWN;
+            default -> null;
         };
     }
 }

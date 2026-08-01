@@ -32,10 +32,10 @@ class Cta4jRouteStatusExceptionTest {
     }
 
     @Test
-    void constructor_setsUnknownErrorCode_whenRawErrorCodeIsUnrecognized() {
+    void constructor_setsNullErrorCode_whenRawErrorCodeIsUnrecognized() {
         Cta4jRouteStatusException exception = new Cta4jRouteStatusException("Something odd happened", 999);
 
         assertThat(exception.getRawErrorCode()).isEqualTo(999);
-        assertThat(exception.getErrorCode()).isEqualTo(RouteStatusErrorCode.UNKNOWN);
+        assertThat(exception.getErrorCode()).isNull();
     }
 }

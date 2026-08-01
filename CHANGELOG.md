@@ -31,6 +31,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   for consistency with the rest of the query-builder naming.
 - `TrainLine.fromCode(String)` no longer throws `IllegalArgumentException` for an unrecognized code; it now
   returns `null` and logs a warning, matching the `@Nullable`-based degrade pattern used elsewhere in the SDK.
+- `ArrivalsErrorCode.fromCode`/`FollowErrorCode.fromCode`/`LocationsErrorCode.fromCode`/
+  `RouteStatusErrorCode.fromCode`/`DetailedAlertsErrorCode.fromCode` no longer fall back to an `UNKNOWN`
+  constant for an unrecognized code; they now return `null`, matching the same degrade pattern as
+  `TrainLine.fromCode`.
+- Renamed `VehiclesApi.findByIds`'s parameter from `ids` to `vehicleIds`, and `findById`'s parameter from `id`
+  to `vehicleId`, for consistency with `StopsApi`/`PatternsApi`'s equivalent methods.
 
 ### Breaking Changes ⚠️
 
@@ -42,6 +48,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the single `String mapId`/`stopId` component is now a `List<String> mapIds`/`stopIds` component (max 4 IDs).
 - `ArrivalsApi.findByMapId(MapArrivalQuery)`/`findByStopId(StopArrivalQuery)` have been renamed to
   `findByMapIds(MapArrivalsQuery)`/`findByStopIds(StopArrivalsQuery)` to match the new query types.
+- `ArrivalsErrorCode.UNKNOWN`/`FollowErrorCode.UNKNOWN`/`LocationsErrorCode.UNKNOWN`/
+  `RouteStatusErrorCode.UNKNOWN`/`DetailedAlertsErrorCode.UNKNOWN` have been removed; code that referenced
+  these constants directly (e.g. `switch` statements, equality checks) must handle `null` instead.
 - `MapArrivalsQuery.Builder.maxResults`/`StopArrivalsQuery.Builder.maxResults` now take `int` instead of
   `Integer`; passing `null` no longer compiles.
 - `Arrival.line` is now `@Nullable`, a direct consequence of `TrainLine.fromCode` no longer throwing — code that

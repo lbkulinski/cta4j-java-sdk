@@ -1,6 +1,7 @@
 package com.cta4j.alert.detailedalert.exception;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /// Represents the error codes returned by the CTA Detailed Alerts API.
 @NullMarked
@@ -44,10 +45,7 @@ public enum DetailedAlertsErrorCode {
     INVALID_PARAMETER(500),
 
     /// Indicates that the server encountered an unexpected error that prevented it from fulfilling the request.
-    SERVER_ERROR(900),
-
-    /// Indicates that an unknown error occurred that does not match any of the defined error codes.
-    UNKNOWN(-1);
+    SERVER_ERROR(900);
 
     private final int code;
 
@@ -65,9 +63,9 @@ public enum DetailedAlertsErrorCode {
     /// Returns the `DetailedAlertsErrorCode` corresponding to the given integer code.
     ///
     /// @param code the integer code to look up
-    /// @return the corresponding `DetailedAlertsErrorCode`, or `UNKNOWN` if the code does not match any
-    /// defined error code
-    public static DetailedAlertsErrorCode fromCode(int code) {
+    /// @return the corresponding `DetailedAlertsErrorCode`, or `null` if the code does not match any defined error
+    /// code
+    public static @Nullable DetailedAlertsErrorCode fromCode(int code) {
         return switch (code) {
             case 0 -> OK;
             case 25 -> NO_ACTIVE_ALERTS;
@@ -82,7 +80,7 @@ public enum DetailedAlertsErrorCode {
             case 107 -> RECENTDAYS_BYSTARTDATE_CONFLICT;
             case 500 -> INVALID_PARAMETER;
             case 900 -> SERVER_ERROR;
-            default -> UNKNOWN;
+            default -> null;
         };
     }
 }

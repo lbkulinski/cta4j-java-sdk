@@ -34,10 +34,10 @@ class Cta4jDetailedAlertsExceptionTest {
     }
 
     @Test
-    void constructor_setsUnknownErrorCode_whenRawErrorCodeIsUnrecognized() {
+    void constructor_setsNullErrorCode_whenRawErrorCodeIsUnrecognized() {
         Cta4jDetailedAlertsException exception = new Cta4jDetailedAlertsException("Something odd happened", 999);
 
         assertThat(exception.getRawErrorCode()).isEqualTo(999);
-        assertThat(exception.getErrorCode()).isEqualTo(DetailedAlertsErrorCode.UNKNOWN);
+        assertThat(exception.getErrorCode()).isNull();
     }
 }

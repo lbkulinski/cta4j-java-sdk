@@ -13,13 +13,12 @@ class RouteStatusErrorCodeTest {
     }
 
     @Test
-    void fromCode_returnsUnknown_whenCodeIsUnrecognized() {
-        assertThat(RouteStatusErrorCode.fromCode(12345)).isEqualTo(RouteStatusErrorCode.UNKNOWN);
+    void fromCode_returnsNull_whenCodeIsUnrecognized() {
+        assertThat(RouteStatusErrorCode.fromCode(12345)).isNull();
     }
 
     @Test
     void getCode_returnsCode() {
         assertThat(RouteStatusErrorCode.NO_RESULTS.getCode()).isEqualTo(50);
-        assertThat(RouteStatusErrorCode.UNKNOWN.getCode()).isEqualTo(-1);
     }
 }

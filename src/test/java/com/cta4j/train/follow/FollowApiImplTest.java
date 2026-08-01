@@ -3,7 +3,6 @@ package com.cta4j.train.follow;
 import com.cta4j.TestFixtures;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.follow.exception.Cta4jFollowException;
-import com.cta4j.train.follow.exception.FollowErrorCode;
 import com.cta4j.train.follow.internal.impl.FollowApiImpl;
 import com.cta4j.train.follow.model.FollowTrain;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -98,7 +97,7 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -158,7 +157,7 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("Unknown error code")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(-1));
     }
 
@@ -174,7 +173,7 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("An unknown error occurred.")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -190,7 +189,7 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("An unknown error occurred.")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
     }
 

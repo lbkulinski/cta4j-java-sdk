@@ -1,7 +1,6 @@
 package com.cta4j.train.arrival;
 
 import com.cta4j.TestFixtures;
-import com.cta4j.train.arrival.exception.ArrivalsErrorCode;
 import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
 import com.cta4j.train.arrival.query.MapArrivalsQuery;
@@ -131,7 +130,7 @@ class ArrivalsApiImplTest {
             .isInstanceOf(Cta4jArrivalsException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
-                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -233,7 +232,7 @@ class ArrivalsApiImplTest {
             .isInstanceOf(Cta4jArrivalsException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
-                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -392,7 +391,7 @@ class ArrivalsApiImplTest {
             .isInstanceOf(Cta4jArrivalsException.class)
             .hasMessage("Unknown error code")
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
-                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(-1));
     }
 
@@ -410,7 +409,7 @@ class ArrivalsApiImplTest {
             .isInstanceOf(Cta4jArrivalsException.class)
             .hasMessage("An unknown error occurred.")
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
-                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -428,7 +427,7 @@ class ArrivalsApiImplTest {
             .isInstanceOf(Cta4jArrivalsException.class)
             .hasMessage("An unknown error occurred.")
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getErrorCode())
-                .isEqualTo(ArrivalsErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jArrivalsException) e).getRawErrorCode()).isEqualTo(1));
     }
 

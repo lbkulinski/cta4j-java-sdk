@@ -13,13 +13,12 @@ class ArrivalsErrorCodeTest {
     }
 
     @Test
-    void fromCode_returnsUnknown_whenCodeIsUnrecognized() {
-        assertThat(ArrivalsErrorCode.fromCode(999)).isEqualTo(ArrivalsErrorCode.UNKNOWN);
+    void fromCode_returnsNull_whenCodeIsUnrecognized() {
+        assertThat(ArrivalsErrorCode.fromCode(999)).isNull();
     }
 
     @Test
     void getCode_returnsCode() {
         assertThat(ArrivalsErrorCode.INVALID_API_KEY.getCode()).isEqualTo(101);
-        assertThat(ArrivalsErrorCode.UNKNOWN.getCode()).isEqualTo(-1);
     }
 }

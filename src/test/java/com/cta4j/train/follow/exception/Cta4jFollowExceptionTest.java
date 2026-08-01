@@ -31,10 +31,10 @@ class Cta4jFollowExceptionTest {
     }
 
     @Test
-    void constructor_setsUnknownErrorCode_whenRawErrorCodeIsUnrecognized() {
+    void constructor_setsNullErrorCode_whenRawErrorCodeIsUnrecognized() {
         Cta4jFollowException exception = new Cta4jFollowException("Something odd happened", 999);
 
         assertThat(exception.getRawErrorCode()).isEqualTo(999);
-        assertThat(exception.getErrorCode()).isEqualTo(FollowErrorCode.UNKNOWN);
+        assertThat(exception.getErrorCode()).isNull();
     }
 }
