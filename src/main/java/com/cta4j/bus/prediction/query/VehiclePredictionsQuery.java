@@ -60,7 +60,7 @@ public record VehiclePredictionsQuery(
 
         /// Sets the maximum number of predictions to return.
         ///
-        /// @param maxResults the maximum number of predictions to return
+        /// @param maxResults the maximum number of predictions
         /// @return this `Builder` instance
         /// @throws IllegalArgumentException if `maxResults` is not positive
         public Builder maxResults(int maxResults) {
