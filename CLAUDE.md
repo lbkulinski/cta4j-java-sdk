@@ -2,16 +2,17 @@
 
 ## Project Overview
 
-Java SDK for the CTA Bus Tracker and Train Tracker APIs. Published to Maven Central. Consumers instantiate `BusApi` or `TrainApi` via their respective builders and access sub-APIs from there.
+Java SDK for the CTA Bus Tracker, Train Tracker, and Customer Alerts APIs. Published to Maven Central. Consumers instantiate `BusApi`, `TrainApi`, or `AlertApi` via their respective builders and access sub-APIs from there.
 
 ## Entry Points
 
 ```java
 BusApi busApi = BusApi.builder("apiKey").build();
 TrainApi trainApi = TrainApi.builder("apiKey").build();
+AlertApi alertApi = AlertApi.builder().build();
 ```
 
-Both builders accept an optional `.host(String)` override; `TrainApi.Builder` also accepts `.stationsUrl(String)`.
+`BusApi`/`TrainApi` builders require an API key and accept an optional `.host(String)` override; `TrainApi.Builder` also accepts `.stationsUrl(String)`. The CTA Customer Alerts API is unauthenticated, so `AlertApi.builder()` takes no API key and only accepts an optional `.host(String)` override.
 
 ## API Surface
 
@@ -32,9 +33,13 @@ Both builders accept an optional `.host(String)` override; `TrainApi.Builder` al
 - `follow()` — `FollowApi`
 - `locations()` — `LocationsApi`
 
+**Alert (`AlertApi`)**
+- `routeStatus()` — `RouteStatusApi`
+- `detailedAlerts()` — `DetailedAlertsApi`
+
 ## Package Layout
 
-Transit type (`bus`, `train`) then feature then layer:
+Transit type (`bus`, `train`, `alert`) then feature then layer:
 
 ```
 com.cta4j.bus.route/
@@ -46,27 +51,31 @@ com.cta4j.bus.route/
     mapper/RouteMapper.java   ← MapStruct mapper
 ```
 
-Shared types live in `bus/common/` or `train/common/`. Cross-cutting types (geo, exceptions) live in `common/` or `exception/`.
+Shared types live in `bus/common/`, `train/common/`, or `alert/common/`. Cross-cutting types (geo, exceptions) live in `common/` or `exception/`.
 
 ## Wire Layer Conventions
 
 - All wire records are `@ApiStatus.Internal` and not part of the public API.
 - **Bus**: each feature has a typed `Cta<Feature>BustimeResponse` record (envelope field `bustimeResponse`, mapped from `"bustime-response"`) with `@Nullable` fields for both the data list and a typed `Cta<Feature>Error` list. Each `Cta<Feature>Error` implements `CtaError` and overrides `notFound()` using its own typed fields (e.g. `rt`, `stpid`, `vid`) to identify which input caused the error — do not collapse these into a generic map.
 - **Train**: there is no shared `CtaError`-style record. Each feature's wire response record carries `errCd`/`errNm` fields directly; `errCd` is parsed to an `int` and mapped via `<Feature>ErrorCode.fromCode(int)` to a feature-specific enum (e.g. `ArrivalsErrorCode`) whose constants identify resource-specific ("not found") codes.
+- **Alert**: like Train, there is no shared `CtaError`-style record, and each feature's error shape is its own — do not assume `RouteStatus` and `DetailedAlerts` match each other. `CtaRoutes` (route status) carries `ErrorCode`/`ErrorMessage` as `List<String>`, since the CTA API can return multiple distinct codes for a single request; `CtaAlerts` (detailed alerts) carries a single non-nullable `ErrorCode` `String` and a `@Nullable ErrorMessage` `String`. Both map their code(s) via a feature-specific `<Feature>ErrorCode.fromCode(int)` enum (`RouteStatusErrorCode`, `DetailedAlertsErrorCode`), following the Train pattern.
 - All wire records use `@JsonIgnoreProperties(ignoreUnknown = true)`.
-- The outer envelope is `CtaResponse<T>`, with a `bustimeResponse` field (bus) or a `ctatt` field (train).
+- **Bus and Train** share a single generic `CtaResponse<T>` record per module (`bus/common/internal/wire/CtaResponse`, `train/common/internal/wire/CtaResponse`) with a fixed field name — `bustimeResponse` (bus) or `ctatt` (train).
+- **Alert** has no shared generic envelope type; each feature declares its own concretely-typed response record with its own field name (e.g. `CtaRouteStatusResponse.ctaRoutes` mapped from `"CTARoutes"`, `CtaDetailedAlertsResponse.ctaAlerts` mapped from `"CTAAlerts"`).
 
 ## Error Handling Pattern
 
 **Bus** `*ApiImpl` classes returning a `List` follow this pattern in `makeRequest`:
 
 1. If the data list is non-null and non-empty → map and return it.
-2. Otherwise, call `ApiUtils.checkErrors(errors, endpoint)` (`bus/common/internal/util/ApiUtils`): it logs a warn and returns if the error list is null/empty, returns if every error's `notFound()` is `true`, or throws `Cta4jBusException` otherwise.
+2. Otherwise, call `BusApiUtils.checkErrors(errors, endpoint)` (`bus/common/internal/util/BusApiUtils`): it logs a warn and returns if the error list is null/empty, returns if every error's `notFound()` is `true`, or throws `Cta4jBusException` otherwise.
 3. Return `List.of()`.
 
-`SystemTimeApiImpl` is the one exception: it returns a single `Instant`, not a `List`, so a missing value has no valid "empty" result — it throws directly instead of calling `ApiUtils.checkErrors`.
+`SystemTimeApiImpl` is the one exception: it returns a single `Instant`, not a `List`, so a missing value has no valid "empty" result — it throws directly instead of calling `BusApiUtils.checkErrors`.
 
 **Train** `*ApiImpl` classes follow a related but distinct pattern (no shared helper — each impl inlines it with its own exception type): parse `errCd` to the feature's `*ErrorCode` enum; if it's a resource-specific not-found code → return an empty result (or `Optional.empty()`); if it isn't `OK` → throw the feature-specific exception (e.g. `Cta4jArrivalsException`) using `errNm` as the message, falling back to a default message when `errNm` is `null` or blank.
+
+**Alert** `*ApiImpl` classes follow the same inlined, no-shared-helper pattern as Train, but each feature's `errCd`/`errNm` shape differs (see Wire Layer Conventions above): `RouteStatusApiImpl` reads the first of a possibly-multi-value error-code list (logging a warn if more than one distinct code is present) and falls back to `"An unknown error occurred."` when the message is null/blank; `DetailedAlertsApiImpl` reads the single scalar `errCd`/`errNm` directly. Both throw their feature-specific exception (`Cta4jRouteStatusException`/`Cta4jDetailedAlertsException`, both extending the shared `Cta4jAlertException`) for any code other than `OK`/not-found.
 
 `find*` methods return an empty `List` (or `Optional.empty()`) for not-found; they never throw for missing resources.
 

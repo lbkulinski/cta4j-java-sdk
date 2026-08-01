@@ -17,27 +17,27 @@ import java.util.Optional;
 public interface VehiclesApi {
     /// Retrieves vehicles by their IDs.
     ///
-    /// @param ids a [Collection] of vehicle IDs
+    /// @param vehicleIds a [Collection] of vehicle IDs
     /// @return a [List] of [Vehicle]s corresponding to the provided IDs, or an empty [List] if no vehicles are found
-    /// @throws NullPointerException if `ids` is `null`, or if any element of `ids` is `null`
+    /// @throws NullPointerException if `vehicleIds` is `null`, or if any element of `vehicleIds` is `null`
     /// @throws IllegalArgumentException if more than 10 vehicle IDs are provided
     /// @throws Cta4jBusException if the API returns an error response or the response cannot be parsed
-    List<Vehicle> findByIds(Collection<String> ids);
+    List<Vehicle> findByIds(Collection<String> vehicleIds);
 
     /// Retrieves a vehicle by its ID.
     ///
-    /// @param id the vehicle ID
+    /// @param vehicleId the vehicle ID
     /// @return an [Optional] containing the [Vehicle] if found, or an empty [Optional] if no vehicle is found for the
     /// given ID
-    /// @throws NullPointerException if `id` is `null`
+    /// @throws NullPointerException if `vehicleId` is `null`
     /// @throws Cta4jBusException if multiple vehicles are found for the given ID, or if the API returns an error
     /// response or the response cannot be parsed
-    default Optional<Vehicle> findById(String id) {
-        Objects.requireNonNull(id);
+    default Optional<Vehicle> findById(String vehicleId) {
+        Objects.requireNonNull(vehicleId);
 
-        List<String> ids = List.of(id);
+        List<String> vehicleIds = List.of(vehicleId);
 
-        List<Vehicle> vehicles = this.findByIds(ids);
+        List<Vehicle> vehicles = this.findByIds(vehicleIds);
 
         if (vehicles.isEmpty()) {
             return Optional.empty();
@@ -45,7 +45,7 @@ public interface VehiclesApi {
 
         if (vehicles.size() > 1) {
             String message = "Expected at most one vehicle for ID: %s, but found %d".formatted(
-                id,
+                vehicleId,
                 vehicles.size()
             );
 

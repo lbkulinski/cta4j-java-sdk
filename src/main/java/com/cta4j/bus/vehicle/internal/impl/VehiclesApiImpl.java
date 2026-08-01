@@ -37,18 +37,18 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     @Override
-    public List<Vehicle> findByIds(Collection<String> ids) {
-        Objects.requireNonNull(ids);
+    public List<Vehicle> findByIds(Collection<String> vehicleIds) {
+        Objects.requireNonNull(vehicleIds);
 
-        ids = List.copyOf(ids);
+        vehicleIds = List.copyOf(vehicleIds);
 
-        if (ids.isEmpty()) {
+        if (vehicleIds.isEmpty()) {
             return List.of();
         }
 
-        BusApiUtils.requireMaxIds(ids, "vehicle");
+        BusApiUtils.requireMaxIds(vehicleIds, "vehicle");
 
-        String idsString = String.join(",", ids);
+        String idsString = String.join(",", vehicleIds);
 
         String url = new URIBuilder()
             .setScheme(this.config.scheme())
