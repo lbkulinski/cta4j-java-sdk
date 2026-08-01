@@ -33,7 +33,7 @@ public final class Cta4jArrivalsException extends Cta4jTrainException {
 
     /// Returns the error code associated with this exception, if available.
     ///
-    /// @return the error code, if available
+    /// @return the error code, or `null` if not available
     public @Nullable ArrivalsErrorCode getErrorCode() {
         return this.errorCode;
     }

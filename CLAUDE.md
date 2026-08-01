@@ -70,9 +70,11 @@ Shared types live in `bus/common/` or `train/common/`. Cross-cutting types (geo,
 
 `find*` methods return an empty `List` (or `Optional.empty()`) for not-found; they never throw for missing resources.
 
-## Annotation Ordering
+## Annotations
 
-Always apply annotations in this order: **Jackson/framework → `@ApiStatus.Internal` → `@NullMarked`**
+- Annotations always stack one per line above the declaration.
+- They should adhere to the following order: Jackson/framework → `@ApiStatus.Internal` → `@NullMarked`.
+- This applies to classes, interfaces, records, fields, and methods alike.
 
 ```java
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -80,6 +82,11 @@ Always apply annotations in this order: **Jackson/framework → `@ApiStatus.Inte
 @NullMarked
 public record CtaFoo(...) { }
 ```
+
+- **Exception — Record components:** A component with a single annotation may keep it inline with the type
+  (`@Nullable String foo`) instead of stacking. Two or more annotations on a component still stack one per
+  line above the type, and when any component in a record stacks, blank-line-separate every component in
+  that record (see `CtaLocation` vs. the single-annotation `CtaStation`).
 
 ## Null Safety
 
@@ -122,13 +129,13 @@ References:
   `TransitMode`, `DynamicAction`, `TrainLine`) and numeric/status-code
   accessors on error-code enums or exceptions alike. Do not use "Gets the
   X" to distinguish the two.
-- **Builder setter `@return`:** Always backticked, "this `Builder` instance" —
-  never the unbacked "this builder instance" variant.
 - **Builder creator methods:** One template for every builder, top-level
   client builders and query-parameter builders alike — no terser variant.
   The static `builder(...)` method: "Creates a new `Builder` for
   constructing a/an `X`.", `@return` tag "a new `Builder`". The `build()`
   method: "Builds a configured `X` instance.", `@return` tag "a new `X`".
+- **Builder setter `@return`:** Always backticked, "this `Builder` instance" —
+  never the unbacked "this builder instance" variant.
 - **Tag order:** `@param` → `@return` → `@deprecated` → `@since` → `@throws`
   → `@see`.
 - **@param / @throws descriptions:** Lowercase phrase, no trailing period.
