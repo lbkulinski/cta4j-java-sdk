@@ -1,8 +1,8 @@
 package com.cta4j.alert.routestatus;
 
+import com.cta4j.alert.common.internal.wire.CtaCdata;
 import com.cta4j.alert.routestatus.internal.mapper.RouteStatusMapper;
 import com.cta4j.alert.routestatus.internal.wire.CtaRouteInfo;
-import com.cta4j.alert.common.internal.wire.CtaCdata;
 import com.cta4j.alert.routestatus.model.RouteStatus;
 import org.junit.jupiter.api.Test;
 
