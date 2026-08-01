@@ -38,15 +38,23 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
     }
 
     @Override
-    public List<Arrival> findByMapId(MapArrivalsQuery query) {
+    public List<Arrival> findByMapIds(MapArrivalsQuery query) {
         Objects.requireNonNull(query);
+
+        List<String> mapIds = query.mapIds();
+
+        if (mapIds.isEmpty()) {
+            return List.of();
+        }
+
+        String mapIdsString = String.join(",", mapIds);
 
         URIBuilder builder = new URIBuilder()
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
             .setPath(TrainApiConstants.ARRIVALS_ENDPOINT)
-            .addParameter("mapid", query.mapId())
+            .addParameter("mapid", mapIdsString)
             .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON");
 
@@ -54,15 +62,23 @@ public final class ArrivalsApiImpl implements ArrivalsApi {
     }
 
     @Override
-    public List<Arrival> findByStopId(StopArrivalsQuery query) {
+    public List<Arrival> findByStopIds(StopArrivalsQuery query) {
         Objects.requireNonNull(query);
+
+        List<String> stopIds = query.stopIds();
+
+        if (stopIds.isEmpty()) {
+            return List.of();
+        }
+
+        String stopIdsString = String.join(",", stopIds);
 
         URIBuilder builder = new URIBuilder()
             .setScheme(this.config.scheme())
             .setHost(this.config.host())
             .setPort(this.config.port())
             .setPath(TrainApiConstants.ARRIVALS_ENDPOINT)
-            .addParameter("stpid", query.stopId())
+            .addParameter("stpid", stopIdsString)
             .addParameter("key", this.config.apiKey())
             .addParameter("outputType", "JSON");
 

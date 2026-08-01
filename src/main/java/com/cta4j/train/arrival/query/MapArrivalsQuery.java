@@ -1,31 +1,39 @@
 package com.cta4j.train.arrival.query;
 
+import com.cta4j.train.common.internal.util.TrainApiUtils;
 import com.cta4j.train.common.model.TrainLine;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /// Represents a query for train arrivals at a specific map.
 ///
-/// @param mapId the ID of the map to retrieve arrivals for
+/// @param mapIds the [List] of map IDs to retrieve arrivals for
 /// @param line the optional train line to filter arrivals by
 /// @param maxResults the optional maximum number of arrivals to return
 @NullMarked
 public record MapArrivalsQuery(
-    String mapId,
+    List<String> mapIds,
     @Nullable TrainLine line,
     @Nullable Integer maxResults
 ) {
     /// Constructs a `MapArrivalsQuery`.
     ///
-    /// @param mapId the ID of the map to retrieve arrivals for
+    /// @param mapIds the [List] of map IDs to retrieve arrivals for
     /// @param line the optional train line to filter arrivals by
     /// @param maxResults the optional maximum number of arrivals to return
-    /// @throws NullPointerException if `mapId` is `null`
-    /// @throws IllegalArgumentException if `maxResults` is non-`null` and not positive
+    /// @throws NullPointerException if `mapIds` is `null`, or if any element of `mapIds` is `null`
+    /// @throws IllegalArgumentException if more than 4 map IDs are provided, or if `maxResults` is non-`null` and not
+    /// positive
     public MapArrivalsQuery {
-        Objects.requireNonNull(mapId);
+        Objects.requireNonNull(mapIds);
+
+        mapIds = List.copyOf(mapIds);
+
+        TrainApiUtils.requireMaxIds(mapIds, "map");
 
         if ((maxResults != null) && (maxResults <= 0)) {
             throw new IllegalArgumentException("maxResults must be positive");
@@ -34,16 +42,16 @@ public record MapArrivalsQuery(
 
     /// Creates a new `Builder` for constructing a `MapArrivalsQuery`.
     ///
-    /// @param mapId the ID of the map to retrieve arrivals for
+    /// @param mapIds the [Collection] of map IDs to retrieve arrivals for
     /// @return a new `Builder`
-    /// @throws NullPointerException if `mapId` is `null`
-    public static Builder builder(String mapId) {
-        return new Builder(mapId);
+    /// @throws NullPointerException if `mapIds` is `null`, or if any element of `mapIds` is `null`
+    public static Builder builder(Collection<String> mapIds) {
+        return new Builder(mapIds);
     }
 
     /// A builder for `MapArrivalsQuery`.
     public static final class Builder {
-        private final String mapId;
+        private final List<String> mapIds;
 
         @Nullable
         private TrainLine line;
@@ -51,8 +59,10 @@ public record MapArrivalsQuery(
         @Nullable
         private Integer maxResults;
 
-        private Builder(String mapId) {
-            this.mapId = Objects.requireNonNull(mapId);
+        private Builder(Collection<String> mapIds) {
+            Objects.requireNonNull(mapIds);
+
+            this.mapIds = List.copyOf(mapIds);
         }
 
         /// Sets the train line to filter arrivals by.
@@ -84,9 +94,10 @@ public record MapArrivalsQuery(
         /// Builds a configured `MapArrivalsQuery` instance.
         ///
         /// @return a new `MapArrivalsQuery`
+        /// @throws IllegalArgumentException if more than 4 map IDs are provided
         public MapArrivalsQuery build() {
             return new MapArrivalsQuery(
-                this.mapId,
+                this.mapIds,
                 this.line,
                 this.maxResults
             );
