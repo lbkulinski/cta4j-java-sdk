@@ -12,7 +12,7 @@ public class Cta4jException extends RuntimeException {
     /// Constructs a `Cta4jException`.
     ///
     /// @param message the detail message
-    /// @param endpoint the URL of the API endpoint associated with the exception
+    /// @param endpoint the API endpoint associated with the exception
     /// @throws NullPointerException if `endpoint` is `null`
     public Cta4jException(String message, String endpoint) {
         super(message);
@@ -23,7 +23,7 @@ public class Cta4jException extends RuntimeException {
     /// Constructs a `Cta4jException`.
     ///
     /// @param message the detail message
-    /// @param endpoint the URL of the API endpoint associated with the exception
+    /// @param endpoint the API endpoint associated with the exception
     /// @param cause the cause of the exception
     /// @throws NullPointerException if `endpoint` is `null`
     public Cta4jException(String message, String endpoint, Throwable cause) {
@@ -32,9 +32,9 @@ public class Cta4jException extends RuntimeException {
         this.endpoint = Objects.requireNonNull(endpoint);
     }
 
-    /// Returns the URL of the API endpoint associated with this exception.
+    /// Returns the API endpoint associated with this exception.
     ///
-    /// @return the endpoint URL
+    /// @return the endpoint
     public String getEndpoint() {
         return this.endpoint;
     }
