@@ -6,30 +6,33 @@
 ![Java Version](https://img.shields.io/badge/Java-21%2B-orange)
 [![License](https://img.shields.io/github/license/lbkulinski/cta4j-java-sdk)](LICENSE)
 
-A lightweight Java SDK for interacting with the [Chicago Transit Authority (CTA)](https://www.transitchicago.com/) APIs — both Train Tracker and Bus Tracker.  
+A lightweight Java SDK for interacting with the [Chicago Transit Authority (CTA)](https://www.transitchicago.com/) APIs — Train Tracker, Bus Tracker, and Customer Alerts.  
 
 Built for simplicity, reliability, and minimal external dependencies.
 
 ---
 
-## 🚆 Overview
+## 🏙️ Overview
 
 `cta4j-java-sdk` provides a clean, type-safe interface for accessing CTA's public transit data.  
-It wraps the official Train and Bus Tracker APIs with intuitive Java models and error handling.
+It wraps the official Train Tracker, Bus Tracker, and Customer Alerts APIs with intuitive Java models and error
+handling.
 
 **Features:**
 - Simple, dependency-light HTTP client (uses Apache HttpClient 5)
 - DTOs modeled as Java records
-- Works with both **Train Tracker** and **Bus Tracker** APIs
+- Works with the **Train Tracker**, **Bus Tracker**, and **Customer Alerts** APIs
 
 ---
 
 ## 🔑 Getting API Keys
 
-You'll need a free API key from CTA to use the SDK.
+You'll need a free API key from CTA to use the Train Tracker or Bus Tracker APIs. The Customer Alerts API is
+unauthenticated and needs no key.
 
 - **Train Tracker API** → [Apply here](https://www.transitchicago.com/developers/traintrackerapply/)
 - **Bus Tracker API** → [Apply here](https://www.transitchicago.com/developers/bustracker/)
+- **Customer Alerts API** → No API key is needed
 
 After applying, you'll receive an API key by email. Keep it safe — you'll use it when initializing the client.
 
@@ -117,6 +120,38 @@ public final class Application {
 }
 ```
 
+### Fetch detailed alerts for a route ID
+
+> **Note:** `AlertApi` requires no API key — the CTA Customer Alerts API is unauthenticated.
+
+```java
+import com.cta4j.alert.AlertApi;
+
+public final class Application {
+    public static void main(String[] args) {
+        AlertApi alertApi = AlertApi.builder()
+                                    .build();
+
+        alertApi.detailedAlerts()
+                .findByBusRouteId("70")
+                .forEach(alert -> System.out.printf(
+                    "Alert ID: %s%nDescription: %s%nFrom: %s%nTo: %s%n%n",
+                    alert.id(),
+                    alert.shortDescription(),
+                    alert.startTime(),
+                    alert.endTime()
+                ));
+
+        // Example output:
+        // Alert ID: 114946
+        // Description: EB #70 buses will operate via Division, Wells, Oak, and Dearborn. WB buses will operate via Clark, Oak, Wells, and Division.
+        // From: 2026-08-01T12:30:00Z
+        // To: 2026-08-01T22:00:00Z
+        // ...
+    }
+}
+```
+
 ---
 
 ## 🧠 Design Goals
@@ -129,7 +164,6 @@ public final class Application {
 
 ## 🛠️ Planned Improvements
 
-- Add support for more API endpoints, like service alerts
 - Implement caching for frequently requested data
 - Add asynchronous request support
 
