@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.JacksonException;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -301,5 +302,19 @@ class PredictionsApiImplTest {
         List<Prediction> predictions = this.api.findByVehicleIds(List.of("509", "510"));
 
         assertThat(predictions).hasSize(1);
+    }
+
+    @Test
+    void findByStopIds_collectionOverload_throwsNullPointerException_whenStopIdsContainsNull() {
+        List<String> withNull = Arrays.asList("456", null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByStopIds(withNull));
+    }
+
+    @Test
+    void findByVehicleIds_collectionOverload_throwsNullPointerException_whenVehicleIdsContainsNull() {
+        List<String> withNull = Arrays.asList("509", null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByVehicleIds(withNull));
     }
 }

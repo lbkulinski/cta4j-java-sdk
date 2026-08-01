@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.JacksonException;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -306,6 +307,13 @@ class ArrivalsApiImplTest {
     }
 
     @Test
+    void findByMapIds_collectionOverload_throwsNullPointerException_whenMapIdsContainsNull() {
+        List<String> withNull = Arrays.asList("40900", null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByMapIds(withNull));
+    }
+
+    @Test
     void findByStopIds_collectionOverload_returnsArrivals_whenResponseContainsArrivals() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttarrivals.aspx"))
             .withQueryParam("stpid", equalTo("30070,30071"))
@@ -317,6 +325,13 @@ class ArrivalsApiImplTest {
         List<Arrival> arrivals = this.api.findByStopIds(List.of("30070", "30071"));
 
         assertThat(arrivals).hasSize(1);
+    }
+
+    @Test
+    void findByStopIds_collectionOverload_throwsNullPointerException_whenStopIdsContainsNull() {
+        List<String> withNull = Arrays.asList("30070", null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByStopIds(withNull));
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.cta4j.train.arrival.query;
 import com.cta4j.train.common.model.TrainLine;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +39,18 @@ class MapArrivalsQueryTest {
     }
 
     @Test
+    void builder_throwsNullPointerException_whenMapIdsIsNull() {
+        assertThatNullPointerException().isThrownBy(() -> MapArrivalsQuery.builder(null));
+    }
+
+    @Test
+    void builder_throwsNullPointerException_whenMapIdsContainsNull() {
+        List<String> withNull = Arrays.asList("40900", null);
+
+        assertThatNullPointerException().isThrownBy(() -> MapArrivalsQuery.builder(withNull));
+    }
+
+    @Test
     void builder_throwsIllegalArgumentException_whenMaxResultsIsZero() {
         assertThatIllegalArgumentException().isThrownBy(() ->
             MapArrivalsQuery.builder(List.of("40900")).maxResults(0));
@@ -55,6 +68,18 @@ class MapArrivalsQueryTest {
 
         assertThatIllegalArgumentException().isThrownBy(() ->
             MapArrivalsQuery.builder(mapIds).build());
+    }
+
+    @Test
+    void constructor_throwsNullPointerException_whenMapIdsIsNull() {
+        assertThatNullPointerException().isThrownBy(() -> new MapArrivalsQuery(null, null, null));
+    }
+
+    @Test
+    void constructor_throwsNullPointerException_whenMapIdsContainsNull() {
+        List<String> withNull = Arrays.asList("40900", null);
+
+        assertThatNullPointerException().isThrownBy(() -> new MapArrivalsQuery(withNull, null, null));
     }
 
     @Test

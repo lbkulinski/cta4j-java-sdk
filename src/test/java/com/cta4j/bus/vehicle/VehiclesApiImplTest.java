@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.JacksonException;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -166,6 +167,20 @@ class VehiclesApiImplTest {
         List<Vehicle> vehicles = this.api.findByRouteIds(List.of("8"));
 
         assertThat(vehicles).hasSize(1);
+    }
+
+    @Test
+    void findByIds_throwsNullPointerException_whenIdsContainsNull() {
+        List<String> withNull = Arrays.asList("509", null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByIds(withNull));
+    }
+
+    @Test
+    void findByRouteIds_throwsNullPointerException_whenRouteIdsContainsNull() {
+        List<String> withNull = Arrays.asList("8", null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByRouteIds(withNull));
     }
 
     @Test

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.JacksonException;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -267,6 +268,13 @@ class RouteStatusApiImplTest {
     }
 
     @Test
+    void findByTypes_throwsNullPointerException_whenTypesContainsNull() {
+        List<ServiceType> withNull = Arrays.asList(ServiceType.BUS, null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByTypes(withNull));
+    }
+
+    @Test
     void findByType_delegatesToFindByTypes() {
         this.server.stubFor(get(urlPathEqualTo("/api/1.0/routes.aspx"))
             .withQueryParam("type", equalTo("rail"))
@@ -319,6 +327,13 @@ class RouteStatusApiImplTest {
     }
 
     @Test
+    void findByBusRouteIds_throwsNullPointerException_whenRouteIdsContainsNull() {
+        List<String> withNull = Arrays.asList("22", null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByBusRouteIds(withNull));
+    }
+
+    @Test
     void findByBusRouteIds_throwsIllegalArgumentException_whenRouteIdIsTrainLine() {
         assertThatIllegalArgumentException()
             .isThrownBy(() -> this.api.findByBusRouteIds(List.of("Red")))
@@ -355,6 +370,13 @@ class RouteStatusApiImplTest {
 
         assertThat(statuses).isEmpty();
         this.server.verify(0, anyRequestedFor(anyUrl()));
+    }
+
+    @Test
+    void findByLines_throwsNullPointerException_whenLinesContainsNull() {
+        List<AlertTrainLine> withNull = Arrays.asList(AlertTrainLine.RED, null);
+
+        assertThatNullPointerException().isThrownBy(() -> this.api.findByLines(withNull));
     }
 
     @Test

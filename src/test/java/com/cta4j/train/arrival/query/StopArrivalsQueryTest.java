@@ -3,6 +3,7 @@ package com.cta4j.train.arrival.query;
 import com.cta4j.train.common.model.TrainLine;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +39,18 @@ class StopArrivalsQueryTest {
     }
 
     @Test
+    void builder_throwsNullPointerException_whenStopIdsIsNull() {
+        assertThatNullPointerException().isThrownBy(() -> StopArrivalsQuery.builder(null));
+    }
+
+    @Test
+    void builder_throwsNullPointerException_whenStopIdsContainsNull() {
+        List<String> withNull = Arrays.asList("30070", null);
+
+        assertThatNullPointerException().isThrownBy(() -> StopArrivalsQuery.builder(withNull));
+    }
+
+    @Test
     void builder_throwsIllegalArgumentException_whenMaxResultsIsZero() {
         assertThatIllegalArgumentException().isThrownBy(() ->
             StopArrivalsQuery.builder(List.of("30070")).maxResults(0));
@@ -55,6 +68,18 @@ class StopArrivalsQueryTest {
 
         assertThatIllegalArgumentException().isThrownBy(() ->
             StopArrivalsQuery.builder(stopIds).build());
+    }
+
+    @Test
+    void constructor_throwsNullPointerException_whenStopIdsIsNull() {
+        assertThatNullPointerException().isThrownBy(() -> new StopArrivalsQuery(null, null, null));
+    }
+
+    @Test
+    void constructor_throwsNullPointerException_whenStopIdsContainsNull() {
+        List<String> withNull = Arrays.asList("30070", null);
+
+        assertThatNullPointerException().isThrownBy(() -> new StopArrivalsQuery(withNull, null, null));
     }
 
     @Test

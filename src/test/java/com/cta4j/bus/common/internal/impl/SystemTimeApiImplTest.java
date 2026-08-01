@@ -77,6 +77,21 @@ class SystemTimeApiImplTest {
     }
 
     @Test
+    void systemTime_throwsCta4jBusException_whenErrorsIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/gettime"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/time/empty-error-array.json"))));
+
+        assertThatThrownBy(() -> this.api.systemTime())
+            .isInstanceOf(Cta4jBusException.class)
+            .hasMessage("No system time data returned")
+            .satisfies(e -> assertThat(((Cta4jBusException) e).getEndpoint())
+                .isEqualTo(BusApiConstants.SYSTEM_TIME_ENDPOINT));
+    }
+
+    @Test
     void systemTime_throwsCta4jBusException_whenResponseIsNotJson() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/gettime"))
             .willReturn(aResponse()
