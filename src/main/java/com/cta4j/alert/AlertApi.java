@@ -35,15 +35,15 @@ public interface AlertApi {
         /// @throws NullPointerException if `host` is `null`
         Builder host(String host);
 
-        /// Builds a configured [AlertApi] instance.
+        /// Builds a configured `AlertApi` instance.
         ///
-        /// @return a new [AlertApi]
+        /// @return a new `AlertApi`
         AlertApi build();
     }
 
-    /// Creates a new [Builder] for constructing a [AlertApi].
+    /// Creates a new `Builder` for constructing an `AlertApi`.
     ///
-    /// @return a new [Builder]
+    /// @return a new `Builder`
     static Builder builder() {
         return new AlertApiImpl.BuilderImpl();
     }

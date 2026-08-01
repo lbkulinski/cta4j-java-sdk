@@ -58,16 +58,16 @@ public interface TrainApi {
         /// @throws NullPointerException if `stationsUrl` is `null`
         Builder stationsUrl(String stationsUrl);
 
-        /// Builds a configured [TrainApi] instance.
+        /// Builds a configured `TrainApi` instance.
         ///
-        /// @return a new [TrainApi]
+        /// @return a new `TrainApi`
         TrainApi build();
     }
 
-    /// Creates a new [Builder] for constructing a [TrainApi].
+    /// Creates a new `Builder` for constructing a `TrainApi`.
     ///
     /// @param apiKey the CTA Train Tracker API key
-    /// @return a new [Builder]
+    /// @return a new `Builder`
     /// @throws NullPointerException if `apiKey` is `null`
     static Builder builder(String apiKey) {
         Objects.requireNonNull(apiKey);

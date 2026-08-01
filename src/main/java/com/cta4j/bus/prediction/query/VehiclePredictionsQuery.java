@@ -45,7 +45,7 @@ public record VehiclePredictionsQuery(
         return new Builder(vehicleIds);
     }
 
-    /// Builder for `VehiclePredictionsQuery`.
+    /// A builder for `VehiclePredictionsQuery`.
     public static final class Builder {
         private final List<String> vehicleIds;
 

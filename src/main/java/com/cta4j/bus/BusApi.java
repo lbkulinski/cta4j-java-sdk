@@ -81,16 +81,16 @@ public interface BusApi {
         /// @throws NullPointerException if `host` is `null`
         Builder host(String host);
 
-        /// Builds a configured [BusApi] instance.
+        /// Builds a configured `BusApi` instance.
         ///
-        /// @return a new [BusApi]
+        /// @return a new `BusApi`
         BusApi build();
     }
 
-    /// Creates a new [Builder] for constructing a [BusApi].
+    /// Creates a new `Builder` for constructing a `BusApi`.
     ///
     /// @param apiKey the CTA Bus Tracker API key
-    /// @return a new [Builder]
+    /// @return a new `Builder`
     /// @throws NullPointerException if `apiKey` is `null`
     static Builder builder(String apiKey) {
         Objects.requireNonNull(apiKey);
