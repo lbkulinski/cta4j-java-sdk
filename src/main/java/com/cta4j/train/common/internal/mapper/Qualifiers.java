@@ -14,6 +14,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -28,6 +30,8 @@ import java.util.Set;
 @ApiStatus.Internal
 @NullMarked
 public final class Qualifiers {
+    private static final Logger log = LoggerFactory.getLogger(Qualifiers.class);
+
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
 
@@ -104,10 +108,16 @@ public final class Qualifiers {
     }
 
     @Named("mapLine")
-    public static TrainLine mapLine(String line) {
+    public static @Nullable TrainLine mapLine(String line) {
         Objects.requireNonNull(line);
 
-        return TrainLine.fromCode(line);
+        TrainLine trainLine = TrainLine.fromCode(line);
+
+        if (trainLine == null) {
+            log.warn("Unknown train line code: {}", line);
+        }
+
+        return trainLine;
     }
 
     @Named("mapTimestamp")

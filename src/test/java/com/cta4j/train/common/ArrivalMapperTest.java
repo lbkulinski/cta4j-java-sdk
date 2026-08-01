@@ -77,7 +77,7 @@ class ArrivalMapperTest {
     }
 
     @Test
-    void toDomain_mapsUnknownLine_whenRtIsNotApplicable() {
+    void toDomain_mapsNullLine_whenRtIsNotApplicable() {
         CtaArrival wire = new CtaArrival(
             "40100", "30070",
             "Howard", "Service toward O'Hare",
@@ -92,6 +92,6 @@ class ArrivalMapperTest {
 
         Arrival arrival = ArrivalMapper.INSTANCE.toDomain(wire);
 
-        assertThat(arrival.line()).isEqualTo(TrainLine.UNKNOWN);
+        assertThat(arrival.line()).isNull();
     }
 }

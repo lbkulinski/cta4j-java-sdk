@@ -136,8 +136,8 @@ class TrainQualifiersTest {
     }
 
     @Test
-    void mapLine_returnsUnknown_whenLineIsNotApplicable() {
-        assertThat(Qualifiers.mapLine("N/A")).isEqualTo(TrainLine.UNKNOWN);
+    void mapLine_returnsNull_whenLineIsNotApplicable() {
+        assertThat(Qualifiers.mapLine("N/A")).isNull();
     }
 
     @Test

@@ -1,17 +1,20 @@
 package com.cta4j.train.common.model;
 
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 import java.util.Objects;
 
 /// Represents a train arrival.
 ///
+/// **NOTE:** The CTA will occasionally send a train line code that can't be resolved, in which case `line` is `null`.
+///
 /// @param stationId the unique identifier of the station for which this arrival was generated
 /// @param stationName the display name of the station for which this arrival was generated
 /// @param stopId the unique identifier of the stop for which this arrival was generated
 /// @param stopDescription the display name of the stop for which this arrival was generated
-/// @param line the train line associated with this arrival
+/// @param line the train line associated with this arrival, if applicable
 /// @param destinationStationId the unique identifier of the destination station for this arrival
 /// @param destinationName the display name of the destination station for this arrival
 /// @param predictionTime the date and time (UTC) this arrival was generated
@@ -28,7 +31,7 @@ public record Arrival(
     String stationName,
     String stopId,
     String stopDescription,
-    TrainLine line,
+    @Nullable TrainLine line,
     String destinationStationId,
     String destinationName,
     Instant predictionTime,
@@ -45,7 +48,7 @@ public record Arrival(
     /// @param stationName the display name of the station for which the arrival was generated
     /// @param stopId the unique identifier of the stop for which the arrival was generated
     /// @param stopDescription the display name of the stop for which the arrival was generated
-    /// @param line the train line associated with the arrival
+    /// @param line the train line associated with the arrival, if applicable
     /// @param destinationStationId the unique identifier of the destination station for the arrival
     /// @param destinationName the display name of the destination station for the arrival
     /// @param predictionTime the date and time (UTC) the arrival was generated
@@ -56,14 +59,13 @@ public record Arrival(
     /// @param delayed whether the train associated with the arrival is currently delayed
     /// @param fault whether the train associated with the arrival is currently experiencing a fault
     /// @param metadata the metadata associated with the arrival
-    /// @throws NullPointerException if `stationId`, `stationName`, `stopId`, `stopDescription`, `line`,
+    /// @throws NullPointerException if `stationId`, `stationName`, `stopId`, `stopDescription`,
     /// `destinationStationId`, `destinationName`, `predictionTime`, `arrivalTime`, or `metadata` is `null`
     public Arrival {
         Objects.requireNonNull(stationId);
         Objects.requireNonNull(stationName);
         Objects.requireNonNull(stopId);
         Objects.requireNonNull(stopDescription);
-        Objects.requireNonNull(line);
         Objects.requireNonNull(destinationStationId);
         Objects.requireNonNull(destinationName);
         Objects.requireNonNull(predictionTime);
