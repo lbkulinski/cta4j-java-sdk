@@ -39,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to `vehicleId`, for consistency with `StopsApi`/`PatternsApi`'s equivalent methods.
 - Bumped `tools.jackson.core:jackson-databind` from **3.2.0** → **3.2.1**
 - Bumped `org.apache.httpcomponents.client5:httpclient5-fluent` from **5.6.1** → **5.6.2**
+- Bumped `ch.qos.logback:logback-classic` from **1.5.38** → **1.6.0**
 
 ### Breaking Changes ⚠️
 
