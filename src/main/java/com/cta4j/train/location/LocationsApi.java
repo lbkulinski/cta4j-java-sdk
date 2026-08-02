@@ -6,6 +6,7 @@ import com.cta4j.train.location.model.TrainLocations;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
+import java.util.Objects;
 
 /// Provides access to location-related endpoints of the CTA Train Tracker API.
 ///
@@ -17,7 +18,9 @@ public interface LocationsApi {
     /// @return a [List] of [TrainLocations] for all lines, or an empty [List] if no train locations are found
     /// @throws Cta4jLocationsException if the API returns an error response or the response cannot be parsed
     default List<TrainLocations> list() {
-        return findByLines(List.of(TrainLine.values()));
+        List<TrainLine> lines = List.of(TrainLine.values());
+
+        return this.findByLines(lines);
     }
 
     /// Retrieves train locations for the specified lines.
@@ -37,6 +40,10 @@ public interface LocationsApi {
     /// @throws NullPointerException if `line` is `null`
     /// @throws Cta4jLocationsException if the API returns an error response or the response cannot be parsed
     default List<TrainLocations> findByLine(TrainLine line) {
-        return findByLines(List.of(line));
+        Objects.requireNonNull(line);
+
+        List<TrainLine> lines = List.of(line);
+
+        return this.findByLines(lines);
     }
 }
