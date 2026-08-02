@@ -66,6 +66,19 @@ class LocalesApiImplTest {
     }
 
     @Test
+    void list_returnsEmpty_whenLocaleIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getlocalelist"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/locale/empty_locale_array.json"))));
+
+        List<SupportedLocale> locales = this.api.list();
+
+        assertThat(locales).isEmpty();
+    }
+
+    @Test
     void list_throwsCta4jBusException_whenResponseContainsFatalErrors() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getlocalelist"))
             .willReturn(aResponse()

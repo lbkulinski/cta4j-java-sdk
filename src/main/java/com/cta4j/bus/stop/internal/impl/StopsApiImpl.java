@@ -2,8 +2,8 @@ package com.cta4j.bus.stop.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.stop.StopsApi;
 import com.cta4j.bus.stop.internal.mapper.StopMapper;
@@ -64,7 +64,7 @@ public final class StopsApiImpl implements StopsApi {
             return List.of();
         }
 
-        ApiUtils.requireMaxIds(stopIds, "stop");
+        BusApiUtils.requireMaxIds(stopIds, "stop");
 
         String stopIdsString = String.join(",", stopIds);
 
@@ -115,7 +115,7 @@ public final class StopsApiImpl implements StopsApi {
                         .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.STOPS_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.STOPS_ENDPOINT);
 
         return List.of();
     }

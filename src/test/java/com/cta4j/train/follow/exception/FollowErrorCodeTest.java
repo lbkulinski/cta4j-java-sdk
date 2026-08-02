@@ -13,13 +13,12 @@ class FollowErrorCodeTest {
     }
 
     @Test
-    void fromCode_returnsUnknown_whenCodeIsUnrecognized() {
-        assertThat(FollowErrorCode.fromCode(999)).isEqualTo(FollowErrorCode.UNKNOWN);
+    void fromCode_returnsNull_whenCodeIsUnrecognized() {
+        assertThat(FollowErrorCode.fromCode(999)).isNull();
     }
 
     @Test
     void getCode_returnsCode() {
         assertThat(FollowErrorCode.RUN_NOT_FOUND.getCode()).isEqualTo(501);
-        assertThat(FollowErrorCode.UNKNOWN.getCode()).isEqualTo(-1);
     }
 }

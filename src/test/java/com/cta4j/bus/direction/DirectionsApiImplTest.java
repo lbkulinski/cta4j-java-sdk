@@ -61,6 +61,19 @@ class DirectionsApiImplTest {
     }
 
     @Test
+    void findByRouteId_returnsEmpty_whenDirectionsIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getdirections"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/direction/empty_directions_array.json"))));
+
+        List<String> directions = this.api.findByRouteId("22");
+
+        assertThat(directions).isEmpty();
+    }
+
+    @Test
     void findByRouteId_returnsEmpty_whenAllErrorsAreResourceSpecific() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getdirections"))
             .willReturn(aResponse()

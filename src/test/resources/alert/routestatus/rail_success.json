@@ -1,0 +1,27 @@
+{
+  "CTARoutes": {
+    "TimeStamp": "2026-07-17T14:14:52",
+    "ErrorCode": "0",
+    "ErrorMessage": null,
+    "RouteInfo": [
+      {
+        "Route": "Red Line",
+        "RouteColorCode": "c60c30",
+        "RouteTextColor": "ffffff",
+        "ServiceId": "Red",
+        "RouteURL": {"#cdata-section": "http://www.transitchicago.com/redline/"},
+        "RouteStatus": "Normal Service",
+        "RouteStatusColor": "404040"
+      },
+      {
+        "Route": "Blue Line",
+        "RouteColorCode": "00a1de",
+        "RouteTextColor": "FFFFFF",
+        "ServiceId": "Blue",
+        "RouteURL": {"#cdata-section": "http://www.transitchicago.com/blueline/"},
+        "RouteStatus": "Normal Service",
+        "RouteStatusColor": "404040"
+      }
+    ]
+  }
+}

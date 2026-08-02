@@ -2,8 +2,8 @@ package com.cta4j.bus.pattern.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.pattern.PatternsApi;
 import com.cta4j.bus.pattern.internal.mapper.RoutePatternMapper;
@@ -46,7 +46,7 @@ public final class PatternsApiImpl implements PatternsApi {
             return List.of();
         }
 
-        ApiUtils.requireMaxIds(patternIds, "pattern");
+        BusApiUtils.requireMaxIds(patternIds, "pattern");
 
         String patternIdsString = String.join(",", patternIds);
 
@@ -114,7 +114,7 @@ public final class PatternsApiImpl implements PatternsApi {
                            .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.PATTERNS_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.PATTERNS_ENDPOINT);
 
         return List.of();
     }

@@ -31,10 +31,10 @@ class Cta4jArrivalsExceptionTest {
     }
 
     @Test
-    void constructor_setsUnknownErrorCode_whenRawErrorCodeIsUnrecognized() {
+    void constructor_setsNullErrorCode_whenRawErrorCodeIsUnrecognized() {
         Cta4jArrivalsException exception = new Cta4jArrivalsException("Something odd happened", 999);
 
         assertThat(exception.getRawErrorCode()).isEqualTo(999);
-        assertThat(exception.getErrorCode()).isEqualTo(ArrivalsErrorCode.UNKNOWN);
+        assertThat(exception.getErrorCode()).isNull();
     }
 }

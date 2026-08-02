@@ -2,8 +2,8 @@ package com.cta4j.bus.prediction.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.prediction.PredictionsApi;
 import com.cta4j.bus.prediction.internal.mapper.PredictionMapper;
@@ -11,8 +11,8 @@ import com.cta4j.bus.prediction.internal.wire.CtaPrediction;
 import com.cta4j.bus.prediction.internal.wire.CtaPredictionBustimeResponse;
 import com.cta4j.bus.prediction.internal.wire.CtaPredictionError;
 import com.cta4j.bus.prediction.model.Prediction;
-import com.cta4j.bus.prediction.query.StopsPredictionsQuery;
-import com.cta4j.bus.prediction.query.VehiclesPredictionsQuery;
+import com.cta4j.bus.prediction.query.StopPredictionsQuery;
+import com.cta4j.bus.prediction.query.VehiclePredictionsQuery;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.net.URIBuilder;
 import org.jetbrains.annotations.ApiStatus;
@@ -38,7 +38,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
     }
 
     @Override
-    public List<Prediction> findByStopIds(StopsPredictionsQuery query) {
+    public List<Prediction> findByStopIds(StopPredictionsQuery query) {
         Objects.requireNonNull(query);
 
         List<String> stopIds = query.stopIds();
@@ -77,7 +77,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
     }
 
     @Override
-    public List<Prediction> findByVehicleIds(VehiclesPredictionsQuery query) {
+    public List<Prediction> findByVehicleIds(VehiclePredictionsQuery query) {
         Objects.requireNonNull(query);
 
         List<String> vehicleIds = query.vehicleIds();
@@ -143,7 +143,7 @@ public final class PredictionsApiImpl implements PredictionsApi {
                               .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.PREDICTIONS_ENDPOINT);
 
         return List.of();
     }

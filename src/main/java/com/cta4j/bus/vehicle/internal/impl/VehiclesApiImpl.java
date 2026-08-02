@@ -2,8 +2,8 @@ package com.cta4j.bus.vehicle.internal.impl;
 
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
-import com.cta4j.bus.common.internal.util.ApiUtils;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
+import com.cta4j.bus.common.internal.util.BusApiUtils;
 import com.cta4j.bus.common.internal.wire.CtaResponse;
 import com.cta4j.bus.vehicle.VehiclesApi;
 import com.cta4j.bus.vehicle.internal.mapper.VehicleMapper;
@@ -37,18 +37,18 @@ public final class VehiclesApiImpl implements VehiclesApi {
     }
 
     @Override
-    public List<Vehicle> findByIds(Collection<String> ids) {
-        Objects.requireNonNull(ids);
+    public List<Vehicle> findByIds(Collection<String> vehicleIds) {
+        Objects.requireNonNull(vehicleIds);
 
-        ids = List.copyOf(ids);
+        vehicleIds = List.copyOf(vehicleIds);
 
-        if (ids.isEmpty()) {
+        if (vehicleIds.isEmpty()) {
             return List.of();
         }
 
-        ApiUtils.requireMaxIds(ids, "vehicle");
+        BusApiUtils.requireMaxIds(vehicleIds, "vehicle");
 
-        String idsString = String.join(",", ids);
+        String idsString = String.join(",", vehicleIds);
 
         String url = new URIBuilder()
             .setScheme(this.config.scheme())
@@ -74,7 +74,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
             return List.of();
         }
 
-        ApiUtils.requireMaxIds(routeIds, "route");
+        BusApiUtils.requireMaxIds(routeIds, "route");
 
         String routeIdsString = String.join(",", routeIds);
 
@@ -126,7 +126,7 @@ public final class VehiclesApiImpl implements VehiclesApi {
                            .toList();
         }
 
-        ApiUtils.checkErrors(errors, BusApiConstants.VEHICLES_ENDPOINT);
+        BusApiUtils.checkErrors(errors, BusApiConstants.VEHICLES_ENDPOINT);
 
         return List.of();
     }

@@ -4,24 +4,20 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
-/**
- * Represents a route and direction affected by a detour.
- *
- * @param routeId the route ID of this detour
- * @param direction the direction of this detour
- */
+/// Represents a route and direction affected by a detour.
+///
+/// @param routeId the route ID of this detour
+/// @param direction the direction of this detour (e.g., "Northbound", "Southbound")
 @NullMarked
 public record DetourRouteDirection(
     String routeId,
     String direction
 ) {
-    /**
-     * Constructs a {@code DetourRouteDirection}.
-     *
-     * @param routeId the route ID of the detour
-     * @param direction the direction of the detour
-     * @throws NullPointerException if {@code routeId} or {@code direction} is {@code null}
-     */
+    /// Constructs a `DetourRouteDirection`.
+    ///
+    /// @param routeId the route ID of the detour
+    /// @param direction the direction of the detour (e.g., "Northbound", "Southbound")
+    /// @throws NullPointerException if `routeId` or `direction` is `null`
     public DetourRouteDirection {
         Objects.requireNonNull(routeId);
         Objects.requireNonNull(direction);

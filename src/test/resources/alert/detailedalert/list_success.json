@@ -1,0 +1,104 @@
+{
+  "CTAAlerts": {
+    "TimeStamp": "2026-07-28T12:00:00",
+    "ErrorCode": "0",
+    "ErrorMessage": null,
+    "Alert": [
+      {
+        "AlertId": "115070",
+        "Headline": "Route 22 Rerouted",
+        "ShortDescription": "Route 22 is rerouted due to construction",
+        "FullDescription": {"#cdata-section": "Route 22 buses are being rerouted due to construction on Clark St."},
+        "SeverityScore": "37",
+        "SeverityColor": "06c",
+        "SeverityCSS": "planned",
+        "Impact": "Planned Reroute",
+        "EventStart": "2026-07-01T05:00:00",
+        "EventEnd": "2026-08-01T05:00:00",
+        "TBD": "0",
+        "MajorAlert": "0",
+        "AlertURL": {"#cdata-section": "http://www.transitchicago.com/alerts/115070"},
+        "ImpactedService": {
+          "Service": {
+            "ServiceType": "B",
+            "ServiceTypeDescription": "Bus Route",
+            "ServiceName": "Clark",
+            "ServiceId": "22",
+            "ServiceBackColor": "565a5c",
+            "ServiceTextColor": "ffffff",
+            "ServiceURL": {"#cdata-section": "http://www.transitchicago.com/bus/22/"}
+          }
+        },
+        "ttim": "0",
+        "GUID": "664b81c1-197b-450b-a00c-090483b90bb9"
+      },
+      {
+        "AlertId": "115080",
+        "Headline": "Austin Main Stationhouse Temporarily Closed",
+        "ShortDescription": "Elevator out of service",
+        "FullDescription": {"#cdata-section": "The elevator at Austin is out of service."},
+        "SeverityScore": "9",
+        "SeverityColor": "000000",
+        "SeverityCSS": "minor",
+        "Impact": "Elevator Status",
+        "EventStart": "2026-07-15T00:00:00",
+        "EventEnd": null,
+        "TBD": "1",
+        "MajorAlert": "0",
+        "AlertURL": {"#cdata-section": "http://www.transitchicago.com/alerts/115080"},
+        "ImpactedService": {
+          "Service": [
+            {
+              "ServiceType": "T",
+              "ServiceTypeDescription": "Train Station",
+              "ServiceName": "Austin",
+              "ServiceId": "41260",
+              "ServiceBackColor": "009b3a",
+              "ServiceTextColor": "FFFFFF",
+              "ServiceURL": {"#cdata-section": "http://www.transitchicago.com/travel_information/station.aspx?StopId=24"}
+            },
+            {
+              "ServiceType": "R",
+              "ServiceTypeDescription": "Train Route",
+              "ServiceName": "Green Line",
+              "ServiceId": "G",
+              "ServiceBackColor": "009b3a",
+              "ServiceTextColor": "FFFFFF",
+              "ServiceURL": {"#cdata-section": "http://www.transitchicago.com/greenline/"}
+            }
+          ]
+        },
+        "ttim": "1",
+        "GUID": "d41b2532-09ca-4827-b9c6-f4299cc86fb6"
+      },
+      {
+        "AlertId": "115090",
+        "Headline": "Later, More Frequent Weekend Service",
+        "ShortDescription": "Service is being increased on the South Pulaski corridor.",
+        "FullDescription": {"#cdata-section": "Later evening and more frequent weekend service will operate on the South Pulaski corridor."},
+        "SeverityScore": "11",
+        "SeverityColor": "000000",
+        "SeverityCSS": "normal",
+        "Impact": "Added Service",
+        "EventStart": "2025-11-07",
+        "EventEnd": "2027-09-30",
+        "TBD": "0",
+        "MajorAlert": "0",
+        "AlertURL": {"#cdata-section": "http://www.transitchicago.com/alerts/115090"},
+        "ImpactedService": {
+          "Service": {
+            "ServiceType": "B",
+            "ServiceTypeDescription": "Bus Route",
+            "ServiceName": "South Pulaski",
+            "ServiceId": "53A",
+            "ServiceBackColor": "059",
+            "ServiceTextColor": "ffffff",
+            "ServiceURL": {"#cdata-section": "http://www.transitchicago.com/riding_cta/bus_route.aspx?RouteId=207"}
+          }
+        },
+        "ttim": "0",
+        "GUID": "9979cd0c-a29d-4b52-805d-4baa0b32322b"
+      }
+    ]
+  }
+}

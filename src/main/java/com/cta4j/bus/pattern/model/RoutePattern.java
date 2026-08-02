@@ -6,17 +6,14 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Represents a bus route pattern.
- *
- * @param id the unique identifier of this route pattern
- * @param length the length of this route pattern in feet
- * @param direction the direction of this route pattern (e.g., "Northbound", "Southbound")
- * @param points the {@link List} of pattern points that make up this route pattern
- * @param detourId the identifier of the detour associated with this route pattern, if applicable
- * @param detourPoints the {@link List} of pattern points of the detour associated with this route pattern, if
- *                     applicable
- */
+/// Represents a bus route pattern.
+///
+/// @param id the unique identifier of this route pattern
+/// @param length the length of this route pattern in feet
+/// @param direction the direction of this route pattern (e.g., "Northbound", "Southbound")
+/// @param points the [List] of pattern points that make up this route pattern
+/// @param detourId the identifier of the detour associated with this route pattern, if applicable
+/// @param detourPoints the [List] of pattern points of the detour associated with this route pattern, if applicable
 @NullMarked
 public record RoutePattern(
     String id,
@@ -26,19 +23,16 @@ public record RoutePattern(
     @Nullable String detourId,
     @Nullable List<PatternPoint> detourPoints
 ) {
-    /**
-     * Constructs a {@code RoutePattern}.
-     *
-     * @param id the unique identifier of the route pattern
-     * @param length the length of the route pattern in feet
-     * @param direction the direction of the route pattern (e.g., "Northbound", "Southbound")
-     * @param points the {@link List} of pattern points that make up the route pattern
-     * @param detourId the identifier of the detour associated with the route pattern, if applicable
-     * @param detourPoints the {@link List} of pattern points of the detour associated with the route pattern, if
-     *                     applicable
-     * @throws NullPointerException if {@code id}, {@code direction}, or {@code points} is {@code null}, or if any
-     * element of {@code points} or {@code detourPoints} is {@code null}
-     */
+    /// Constructs a `RoutePattern`.
+    ///
+    /// @param id the unique identifier of the route pattern
+    /// @param length the length of the route pattern in feet
+    /// @param direction the direction of the route pattern (e.g., "Northbound", "Southbound")
+    /// @param points the [List] of pattern points that make up the route pattern
+    /// @param detourId the identifier of the detour associated with the route pattern, if applicable
+    /// @param detourPoints the [List] of pattern points of the detour associated with the route pattern, if applicable
+    /// @throws NullPointerException if `id`, `direction`, or `points` is `null`, or if any element of `points` or
+    /// `detourPoints` is `null`
     public RoutePattern {
         Objects.requireNonNull(id);
         Objects.requireNonNull(direction);

@@ -3,7 +3,6 @@ package com.cta4j.train.follow;
 import com.cta4j.TestFixtures;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.follow.exception.Cta4jFollowException;
-import com.cta4j.train.follow.exception.FollowErrorCode;
 import com.cta4j.train.follow.internal.impl.FollowApiImpl;
 import com.cta4j.train.follow.model.FollowTrain;
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -98,7 +97,7 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("Invalid API key")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
     }
 
@@ -158,7 +157,7 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("Unknown error code")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN))
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(-1));
     }
 
@@ -174,7 +173,23 @@ class FollowApiImplTest {
             .isInstanceOf(Cta4jFollowException.class)
             .hasMessage("An unknown error occurred.")
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
-                .isEqualTo(FollowErrorCode.UNKNOWN))
+                .isNull())
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
+    }
+
+    @Test
+    void findByRun_throwsCta4jFollowException_withDefaultMessage_whenErrNmIsAbsent() {
+        this.server.stubFor(get(urlPathEqualTo("/api/1.0/ttfollow.aspx"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"ctatt\":{\"tmst\":\"2015-04-30T20:23:53\",\"errCd\":\"1\"}}")));
+
+        assertThatThrownBy(() -> this.api.findByRun("123"))
+            .isInstanceOf(Cta4jFollowException.class)
+            .hasMessage("An unknown error occurred.")
+            .satisfies(e -> assertThat(((Cta4jFollowException) e).getErrorCode())
+                .isNull())
             .satisfies(e -> assertThat(((Cta4jFollowException) e).getRawErrorCode()).isEqualTo(1));
     }
 

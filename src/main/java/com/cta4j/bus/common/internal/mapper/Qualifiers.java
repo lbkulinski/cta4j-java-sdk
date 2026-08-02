@@ -6,16 +6,15 @@ import com.cta4j.bus.prediction.model.FlagStop;
 import com.cta4j.bus.prediction.model.PassengerLoad;
 import com.cta4j.bus.prediction.model.PredictionType;
 import com.cta4j.bus.vehicle.model.TransitMode;
+import com.cta4j.common.internal.util.TimestampParser;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -46,19 +45,7 @@ public final class Qualifiers {
 
     @Named("mapTimestamp")
     public static @Nullable Instant mapTimestamp(@Nullable String timestamp) {
-        if (timestamp == null) {
-            return null;
-        }
-
-        try {
-            return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
-                                .atZone(CHICAGO_ZONE_ID)
-                                .toInstant();
-        } catch (DateTimeParseException e) {
-            String message = "Failed to parse timestamp: %s".formatted(timestamp);
-
-            throw new IllegalArgumentException(message, e);
-        }
+        return TimestampParser.parseNullable(timestamp, TIMESTAMP_FORMATTER, CHICAGO_ZONE_ID);
     }
 
     @Named("mapDynamicAction")

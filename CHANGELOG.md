@@ -7,6 +7,61 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0] - 2026-08-01
+
+### Added
+
+- A new `AlertApi` composed entry point for the CTA Customer Alerts API, unauthenticated and constructed via
+  `AlertApi.builder().build()` (no API key required).
+  - `RouteStatusApi`, exposing route/line service status (`list()`, `findByTypes`, `findByBusRouteIds`,
+    `findByLines`, `findByStationId`).
+  - `DetailedAlertsApi`, exposing detailed service alerts (`list(AlertsQuery)`, plus filtered lookups by bus
+    route IDs, train lines, and station IDs).
+  - New domain models (`RouteStatus`, `Alert`, `ImpactedService`, `Severity`, `AlertTrainLine`, `ServiceType`),
+    feature-specific exceptions (`Cta4jRouteStatusException`, `Cta4jDetailedAlertsException`, both extending
+    the new shared `Cta4jAlertException`), and error-code enums (`RouteStatusErrorCode`,
+    `DetailedAlertsErrorCode`).
+- `ArrivalsApi.findByMapIds`/`findByStopIds` — multi-value lookups accepting up to 4 map/stop IDs per request
+  (`MapArrivalsQuery`/`StopArrivalsQuery`, plus `Collection<String>` convenience overloads), alongside the
+  existing single-ID `findByMapId`/`findByStopId`.
+- `PredictionsApi.findByStopIds`/`findByVehicleIds` — convenience overloads accepting a bare
+  `Collection<String>` without requiring a full `StopPredictionsQuery`/`VehiclePredictionsQuery` to be
+  constructed, matching `ArrivalsApi`'s equivalent overloads.
+
+### Changed
+
+- `TrainLine.fromCode(String)` no longer throws `IllegalArgumentException` for an unrecognized code; it now
+  returns `null` and logs a warning, matching the `@Nullable`-based degrade pattern used elsewhere in the SDK.
+- `ArrivalsErrorCode.fromCode`/`FollowErrorCode.fromCode`/`LocationsErrorCode.fromCode` no longer fall back to
+  an `UNKNOWN` constant for an unrecognized code; they now return `null`, matching the same degrade pattern as
+  `TrainLine.fromCode`.
+- Renamed `VehiclesApi.findByIds`'s parameter from `ids` to `vehicleIds`, and `findById`'s parameter from `id`
+  to `vehicleId`, for consistency with `StopsApi`/`PatternsApi`'s equivalent methods.
+- Bumped `tools.jackson.core:jackson-databind` from **3.2.0** → **3.2.1**
+- Bumped `org.apache.httpcomponents.client5:httpclient5-fluent` from **5.6.1** → **5.6.2**
+- Bumped `ch.qos.logback:logback-classic` from **1.5.38** → **1.6.0**
+
+### Breaking Changes ⚠️
+
+- **Builder constructors are now `private`** on all query-parameter builders (`StopPredictionsQuery`,
+  `VehiclePredictionsQuery`, `MapArrivalsQuery`, `StopArrivalsQuery`, `AlertsQuery`, `BusRouteAlertsQuery`,
+  `LineAlertsQuery`, `StationAlertsQuery`). Construct instances via the static `builder(...)` factory method
+  only.
+- Renamed `StopsPredictionsQuery`/`VehiclesPredictionsQuery` to `StopPredictionsQuery`/`VehiclePredictionsQuery`
+  for consistency with the rest of the query-builder naming.
+- `MapArrivalQuery`/`StopArrivalQuery` have been renamed and reshaped to `MapArrivalsQuery`/`StopArrivalsQuery`:
+  the single `String mapId`/`stopId` component is now a `List<String> mapIds`/`stopIds` component (max 4 IDs).
+- `ArrivalsApi.findByMapId(MapArrivalQuery)`/`findByStopId(StopArrivalQuery)` have been renamed to
+  `findByMapIds(MapArrivalsQuery)`/`findByStopIds(StopArrivalsQuery)` to match the new query types.
+- `ArrivalsErrorCode.UNKNOWN`/`FollowErrorCode.UNKNOWN`/`LocationsErrorCode.UNKNOWN` have been removed; code
+  that referenced these constants directly (e.g. `switch` statements, equality checks) must handle `null`
+  instead.
+- `MapArrivalsQuery.Builder.maxResults`/`StopArrivalsQuery.Builder.maxResults` now take `int` instead of
+  `Integer`; passing `null` no longer compiles.
+- `Arrival.line`/`TrainLocations.line` are now `@Nullable`, a direct consequence of `TrainLine.fromCode` no
+  longer throwing — code that assumed either was always non-null must add a null check.
+- `LocationsApi.findAll()` has been renamed to `LocationsApi.list()`.
+
 ## [6.0.0] - 2026-07-05
 
 ### Added
@@ -267,7 +322,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v6.0.0...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.0...HEAD
+[7.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.1.0...v5.0.0
 [4.1.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.0.3...v4.1.0

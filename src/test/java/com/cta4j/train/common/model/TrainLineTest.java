@@ -26,8 +26,9 @@ class TrainLineTest {
     }
 
     @Test
-    void fromCode_throwsIllegalArgumentException_whenCodeIsUnknown() {
-        assertThatIllegalArgumentException().isThrownBy(() -> TrainLine.fromCode("Unknown"));
+    void fromCode_returnsNull_whenCodeIsUnrecognized() {
+        assertThat(TrainLine.fromCode("N/A")).isNull();
+        assertThat(TrainLine.fromCode("Unknown")).isNull();
     }
 
     @Test

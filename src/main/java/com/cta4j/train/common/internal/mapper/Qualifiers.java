@@ -1,6 +1,8 @@
 package com.cta4j.train.common.internal.mapper;
 
 import com.cta4j.common.geo.Coordinates;
+import com.cta4j.common.internal.util.BooleanParser;
+import com.cta4j.common.internal.util.TimestampParser;
 import com.cta4j.train.common.internal.wire.CtaArrival;
 import com.cta4j.train.common.model.TrainDirection;
 import com.cta4j.train.common.model.TrainLine;
@@ -12,15 +14,15 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.mapstruct.Named;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.json.JsonMapper;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
@@ -28,6 +30,8 @@ import java.util.Set;
 @ApiStatus.Internal
 @NullMarked
 public final class Qualifiers {
+    private static final Logger log = LoggerFactory.getLogger(Qualifiers.class);
+
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private static final ZoneId CHICAGO_ZONE_ID = ZoneId.of("America/Chicago");
 
@@ -104,40 +108,30 @@ public final class Qualifiers {
     }
 
     @Named("mapLine")
-    public static TrainLine mapLine(String line) {
+    public static @Nullable TrainLine mapLine(String line) {
         Objects.requireNonNull(line);
 
-        return TrainLine.fromCode(line);
+        TrainLine trainLine = TrainLine.fromCode(line);
+
+        if (trainLine == null) {
+            log.warn("Unknown train line code: {}", line);
+        }
+
+        return trainLine;
     }
 
     @Named("mapTimestamp")
     public static Instant mapTimestamp(String timestamp) {
         Objects.requireNonNull(timestamp);
 
-        try {
-            return LocalDateTime.parse(timestamp, TIMESTAMP_FORMATTER)
-                                .atZone(CHICAGO_ZONE_ID)
-                                .toInstant();
-        } catch (DateTimeParseException e) {
-            String message = "Failed to parse timestamp: %s".formatted(timestamp);
-
-            throw new IllegalArgumentException(message, e);
-        }
+        return TimestampParser.parse(timestamp, TIMESTAMP_FORMATTER, CHICAGO_ZONE_ID);
     }
 
     @Named("map01ToBoolean")
     public static boolean map01ToBoolean(String value) {
         Objects.requireNonNull(value);
 
-        return switch (value) {
-            case "0" -> false;
-            case "1" -> true;
-            default -> {
-                String message = "Invalid boolean value: %s. Expected 0 or 1".formatted(value);
-
-                throw new IllegalArgumentException(message);
-            }
-        };
+        return BooleanParser.parse01(value);
     }
 
     @Named("map15ToTrainDirection")
@@ -163,8 +157,8 @@ public final class Qualifiers {
         }
     }
 
-    @Named("parseCoordinate")
-    public static BigDecimal parseCoordinate(String value) {
+    @Named("mapCoordinate")
+    public static BigDecimal mapCoordinate(String value) {
         Objects.requireNonNull(value);
 
         try {
@@ -176,8 +170,8 @@ public final class Qualifiers {
         }
     }
 
-    @Named("parseHeading")
-    public static int parseHeading(String value) {
+    @Named("mapHeading")
+    public static int mapHeading(String value) {
         Objects.requireNonNull(value);
 
         try {
@@ -222,9 +216,9 @@ public final class Qualifiers {
             return null;
         }
 
-        BigDecimal latitude = parseCoordinate(lat);
-        BigDecimal longitude = parseCoordinate(lon);
-        int headingValue = parseHeading(heading);
+        BigDecimal latitude = mapCoordinate(lat);
+        BigDecimal longitude = mapCoordinate(lon);
+        int headingValue = mapHeading(heading);
 
         return new Coordinates(latitude, longitude, headingValue);
     }

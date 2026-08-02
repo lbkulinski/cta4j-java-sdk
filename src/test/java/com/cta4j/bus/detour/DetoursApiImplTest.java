@@ -67,6 +67,19 @@ class DetoursApiImplTest {
     }
 
     @Test
+    void list_returnsEmpty_whenDtrsIsExplicitlyEmptyArray() {
+        this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getdetours"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("bus/detour/empty_dtrs_array.json"))));
+
+        List<Detour> detours = this.api.list();
+
+        assertThat(detours).isEmpty();
+    }
+
+    @Test
     void list_throwsCta4jBusException_whenResponseContainsFatalErrors() {
         this.server.stubFor(get(urlPathEqualTo("/bustime/api/v3/getdetours"))
             .willReturn(aResponse()
