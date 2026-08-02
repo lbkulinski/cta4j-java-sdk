@@ -120,7 +120,7 @@ public final class Application {
 }
 ```
 
-### Fetch detailed alerts for a route ID
+### Fetch detailed alerts for a route
 
 > **Note:** `AlertApi` requires no API key — the CTA Customer Alerts API is unauthenticated.
 
