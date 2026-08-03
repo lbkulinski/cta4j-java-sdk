@@ -6,6 +6,7 @@
 ![Java Version](https://img.shields.io/badge/Java-21%2B-orange)
 [![License](https://img.shields.io/github/license/lbkulinski/cta4j-java-sdk)](LICENSE)
 [![Discord](https://img.shields.io/discord/1487848652444668085?logo=discord)](https://discord.gg/gNWjXZAhge)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-support-yellow?logo=buymeacoffee)](https://buymeacoffee.com/cta4j)
 
 A lightweight Java SDK for interacting with the [Chicago Transit Authority (CTA)](https://www.transitchicago.com/) APIs — Train Tracker, Bus Tracker, and Customer Alerts.  
 
