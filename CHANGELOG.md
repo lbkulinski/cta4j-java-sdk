@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.1] - 2026-10-14
+
+### Changed
+
+- Bumped `org.slf4j:slf4j-api` from **2.0.18** → **2.0.20**
+- Bumped `tools.jackson.core:jackson-databind` from **3.2.1** → **3.2.3**
+- Bumped `org.apache.httpcomponents.client5:httpclient5-fluent` from **5.6.2** → **5.6.4**
+- Bumped `org.jspecify:jspecify` from **1.0.0** → **1.0.1**
+- Bumped `org.junit.jupiter:junit-jupiter` from **6.1.2** → **6.1.3**
+- Bumped `ch.qos.logback:logback-classic` from **1.6.0** → **1.6.5**
+
 ## [7.0.0] - 2026-08-01
 
 ### Added
@@ -322,7 +333,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.0...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.1...HEAD
+[7.0.1]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.0...v7.0.1
 [7.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v5.0.0...v6.0.0
 [5.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v4.1.0...v5.0.0
