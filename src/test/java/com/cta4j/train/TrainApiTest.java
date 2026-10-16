@@ -15,6 +15,8 @@ class TrainApiTest {
         TrainApi api = TrainApi.builder("testkey").build();
 
         assertThat(api).isNotNull();
-        assertThat(api.stations()).isNotNull();
+        assertThat(api.arrivals()).isNotNull();
+        assertThat(api.follow()).isNotNull();
+        assertThat(api.locations()).isNotNull();
     }
 }

@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.0] - 2026-10-16
+
+### Added
+
+- `StationsApi.builder()` — `StationsApi` is now a standalone, unauthenticated entry point (no API key required),
+  constructed via `StationsApi.builder().build()`. The builder accepts an optional `url(String)` override for the
+  station data source.
+
+### Changed
+
+- An invalid stations URL now causes `Cta4jTrainException` to be thrown from `StationsApi.Builder.build()` instead
+  of from `StationsApi.list()`.
+
+### Breaking Changes ⚠️
+
+- **Removed `TrainApi.stations()`.** Use `StationsApi.builder().build()` instead.
+- **Removed `TrainApi.Builder.stationsUrl(String)`.** Use `StationsApi.Builder.url(String)` instead.
+
 ## [7.0.1] - 2026-10-14
 
 ### Changed
@@ -333,7 +351,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.1...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v8.0.0...HEAD
+[8.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.1...v8.0.0
 [7.0.1]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.0...v7.0.1
 [7.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v6.0.0...v7.0.0
 [6.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v5.0.0...v6.0.0

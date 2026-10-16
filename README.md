@@ -47,13 +47,13 @@ After applying, you'll receive an API key by email. Keep it safe — you'll use 
 <dependency>
     <groupId>com.cta4j</groupId>
     <artifactId>cta4j-java-sdk</artifactId>
-    <version>7.0.1</version>
+    <version>8.0.0</version>
 </dependency>
 ```
 
 ### Gradle (Kotlin DSL)
 ```kotlin
-implementation("com.cta4j:cta4j-java-sdk:7.0.1")
+implementation("com.cta4j:cta4j-java-sdk:8.0.0")
 ```
 
 ---
@@ -150,6 +150,29 @@ public final class Application {
         // From: 2026-08-01T12:30:00Z
         // To: 2026-08-01T22:00:00Z
         // ...
+    }
+}
+```
+
+### List all train stations
+
+> **Note:** `StationsApi` requires no API key — station data comes from the City of Chicago Data Portal rather than
+> the Train Tracker API.
+
+```java
+import com.cta4j.train.station.StationsApi;
+
+public final class Application {
+    public static void main(String[] args) {
+        StationsApi stationsApi = StationsApi.builder()
+                                             .build();
+
+        stationsApi.list()
+                   .forEach(station -> System.out.printf(
+                       "%s (%s)%n",
+                       station.name(),
+                       station.stopId()
+                   ));
     }
 }
 ```

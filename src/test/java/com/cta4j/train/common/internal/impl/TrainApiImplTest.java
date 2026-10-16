@@ -5,7 +5,6 @@ import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.follow.FollowApi;
 import com.cta4j.train.location.LocationsApi;
-import com.cta4j.train.station.StationsApi;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,7 +25,6 @@ class TrainApiImplTest {
             "http",
             "localhost",
             this.server.port(),
-            "http://localhost:" + this.server.port() + "/stations",
             "testkey"
         );
         this.api = new TrainApiImpl(config);
@@ -40,13 +38,6 @@ class TrainApiImplTest {
     @Test
     void constructor_throwsNullPointerException_whenConfigIsNull() {
         assertThatNullPointerException().isThrownBy(() -> new TrainApiImpl(null));
-    }
-
-    @Test
-    void stations_returnsNonNull() {
-        StationsApi result = this.api.stations();
-
-        assertThat(result).isNotNull();
     }
 
     @Test
@@ -83,14 +74,7 @@ class TrainApiImplTest {
     }
 
     @Test
-    void builderImpl_stationsUrl_throwsNullPointerException_whenUrlIsNull() {
-        TrainApiImpl.BuilderImpl builder = new TrainApiImpl.BuilderImpl("testkey");
-
-        assertThatNullPointerException().isThrownBy(() -> builder.stationsUrl(null));
-    }
-
-    @Test
-    void builderImpl_build_returnsInstance_withDefaultHostAndStationsUrl() {
+    void builderImpl_build_returnsInstance_withDefaultHost() {
         TrainApiImpl.BuilderImpl builder = new TrainApiImpl.BuilderImpl("testkey");
 
         TrainApi result = builder.build();
@@ -102,16 +86,6 @@ class TrainApiImplTest {
     void builderImpl_build_returnsInstance_withCustomHost() {
         TrainApiImpl.BuilderImpl builder = new TrainApiImpl.BuilderImpl("testkey");
         builder.host("example.com");
-
-        TrainApi result = builder.build();
-
-        assertThat(result).isNotNull();
-    }
-
-    @Test
-    void builderImpl_build_returnsInstance_withCustomStationsUrl() {
-        TrainApiImpl.BuilderImpl builder = new TrainApiImpl.BuilderImpl("testkey");
-        builder.stationsUrl("https://example.com/stations");
 
         TrainApi result = builder.build();
 
