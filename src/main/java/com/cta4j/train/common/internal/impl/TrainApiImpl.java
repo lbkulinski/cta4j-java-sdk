@@ -67,11 +67,7 @@ public final class TrainApiImpl implements TrainApi {
         public TrainApi build() {
             String finalHost = Objects.requireNonNullElse(this.host, TrainApiConstants.DEFAULT_HOST);
 
-            TrainApiConfig config = new TrainApiConfig(
-                TrainApiConstants.SCHEME,
-                finalHost,
-                this.apiKey
-            );
+            TrainApiConfig config = new TrainApiConfig(TrainApiConstants.SCHEME, finalHost, this.apiKey);
 
             return new TrainApiImpl(config);
         }
