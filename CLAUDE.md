@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Java SDK for the CTA Bus Tracker, Train Tracker, and Customer Alerts APIs. Published to Maven Central. Consumers instantiate `BusApi`, `TrainApi`, or `AlertApi` via their respective builders and access sub-APIs from there.
+Java SDK for the CTA Bus Tracker, Train Tracker, and Customer Alerts APIs. Published to Maven Central. Consumers instantiate `BusApi`, `TrainApi`, `AlertApi`, or `StationsApi` via their respective builders and access sub-APIs from there.
 
 ## Entry Points
 
@@ -10,9 +10,10 @@ Java SDK for the CTA Bus Tracker, Train Tracker, and Customer Alerts APIs. Publi
 BusApi busApi = BusApi.builder("apiKey").build();
 TrainApi trainApi = TrainApi.builder("apiKey").build();
 AlertApi alertApi = AlertApi.builder().build();
+StationsApi stationsApi = StationsApi.builder().build();
 ```
 
-`BusApi`/`TrainApi` builders require an API key and accept an optional `.host(String)` override; `TrainApi.Builder` also accepts `.stationsUrl(String)`. The CTA Customer Alerts API is unauthenticated, so `AlertApi.builder()` takes no API key and only accepts an optional `.host(String)` override.
+`BusApi`/`TrainApi` builders require an API key and accept an optional `.host(String)` override. The CTA Customer Alerts API is unauthenticated, so `AlertApi.builder()` takes no API key and only accepts an optional `.host(String)` override. `StationsApi` is likewise unauthenticated (station data comes from the City of Chicago Data Portal, not the Train Tracker API); `StationsApi.builder()` takes no API key and only accepts an optional `.url(String)` override.
 
 ## API Surface
 
@@ -28,10 +29,12 @@ AlertApi alertApi = AlertApi.builder().build();
 - `systemTime()` — current API system time
 
 **Train (`TrainApi`)**
-- `stations()` — `StationsApi`
 - `arrivals()` — `ArrivalsApi`
 - `follow()` — `FollowApi`
 - `locations()` — `LocationsApi`
+
+**Stations (`StationsApi`)**
+- `list()` — all train stations (standalone; lives in `com.cta4j.train.station`, not reachable from `TrainApi`)
 
 **Alert (`AlertApi`)**
 - `routeStatus()` — `RouteStatusApi`

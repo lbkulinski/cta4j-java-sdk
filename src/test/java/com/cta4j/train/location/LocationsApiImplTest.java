@@ -30,7 +30,6 @@ class LocationsApiImplTest {
             "http",
             "localhost",
             this.server.port(),
-            "http://localhost:" + this.server.port() + "/stations",
             "testkey"
         );
         this.api = new LocationsApiImpl(config);

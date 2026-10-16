@@ -2,7 +2,6 @@ package com.cta4j.train.station;
 
 import com.cta4j.TestFixtures;
 import com.cta4j.train.common.exception.Cta4jTrainException;
-import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.station.internal.impl.StationsApiImpl;
 import com.cta4j.train.station.model.Station;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import tools.jackson.core.JacksonException;
 
+import java.net.URI;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -29,14 +29,7 @@ class StationsApiImplTest {
         this.server = new WireMockServer(wireMockConfig().dynamicPort());
         this.server.start();
         this.stationsUrl = "http://localhost:" + this.server.port() + STATIONS_PATH;
-        TrainApiConfig config = new TrainApiConfig(
-            "http",
-            "localhost",
-            this.server.port(),
-            this.stationsUrl,
-            "testkey"
-        );
-        this.api = new StationsApiImpl(config);
+        this.api = new StationsApiImpl(URI.create(this.stationsUrl));
     }
 
     @AfterEach
@@ -93,23 +86,61 @@ class StationsApiImplTest {
     }
 
     @Test
-    void list_throwsCta4jTrainException_whenStationsUrlIsInvalid() {
-        TrainApiConfig config = new TrainApiConfig(
-            "http",
-            "localhost",
-            this.server.port(),
-            "not a valid url",
-            "testkey"
-        );
-        StationsApiImpl invalidApi = new StationsApiImpl(config);
+    void constructor_throwsNullPointerException_whenUriIsNull() {
+        assertThatNullPointerException().isThrownBy(() -> new StationsApiImpl(null));
+    }
 
-        assertThatThrownBy(invalidApi::list)
+    @Test
+    void builderImpl_url_throwsNullPointerException_whenUrlIsNull() {
+        StationsApiImpl.BuilderImpl builder = new StationsApiImpl.BuilderImpl();
+
+        assertThatNullPointerException().isThrownBy(() -> builder.url(null));
+    }
+
+    @Test
+    void builderImpl_url_returnsSameBuilder() {
+        StationsApiImpl.BuilderImpl builder = new StationsApiImpl.BuilderImpl();
+
+        StationsApi.Builder result = builder.url(this.stationsUrl);
+
+        assertThat(result).isSameAs(builder);
+    }
+
+    @Test
+    void builderImpl_build_returnsInstance_withDefaultUrl() {
+        StationsApiImpl.BuilderImpl builder = new StationsApiImpl.BuilderImpl();
+
+        StationsApi result = builder.build();
+
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    void builderImpl_build_usesCustomUrl() {
+        this.server.stubFor(get(urlPathEqualTo(STATIONS_PATH))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody(TestFixtures.read("train/station/empty.json"))));
+        StationsApiImpl.BuilderImpl builder = new StationsApiImpl.BuilderImpl();
+        builder.url(this.stationsUrl);
+
+        List<Station> stations = builder.build().list();
+
+        assertThat(stations).isEmpty();
+        this.server.verify(1, getRequestedFor(urlPathEqualTo(STATIONS_PATH)));
+    }
+
+    @Test
+    void builderImpl_build_throwsCta4jTrainException_whenUrlIsInvalid() {
+        StationsApiImpl.BuilderImpl builder = new StationsApiImpl.BuilderImpl();
+        builder.url("not a valid url");
+
+        assertThatThrownBy(builder::build)
             .isInstanceOf(Cta4jTrainException.class)
             .hasMessage("Invalid stations URL")
             .satisfies(e -> assertThat(((Cta4jTrainException) e).getEndpoint()).isEqualTo("not a valid url"))
             .satisfies(e -> assertThat(e.getCause()).isInstanceOf(IllegalArgumentException.class));
-
-        this.server.verify(0, anyRequestedFor(anyUrl()));
     }
 
     @Test
