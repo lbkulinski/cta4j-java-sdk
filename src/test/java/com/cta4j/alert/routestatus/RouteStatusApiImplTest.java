@@ -1,6 +1,7 @@
 package com.cta4j.alert.routestatus;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.TestServers;
 import com.cta4j.alert.common.internal.config.AlertApiConfig;
 import com.cta4j.alert.common.internal.util.AlertApiConstants;
 import com.cta4j.alert.common.model.AlertTrainLine;
@@ -19,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.*;
 
 class RouteStatusApiImplTest {
@@ -28,7 +28,7 @@ class RouteStatusApiImplTest {
 
     @BeforeEach
     void setUp() {
-        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server = TestServers.create();
         this.server.start();
         AlertApiConfig config = new AlertApiConfig("http", "localhost", this.server.port());
         this.api = new RouteStatusApiImpl(config);
