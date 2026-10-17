@@ -1,6 +1,7 @@
 package com.cta4j.train.arrival;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.TestServers;
 import com.cta4j.train.arrival.exception.Cta4jArrivalsException;
 import com.cta4j.train.arrival.internal.impl.ArrivalsApiImpl;
 import com.cta4j.train.arrival.query.MapArrivalsQuery;
@@ -18,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.*;
 
 class ArrivalsApiImplTest {
@@ -27,7 +27,7 @@ class ArrivalsApiImplTest {
 
     @BeforeEach
     void setUp() {
-        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server = TestServers.create();
         this.server.start();
         TrainApiConfig config = new TrainApiConfig(
             "http",

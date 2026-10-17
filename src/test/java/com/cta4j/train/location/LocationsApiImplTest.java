@@ -1,6 +1,7 @@
 package com.cta4j.train.location;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.TestServers;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.location.exception.Cta4jLocationsException;
@@ -15,7 +16,6 @@ import tools.jackson.core.JacksonException;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.*;
 
 class LocationsApiImplTest {
@@ -24,7 +24,7 @@ class LocationsApiImplTest {
 
     @BeforeEach
     void setUp() {
-        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server = TestServers.create();
         this.server.start();
         TrainApiConfig config = new TrainApiConfig(
             "http",

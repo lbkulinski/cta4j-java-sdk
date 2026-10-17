@@ -1,6 +1,7 @@
 package com.cta4j.bus.locale;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.TestServers;
 import com.cta4j.bus.common.exception.Cta4jBusException;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.common.internal.util.BusApiConstants;
@@ -16,7 +17,6 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.*;
 
 class LocalesApiImplTest {
@@ -25,7 +25,7 @@ class LocalesApiImplTest {
 
     @BeforeEach
     void setUp() {
-        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server = TestServers.create();
         this.server.start();
         BusApiConfig config = new BusApiConfig("http", "localhost", this.server.port(), "testkey");
         this.api = new LocalesApiImpl(config);

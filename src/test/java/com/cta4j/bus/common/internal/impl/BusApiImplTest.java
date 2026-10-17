@@ -1,6 +1,7 @@
 package com.cta4j.bus.common.internal.impl;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.TestServers;
 import com.cta4j.bus.BusApi;
 import com.cta4j.bus.common.internal.config.BusApiConfig;
 import com.cta4j.bus.detour.DetoursApi;
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.Test;
 import java.time.Instant;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.*;
 
 class BusApiImplTest {
@@ -28,7 +28,7 @@ class BusApiImplTest {
 
     @BeforeEach
     void setUp() {
-        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server = TestServers.create();
         this.server.start();
         BusApiConfig config = new BusApiConfig("http", "localhost", this.server.port(), "testkey");
         this.api = new BusApiImpl(config);

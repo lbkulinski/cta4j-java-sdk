@@ -1,5 +1,6 @@
 package com.cta4j.train.common.internal.impl;
 
+import com.cta4j.TestServers;
 import com.cta4j.train.TrainApi;
 import com.cta4j.train.arrival.ArrivalsApi;
 import com.cta4j.train.common.internal.config.TrainApiConfig;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.*;
 
 class TrainApiImplTest {
@@ -19,7 +19,7 @@ class TrainApiImplTest {
 
     @BeforeEach
     void setUp() {
-        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server = TestServers.create();
         this.server.start();
         TrainApiConfig config = new TrainApiConfig(
             "http",

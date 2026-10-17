@@ -1,6 +1,7 @@
 package com.cta4j.train.station;
 
 import com.cta4j.TestFixtures;
+import com.cta4j.TestServers;
 import com.cta4j.train.common.exception.Cta4jTrainException;
 import com.cta4j.train.common.model.TrainLine;
 import com.cta4j.train.station.internal.impl.StationsApiImpl;
@@ -15,7 +16,6 @@ import java.net.URI;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.assertj.core.api.Assertions.*;
 
 class StationsApiImplTest {
@@ -26,7 +26,7 @@ class StationsApiImplTest {
 
     @BeforeEach
     void setUp() {
-        this.server = new WireMockServer(wireMockConfig().dynamicPort());
+        this.server = TestServers.create();
         this.server.start();
         this.stationsUrl = "http://localhost:" + this.server.port() + STATIONS_PATH;
         this.api = new StationsApiImpl(URI.create(this.stationsUrl));
