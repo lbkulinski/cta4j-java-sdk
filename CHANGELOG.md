@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [8.0.2] - 2026-11-23
+
+### Changed
+
+- Bumped `tools.jackson.core:jackson-databind` from **3.2.4** → **3.3.0**
+
 ## [8.0.1] - 2026-10-31
 
 ### Changed
@@ -358,7 +364,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `TrainClient` class with methods to interact with CTA Train API.
 - `BusClient` class with methods to interact with CTA Bus API.
 
-[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v8.0.1...HEAD
+[Unreleased]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v8.0.2...HEAD
+[8.0.2]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v8.0.1...v8.0.2
 [8.0.1]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v8.0.0...v8.0.1
 [8.0.0]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.1...v8.0.0
 [7.0.1]: https://github.com/lbkulinski/cta4j-java-sdk/compare/v7.0.0...v7.0.1
